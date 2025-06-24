@@ -1,6 +1,7 @@
 import { type HTMLAttributes, useContext, useState } from 'react';
 import clsx from 'clsx';
 import { styled, generateClasses, getChildren } from '../../utils';
+import useOutsideClick from '../../hooks/useOutsideClick';
 import ButtonGroupContext from './ButtonGroupContext';
 import Button from './Button';
 
@@ -85,6 +86,10 @@ const ButtonGroup = (props: ButtonGroupProps) => {
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const isDropdown = !!groupContext;
 
+  const dropdownRef = useOutsideClick<HTMLDivElement>(() => {
+    setDropdownOpen(false);
+  }, dropdownOpen);
+
   const validChildren = getChildren(children);
   const childrenLength = validChildren.length;
 
@@ -99,14 +104,16 @@ const ButtonGroup = (props: ButtonGroupProps) => {
     ]);
   }
 
-  function toggleDropdown() {
-    setDropdownOpen((prev) => !prev);
-  }
-
   if (isDropdown) {
     return (
-      <ButtonGroupRoot className={clsx(classes.dropdownRoot, className)}>
-        <Button icon="arrow_drop_down" onClick={toggleDropdown} />
+      <ButtonGroupRoot
+        ref={dropdownRef}
+        className={clsx(classes.dropdownRoot, className)}
+      >
+        <Button
+          icon="arrow_drop_down"
+          onClick={() => setDropdownOpen((o) => !o)}
+        />
 
         {dropdownOpen && (
           <div className={clsx(classes.dropdown)}>

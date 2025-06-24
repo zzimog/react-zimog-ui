@@ -1,8 +1,14 @@
 {
-  "name": "react-zimog-ui",
-  "private": true,
+  "name": "@zzimog/react-zimog-ui",
+  "author": "zzimog",
   "version": "1.0.0",
   "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "sideEffects": [],
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
@@ -33,5 +39,9 @@
     "vite": "^6.3.5",
     "vite-plugin-dts": "^4.5.4",
     "vite-tsconfig-paths": "^5.1.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zzimog/react-zimog-ui.git"
   }
 }

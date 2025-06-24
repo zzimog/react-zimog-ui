@@ -5,7 +5,7 @@ import {
   useState,
 } from 'react';
 import clsx from 'clsx';
-import Button from './Button';
+import { Button } from '@zui/elements';
 
 export type MultiInputField = {
   label?: string;

@@ -1,3 +1,4 @@
+import { styled, ButtonGroup, Button } from '@zui';
 import guid from '@/utils/guid';
 import { type FormSchema, Form } from '@/ui/Form';
 
@@ -41,8 +42,28 @@ const schema: FormSchema = [
   },
 ];
 
+const AppRoot = styled.div({
+  width: '800px',
+  margin: '0 auto',
+  padding: '32px 0',
+});
+
 function App() {
-  return <Form schema={schema} />;
+  return (
+    <AppRoot>
+      <ButtonGroup>
+        <Button label="Some kind of button" />
+        <Button label="Some kind of button" />
+        <Button label="Some kind of button" />
+        <ButtonGroup>
+          <Button label="Some kind of button" />
+          <Button label="Some kind of button" />
+          <Button label="Some kind of button" />
+        </ButtonGroup>
+      </ButtonGroup>
+      <Form schema={schema} />
+    </AppRoot>
+  );
 }
 
 export default App;

@@ -1,5 +1,5 @@
 import { useId, type InputHTMLAttributes } from 'react';
-import styled from './styled';
+import { styled } from '@zui/utils';
 
 export type InputProps = {
   label?: string;

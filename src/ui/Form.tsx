@@ -3,7 +3,7 @@ import {
   type HTMLInputTypeAttribute,
   useId,
 } from 'react';
-import Button from '@/ui/Button';
+import { Button } from '@zui/elements';
 
 export type FormFieldValue = string | number | boolean;
 
@@ -75,14 +75,7 @@ export const Form = (props: FormProps) => {
   }
 
   return (
-    <div
-      className="form"
-      style={{
-        width: '800px',
-        margin: '0 auto',
-        padding: '32px 0',
-      }}
-    >
+    <div className="form">
       {parseForm(schema)}
 
       <div className="form-actions">

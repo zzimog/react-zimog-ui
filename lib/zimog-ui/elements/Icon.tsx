@@ -1,6 +1,5 @@
 import clsx from 'clsx';
 import { generateClasses, styled } from '../utils';
-import '@fontsource-variable/material-symbols-rounded/wght.css';
 
 const sizes: Record<string, number> = {
   small: 14,

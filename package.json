@@ -3,6 +3,12 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "sideEffects": [],
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

@@ -1,69 +1,34 @@
-import { styled, ButtonGroup, Button } from '@zui';
-import guid from '@/utils/guid';
-import { type FormSchema, Form } from '@/ui/Form';
+import { ThemeSwitcher } from './ui/ThemeSwitcher/ThemeSwitcher';
+import buttons from './demo/buttons';
+import headings from './demo/headings';
+import inputs from './demo/inputs';
 
-const schema: FormSchema = [
-  [
-    {
-      label: 'Order ID',
-      name: 'guid',
-      type: 'string',
-      readOnly: true,
-      value: () => guid(16),
-    },
-    {
-      label: 'Holder',
-      name: 'holder',
-      type: 'string',
-    },
-  ],
-  {
-    name: 'products',
-    type: 'multi',
-    fields: [
-      {
-        label: 'Product',
-        name: 'product_name',
-        type: 'text',
-      },
-      {
-        label: 'Quantity',
-        name: 'product_qta',
-        type: 'number',
-        defaultValue: 0,
-      },
-      {
-        label: 'Price',
-        name: 'product_price',
-        type: 'number',
-        step: '0.10',
-      },
-    ],
-  },
-];
-
-const AppRoot = styled.div({
-  width: '800px',
-  margin: '0 auto',
-  padding: '32px 0',
-});
-
-function App() {
+const App = () => {
   return (
-    <AppRoot>
-      <ButtonGroup>
-        <Button label="Some kind of button" />
-        <Button label="Some kind of button" />
-        <Button label="Some kind of button" />
-        <ButtonGroup>
-          <Button label="Some kind of button" />
-          <Button label="Some kind of button" />
-          <Button label="Some kind of button" />
-        </ButtonGroup>
-      </ButtonGroup>
-      <Form schema={schema} />
-    </AppRoot>
+    <div className="min-h-screen dark:text-white dark:bg-black">
+      <div className="max-w-5xl mx-auto flex flex-col gap-6 py-6">
+        <div className="ml-auto">
+          <ThemeSwitcher />
+        </div>
+
+        <ul>
+          <li>
+            <a href="#headings">Headings</a>
+          </li>
+          <li>
+            <a href="#buttons">Buttons</a>
+          </li>
+          <li>
+            <a href="#inputs">Inputs</a>
+          </li>
+        </ul>
+
+        {headings}
+        {buttons}
+        {inputs}
+      </div>
+    </div>
   );
-}
+};
 
 export default App;

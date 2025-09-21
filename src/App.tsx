@@ -1,12 +1,13 @@
-import { ThemeSwitcher } from './ui/ThemeSwitcher/ThemeSwitcher';
+import { ThemeSwitcher } from '@ui';
 import buttons from './demo/buttons';
 import headings from './demo/headings';
 import inputs from './demo/inputs';
+import spinners from './demo/spinners';
 
 const App = () => {
   return (
     <div className="min-h-screen dark:text-white dark:bg-black">
-      <div className="max-w-5xl mx-auto flex flex-col gap-6 py-6">
+      <div className="max-w-5xl mx-auto flex flex-col gap-6 p-6">
         <div className="ml-auto">
           <ThemeSwitcher />
         </div>
@@ -21,11 +22,15 @@ const App = () => {
           <li>
             <a href="#inputs">Inputs</a>
           </li>
+          <li>
+            <a href="#spinners">Spinners</a>
+          </li>
         </ul>
 
-        {headings}
         {buttons}
+        {headings}
         {inputs}
+        {spinners}
       </div>
     </div>
   );

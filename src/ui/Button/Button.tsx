@@ -1,11 +1,13 @@
 import {
   type ButtonHTMLAttributes,
   type PropsWithChildren,
+  type ReactNode,
   useContext,
 } from 'react';
 import { cn } from '../utils';
 import buttonClasses from './buttonClasses';
 import ButtonGroupContext from './buttonGroupContext';
+import { Spinner } from '../Spinner';
 
 export type ButtonSize = 'sm' | 'md' | 'lg';
 
@@ -18,6 +20,7 @@ export type ButtonProps = PropsWithChildren<{
   variant?: ButtonVariant;
   color?: ButtonColor;
   loading?: boolean;
+  icon?: ReactNode;
 }> &
   ButtonHTMLAttributes<HTMLButtonElement>;
 
@@ -27,6 +30,7 @@ export const Button = (inProps: ButtonProps) => {
     variant,
     color,
     loading,
+    icon,
     disabled,
     className,
     children,
@@ -41,7 +45,7 @@ export const Button = (inProps: ButtonProps) => {
 
   const mergedSize = context?.size || size;
 
-  const mergedDisabled = disabled || context?.disabled || false;
+  const mergedDisabled = loading || disabled || context?.disabled || false;
 
   return (
     <button
@@ -51,17 +55,15 @@ export const Button = (inProps: ButtonProps) => {
           variant: mergedVariant,
           color: mergedColor,
           size: mergedSize,
+          loading,
         }),
         context?.className,
         className
       )}
       {...props}
     >
-      {loading ? (
-        <div className="size-6 border-3 border-r-transparent rounded-full animate-spin" />
-      ) : (
-        children
-      )}
+      {loading ? <Spinner /> : icon}
+      {children}
     </button>
   );
 };

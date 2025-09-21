@@ -10,12 +10,14 @@ export const ThemeSwitcher = () => {
   return (
     <ButtonGroup size="sm" joined>
       <Button
+        title="Light theme"
         className={scheme === 'light' ? selectedClasses : ''}
         onClick={() => setScheme('light')}
       >
         <Sun />
       </Button>
       <Button
+        title="Dark theme"
         className={scheme === 'dark' ? selectedClasses : ''}
         onClick={() => setScheme('dark')}
       >

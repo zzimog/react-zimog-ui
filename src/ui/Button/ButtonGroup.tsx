@@ -46,7 +46,7 @@ export const ButtonGroup = (inProps: ButtonGroupProps) => {
       role="group"
       className={cn(
         'inline-flex',
-        'align-center',
+        'items-center',
         joined ? 'gap-[1px]' : 'gap-1',
         direction === 'col' && 'flex-col',
         className

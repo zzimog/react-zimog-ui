@@ -1,45 +1,56 @@
 import type { InputHTMLAttributes, ReactNode } from 'react';
 import { cn } from '../utils';
-import { inputGroupClasses, inputClasses, addonClasses } from './inputClasses';
+import { textboxClasses as classes } from './inputClasses';
+import { Checkable } from './Checkable';
 
 export type InputProps = {
   prefix?: ReactNode;
   suffix?: ReactNode;
-  pippo?: ReactNode;
 } & Omit<InputHTMLAttributes<HTMLInputElement>, 'prefix' | 'suffix'>;
+
+function createAddon(content: ReactNode, type: 'prefix' | 'suffix') {
+  return (
+    content && (
+      <div
+        className={cn(classes.addon.root, classes.addon[type])}
+        children={content}
+      />
+    )
+  );
+}
 
 export const Input = (inProps: InputProps) => {
   const { type, prefix, suffix, className, ...props } = inProps;
 
-  if (type === 'checkbox') {
-    return <h1>CHECKBOX</h1>;
+  if (type === 'checkbox' || type === 'radio') {
+    return <Checkable type={type} className={className} {...props} />;
   }
 
   if (prefix || suffix) {
     return (
-      <div
-        className={cn(
-          inputGroupClasses({
-            prefix: !!prefix,
-            suffix: !!suffix,
-          }),
-          className
-        )}
-      >
-        {prefix && (
-          <div className={addonClasses({ type: 'prefix' })}>{prefix}</div>
-        )}
+      <div className={cn(classes.group, className)}>
+        {createAddon(prefix, 'prefix')}
 
-        <input type={type} className={inputClasses()} {...props} />
+        <input
+          type={type}
+          className={cn(
+            classes.input.root,
+            prefix && classes.input.prefix,
+            suffix && classes.input.suffix
+          )}
+          {...props}
+        />
 
-        {suffix && (
-          <div className={addonClasses({ type: 'suffix' })}>{suffix}</div>
-        )}
+        {createAddon(suffix, 'suffix')}
       </div>
     );
   }
 
   return (
-    <input type={type} className={cn(inputClasses(), className)} {...props} />
+    <input
+      type={type}
+      className={cn(classes.input.root, className)}
+      {...props}
+    />
   );
 };

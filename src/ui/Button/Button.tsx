@@ -49,7 +49,6 @@ export const Button = (inProps: ButtonProps) => {
 
   return (
     <button
-      disabled={mergedDisabled}
       className={cn(
         buttonClasses({
           variant: mergedVariant,
@@ -60,6 +59,7 @@ export const Button = (inProps: ButtonProps) => {
         context?.className,
         className
       )}
+      disabled={mergedDisabled}
       {...props}
     >
       {loading ? <Spinner /> : icon}

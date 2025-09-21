@@ -1,28 +1,21 @@
 import { Moon, Sun } from 'lucide-react';
-import { Button, ButtonGroup } from '../Button';
+import { Button } from '../Button';
 import { useColorScheme } from '../hooks';
+import { capitalize } from '../utils';
 
 export const ThemeSwitcher = () => {
   const [scheme, setScheme] = useColorScheme();
 
-  const selectedClasses = 'scale-90';
+  const isDark = scheme === 'dark';
 
   return (
-    <ButtonGroup size="sm" joined>
-      <Button
-        title="Light theme"
-        className={scheme === 'light' ? selectedClasses : ''}
-        onClick={() => setScheme('light')}
-      >
-        <Sun />
-      </Button>
-      <Button
-        title="Dark theme"
-        className={scheme === 'dark' ? selectedClasses : ''}
-        onClick={() => setScheme('dark')}
-      >
-        <Moon />
-      </Button>
-    </ButtonGroup>
+    <Button
+      size="sm"
+      variant="ghost"
+      title={`${capitalize(scheme)} mode`}
+      onClick={() => setScheme(isDark ? 'light' : 'dark')}
+    >
+      {isDark ? <Sun /> : <Moon />}
+    </Button>
   );
 };

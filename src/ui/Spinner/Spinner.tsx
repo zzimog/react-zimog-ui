@@ -1,5 +1,3 @@
-import { cn } from '../utils';
-
 export type SpinnerProps = {
   size?: number;
   className?: string;
@@ -14,7 +12,7 @@ export const Spinner = (inProps: SpinnerProps) => {
       width={size}
       height={size}
       viewBox="0 0 24 24"
-      className={cn('dark:text-white', className)}
+      className={className}
     >
       <path
         fill="currentColor"

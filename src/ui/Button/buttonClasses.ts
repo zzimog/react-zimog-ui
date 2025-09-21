@@ -23,7 +23,6 @@ const buttonClasses = cva(
     'focus-visible:outline-4',
     '[&_svg]:shrink-0',
     '[&_svg]:pointer-events-none',
-    '[&_svg:not([class*="stroke-"])]:stroke-1',
     '[&_svg:not([class*="size-"])]:size-6',
   ],
   {

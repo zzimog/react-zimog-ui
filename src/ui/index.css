@@ -21,3 +21,13 @@
     transparent
   );
 }
+
+body {
+  min-height: 100vh;
+  background-color: var(--color-white);
+
+  @variant dark {
+    color: var(--color-white);
+    background-color: var(--color-black);
+  }
+}

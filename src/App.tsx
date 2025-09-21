@@ -1,23 +1,21 @@
-import { ThemeSwitcher } from '@ui';
+/*
+import { Box, ThemeSwitcher } from '@ui';
 import buttons from './demo/buttons';
 import headings from './demo/headings';
 import inputs from './demo/inputs';
 import spinners from './demo/spinners';
+import popover from './demo/popover';
 
 const App = () => {
   return (
-    <div className="min-h-screen dark:text-white dark:bg-black">
-      <div className="max-w-5xl mx-auto flex flex-col gap-6 p-6">
-        <div className="ml-auto">
-          <ThemeSwitcher />
-        </div>
-
+    <div className="flex gap-2 p-2">
+      <Box className="shrink-0 grow-0 basis-[300px]">
         <ul>
           <li>
-            <a href="#headings">Headings</a>
+            <a href="#buttons">Buttons</a>
           </li>
           <li>
-            <a href="#buttons">Buttons</a>
+            <a href="#headings">Headings</a>
           </li>
           <li>
             <a href="#inputs">Inputs</a>
@@ -26,14 +24,29 @@ const App = () => {
             <a href="#spinners">Spinners</a>
           </li>
         </ul>
+      </Box>
+      <main className="grow-1">
+        <div className="max-w-5xl mx-auto">
+          <div className="w-fit ml-auto mb-2">
+            <ThemeSwitcher />
+          </div>
 
-        {buttons}
-        {headings}
-        {inputs}
-        {spinners}
-      </div>
+          <div className="flex flex-col gap-6">
+            {popover}
+            {buttons}
+            {headings}
+            {inputs}
+            {spinners}
+          </div>
+        </div>
+      </main>
     </div>
   );
+};
+*/
+
+const App = () => {
+  return <div>Hello world!</div>;
 };
 
 export default App;

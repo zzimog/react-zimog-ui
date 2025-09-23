@@ -17,17 +17,18 @@ export type ButtonVariant = 'solid' | 'outlined' | 'dashed' | 'ghost';
 export type ButtonColor = 'default' | 'primary' | 'secondary' | 'danger';
 
 export type ButtonProps = PropsWithChildren<{
+  ref?: Ref<HTMLButtonElement>;
   size?: ButtonSize;
   variant?: ButtonVariant;
   color?: ButtonColor;
   loading?: boolean;
   icon?: ReactNode;
-  ref?: Ref<HTMLButtonElement>;
 }> &
   ButtonHTMLAttributes<HTMLButtonElement>;
 
 export const Button = (inProps: ButtonProps) => {
   const {
+    ref,
     size,
     variant,
     color,
@@ -36,7 +37,6 @@ export const Button = (inProps: ButtonProps) => {
     disabled,
     className,
     children,
-    ref,
     ...props
   } = inProps;
 

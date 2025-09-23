@@ -1,11 +1,11 @@
-import type { ElementType, HTMLAttributes, Ref } from 'react';
+import type { Ref, HTMLAttributes, ElementType } from 'react';
 import { cn } from '../utils';
 import titleClasses from './titleClasses';
 
 export type TitleProps = {
+  ref?: Ref<HTMLHeadingElement>;
   children: string;
   size?: 1 | 2 | 3 | 4 | 5 | 6;
-  ref?: Ref<HTMLHeadingElement>;
 } & HTMLAttributes<HTMLHeadingElement>;
 
 export const Title = (inProps: TitleProps) => {

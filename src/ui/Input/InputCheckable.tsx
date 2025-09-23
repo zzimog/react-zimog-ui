@@ -3,8 +3,8 @@ import { cn } from '@ui/utils';
 import { checkboxClasses, radioClasses } from './inputClasses';
 
 export type CheckableProps = {
-  type?: 'checkbox' | 'radio' | (string & {});
   ref?: Ref<HTMLInputElement>;
+  type?: 'checkbox' | 'radio' | (string & {});
 } & InputHTMLAttributes<HTMLInputElement>;
 
 export const InputCheckable = (inProps: CheckableProps) => {

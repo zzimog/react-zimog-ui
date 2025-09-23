@@ -21,7 +21,7 @@ export type PopperObject = {
 export function usePopper(options: PopperOptions = {}): PopperObject {
   const {
     open = false,
-    distance = 4,
+    distance = 8,
     flip = true,
     position = 'bottom-center',
   } = options;

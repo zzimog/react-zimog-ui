@@ -4,9 +4,9 @@ import { textboxClasses as classes } from './inputClasses';
 import { InputCheckable } from './InputCheckable';
 
 export type InputProps = {
+  ref?: Ref<HTMLInputElement>;
   prefix?: ReactNode;
   suffix?: ReactNode;
-  ref?: Ref<HTMLInputElement>;
 } & Omit<InputHTMLAttributes<HTMLInputElement>, 'prefix' | 'suffix'>;
 
 function createAddon(content: ReactNode, type: 'prefix' | 'suffix') {
@@ -24,7 +24,9 @@ export const Input = (inProps: InputProps) => {
   const { type, prefix, suffix, className, ref, ...props } = inProps;
 
   if (type === 'checkbox' || type === 'radio') {
-    return <InputCheckable type={type} className={className} {...props} />;
+    return (
+      <InputCheckable ref={ref} type={type} className={className} {...props} />
+    );
   }
 
   if (prefix || suffix) {

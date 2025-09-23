@@ -1,11 +1,12 @@
-import type { InputHTMLAttributes, ReactNode } from 'react';
+import type { InputHTMLAttributes, ReactNode, Ref } from 'react';
 import { cn } from '../utils';
 import { textboxClasses as classes } from './inputClasses';
-import { Checkable } from './Checkable';
+import { InputCheckable } from './InputCheckable';
 
 export type InputProps = {
   prefix?: ReactNode;
   suffix?: ReactNode;
+  ref?: Ref<HTMLInputElement>;
 } & Omit<InputHTMLAttributes<HTMLInputElement>, 'prefix' | 'suffix'>;
 
 function createAddon(content: ReactNode, type: 'prefix' | 'suffix') {
@@ -20,10 +21,10 @@ function createAddon(content: ReactNode, type: 'prefix' | 'suffix') {
 }
 
 export const Input = (inProps: InputProps) => {
-  const { type, prefix, suffix, className, ...props } = inProps;
+  const { type, prefix, suffix, className, ref, ...props } = inProps;
 
   if (type === 'checkbox' || type === 'radio') {
-    return <Checkable type={type} className={className} {...props} />;
+    return <InputCheckable type={type} className={className} {...props} />;
   }
 
   if (prefix || suffix) {
@@ -32,6 +33,7 @@ export const Input = (inProps: InputProps) => {
         {createAddon(prefix, 'prefix')}
 
         <input
+          ref={ref}
           type={type}
           className={cn(
             classes.input.root,
@@ -48,6 +50,7 @@ export const Input = (inProps: InputProps) => {
 
   return (
     <input
+      ref={ref}
       type={type}
       className={cn(classes.input.root, className)}
       {...props}

@@ -1,20 +1,21 @@
-import type { InputHTMLAttributes } from 'react';
+import type { InputHTMLAttributes, Ref } from 'react';
 import { cn } from '@ui/utils';
 import { checkboxClasses, radioClasses } from './inputClasses';
 
 export type CheckableProps = {
   type?: 'checkbox' | 'radio' | (string & {});
+  ref?: Ref<HTMLInputElement>;
 } & InputHTMLAttributes<HTMLInputElement>;
 
-export const Checkable = (inProps: CheckableProps) => {
-  const { type = 'checkbox', className, ...props } = inProps;
+export const InputCheckable = (inProps: CheckableProps) => {
+  const { type = 'checkbox', className, ref, ...props } = inProps;
 
   const classes = type === 'checkbox' ? checkboxClasses : radioClasses;
 
   return (
     <div className={cn(classes.box, className)}>
       <div className={cn(classes.mark)} />
-      <input type={type} className={cn(classes.input)} {...props} />
+      <input ref={ref} type={type} className={cn(classes.input)} {...props} />
     </div>
   );
 };

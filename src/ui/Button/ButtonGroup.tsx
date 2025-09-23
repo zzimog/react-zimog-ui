@@ -1,4 +1,4 @@
-import { Children, type HTMLAttributes } from 'react';
+import { Children, type HTMLAttributes, type Ref } from 'react';
 import { cn } from '../utils';
 import type { ButtonColor, ButtonSize, ButtonVariant } from './Button';
 import ButtonGroupContext from './buttonGroupContext';
@@ -10,6 +10,7 @@ export type ButtonGroupProps = {
   disabled?: boolean;
   direction?: 'row' | 'col';
   joined?: boolean;
+  ref?: Ref<HTMLDivElement>;
 } & HTMLAttributes<HTMLDivElement>;
 
 export const ButtonGroup = (inProps: ButtonGroupProps) => {
@@ -22,6 +23,7 @@ export const ButtonGroup = (inProps: ButtonGroupProps) => {
     disabled,
     children,
     className,
+    ref,
     ...props
   } = inProps;
 
@@ -43,6 +45,7 @@ export const ButtonGroup = (inProps: ButtonGroupProps) => {
 
   return (
     <div
+      ref={ref}
       role="group"
       className={cn(
         'inline-flex',

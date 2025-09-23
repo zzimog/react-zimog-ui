@@ -1,24 +1,27 @@
-import { useEffect, useRef } from 'react';
+import { type RefObject, useEffect } from 'react';
 
-export type OutsideClickHookCallback = (evt?: MouseEvent) => void;
-
-function useOutsideClick<T extends HTMLElement>(
-  callback: OutsideClickHookCallback,
+export function useOutsideClick(
+  refs: RefObject<HTMLElement | null> | RefObject<HTMLElement | null>[],
+  callback: (evt?: MouseEvent) => void,
   listen: boolean = true
 ) {
-  const ref = useRef<T>(null);
-
   useEffect(() => {
-    if (!listen || !ref.current) {
+    if (!listen) {
       return;
     }
+
+    const refsArray = Array.isArray(refs) ? refs : [refs];
 
     function handler(event: MouseEvent) {
       const target = event.target as HTMLElement;
 
-      if (ref.current && !ref.current.contains(target)) {
-        callback(event);
+      for (const ref of refsArray) {
+        if (ref.current && ref.current.contains(target)) {
+          return;
+        }
       }
+
+      callback(event);
     }
 
     document.addEventListener('click', handler);
@@ -26,9 +29,5 @@ function useOutsideClick<T extends HTMLElement>(
     return () => {
       document.removeEventListener('click', handler);
     };
-  }, [callback, listen]);
-
-  return ref;
+  }, [refs, callback, listen]);
 }
-
-export default useOutsideClick;

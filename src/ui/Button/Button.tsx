@@ -2,12 +2,13 @@ import {
   type ButtonHTMLAttributes,
   type PropsWithChildren,
   type ReactNode,
+  type Ref,
   useContext,
 } from 'react';
 import { cn } from '../utils';
+import { Spinner } from '../Spinner';
 import buttonClasses from './buttonClasses';
 import ButtonGroupContext from './buttonGroupContext';
-import { Spinner } from '../Spinner';
 
 export type ButtonSize = 'sm' | 'md' | 'lg';
 
@@ -21,6 +22,7 @@ export type ButtonProps = PropsWithChildren<{
   color?: ButtonColor;
   loading?: boolean;
   icon?: ReactNode;
+  ref?: Ref<HTMLButtonElement>;
 }> &
   ButtonHTMLAttributes<HTMLButtonElement>;
 
@@ -34,6 +36,7 @@ export const Button = (inProps: ButtonProps) => {
     disabled,
     className,
     children,
+    ref,
     ...props
   } = inProps;
 
@@ -49,6 +52,7 @@ export const Button = (inProps: ButtonProps) => {
 
   return (
     <button
+      ref={ref}
       className={cn(
         buttonClasses({
           variant: mergedVariant,

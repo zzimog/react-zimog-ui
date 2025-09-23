@@ -9,7 +9,7 @@ export * from './utils';
 export * from './Box';
 export * from './Button';
 export * from './Input';
-export * from './Popover';
+export * from './Popper';
 export * from './Spinner';
 export * from './Text';
 export * from './ThemeSwitcher';

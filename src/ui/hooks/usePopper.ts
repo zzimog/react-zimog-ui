@@ -13,8 +13,8 @@ export type PopperOptions = {
 };
 
 export type PopperObject = {
-  triggerRef: Ref<HTMLElement>;
-  layerRef: Ref<HTMLElement>;
+  triggerRef: Ref<HTMLElement | null>;
+  layerRef: Ref<HTMLElement | null>;
   layerOpen: boolean;
 };
 
@@ -28,10 +28,10 @@ export function usePopper(options: PopperOptions = {}): PopperObject {
 
   const [layerOpen, setLayerOpen] = useState(open);
 
-  const triggerRef = useRef<HTMLElement>(null);
+  const triggerRef = useRef<HTMLElement | null>(null);
   const triggerRectRef = useRef<DOMRect>(null);
 
-  const layerRef = useRef<HTMLElement>(null);
+  const layerRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     if (!triggerRef.current) {

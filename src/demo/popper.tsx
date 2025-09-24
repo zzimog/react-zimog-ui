@@ -1,6 +1,6 @@
 import { useState, type ChangeEvent } from 'react';
-import { DemoBox } from './DemoBox';
 import { Button, Popper, type PopperOptions } from '@ui';
+import { DemoBox } from './DemoBox';
 
 // eslint-disable-next-line react-refresh/only-export-components
 const PopperDemo = () => {
@@ -123,4 +123,6 @@ const PopperDemo = () => {
   );
 };
 
-export default <PopperDemo />;
+const popper = <PopperDemo />;
+
+export default popper;

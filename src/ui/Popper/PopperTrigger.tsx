@@ -1,10 +1,17 @@
 import {
   type ReactNode,
+  type Ref,
   cloneElement,
   isValidElement,
   useContext,
 } from 'react';
+import { mergeRefs } from 'react-merge-refs';
 import PopperContext from './popperContext';
+
+type PropsWithRef = {
+  ref?: Ref<HTMLElement>;
+  [key: string]: unknown;
+};
 
 export type PopperTriggerProps = {
   children: ReactNode;
@@ -22,7 +29,9 @@ export const PopperTrigger = (inProps: PopperTriggerProps) => {
     return null;
   }
 
-  const props = { ref: popper.triggerRef };
+  const props = {
+    ref: mergeRefs([popper.triggerRef, (children.props as PropsWithRef).ref]),
+  };
 
   return cloneElement(children, props);
 };

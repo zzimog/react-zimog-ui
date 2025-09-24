@@ -6,8 +6,10 @@ export * from './hooks';
 export * from './utils';
 
 // Components
+export * from './Accordion';
 export * from './Box';
 export * from './Button';
+export * from './Collapsible';
 export * from './Input';
 export * from './Popper';
 export * from './Spinner';

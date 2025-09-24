@@ -4,6 +4,7 @@ import headings from './demo/headings';
 import inputs from './demo/inputs';
 import spinners from './demo/spinners';
 import popper from './demo/popper';
+import accordion from './demo/accordion';
 
 const App = () => {
   return (
@@ -30,6 +31,7 @@ const App = () => {
       <main className="grow-1">
         <div className="max-w-5xl mx-auto">
           <div className="flex flex-col gap-6">
+            {accordion}
             {popper}
             {buttons}
             {headings}

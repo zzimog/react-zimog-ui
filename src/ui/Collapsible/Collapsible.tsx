@@ -2,11 +2,13 @@ import {
   type ElementType,
   type HTMLAttributes,
   type Ref,
-  useCallback,
   useState,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
 } from 'react';
 import { cn } from '../utils';
-import { mergeRefs } from 'react-merge-refs';
 
 export type CollapsibleProps = {
   ref?: Ref<HTMLElement>;
@@ -16,49 +18,46 @@ export type CollapsibleProps = {
 } & HTMLAttributes<HTMLElement>;
 
 export const Collapsible = (inProps: CollapsibleProps) => {
-  const {
-    as,
-    ref,
-    open: initialOpen,
-    //animate = true,
-    className,
-    children,
-    ...props
-  } = inProps;
+  const { ref, as, open = false, animate = true, children, ...props } = inProps;
 
   const Tag = as || 'div';
 
-  const [height, setHeight] = useState<number | null>(null);
-  const [open, setOpen] = useState(initialOpen);
-  //const [hidden, setHidden] = useState(false);
+  const [height, setHeight] = useState(-1);
+  const [hidden, setHidden] = useState(false);
 
-  const heightRef = useCallback((node: HTMLElement) => {
-    if (node) {
-      setHeight(() => {
-        const { height } = node.getBoundingClientRect();
+  const wrapperRef = useRef<HTMLDivElement>(null);
 
-        node.style.setProperty('--height', `${height}px`);
-        return height;
-      });
+  const isHidden = height > 0 && !open;
+
+  useEffect(() => {
+    setHidden(!open);
+  }, [open]);
+
+  useLayoutEffect(() => {
+    const wrapper = wrapperRef.current;
+
+    if (wrapper && height < 0) {
+      const { height } = wrapper.getBoundingClientRect();
+
+      wrapper.style.setProperty('--height', `${height}px`);
+      setHidden(true);
+      setHeight(height);
     }
-  }, []);
-
-  const mergedRefs = mergeRefs([heightRef, ref]);
-
-  const isVisible = height && open;
+  }, [height]);
 
   return (
-    <Tag
-      ref={mergedRefs}
-      className={cn(
-        className,
-        'overflow-hidden',
-        isVisible ? 'h-[var(--height)]' : 'h-0'
-      )}
-      hidden={false}
-      {...props}
-    >
-      {children}
+    <Tag ref={ref} {...props}>
+      <div
+        ref={wrapperRef}
+        className={cn(
+          'h-[var(--height)]',
+          'overflow-hidden',
+          isHidden && 'h-0',
+          animate && 'transition-[height] duration-200'
+        )}
+      >
+        {children}
+      </div>
     </Tag>
   );
 };

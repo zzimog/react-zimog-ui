@@ -1,9 +1,15 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import App from './App.tsx'
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import App from './App.tsx';
+
+const useStrict = false;
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
+  useStrict ? (
+    <StrictMode>
+      <App />
+    </StrictMode>
+  ) : (
     <App />
-  </StrictMode>,
-)
+  )
+);

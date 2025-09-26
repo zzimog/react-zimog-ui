@@ -13,10 +13,12 @@ const DemoCollapsible = () => {
       </Button>
 
       <Collapsible open={open}>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem, impedit.
-        Ea eius possimus esse, dolores molestias numquam laudantium architecto,
-        dignissimos deleniti, molestiae et. Quisquam nisi consequatur enim dicta
-        architecto ipsa!
+        <div>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem,
+          impedit. Ea eius possimus esse, dolores molestias numquam laudantium
+          architecto, dignissimos deleniti, molestiae et. Quisquam nisi
+          consequatur enim dicta architecto ipsa!
+        </div>
       </Collapsible>
     </div>
   );

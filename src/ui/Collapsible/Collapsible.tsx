@@ -1,14 +1,15 @@
+// Ref: https://github.com/radix-ui/primitives/blob/main/packages/react/collapsible/src/collapsible.tsx
 import {
   type ElementType,
   type HTMLAttributes,
   type Ref,
   useState,
-  useCallback,
   useEffect,
   useLayoutEffect,
   useRef,
 } from 'react';
 import { cn } from '../utils';
+import { mergeRefs } from 'react-merge-refs';
 
 export type CollapsibleProps = {
   ref?: Ref<HTMLElement>;
@@ -18,46 +19,80 @@ export type CollapsibleProps = {
 } & HTMLAttributes<HTMLElement>;
 
 export const Collapsible = (inProps: CollapsibleProps) => {
-  const { ref, as, open = false, animate = true, children, ...props } = inProps;
+  const {
+    ref: refProp,
+    as,
+    open = false,
+    animate = true,
+    className,
+    style,
+    children,
+    ...props
+  } = inProps;
 
   const Tag = as || 'div';
 
-  const [height, setHeight] = useState(-1);
-  const [hidden, setHidden] = useState(false);
+  const [visible, setVisible] = useState(open);
 
-  const wrapperRef = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
+  const mergedRefs = mergeRefs([ref, refProp]);
 
-  const isHidden = height > 0 && !open;
+  const widthRef = useRef(0);
+  const width = widthRef.current;
+  const heightRef = useRef(0);
+  const height = heightRef.current;
+
+  const preventAnimationRef = useRef(open);
+
+  const present = open || visible;
 
   useEffect(() => {
-    setHidden(!open);
-  }, [open]);
+    const raf = requestAnimationFrame(() => {
+      preventAnimationRef.current = false;
+    });
+
+    return () => cancelAnimationFrame(raf);
+  });
 
   useLayoutEffect(() => {
-    const wrapper = wrapperRef.current;
+    const node = ref.current;
 
-    if (wrapper && height < 0) {
-      const { height } = wrapper.getBoundingClientRect();
-
-      wrapper.style.setProperty('--height', `${height}px`);
-      setHidden(true);
-      setHeight(height);
+    if (!node) {
+      return;
     }
-  }, [height]);
+
+    node.style.transitionDuration = '0s';
+    node.style.animationName = 'none';
+
+    const { width, height } = node.getBoundingClientRect();
+    widthRef.current = width;
+    heightRef.current = height;
+
+    if (!preventAnimationRef.current) {
+      node.style.removeProperty('transition-duration');
+      node.style.removeProperty('animation-name');
+    }
+
+    setVisible(open);
+  }, [open, present]);
 
   return (
-    <Tag ref={ref} {...props}>
-      <div
-        ref={wrapperRef}
-        className={cn(
-          'h-[var(--height)]',
-          'overflow-hidden',
-          isHidden && 'h-0',
-          animate && 'transition-[height] duration-200'
-        )}
-      >
-        {children}
-      </div>
+    <Tag
+      ref={mergedRefs}
+      className={cn(
+        present ? 'animate-height-grow' : 'animate-height-shrink',
+        animate && 'transition-[height]',
+        'overflow-hidden',
+        className
+      )}
+      style={{
+        ['--width']: width ? `${width}px` : undefined,
+        ['--height']: height ? `${height}px` : undefined,
+        ...style,
+      }}
+      {...props}
+    >
+      {present && children}
     </Tag>
   );
 };

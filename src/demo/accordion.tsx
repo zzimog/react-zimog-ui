@@ -1,28 +1,5 @@
-import { useState } from 'react';
-import { Accordion, Button, Collapsible } from '@ui';
+import { Accordion } from '@ui';
 import { DemoBox } from './DemoBox';
-
-// eslint-disable-next-line react-refresh/only-export-components
-const DemoCollapsible = () => {
-  const [open, setOpen] = useState(false);
-
-  return (
-    <div>
-      <Button onClick={() => setOpen((o) => !o)} className="mb-2">
-        Toggle collapsed
-      </Button>
-
-      <Collapsible open={open}>
-        <div>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem,
-          impedit. Ea eius possimus esse, dolores molestias numquam laudantium
-          architecto, dignissimos deleniti, molestiae et. Quisquam nisi
-          consequatur enim dicta architecto ipsa!
-        </div>
-      </Collapsible>
-    </div>
-  );
-};
 
 const accordion = (
   <DemoBox id="accordion" title="Accordion">
@@ -43,8 +20,6 @@ const accordion = (
         magnam dignissimos?
       </Accordion.Item>
     </Accordion>
-
-    <DemoCollapsible />
   </DemoBox>
 );
 

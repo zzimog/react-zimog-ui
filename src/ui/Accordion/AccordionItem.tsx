@@ -1,125 +1,87 @@
 import {
+  type Ref,
   type ElementType,
+  type ReactNode,
   type HTMLAttributes,
   useId,
   useState,
-  useRef,
-  useLayoutEffect,
+  useContext,
 } from 'react';
-import { cn } from '../utils';
 import { ChevronDown } from 'lucide-react';
+import { cn } from '../utils';
+import { Button } from '../Button';
+import { Collapsible } from '../Collapsible';
+import AccordionContext from './accordionContext';
+import accordionClasses from './accordionClasses';
+
+const { item: classes } = accordionClasses;
 
 export type AccordionItemProps = {
   as?: ElementType;
-  title: string;
-  value?: string | number;
-  expanded?: boolean;
+  ref?: Ref<HTMLElement>;
+  title: ReactNode;
+  disabled?: boolean;
+  value?: string;
 } & HTMLAttributes<HTMLElement>;
 
 export const AccordionItem = (inProps: AccordionItemProps) => {
   const {
-    as,
+    as: Tag = 'div',
     title,
-    /*value,*/
-    expanded: initialExpanded,
+    disabled,
+    value: propValue,
     className,
     children,
     ...props
   } = inProps;
 
-  const Tag = as || 'div';
+  const context = useContext(AccordionContext);
+
+  if (!context) {
+    throw new Error('AccordionItem must be used inside AccordionContext');
+  }
+
+  const { value, setValue } = context;
 
   const triggerId = useId();
   const contentId = useId();
 
-  const [height, setHeight] = useState(-1);
-  const [expanded, setExpanded] = useState(initialExpanded || false);
-
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
+  const [open, setOpen] = useState(false);
 
   function handleClick() {
-    setExpanded((prev) => !prev);
-  }
+    if (disabled) return;
 
-  useLayoutEffect(() => {
-    const wrapper = wrapperRef.current;
-    const content = contentRef.current;
-
-    if (!wrapper || !content) {
-      return;
-    }
-
-    setHeight(() => {
-      const { height } = content.getBoundingClientRect();
-      return height;
-    });
-  }, []);
-
-  if (wrapperRef.current) {
-    wrapperRef.current.style.setProperty('--height', `${height}px`);
+    setOpen((open) => !open);
   }
 
   return (
     <Tag
-      className={cn(
-        'group',
-        'not-last:border-b',
-        'border-gray-500/20',
-        className
-      )}
+      data-disabled={disabled}
+      data-state={open ? 'open' : 'closed'}
+      className={cn(classes.root, className)}
       {...props}
     >
-      <button
+      <Button
         id={triggerId}
-        aria-expanded={expanded}
+        variant="ghost"
+        aria-expanded={open}
         aria-controls={contentId}
         onClick={handleClick}
-        className={cn(
-          'flex',
-          'justify-between',
-          'items-center',
-          'w-full',
-          'py-3',
-          'text-left',
-          'rounded-md',
-          'transition-[outline]',
-          'duration-100',
-          'outline-0',
-          'outline-primary/30',
-          'focus-visible:outline-4',
-          'hover:underline'
-        )}
+        className={classes.trigger}
+        disabled={disabled}
       >
         {title}
-        <ChevronDown
-          className={cn(
-            'size-4',
-            'pointer-events-none',
-            'shrink-0',
-            'transition-transform',
-            'duration-200',
-            expanded && 'rotate-180'
-          )}
-        />
-      </button>
-      <div
-        ref={wrapperRef}
+        <ChevronDown className={classes.arrow} />
+      </Button>
+      <Collapsible
         id={contentId}
         role="region"
-        aria-hidden={!expanded}
+        aria-hidden={!open}
         aria-labelledby={triggerId}
-        className={cn(
-          expanded ? 'h-[var(--height)]' : 'h-0',
-          'transition-[height]',
-          'duration-200',
-          'overflow-hidden'
-        )}
+        open={open}
       >
-        <div ref={contentRef} className="pb-3">
-          {children}
-        </div>
-      </div>
+        <div className={classes.content}>{children}</div>
+      </Collapsible>
     </Tag>
   );
 };

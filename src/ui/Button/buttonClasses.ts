@@ -73,7 +73,7 @@ const buttonClasses = cva(
       {
         variant: ['outlined', 'dashed', 'ghost'],
         color: 'default',
-        className: ['hover:[--bg-opacity:30%]'],
+        className: ['hover:[--bg-opacity:40%]'],
       },
     ],
   }

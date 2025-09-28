@@ -4,95 +4,99 @@ import {
   type HTMLAttributes,
   type Ref,
   useState,
-  useEffect,
   useLayoutEffect,
   useRef,
+  useEffect,
 } from 'react';
-import { cn } from '../utils';
 import { mergeRefs } from 'react-merge-refs';
+import { cn } from '../utils';
 
 export type CollapsibleProps = {
-  ref?: Ref<HTMLElement>;
   as?: ElementType;
+  ref?: Ref<HTMLElement>;
   open?: boolean;
   animate?: boolean;
+  onChange?: (open: boolean) => void;
 } & HTMLAttributes<HTMLElement>;
 
 export const Collapsible = (inProps: CollapsibleProps) => {
   const {
+    as: Tag = 'div',
     ref: refProp,
-    as,
     open = false,
     animate = true,
+    onChange,
     className,
-    style,
     children,
     ...props
   } = inProps;
 
-  const Tag = as || 'div';
-
-  const [visible, setVisible] = useState(open);
-
   const ref = useRef<HTMLDivElement>(null);
   const mergedRefs = mergeRefs([ref, refProp]);
 
-  const widthRef = useRef(0);
-  const width = widthRef.current;
-  const heightRef = useRef(0);
-  const height = heightRef.current;
+  const [visible, setVisible] = useState(open);
 
-  const preventAnimationRef = useRef(open);
+  const preventAnimation = useRef(open);
+  const prevStyle = useRef<Record<string, string>>(undefined);
 
-  const present = open || visible;
+  const shouldRender = open || visible;
+
+  function handleAnimationEnd() {
+    const node = ref.current;
+    if (!node) return;
+
+    node!.style.removeProperty('--height');
+
+    if (!open) {
+      setVisible(false);
+      onChange?.(false);
+    }
+  }
 
   useEffect(() => {
-    const raf = requestAnimationFrame(() => {
-      preventAnimationRef.current = false;
-    });
-
-    return () => cancelAnimationFrame(raf);
-  });
+    preventAnimation.current = false;
+  }, []);
 
   useLayoutEffect(() => {
     const node = ref.current;
+    if (!node) return;
 
-    if (!node) {
+    if (!animate) {
+      setVisible(open);
+      onChange?.(open);
       return;
     }
 
-    node.style.transitionDuration = '0s';
+    prevStyle.current = prevStyle.current || {
+      animationName: node.style.animationName,
+    };
+
     node.style.animationName = 'none';
 
-    const { width, height } = node.getBoundingClientRect();
-    widthRef.current = width;
-    heightRef.current = height;
-
-    if (!preventAnimationRef.current) {
-      node.style.removeProperty('transition-duration');
-      node.style.removeProperty('animation-name');
+    if (!preventAnimation.current) {
+      const { height } = node.getBoundingClientRect();
+      node.style.setProperty('--height', `${height}px`);
+      node.style.animationName = prevStyle.current.animationName;
     }
 
-    setVisible(open);
-  }, [open, present]);
+    if (open) {
+      setVisible(true);
+      onChange?.(true);
+    }
+  }, [open, animate, onChange]);
+
+  const animationClass = open ? 'animate-height-grow' : 'animate-height-shrink';
 
   return (
     <Tag
       ref={mergedRefs}
-      className={cn(
-        present ? 'animate-height-grow' : 'animate-height-shrink',
-        animate && 'transition-[height]',
-        'overflow-hidden',
-        className
-      )}
-      style={{
-        ['--width']: width ? `${width}px` : undefined,
-        ['--height']: height ? `${height}px` : undefined,
-        ...style,
-      }}
+      onAnimationEnd={handleAnimationEnd}
+      data-state={shouldRender ? 'open' : 'closed'}
+      hidden={!shouldRender}
+      className={cn('overflow-hidden', animate && animationClass, className)}
       {...props}
     >
-      {present && children}
+      {shouldRender && children}
     </Tag>
   );
 };

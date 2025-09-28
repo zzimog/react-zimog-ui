@@ -3,8 +3,8 @@ const boxClasses = [
   'rounded-md',
   'border',
   'border-gray-500/20',
-  'bg-gray-500/10',
-  'dark:bg-gray-500/25',
+  'bg-neutral-100/50',
+  'dark:bg-neutral-900/50',
 ];
 
 export default boxClasses;

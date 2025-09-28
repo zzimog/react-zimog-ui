@@ -1,5 +1,5 @@
-import './index.css';
 import '@fontsource-variable/manrope/index.css';
+import './style/index.css';
 
 // System
 export * from './hooks';

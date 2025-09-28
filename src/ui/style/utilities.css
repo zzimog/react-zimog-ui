@@ -1,0 +1,13 @@
+@utility bg-var-* {
+  background-color: color-mix(
+    in oklab,
+    var(--bg-color, --value(--color- *)) var(--bg-opacity, 100%),
+    transparent
+  );
+  background-color: color-mix(
+    in oklab,
+    var(--bg-color, --value(--color- *))
+      calc(var(--bg-opacity, --modifier(integer)) * 1%),
+    transparent
+  );
+}

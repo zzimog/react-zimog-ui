@@ -1,0 +1,22 @@
+@theme {
+  --animate-height-grow: heightGrow 100ms forwards;
+  --animate-height-shrink: heightShrink 100ms forwards;
+}
+
+@keyframes heightGrow {
+  0% {
+    height: 0;
+  }
+  100% {
+    height: var(--height);
+  }
+}
+
+@keyframes heightShrink {
+  0% {
+    height: var(--height);
+  }
+  100% {
+    height: 0;
+  }
+}

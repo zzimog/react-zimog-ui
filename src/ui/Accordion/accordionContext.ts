@@ -1,7 +1,8 @@
 import { createContext } from 'react';
 
 type AccordionContextType = {
-  value?: string | number;
+  value?: string | string[];
+  setValue: (value: string) => void;
 };
 
 const AccordionContext = createContext<AccordionContextType | undefined>(

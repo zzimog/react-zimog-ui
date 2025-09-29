@@ -4,7 +4,6 @@ import {
   type ReactNode,
   type HTMLAttributes,
   useId,
-  useState,
   useContext,
 } from 'react';
 import { ChevronDown } from 'lucide-react';
@@ -35,23 +34,24 @@ export const AccordionItem = (inProps: AccordionItemProps) => {
     ...props
   } = inProps;
 
+  const triggerId = useId();
+  const contentId = useId();
+
   const context = useContext(AccordionContext);
 
   if (!context) {
     throw new Error('AccordionItem must be used inside AccordionContext');
   }
 
-  const { value, setValue } = context;
+  const { index: contextIndex, value, setValue } = context;
 
-  const triggerId = useId();
-  const contentId = useId();
-
-  const [open, setOpen] = useState(false);
+  const index = `item_${contextIndex}`;
+  const open = value === (propValue || index);
 
   function handleClick() {
     if (disabled) return;
 
-    setOpen((open) => !open);
+    setValue(propValue || index, !open);
   }
 
   return (

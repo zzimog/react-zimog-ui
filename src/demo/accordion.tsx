@@ -1,5 +1,29 @@
-import { Accordion } from '@ui';
+import { Accordion, Button, Collapsible } from '@ui';
 import { DemoBox } from './DemoBox';
+import { useState } from 'react';
+import { DemoSection } from './DemoSection';
+
+// eslint-disable-next-line react-refresh/only-export-components
+const DemoCollapsible = () => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <DemoSection title="Collapsible primitive" column>
+      <Button onClick={() => setOpen(!open)} className="w-full scale-100!">
+        Toggle
+      </Button>
+
+      <Collapsible open={open} className="border border-gray-500/20 rounded-md">
+        <div className="p-4">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam, nobis
+          asperiores. Similique nulla nihil doloremque pariatur velit ipsum
+          incidunt itaque enim, aut nam adipisci deserunt dolorum obcaecati quas
+          perspiciatis dolores?
+        </div>
+      </Collapsible>
+    </DemoSection>
+  );
+};
 
 const accordion = (
   <DemoBox id="accordion" title="Accordion">
@@ -20,6 +44,8 @@ const accordion = (
         magnam dignissimos?
       </Accordion.Item>
     </Accordion>
+
+    <DemoCollapsible />
   </DemoBox>
 );
 

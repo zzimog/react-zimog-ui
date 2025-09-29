@@ -1,4 +1,3 @@
-// Ref: https://github.com/radix-ui/primitives/blob/main/packages/react/collapsible/src/collapsible.tsx
 import {
   type ElementType,
   type HTMLAttributes,
@@ -91,9 +90,12 @@ export const Collapsible = (inProps: CollapsibleProps) => {
     <Tag
       ref={mergedRefs}
       onAnimationEnd={handleAnimationEnd}
-      data-state={shouldRender ? 'open' : 'closed'}
-      hidden={!shouldRender}
-      className={cn('overflow-hidden', animate && animationClass, className)}
+      className={cn(
+        'w-full',
+        'overflow-hidden',
+        animate && animationClass,
+        className
+      )}
       {...props}
     >
       {shouldRender && children}

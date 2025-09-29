@@ -4,6 +4,7 @@ import {
   type ReactNode,
   type HTMLAttributes,
   useState,
+  Children,
 } from 'react';
 import { cn } from '../utils';
 import { AccordionItem } from './AccordionItem';
@@ -35,24 +36,32 @@ export const Accordion = (inProps: AccordionProps) => {
     defaultValue,
     className,
     children,
-    onChange,
+    //onChange,
     ...props
   } = inProps;
 
   const initValue = defaultValue || (single ? '' : []);
 
-  const [value, setValue] = useState<string | string[]>(initValue);
+  const [value, setValue] = useState<string | string[] | undefined>(initValue);
 
   const context = {
     value,
-    setValue: (itemValue: string) => {
-      setValue(itemValue);
+    setValue: (itemValue: string, open: boolean) => {
+      if (open) {
+        setValue(itemValue);
+      } else {
+        setValue(undefined);
+      }
     },
   };
 
   return (
     <Tag className={cn(classes.root, className)} {...props}>
-      <AccordionContext value={context}>{children}</AccordionContext>
+      {Children.map(children, (child, index) => (
+        <AccordionContext value={{ index, ...context }}>
+          {child}
+        </AccordionContext>
+      ))}
     </Tag>
   );
 };

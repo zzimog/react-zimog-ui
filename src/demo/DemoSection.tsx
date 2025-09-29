@@ -6,8 +6,9 @@ export const DemoSection = (props: {
   title: string;
   children: ReactNode;
   column?: boolean;
+  gap?: boolean;
 }) => {
-  const { id, title, children, column } = props;
+  const { id, title, children, column, gap = true } = props;
 
   return (
     <article>
@@ -21,7 +22,7 @@ export const DemoSection = (props: {
           'flex',
           'justify-center',
           'items-center',
-          'gap-2',
+          gap && 'gap-2',
           column && 'flex-col'
         )}
       />

@@ -8,13 +8,13 @@ const DemoCollapsible = () => {
   const [open, setOpen] = useState(false);
 
   return (
-    <DemoSection title="Collapsible primitive" column>
+    <DemoSection title="Collapsible primitive" gap={false} column>
       <Button onClick={() => setOpen(!open)} className="w-full scale-100!">
         Toggle
       </Button>
 
-      <Collapsible open={open} className="border border-gray-500/20 rounded-md">
-        <div className="p-4">
+      <Collapsible open={open}>
+        <div className="mt-2 p-4 border border-gray-500/20 rounded-md">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam, nobis
           asperiores. Similique nulla nihil doloremque pariatur velit ipsum
           incidunt itaque enim, aut nam adipisci deserunt dolorum obcaecati quas

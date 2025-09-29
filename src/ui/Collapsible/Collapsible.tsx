@@ -30,13 +30,12 @@ export const Collapsible = (inProps: CollapsibleProps) => {
     ...props
   } = inProps;
 
+  const [visible, setVisible] = useState(open);
+
   const ref = useRef<HTMLDivElement>(null);
   const mergedRefs = mergeRefs([ref, refProp]);
 
-  const [visible, setVisible] = useState(open);
-
   const preventAnimation = useRef(open);
-  const prevStyle = useRef<Record<string, string>>(undefined);
 
   const shouldRender = open || visible;
 
@@ -66,16 +65,12 @@ export const Collapsible = (inProps: CollapsibleProps) => {
       return;
     }
 
-    prevStyle.current = prevStyle.current || {
-      animationName: node.style.animationName,
-    };
-
     node.style.animationName = 'none';
 
     if (!preventAnimation.current) {
       const { height } = node.getBoundingClientRect();
       node.style.setProperty('--height', `${height}px`);
-      node.style.animationName = prevStyle.current.animationName;
+      node.style.removeProperty('animation-name');
     }
 
     if (open) {
@@ -90,6 +85,7 @@ export const Collapsible = (inProps: CollapsibleProps) => {
     <Tag
       ref={mergedRefs}
       onAnimationEnd={handleAnimationEnd}
+      hidden={!shouldRender}
       className={cn(
         'w-full',
         'overflow-hidden',

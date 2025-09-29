@@ -19,12 +19,12 @@ export type AccordionProps = {
   | {
       single: true;
       defaultValue?: string;
-      onChange?: (value: string) => void;
+      onChange?(value?: string): void;
     }
   | {
       single?: false;
       defaultValue?: string[];
-      onChange?: (value: string[]) => void;
+      onChange?(value: string[]): void;
     }
 ) &
   Omit<HTMLAttributes<HTMLElement>, 'defaultValue' | 'onChange'>;
@@ -36,7 +36,7 @@ export const Accordion = (inProps: AccordionProps) => {
     defaultValue,
     className,
     children,
-    //onChange,
+    onChange,
     ...props
   } = inProps;
 
@@ -44,15 +44,37 @@ export const Accordion = (inProps: AccordionProps) => {
 
   const [value, setValue] = useState<string | string[] | undefined>(initValue);
 
+  function handleMultipleValues(itemValue: string, open: boolean) {
+    setValue((prev) => {
+      if (single || !Array.isArray(prev)) {
+        return [];
+      }
+
+      const newValue = open
+        ? [...prev, itemValue]
+        : [...prev].filter((v) => v !== itemValue);
+
+      onChange?.(newValue);
+      return newValue;
+    });
+  }
+
+  function handleSingleValue(itemValue: string, open: boolean) {
+    setValue((prev) => {
+      if (!single || Array.isArray(prev)) {
+        return undefined;
+      }
+
+      const newVal = open ? itemValue : undefined;
+
+      onChange?.(newVal);
+      return newVal;
+    });
+  }
+
   const context = {
     value,
-    setValue: (itemValue: string, open: boolean) => {
-      if (open) {
-        setValue(itemValue);
-      } else {
-        setValue(undefined);
-      }
-    },
+    setValue: single ? handleSingleValue : handleMultipleValues,
   };
 
   return (

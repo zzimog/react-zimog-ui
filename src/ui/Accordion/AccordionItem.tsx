@@ -44,9 +44,11 @@ export const AccordionItem = (inProps: AccordionItemProps) => {
   }
 
   const { index: contextIndex, value, setValue } = context;
+  const index = `${contextIndex}`;
 
-  const index = `item_${contextIndex}`;
-  const open = value === (propValue || index);
+  const open = Array.isArray(value)
+    ? value.includes(propValue || index)
+    : value === (propValue || index);
 
   function handleClick() {
     if (disabled) return;

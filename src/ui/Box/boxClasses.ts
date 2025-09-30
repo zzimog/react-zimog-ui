@@ -5,6 +5,6 @@ const boxClasses = [
   'border-gray-500/25',
   'bg-neutral-100',
   'dark:bg-neutral-900',
-];
+].join(' ');
 
 export default boxClasses;

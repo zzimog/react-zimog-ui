@@ -8,9 +8,7 @@ export type BoxProps = {
 } & HTMLAttributes<HTMLElement>;
 
 export const Box = (inProps: BoxProps) => {
-  const { as, className, ...props } = inProps;
-
-  const Tag = as || 'div';
+  const { as: Tag = 'div', className, ...props } = inProps;
 
   return <Tag className={cn(boxClasses, className)} {...props} />;
 };

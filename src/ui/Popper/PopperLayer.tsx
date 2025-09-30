@@ -2,6 +2,7 @@ import { type ElementType, type HTMLAttributes, useContext } from 'react';
 import { createPortal } from 'react-dom';
 import { cn } from '../utils';
 import PopperContext from './popperContext';
+import classes from './popperClasses';
 
 export type LayerProps = {
   as?: ElementType;
@@ -25,16 +26,7 @@ export const PopperLayer = (inProps: LayerProps) => {
   return createPortal(
     <Tag
       ref={popper.layerRef}
-      className={cn(
-        'p-2',
-        'rounded-md',
-        'border',
-        'border-gray-500/20',
-        'bg-gray-200',
-        'dark:bg-gray-800',
-        'shadow-xs',
-        className
-      )}
+      className={cn(classes.layer, className)}
       {...props}
     />,
     document.body

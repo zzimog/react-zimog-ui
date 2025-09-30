@@ -1,18 +1,22 @@
-import { cn } from '../utils';
-
 const accordionClasses = {
-  root: cn(['p-1', 'rounded-md', 'bg-gray-500/10']),
+  root: 'p-1 rounded-md bg-gray-500/10',
   item: {
     root: 'group',
-    trigger: cn(['w-full', 'justify-between', 'not-disabled:active:scale-100']),
-    arrow: cn([
+    trigger: [
+      'flex',
+      'justify-between',
+      'items-center',
+      'w-full',
+      'not-disabled:active:scale-100',
+    ].join(' '),
+    arrow: [
       'size-4',
-      'pointer-events-none',
       'shrink-0',
       'transition-transform',
       'duration-200',
+      'pointer-events-none',
       'group-[[data-state="open"]]:rotate-180',
-    ]),
+    ].join(' '),
     content: 'p-2',
   },
 };

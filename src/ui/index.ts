@@ -13,5 +13,6 @@ export * from './Collapsible';
 export * from './Input';
 export * from './Popper';
 export * from './Spinner';
+export * from './Tabs';
 export * from './Text';
 export * from './ThemeSwitcher';

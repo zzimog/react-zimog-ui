@@ -1,10 +1,11 @@
 import { Box, ThemeSwitcher } from '@ui';
+import accordion from './demo/accordion';
 import buttons from './demo/buttons';
 import headings from './demo/headings';
 import inputs from './demo/inputs';
-import spinners from './demo/spinners';
 import popper from './demo/popper';
-import accordion from './demo/accordion';
+import spinners from './demo/spinners';
+import tabs from './demo/tabs';
 
 const App = () => {
   return (
@@ -31,6 +32,7 @@ const App = () => {
       <main className="grow-1">
         <div className="max-w-5xl mx-auto">
           <div className="flex flex-col gap-6">
+            {tabs}
             {accordion}
             {popper}
             {buttons}

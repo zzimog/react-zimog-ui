@@ -4,13 +4,12 @@ import {
   type ReactNode,
   type HTMLAttributes,
   useId,
-  useContext,
 } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { cn } from '../utils';
 import { Button } from '../Button';
 import { Collapsible } from '../Collapsible';
-import AccordionContext from './accordionContext';
+import { useAccordion } from './accordionContext';
 import accordionClasses from './accordionClasses';
 
 const { item: classes } = accordionClasses;
@@ -37,13 +36,7 @@ export const AccordionItem = (inProps: AccordionItemProps) => {
   const triggerId = useId();
   const contentId = useId();
 
-  const context = useContext(AccordionContext);
-
-  if (!context) {
-    throw new Error('AccordionItem must be used inside AccordionContext');
-  }
-
-  const { index: contextIndex, value, setValue } = context;
+  const { index: contextIndex, value, setValue } = useAccordion();
   const index = `${contextIndex}`;
 
   const open = Array.isArray(value)

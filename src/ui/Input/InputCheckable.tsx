@@ -1,5 +1,5 @@
 import type { InputHTMLAttributes, Ref } from 'react';
-import { cn } from '@ui/utils';
+import { cn } from '../utils';
 import { checkboxClasses, radioClasses } from './inputClasses';
 
 export type CheckableProps = {

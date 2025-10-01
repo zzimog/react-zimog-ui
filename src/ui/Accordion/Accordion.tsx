@@ -8,7 +8,7 @@ import {
 } from 'react';
 import { cn } from '../utils';
 import { AccordionItem } from './AccordionItem';
-import AccordionContext from './accordionContext';
+import { AccordionContext } from './accordionContext';
 import classes from './accordionClasses';
 
 export type AccordionProps = {

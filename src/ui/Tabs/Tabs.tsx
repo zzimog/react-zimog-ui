@@ -2,17 +2,22 @@ import {
   type ElementType,
   type Ref,
   type HTMLAttributes,
-  Children,
-  isValidElement,
   useState,
+  Children,
+  useId,
 } from 'react';
-import { Button } from '../Button';
-import { TabsItem, type TabsItemProps } from './TabsItem';
+import { cn } from '../utils';
+import { TabsList } from './TabsList';
+import { TabsTab } from './TabsTab';
+import { TabsItem } from './TabsItem';
+import classes from './tabsClasses';
+import { TabsContext } from './tabsContext';
 
 export type TabsProps = {
   as?: ElementType;
   ref?: Ref<HTMLElement>;
   value?: number;
+  defaultValue?: number;
   onChange?(value: number): void;
 } & HTMLAttributes<HTMLElement>;
 
@@ -20,39 +25,37 @@ export const Tabs = (inProps: TabsProps) => {
   const {
     as: Tag = 'div',
     value: propValue,
-    onChange,
+    defaultValue,
+    className,
     children,
+    onChange,
     ...props
   } = inProps;
 
-  const [value, setValue] = useState(propValue || 0);
+  const computedValue = propValue || defaultValue || undefined;
 
-  const validChildren = Children.toArray(children)
-    .filter((child) => isValidElement(child))
-    .filter((child) => Object.hasOwn(child.props as object, 'title'));
+  const baseId = useId();
 
-  const titles = validChildren.map((child) => {
-    const props = child.props as TabsItemProps;
-    return props.title;
-  });
+  const [value, setValue] = useState(computedValue);
 
-  function handleTabChange(index: number) {
-    onChange?.(index);
-    setValue(index);
-  }
+  const context = {
+    baseId,
+    value,
+    setValue(index: number) {
+      onChange?.(index);
+      setValue(index);
+    },
+  };
 
   return (
-    <Tag className="flex flex-col gap-2" {...props}>
-      <header role="tabslist" className="flex gap-2">
-        {titles.map((title, index) => (
-          <Button key={index} size="sm" onClick={() => handleTabChange(index)}>
-            {title}
-          </Button>
-        ))}
-      </header>
-      {validChildren[value]}
+    <Tag className={cn(classes.root, className)} {...props}>
+      {Children.map(children, (child, index) => (
+        <TabsContext value={{ index, ...context }}>{child}</TabsContext>
+      ))}
     </Tag>
   );
 };
 
+Tabs.List = TabsList;
+Tabs.Tab = TabsTab;
 Tabs.Item = TabsItem;

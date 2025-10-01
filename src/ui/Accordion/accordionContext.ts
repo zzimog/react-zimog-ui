@@ -1,4 +1,4 @@
-import { createContext } from 'react';
+import { createContext, useContext } from 'react';
 
 type AccordionContextType = {
   index: number;
@@ -6,8 +6,16 @@ type AccordionContextType = {
   setValue: (value: string, open: boolean) => void;
 };
 
-const AccordionContext = createContext<AccordionContextType | undefined>(
+export const AccordionContext = createContext<AccordionContextType | undefined>(
   undefined
 );
 
-export default AccordionContext;
+export function useAccordion() {
+  const context = useContext(AccordionContext);
+
+  if (!context) {
+    throw new Error('useAccordion must be used inside AccordionContext');
+  }
+
+  return context;
+}

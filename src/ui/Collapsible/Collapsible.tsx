@@ -59,7 +59,13 @@ export const Collapsible = (inProps: CollapsibleProps) => {
     const node = ref.current;
     if (!node) return;
 
-    if (!animate) {
+    const computedAnimationName = window
+      .getComputedStyle(node)
+      .getPropertyValue('animation-name');
+
+    const canAnimate = computedAnimationName !== 'none';
+
+    if (!animate || !canAnimate) {
       setVisible(open);
       onChange?.(open);
       return;

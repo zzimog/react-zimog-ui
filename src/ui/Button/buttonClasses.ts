@@ -18,7 +18,6 @@ const buttonClasses = cva(
     'disabled:opacity-50',
     'disabled:cursor-not-allowed',
     'outline-0',
-    'outline-offset-1',
     'outline-primary/30',
     'focus-visible:outline-4',
     '[&_svg]:shrink-0',

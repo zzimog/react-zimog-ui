@@ -2,16 +2,15 @@ import { createContext, useContext } from 'react';
 
 type TabsContextType = {
   baseId: string;
-  index: number;
-  value?: number;
-  setValue(value: number): void;
+  value?: string;
+  setValue(value: string): void;
 };
 
 export const TabsContext = createContext<TabsContextType | undefined>(
   undefined
 );
 
-export function useTabs() {
+export function useTabsContext() {
   const context = useContext(TabsContext);
 
   if (!context) {

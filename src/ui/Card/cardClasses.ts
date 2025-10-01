@@ -5,7 +5,7 @@ const cardClasses = cva(
     'p-8',
     'rounded-md',
     'border',
-    'border-gray-500/25',
+    'border-neutral-500/20',
     'bg-neutral-100',
     'dark:bg-neutral-900',
   ],

@@ -7,8 +7,8 @@ export * from './utils';
 
 // Components
 export * from './Accordion';
-export * from './Box';
 export * from './Button';
+export * from './Card';
 export * from './Collapsible';
 export * from './Input';
 export * from './Popper';

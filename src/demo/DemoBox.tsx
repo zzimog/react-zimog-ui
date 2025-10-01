@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Box, cn, Title } from '@ui';
+import { Card, cn, Title } from '@ui';
 
 export const DemoBox = (props: {
   id?: string;
@@ -11,7 +11,7 @@ export const DemoBox = (props: {
   const { id, title, children, row, center } = props;
 
   return (
-    <Box as="section">
+    <Card as="section">
       <header className="-mt-2 mb-4 pb-4 border-b border-gray-500/20">
         <Title id={id} size={1} children={title} />
       </header>
@@ -24,6 +24,6 @@ export const DemoBox = (props: {
       >
         {children}
       </main>
-    </Box>
+    </Card>
   );
 };

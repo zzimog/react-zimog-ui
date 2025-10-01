@@ -1,4 +1,4 @@
-import { type Ref, useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, type RefObject } from 'react';
 import { useOutsideClick } from './useOutsideClick';
 
 type PopperPlacement = 'top' | 'right' | 'bottom' | 'left';
@@ -12,13 +12,15 @@ export type PopperOptions = {
   position?: `${PopperPlacement}-${PopperAlign}` | (string & {});
 };
 
-export type PopperObject = {
-  triggerRef: Ref<HTMLElement | null>;
-  layerRef: Ref<HTMLElement | null>;
+export type PopperObject<T extends HTMLElement, L extends HTMLElement> = {
+  triggerRef: RefObject<T | null>;
+  layerRef: RefObject<L | null>;
   layerOpen: boolean;
 };
 
-export function usePopper(options: PopperOptions = {}): PopperObject {
+export function usePopper<T extends HTMLElement, L extends HTMLElement>(
+  options: PopperOptions = {}
+): PopperObject<T, L> {
   const {
     open = false,
     distance = 8,
@@ -28,10 +30,10 @@ export function usePopper(options: PopperOptions = {}): PopperObject {
 
   const [layerOpen, setLayerOpen] = useState(open);
 
-  const triggerRef = useRef<HTMLElement | null>(null);
+  const triggerRef = useRef<T>(null);
   const triggerRectRef = useRef<DOMRect>(null);
 
-  const layerRef = useRef<HTMLElement | null>(null);
+  const layerRef = useRef<L>(null);
 
   useEffect(() => {
     if (!triggerRef.current) {

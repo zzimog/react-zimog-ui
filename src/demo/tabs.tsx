@@ -5,9 +5,9 @@ const tabs = (
   <DemoBox id="tabs" title="Tabs">
     <Tabs defaultValue="0">
       <Tabs.List>
-        <Tabs.Trigger value="0">Lorem</Tabs.Trigger>
-        <Tabs.Trigger value="1">Ipsum</Tabs.Trigger>
-        <Tabs.Trigger value="2">Dolor</Tabs.Trigger>
+        <Tabs.Trigger value="0">Lorem ipsum</Tabs.Trigger>
+        <Tabs.Trigger value="1">Dolor</Tabs.Trigger>
+        <Tabs.Trigger value="2">Sit amet</Tabs.Trigger>
       </Tabs.List>
       <Tabs.Content value="0">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio error

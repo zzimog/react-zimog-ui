@@ -31,9 +31,6 @@ export const TabsList = (inProps: TabsListProps) => {
     const left = nodeLeft - rootLeft;
 
     Object.assign(indicator.style, {
-      position: 'absolute',
-      top: '100%',
-      left: 0,
       width: `${width}px`,
       transform: `translateX(${left}px)`,
     });
@@ -46,8 +43,10 @@ export const TabsList = (inProps: TabsListProps) => {
       className={cn(classes.list.root, className)}
       {...props}
     >
-      <TabsListContext value={{ setActive }}>{children}</TabsListContext>
-      <div ref={indicatorRef} className={classes.list.indicator} />
+      <div className={classes.list.tabs}>
+        <TabsListContext value={{ setActive }}>{children}</TabsListContext>
+      </div>
+      {active && <div ref={indicatorRef} className={classes.list.indicator} />}
     </Tag>
   );
 };

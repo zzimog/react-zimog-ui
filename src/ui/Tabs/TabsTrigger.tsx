@@ -1,4 +1,9 @@
-import { type ElementType, type HTMLAttributes, useCallback } from 'react';
+import {
+  type ElementType,
+  type HTMLAttributes,
+  useRef,
+  useEffect,
+} from 'react';
 import { cn } from '../utils';
 import classes from './tabsClasses';
 import { useTabsContext } from './tabsContext';
@@ -20,6 +25,8 @@ export const TabsTrigger = (inProps: TabsTriggerProps) => {
     ...props
   } = inProps;
 
+  const ref = useRef<HTMLElement>(null);
+
   const { baseId, value, setValue } = useTabsContext();
   const { setActive } = useTabsListContext();
 
@@ -28,20 +35,20 @@ export const TabsTrigger = (inProps: TabsTriggerProps) => {
 
   const isActive = valueProp === value;
 
-  const ref = useCallback(
-    (node: HTMLElement) => {
-      if (isActive) {
-        setActive(node);
-      }
-    },
-    [isActive, setActive]
-  );
-
   function handleClick() {
     if (!isActive && !disabled) {
       setValue(valueProp);
     }
   }
+
+  useEffect(() => {
+    const node = ref.current;
+    if (!node) return;
+
+    if (isActive) {
+      setActive(node);
+    }
+  }, [isActive, setActive]);
 
   return (
     <Tag

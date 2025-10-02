@@ -5,7 +5,7 @@ const tabsClasses = {
   root: 'flex flex-col',
   list: {
     root: 'border-b border-neutral-500/25',
-    tabs: 'flex',
+    tabs: 'flex gap-4',
     indicator: cn([
       'h-[2px]',
       'bg-primary',
@@ -15,8 +15,6 @@ const tabsClasses = {
   },
   trigger: cn([
     buttonClasses({ variant: 'ghost' }),
-    'p-2',
-    'rounded-none',
     'scale-100!',
     'hover:bg-transparent',
   ]),

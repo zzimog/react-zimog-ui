@@ -1,10 +1,4 @@
-import {
-  type ReactNode,
-  type Ref,
-  cloneElement,
-  isValidElement,
-  useContext,
-} from 'react';
+import { type ReactElement, type Ref, cloneElement, useContext } from 'react';
 import { mergeRefs } from 'react-merge-refs';
 import PopperContext from './popperContext';
 
@@ -14,7 +8,7 @@ type PropsWithRef = {
 };
 
 export type PopperTriggerProps = {
-  children: ReactNode;
+  children: ReactElement;
 };
 
 export const PopperTrigger = (inProps: PopperTriggerProps) => {
@@ -23,10 +17,6 @@ export const PopperTrigger = (inProps: PopperTriggerProps) => {
 
   if (!popper) {
     throw new Error('PopperTrigger must be used inside PopperContext');
-  }
-
-  if (!isValidElement(children)) {
-    return null;
   }
 
   const props = {

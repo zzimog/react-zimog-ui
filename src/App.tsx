@@ -7,6 +7,7 @@ import popper from './demo/popper';
 import spinners from './demo/spinners';
 import tabs from './demo/tabs';
 import usePopper from './demo/usePopper';
+import interactive from './demo/interactive';
 
 const App = () => {
   return (
@@ -33,6 +34,7 @@ const App = () => {
       <main className="grow-1">
         <div className="max-w-5xl mx-auto">
           <div className="flex flex-col gap-6">
+            {interactive}
             {usePopper}
             {tabs}
             {accordion}

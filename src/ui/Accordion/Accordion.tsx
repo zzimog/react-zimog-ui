@@ -19,28 +19,37 @@ export type AccordionProps = {
   | {
       single: true;
       defaultValue?: string;
+      value?: string;
       onChange?(value?: string): void;
     }
   | {
       single?: false;
       defaultValue?: string[];
+      value?: string[];
       onChange?(value: string[]): void;
     }
 ) &
-  Omit<HTMLAttributes<HTMLElement>, 'defaultValue' | 'onChange'>;
+  Omit<HTMLAttributes<HTMLElement>, 'defaultValue' | 'value' | 'onChange'>;
 
 export const Accordion = (inProps: AccordionProps) => {
   const {
     as: Tag = 'div',
     single,
     defaultValue,
+    value: valueProp,
     className,
     children,
     onChange,
     ...props
   } = inProps;
 
-  const initValue = defaultValue || (single ? '' : []);
+  if (defaultValue && valueProp) {
+    throw new Error(
+      'Accordion cannot accept both `defaultValue` and `value` props.'
+    );
+  }
+
+  const initValue = defaultValue || valueProp || (single ? '' : []);
 
   const [value, setValue] = useState<string | string[] | undefined>(initValue);
 

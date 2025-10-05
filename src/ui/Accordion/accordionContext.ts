@@ -14,7 +14,7 @@ export function useAccordion() {
   const context = useContext(AccordionContext);
 
   if (!context) {
-    throw new Error('useAccordion must be used inside AccordionContext');
+    throw new Error('useAccordion must be used inside AccordionContext.');
   }
 
   return context;

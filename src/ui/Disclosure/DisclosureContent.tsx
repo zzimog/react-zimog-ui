@@ -5,6 +5,7 @@ import useDisclosure from './useDisclosure';
 export type DisclosureContentProps = {
   as?: ElementType;
   value: string;
+  forceMount?: boolean;
 } & HTMLAttributes<HTMLElement>;
 
 export const DisclosureContent = (inProps: DisclosureContentProps) => {

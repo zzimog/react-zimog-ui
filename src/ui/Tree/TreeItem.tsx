@@ -1,5 +1,7 @@
-import { type ReactNode, type HTMLAttributes, useRef } from 'react';
+import { type ReactNode, type HTMLAttributes, useRef, useState } from 'react';
 import classes from './treeClasses';
+import { File } from 'lucide-react';
+import { Collapsible } from '../Collapsible';
 
 export type TreeItemProps = {
   index?: number;
@@ -19,6 +21,8 @@ export const TreeItem = (inProps: TreeItemProps) => {
 
   const ref = useRef<HTMLDivElement>(null);
 
+  const [open, setOpen] = useState(true);
+
   function handleOver() {
     const node = ref.current;
     if (!node) return;
@@ -28,22 +32,30 @@ export const TreeItem = (inProps: TreeItemProps) => {
 
   return (
     <li {...props}>
-      <div ref={ref} className={classes.list.item} onMouseOver={handleOver}>
+      <div
+        ref={ref}
+        className={classes.list.item}
+        onClick={() => setOpen(!open)}
+        onMouseOver={handleOver}
+      >
+        <File />
         {name}
       </div>
 
       {items.length > 0 && (
-        <ul className={classes.list.root}>
-          {items.map((item, index) => (
-            <TreeItem
-              key={`${indexProp}_${index}`}
-              index={index}
-              name={item.name}
-              items={item.items}
-              onItemOver={onItemOver}
-            />
-          ))}
-        </ul>
+        <Collapsible open={open}>
+          <ul className={classes.list.root}>
+            {items.map((item, index) => (
+              <TreeItem
+                key={`${indexProp}_${index}`}
+                index={index}
+                name={item.name}
+                items={item.items}
+                onItemOver={onItemOver}
+              />
+            ))}
+          </ul>
+        </Collapsible>
       )}
     </li>
   );

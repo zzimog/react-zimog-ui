@@ -6,6 +6,17 @@ const data: TreeProps['data'] = [
     name: 'app',
     items: [
       {
+        name: '(home)',
+        items: [
+          {
+            name: 'page.tsx',
+          },
+          {
+            name: 'layout.tsx',
+          },
+        ],
+      },
+      {
         name: 'page.tsx',
       },
       {

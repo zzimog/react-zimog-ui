@@ -52,20 +52,15 @@ export const Collapsible = (inProps: CollapsibleProps) => {
   }
 
   useEffect(() => {
-    preventAnimation.current = false;
+    const raf = requestAnimationFrame(() => (preventAnimation.current = false));
+    return () => cancelAnimationFrame(raf);
   }, []);
 
   useLayoutEffect(() => {
     const node = ref.current;
     if (!node) return;
 
-    const computedAnimationName = window
-      .getComputedStyle(node)
-      .getPropertyValue('animation-name');
-
-    const canAnimate = computedAnimationName !== 'none';
-
-    if (!animate || !canAnimate) {
+    if (!animate) {
       setVisible(open);
       onChange?.(open);
       return;

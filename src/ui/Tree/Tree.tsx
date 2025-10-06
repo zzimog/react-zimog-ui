@@ -32,21 +32,32 @@ export const Tree = (inProps: TreeProps) => {
   function handleOver(item: HTMLElement) {
     const parentRect = ref.current!.getBoundingClientRect();
     const { top, left, width, height } = item.getBoundingClientRect();
-    const leftOffset = left - parentRect.left;
-    const topOffset = top - parentRect.top;
 
     const highlight = highlightRef.current!;
+    const x = left - parentRect.left;
+    const y = top - parentRect.top;
 
     Object.assign(highlight.style, {
       width: `${width}px`,
       height: `${height}px`,
-      transform: `translate(${leftOffset}px, ${topOffset}px)`,
+      transform: `translate(${x}px, ${y}px)`,
       opacity: 1,
     });
   }
 
+  function handleOut() {
+    Object.assign(highlightRef.current!.style, {
+      opacity: 0,
+    });
+  }
+
   return (
-    <Tag ref={mergedRef} className={cn(classes.root, className)} {...props}>
+    <Tag
+      ref={mergedRef}
+      className={cn(classes.root, className)}
+      onMouseOut={handleOut}
+      {...props}
+    >
       {data.length > 0 && (
         <>
           <div ref={highlightRef} className={classes.highlight} />

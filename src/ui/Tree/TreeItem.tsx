@@ -1,7 +1,7 @@
 import { type ReactNode, type HTMLAttributes, useRef, useState } from 'react';
 import classes from './treeClasses';
 import { File } from 'lucide-react';
-import { Collapsible } from '../Collapsible';
+import { Presence } from '../Presence';
 
 export type TreeItemProps = {
   index?: number;
@@ -43,19 +43,17 @@ export const TreeItem = (inProps: TreeItemProps) => {
       </div>
 
       {items.length > 0 && (
-        <Collapsible open={open}>
-          <ul className={classes.list.root}>
-            {items.map((item, index) => (
-              <TreeItem
-                key={`${indexProp}_${index}`}
-                index={index}
-                name={item.name}
-                items={item.items}
-                onItemOver={onItemOver}
-              />
-            ))}
-          </ul>
-        </Collapsible>
+        <Presence as="ul" className={classes.list.root} open={open}>
+          {items.map((item, index) => (
+            <TreeItem
+              key={`${indexProp}_${index}`}
+              index={index}
+              name={item.name}
+              items={item.items}
+              onItemOver={onItemOver}
+            />
+          ))}
+        </Presence>
       )}
     </li>
   );

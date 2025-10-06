@@ -1,15 +1,11 @@
-import { Accordion, Button, Collapsible } from '@ui';
+import { Accordion, Button, Presence } from '@ui';
 import { DemoBox } from './DemoBox';
 import { useState } from 'react';
 import { DemoSection } from './DemoSection';
 
-function handleChange(value: unknown) {
-  console.log(value);
-}
-
 // eslint-disable-next-line react-refresh/only-export-components
 const DemoAccordion = (props: { single?: boolean }) => (
-  <Accordion single={props.single} onChange={handleChange}>
+  <Accordion single={props.single}>
     <Accordion.Item title="Lorem">
       Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquid nulla
       accusantium mollitia iure ab ex id laborum, aspernatur repudiandae sed
@@ -29,23 +25,23 @@ const DemoAccordion = (props: { single?: boolean }) => (
 );
 
 // eslint-disable-next-line react-refresh/only-export-components
-const DemoCollapsible = () => {
+const DemoPresence = () => {
   const [open, setOpen] = useState(false);
 
   return (
-    <DemoSection title="Collapsible primitive" gap={false} column>
+    <DemoSection title="Presence primitive" gap={false} column>
       <Button onClick={() => setOpen(!open)} className="w-full scale-100!">
         Toggle
       </Button>
 
-      <Collapsible open={open}>
+      <Presence open={open}>
         <div className="mt-2 p-4 border border-gray-500/20 rounded-md">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam, nobis
           asperiores. Similique nulla nihil doloremque pariatur velit ipsum
           incidunt itaque enim, aut nam adipisci deserunt dolorum obcaecati quas
           perspiciatis dolores?
         </div>
-      </Collapsible>
+      </Presence>
     </DemoSection>
   );
 };
@@ -54,7 +50,7 @@ const accordion = (
   <DemoBox id="accordion" title="Accordion">
     <DemoAccordion />
     <DemoAccordion single={true} />
-    <DemoCollapsible />
+    <DemoPresence />
   </DemoBox>
 );
 

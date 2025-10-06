@@ -6,25 +6,24 @@ import {
   useLayoutEffect,
   useRef,
   useEffect,
+  useCallback,
 } from 'react';
 import { mergeRefs } from 'react-merge-refs';
 import { cn } from '../utils';
 
-export type CollapsibleProps = {
+export type PresenceProps = {
   as?: ElementType;
   ref?: Ref<HTMLElement>;
   open?: boolean;
-  animate?: boolean;
-  onChange?: (open: boolean) => void;
-} & HTMLAttributes<HTMLElement>;
+  forceMount?: boolean;
+} & Omit<HTMLAttributes<HTMLElement>, 'style'>;
 
-export const Collapsible = (inProps: CollapsibleProps) => {
+export const Presence = (inProps: PresenceProps) => {
   const {
     as: Tag = 'div',
     ref: refProp,
     open = false,
-    animate = true,
-    onChange,
+    forceMount,
     className,
     children,
     ...props
@@ -37,19 +36,18 @@ export const Collapsible = (inProps: CollapsibleProps) => {
 
   const preventAnimation = useRef(open);
 
-  const shouldRender = open || visible;
+  const shouldRender = forceMount || open || visible;
 
-  function handleAnimationEnd() {
+  const handleAnimationEnd = useCallback(() => {
     const node = ref.current;
     if (!node) return;
 
-    node!.style.removeProperty('--height');
+    node.removeAttribute('style');
 
     if (!open) {
       setVisible(false);
-      onChange?.(false);
     }
-  }
+  }, [open]);
 
   useEffect(() => {
     const raf = requestAnimationFrame(() => (preventAnimation.current = false));
@@ -60,40 +58,35 @@ export const Collapsible = (inProps: CollapsibleProps) => {
     const node = ref.current;
     if (!node) return;
 
-    if (!animate) {
-      setVisible(open);
-      onChange?.(open);
-      return;
-    }
-
     node.style.animationName = 'none';
 
     if (!preventAnimation.current) {
-      const { height } = node.getBoundingClientRect();
+      const { width, height } = node.getBoundingClientRect();
+
+      node.style.setProperty('--width', `${width}px`);
       node.style.setProperty('--height', `${height}px`);
       node.style.removeProperty('animation-name');
     }
 
-    if (open) {
-      setVisible(true);
-      onChange?.(true);
-    }
-  }, [open, animate, onChange]);
+    const animationName = getComputedStyle(node).animationName;
+    const hasAnimation = animationName !== 'none';
 
-  const animationClass = open ? 'animate-height-grow' : 'animate-height-shrink';
+    if (!hasAnimation && !open) {
+      handleAnimationEnd();
+    }
+
+    if (open) {
+      setVisible(open);
+    }
+  }, [open, handleAnimationEnd]);
 
   return (
     <Tag
-      ref={mergedRefs}
-      onAnimationEnd={handleAnimationEnd}
-      hidden={!shouldRender}
-      className={cn(
-        'w-full',
-        'overflow-hidden',
-        animate && animationClass,
-        className
-      )}
       {...props}
+      ref={mergedRefs}
+      className={cn(className, 'overflow-hidden')}
+      hidden={!shouldRender}
+      onAnimationEnd={handleAnimationEnd}
     >
       {shouldRender && children}
     </Tag>

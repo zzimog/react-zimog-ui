@@ -8,7 +8,7 @@ import {
 import { ChevronDown } from 'lucide-react';
 import { cn } from '../utils';
 import { Button } from '../Button';
-import { Collapsible } from '../Collapsible';
+import { Presence } from '../Presence';
 import { useAccordion } from './accordionContext';
 import accordionClasses from './accordionClasses';
 
@@ -68,15 +68,19 @@ export const AccordionItem = (inProps: AccordionItemProps) => {
         {title}
         <ChevronDown className={classes.arrow} />
       </Button>
-      <Collapsible
+      <Presence
         id={contentId}
         role="region"
         aria-hidden={!open}
         aria-labelledby={triggerId}
         open={open}
+        className={[
+          'data-[state="closed"]:animate-height-shrink',
+          'data-[state="open"]:animate-height-grow',
+        ].join(' ')}
       >
         <div className={classes.content}>{children}</div>
-      </Collapsible>
+      </Presence>
     </Tag>
   );
 };

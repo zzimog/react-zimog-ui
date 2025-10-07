@@ -76,7 +76,7 @@ export const Presence = (inProps: PresenceProps) => {
     }
 
     if (open) {
-      setVisible(open);
+      setVisible(true);
     }
   }, [open, handleAnimationEnd]);
 
@@ -84,6 +84,7 @@ export const Presence = (inProps: PresenceProps) => {
     <Tag
       {...props}
       ref={mergedRefs}
+      data-state={open ? 'open' : 'closed'}
       className={cn(className, 'overflow-hidden')}
       hidden={!shouldRender}
       onAnimationEnd={handleAnimationEnd}

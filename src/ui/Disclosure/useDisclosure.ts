@@ -2,10 +2,10 @@ import { useContext } from 'react';
 import DisclosureContext from './disclosureContext';
 
 type UseDisclosureOptions = {
-  valueProp?: string;
+  valueProp: string;
 };
 
-function useDisclosure(options: UseDisclosureOptions = {}) {
+function useDisclosure(options: UseDisclosureOptions) {
   const { valueProp } = options;
 
   const context = useContext(DisclosureContext);
@@ -16,8 +16,8 @@ function useDisclosure(options: UseDisclosureOptions = {}) {
 
   const { baseId, value, setValue } = context;
 
-  const triggerId = `${baseId}-trigger-${value}`;
-  const contentId = `${baseId}-content-${value}`;
+  const triggerId = `${baseId}-trigger-${valueProp}`;
+  const contentId = `${baseId}-content-${valueProp}`;
 
   const isActive = valueProp
     ? Array.isArray(value)

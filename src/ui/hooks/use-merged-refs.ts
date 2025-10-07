@@ -1,4 +1,4 @@
-import { type Ref, useMemo } from 'react';
+import { type Ref, useCallback } from 'react';
 
 function setRef<V>(ref: Ref<V> | undefined, value: V) {
   if (typeof ref === 'function') {
@@ -8,23 +8,21 @@ function setRef<V>(ref: Ref<V> | undefined, value: V) {
   }
 }
 
-function mergeRefs<V>(...refs: (Ref<V> | undefined)[]) {
-  return (value: V) => {
+export function useMergedRefs<V>(...refs: (Ref<V> | undefined)[]) {
+  return useCallback((value: V | null) => {
     const cleanups = refs.map((ref) => {
       const cleanup = setRef(ref, value);
       const hasCleanup = typeof cleanup === 'function';
+
       return hasCleanup ? cleanup : () => setRef(ref, null);
     });
 
     return () => {
-      for (const cleanup of cleanups) cleanup();
+      for (const cleanup of cleanups) {
+        cleanup();
+      }
     };
-  };
-}
 
-function useMergedRefs<V>(...refs: (Ref<V> | undefined)[]) {
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  return useMemo(() => mergeRefs(...refs), refs);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, refs);
 }
-
-export default useMergedRefs;

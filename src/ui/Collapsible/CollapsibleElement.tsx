@@ -1,18 +1,25 @@
 import {
-  type ElementType,
   type HTMLAttributes,
   type RefAttributes,
+  type ElementType,
   useState,
   useRef,
   useEffect,
   useLayoutEffect,
 } from 'react';
 import { useMergedRefs } from '../hooks';
+import { cn } from '../utils';
+import classes from './collapsibleClasses';
+
+/**
+ * Ref: https://github.com/radix-ui/primitives/blob/main/packages/react/collapsible/src/collapsible.tsx
+ */
 
 export type CollapsibleElementProps = {
   as?: ElementType;
-  present: boolean;
   open?: boolean;
+  dir?: 'vertical' | 'horizontal';
+  present: boolean;
 } & HTMLAttributes<HTMLElement> &
   RefAttributes<HTMLElement>;
 
@@ -22,6 +29,8 @@ export const CollapsibleElement = (inProps: CollapsibleElementProps) => {
     ref: refProp,
     present,
     open = false,
+    dir = 'vertical',
+    className,
     style,
     children,
     ...props
@@ -42,10 +51,12 @@ export const CollapsibleElement = (inProps: CollapsibleElementProps) => {
   const preventRef = useRef(isOpen);
   const prevStyleRef = useRef<Record<string, string>>(undefined);
 
+  console.log('--- Collapsible render ---');
+
   useEffect(() => {
     const raf = requestAnimationFrame(() => (preventRef.current = false));
     return () => cancelAnimationFrame(raf);
-  });
+  }, []);
 
   useLayoutEffect(() => {
     const node = ref.current;
@@ -73,7 +84,8 @@ export const CollapsibleElement = (inProps: CollapsibleElementProps) => {
     <Tag
       ref={mergedRefs}
       data-state={open ? 'open' : 'closed'}
-      hidden={!present}
+      hidden={!isOpen}
+      className={cn(className, classes({ dir }))}
       style={{
         ['--width']: width ? `${width}px` : undefined,
         ['--height']: height ? `${height}px` : undefined,

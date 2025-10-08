@@ -3,7 +3,7 @@ import AppContainer from './AppContainer.tsx';
 import App from './App.tsx';
 
 createRoot(document.getElementById('root')!).render(
-  <AppContainer strict={true}>
+  <AppContainer strict={false}>
     <App />
   </AppContainer>
 );

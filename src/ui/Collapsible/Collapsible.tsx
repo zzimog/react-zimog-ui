@@ -1,12 +1,17 @@
-import type { ElementType, HTMLAttributes, RefAttributes } from 'react';
+import { memo } from 'react';
 import { Presence } from '../Presence';
-import { CollapsibleElement } from './CollapsibleElement';
+import {
+  type CollapsibleElementProps,
+  CollapsibleElement,
+} from './CollapsibleElement';
 
-export type CollapsibleProps = {
-  as?: ElementType;
-  open?: boolean;
-} & HTMLAttributes<HTMLElement> &
-  RefAttributes<HTMLElement>;
+/**
+ * Ref: https://github.com/radix-ui/primitives/blob/main/packages/react/collapsible/src/collapsible.tsx
+ */
+
+const CollapsibleMemo = memo(CollapsibleElement);
+
+export type CollapsibleProps = Omit<CollapsibleElementProps, 'present'>;
 
 export const Collapsible = (inProps: CollapsibleProps) => {
   const { open, ...props } = inProps;
@@ -14,7 +19,7 @@ export const Collapsible = (inProps: CollapsibleProps) => {
   return (
     <Presence present={open}>
       {({ present }) => (
-        <CollapsibleElement {...props} present={present} open={open} />
+        <CollapsibleMemo {...props} present={present} open={open} />
       )}
     </Presence>
   );

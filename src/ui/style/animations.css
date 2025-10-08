@@ -1,6 +1,16 @@
 @theme {
-  --animate-height-grow: height-grow 200ms;
-  --animate-height-shrink: height-shrink 200ms;
+  --animation-width-grow: width-grow;
+  --animation-width-shrink: width-shrink;
+  --animation-height-grow: height-grow;
+  --animation-height-shrink: height-shrink;
+}
+
+@utility animate-* {
+  animation-name: --value(--animation- *);
+  animation-duration: var(
+    --tw-duration,
+    var(--default-transition-duration, 150ms)
+  );
 }
 
 @keyframes height-grow {
@@ -18,5 +28,23 @@
   }
   to {
     height: 0;
+  }
+}
+
+@keyframes width-grow {
+  0% {
+    width: 0;
+  }
+  to {
+    width: var(--width);
+  }
+}
+
+@keyframes width-shrink {
+  0% {
+    width: var(--width);
+  }
+  to {
+    width: 0;
   }
 }

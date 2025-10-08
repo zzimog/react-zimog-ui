@@ -28,8 +28,12 @@ const treeClasses = {
       'gap-2',
       'p-2',
       'cursor-pointer',
+      'select-none',
       '[&_svg]:size-4',
       '[&_svg]:shrink-0',
+      '[&_svg]:transition-transform',
+      '[&_svg]:duration-100',
+      'data-[state="open"]:[&_svg]:rotate-90',
     ]),
   },
 };

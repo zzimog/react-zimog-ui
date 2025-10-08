@@ -1,6 +1,5 @@
 import { type ReactNode, type HTMLAttributes, useRef, useState } from 'react';
-import { File } from 'lucide-react';
-import { cn } from '../utils';
+import { ChevronRight, Dot } from 'lucide-react';
 import { Collapsible } from '../Collapsible';
 import classes from './treeClasses';
 
@@ -20,38 +19,35 @@ export const TreeItem = (inProps: TreeItemProps) => {
     ...props
   } = inProps;
 
-  const ref = useRef<HTMLDivElement>(null);
-
   const [open, setOpen] = useState(true);
+  const ref = useRef<HTMLDivElement>(null);
+  const isParent = items.length > 0;
 
   function handleOver() {
-    const node = ref.current;
-    if (!node) return;
+    onItemOver?.(ref.current!);
+  }
 
-    onItemOver?.(node);
+  function handleClick() {
+    if (isParent) {
+      setOpen(!open);
+    }
   }
 
   return (
-    <li {...props}>
+    <li data-parent={isParent} {...props}>
       <div
         ref={ref}
+        data-state={isParent ? (open ? 'open' : 'closed') : undefined}
         className={classes.list.item}
-        onClick={() => setOpen(!open)}
+        onClick={handleClick}
         onMouseOver={handleOver}
       >
-        <File />
+        {isParent ? <ChevronRight /> : <Dot />}
         {name}
       </div>
 
-      {items.length > 0 && (
-        <Collapsible
-          open={open}
-          className={cn([
-            'data-[state="closed"]:animate-height-shrink',
-            'data-[state="open"]:animate-height-grow',
-            'overflow-hidden',
-          ])}
-        >
+      {isParent && (
+        <Collapsible open={open}>
           <ul className={classes.list.root}>
             {items.map((item, index) => (
               <TreeItem

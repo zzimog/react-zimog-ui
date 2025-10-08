@@ -1,7 +1,5 @@
-import { Accordion, Button, Presence } from '@ui';
+import { Accordion } from '@ui';
 import { DemoBox } from './DemoBox';
-import { useState } from 'react';
-import { DemoSection } from './DemoSection';
 
 // eslint-disable-next-line react-refresh/only-export-components
 const DemoAccordion = (props: { single?: boolean }) => (
@@ -24,33 +22,10 @@ const DemoAccordion = (props: { single?: boolean }) => (
   </Accordion>
 );
 
-// eslint-disable-next-line react-refresh/only-export-components
-const DemoPresence = () => {
-  const [open, setOpen] = useState(false);
-
-  return (
-    <DemoSection title="Presence primitive" gap={false} column>
-      <Button onClick={() => setOpen(!open)} className="w-full scale-100!">
-        Toggle
-      </Button>
-
-      <Presence open={open}>
-        <div className="mt-2 p-4 border border-gray-500/20 rounded-md">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam, nobis
-          asperiores. Similique nulla nihil doloremque pariatur velit ipsum
-          incidunt itaque enim, aut nam adipisci deserunt dolorum obcaecati quas
-          perspiciatis dolores?
-        </div>
-      </Presence>
-    </DemoSection>
-  );
-};
-
 const accordion = (
   <DemoBox id="accordion" title="Accordion">
     <DemoAccordion />
     <DemoAccordion single={true} />
-    <DemoPresence />
   </DemoBox>
 );
 

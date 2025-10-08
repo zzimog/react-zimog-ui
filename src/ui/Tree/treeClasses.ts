@@ -20,8 +20,6 @@ const treeClasses = {
       '[&_ul]:pl-2',
       '[&_ul]:border-l',
       '[&_ul]:border-gray-500/20',
-      'data-[state="closed"]:animate-height-shrink',
-      'data-[state="open"]:animate-height-grow',
     ]),
     item: cn([
       'flex',

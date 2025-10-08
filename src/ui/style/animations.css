@@ -1,13 +1,13 @@
 @theme {
-  --animate-height-grow: height-grow 200ms forwards;
-  --animate-height-shrink: height-shrink 200ms forwards;
+  --animate-height-grow: height-grow 200ms;
+  --animate-height-shrink: height-shrink 200ms;
 }
 
 @keyframes height-grow {
   0% {
     height: 0;
   }
-  100% {
+  to {
     height: var(--height);
   }
 }
@@ -16,7 +16,7 @@
   0% {
     height: var(--height);
   }
-  100% {
+  to {
     height: 0;
   }
 }

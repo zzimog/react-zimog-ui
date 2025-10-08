@@ -1,12 +1,12 @@
-import { cn } from '@ui';
 import { type ReactNode, StrictMode } from 'react';
+import { cn } from '@ui';
 
 type AppContainerProps = {
   strict?: boolean;
   children?: ReactNode;
 };
 
-const classes = cn(['h-screen', 'flex', 'justify-center', 'items-center']);
+const classes = cn(['h-screen', 'flex', 'justify-center', 'items-start']);
 
 const AppContainer = (props: AppContainerProps) => {
   const { strict, ...rest } = props;

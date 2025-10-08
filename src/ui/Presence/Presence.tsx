@@ -1,95 +1,94 @@
 import {
-  type ElementType,
-  type HTMLAttributes,
-  type Ref,
+  type ReactElement,
+  type RefAttributes,
   useState,
-  useLayoutEffect,
   useRef,
-  useEffect,
-  useCallback,
+  Children,
+  useLayoutEffect,
+  cloneElement,
 } from 'react';
-import { mergeRefs } from 'react-merge-refs';
-import { cn } from '../utils';
+import { useMergedRefs } from '../hooks';
+
+type PresenceState = 'mounted' | 'animating' | 'unmounted';
 
 export type PresenceProps = {
-  as?: ElementType;
-  ref?: Ref<HTMLElement>;
-  open?: boolean;
-  forceMount?: boolean;
-} & Omit<HTMLAttributes<HTMLElement>, 'style'>;
+  present?: boolean;
+  children: ReactElement | ((props: { present: boolean }) => ReactElement);
+};
 
 export const Presence = (inProps: PresenceProps) => {
-  const {
-    as: Tag = 'div',
-    ref: refProp,
-    open = false,
-    forceMount,
-    className,
-    children,
-    ...props
-  } = inProps;
+  const { present = true, children } = inProps;
 
-  const [visible, setVisible] = useState(open);
+  const initialState = present ? 'mounted' : 'unmounted';
+  const [state, setState] = useState<PresenceState>(initialState);
 
-  const ref = useRef<HTMLDivElement>(null);
-  const mergedRefs = mergeRefs([ref, refProp]);
+  const ref = useRef<HTMLElement>(null);
 
-  const preventAnimation = useRef(open);
+  const stylesRef = useRef<CSSStyleDeclaration>(null);
 
-  const shouldRender = forceMount || open || visible;
+  const isPresent = state !== 'unmounted';
 
-  const handleAnimationEnd = useCallback(() => {
-    const node = ref.current;
-    if (!node) return;
+  const child = (
+    typeof children === 'function'
+      ? children({ present: isPresent })
+      : Children.only(children)
+  ) as ReactElement<RefAttributes<HTMLElement>>;
 
-    node.removeAttribute('style');
-
-    if (!open) {
-      setVisible(false);
-    }
-  }, [open]);
-
-  useEffect(() => {
-    const raf = requestAnimationFrame(() => (preventAnimation.current = false));
-    return () => cancelAnimationFrame(raf);
-  }, []);
+  const childProps = child.props;
+  const mergedRefs = useMergedRefs<HTMLElement>(childProps.ref, ref);
 
   useLayoutEffect(() => {
-    const node = ref.current;
-    if (!node) return;
+    const node = ref.current!;
+    let timeout: number;
 
-    node.style.animationName = 'none';
+    stylesRef.current = stylesRef.current || getComputedStyle(node);
 
-    if (!preventAnimation.current) {
-      const { width, height } = node.getBoundingClientRect();
+    if (present) {
+      setState('mounted');
+    } else {
+      const { animationName, display } = stylesRef.current;
+      const isVisible = display !== 'none';
+      const hasAnimation = animationName !== 'none';
 
-      node.style.setProperty('--width', `${width}px`);
-      node.style.setProperty('--height', `${height}px`);
-      node.style.removeProperty('animation-name');
+      if (isVisible && hasAnimation) {
+        setState('animating');
+      } else {
+        setState('unmounted');
+      }
     }
 
-    const animationName = getComputedStyle(node).animationName;
-    const hasAnimation = animationName !== 'none';
+    function handleAnimationEnd() {
+      if (!present) {
+        setState('unmounted');
 
-    if (!hasAnimation && !open) {
-      handleAnimationEnd();
+        const currentFill = node.style.animationFillMode;
+        node.style.animationFillMode = 'forwards';
+
+        /**
+         * Prevent flashes when unmounting after
+         * animation end event. Cannot use
+         * requestAnimationFrame because it
+         * executes too soon.
+         */
+        timeout = setTimeout(() => {
+          if (node.style.animationFillMode === 'forwards') {
+            node.style.animationFillMode = currentFill;
+          }
+        });
+      }
     }
 
-    if (open) {
-      setVisible(true);
-    }
-  }, [open, handleAnimationEnd]);
+    node.addEventListener('animationcancel', handleAnimationEnd);
+    node.addEventListener('animationend', handleAnimationEnd);
 
-  return (
-    <Tag
-      {...props}
-      ref={mergedRefs}
-      data-state={open ? 'open' : 'closed'}
-      className={cn(className, 'overflow-hidden')}
-      hidden={!shouldRender}
-      onAnimationEnd={handleAnimationEnd}
-    >
-      {shouldRender && children}
-    </Tag>
-  );
+    return () => {
+      clearTimeout(timeout);
+      node.removeEventListener('animationcancel', handleAnimationEnd);
+      node.removeEventListener('animationend', handleAnimationEnd);
+    };
+  }, [present]);
+
+  return typeof children === 'function' || isPresent
+    ? cloneElement(child, { ref: mergedRefs })
+    : null;
 };

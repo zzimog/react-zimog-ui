@@ -3,16 +3,17 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import dts from 'vite-plugin-dts';
-//import pkg from './package.json';
+import pkg from './package.json';
 
 export default defineConfig({
+  root: 'app',
   plugins: [
     react(),
     tsconfigPaths(),
     tailwindcss(),
     dts({
       rollupTypes: true,
-      tsconfigPath: './tsconfig.app.json',
+      tsconfigPath: './tsconfig.ui.json',
     }),
   ],
   server: {
@@ -23,7 +24,7 @@ export default defineConfig({
   build: {
     copyPublicDir: false,
     lib: {
-      entry: './lib/zimog-ui/index.ts',
+      entry: './src/index.ts',
       name: 'zimog-ui',
       formats: ['es'],
       fileName: 'index',
@@ -31,7 +32,7 @@ export default defineConfig({
     rollupOptions: {
       external: [
         'react/jsx-runtime',
-        //...Object.keys(pkg.peerDependencies || {}),
+        ...Object.keys(pkg.peerDependencies || {}),
       ],
     },
   },

@@ -1,7 +1,7 @@
-import { NodeGroup } from '../packages/ui';
+import { NodeGroup } from '@ui';
 
 const App = () => {
-  function handleNodeChange(node: HTMLElement) {
+  function handleNodeChange(node?: HTMLElement) {
     if (node) {
       node.classList.toggle('bg-red-500');
     }

@@ -4,7 +4,7 @@ import {
   type HTMLAttributes,
   useRef,
 } from 'react';
-import { mergeRefs } from 'react-merge-refs';
+import { useMergedRefs } from '../hooks';
 import { cn } from '../utils';
 import classes from './treeClasses';
 import { type TreeItemProps, TreeItem } from './TreeItem';
@@ -25,7 +25,7 @@ export const Tree = (inProps: TreeProps) => {
   } = inProps;
 
   const ref = useRef<HTMLElement>(null);
-  const mergedRef = mergeRefs([refProp, ref]);
+  const mergedRefs = useMergedRefs(refProp, ref);
 
   const highlightRef = useRef<HTMLDivElement>(null);
 
@@ -53,7 +53,7 @@ export const Tree = (inProps: TreeProps) => {
 
   return (
     <Tag
-      ref={mergedRef}
+      ref={mergedRefs}
       className={cn(classes.root, className)}
       onMouseOut={handleOut}
       {...props}

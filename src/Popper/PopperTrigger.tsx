@@ -1,6 +1,6 @@
 import { type ReactElement, type Ref, cloneElement, useContext } from 'react';
-import { mergeRefs } from 'react-merge-refs';
 import PopperContext from './popperContext';
+import { useMergedRefs } from '../hooks';
 
 type PropsWithRef = {
   ref?: Ref<HTMLElement>;
@@ -19,8 +19,13 @@ export const PopperTrigger = (inProps: PopperTriggerProps) => {
     throw new Error('PopperTrigger must be used inside PopperContext');
   }
 
+  const mergedRefs = useMergedRefs(
+    popper.triggerRef,
+    (children.props as PropsWithRef).ref
+  );
+
   const props = {
-    ref: mergeRefs([popper.triggerRef, (children.props as PropsWithRef).ref]),
+    ref: mergedRefs,
   };
 
   return cloneElement(children, props);

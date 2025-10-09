@@ -1,25 +1,29 @@
-import { type ReactNode, type HTMLAttributes, useRef, useState } from 'react';
+import {
+  type ReactNode,
+  type HTMLAttributes,
+  useRef,
+  useState,
+  useEffect,
+} from 'react';
 import { ChevronRight, Dot } from 'lucide-react';
 import { Collapsible } from '../Collapsible';
 import classes from './treeClasses';
+import { useTreeContext } from './treeContext';
 
 export type TreeItemProps = {
-  index?: number;
+  index: string;
   name: ReactNode;
   items?: TreeItemProps[];
   onItemOver?(item: HTMLElement): void;
 } & HTMLAttributes<HTMLElement>;
 
 export const TreeItem = (inProps: TreeItemProps) => {
-  const {
-    index: indexProp = 0,
-    name,
-    items = [],
-    onItemOver,
-    ...props
-  } = inProps;
+  const { index: indexProp, name, items = [], onItemOver, ...props } = inProps;
 
-  const [open, setOpen] = useState(true);
+  const { state } = useTreeContext();
+  const initOpen = state.get(indexProp) ?? true;
+
+  const [open, setOpen] = useState(initOpen);
   const ref = useRef<HTMLDivElement>(null);
   const isParent = items.length > 0;
 
@@ -32,6 +36,10 @@ export const TreeItem = (inProps: TreeItemProps) => {
       setOpen(!open);
     }
   }
+
+  useEffect(() => {
+    state.set(indexProp, open);
+  }, [indexProp, state, open]);
 
   return (
     <li data-parent={isParent} {...props}>
@@ -52,7 +60,7 @@ export const TreeItem = (inProps: TreeItemProps) => {
             {items.map((item, index) => (
               <TreeItem
                 key={`${indexProp}_${index}`}
-                index={index}
+                index={`${indexProp}_${index}`}
                 name={item.name}
                 items={item.items}
                 onItemOver={onItemOver}

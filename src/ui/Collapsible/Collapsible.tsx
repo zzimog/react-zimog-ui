@@ -1,4 +1,3 @@
-import { memo } from 'react';
 import { Presence } from '../Presence';
 import {
   type CollapsibleElementProps,
@@ -9,8 +8,6 @@ import {
  * Ref: https://github.com/radix-ui/primitives/blob/main/packages/react/collapsible/src/collapsible.tsx
  */
 
-const CollapsibleMemo = memo(CollapsibleElement);
-
 export type CollapsibleProps = Omit<CollapsibleElementProps, 'present'>;
 
 export const Collapsible = (inProps: CollapsibleProps) => {
@@ -19,7 +16,7 @@ export const Collapsible = (inProps: CollapsibleProps) => {
   return (
     <Presence present={open}>
       {({ present }) => (
-        <CollapsibleMemo {...props} present={present} open={open} />
+        <CollapsibleElement {...props} present={present} open={open} />
       )}
     </Presence>
   );

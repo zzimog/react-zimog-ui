@@ -10,7 +10,7 @@ export type TabsListProps = {
 export const TabsList = (inProps: TabsListProps) => {
   const { as: Tag = 'div', className, children, ...props } = inProps;
 
-  const rootRef = useRef<HTMLElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
   const indicatorRef = useRef<HTMLDivElement>(null);
 
   function handleNodeChange(node?: HTMLElement) {
@@ -33,12 +33,11 @@ export const TabsList = (inProps: TabsListProps) => {
 
   return (
     <Tag
-      ref={rootRef}
       role="tabslist"
       className={cn(classes.list.root, className)}
       {...props}
     >
-      <div className={classes.list.tabs}>
+      <div ref={rootRef} className={classes.list.tabs}>
         <NodeGroup defaultSelected={0} onNodeChange={handleNodeChange}>
           {children}
         </NodeGroup>

@@ -1,4 +1,4 @@
-import { type ReactNode, useRef, useMemo, useLayoutEffect } from 'react';
+import { type ReactNode, useRef, useMemo, useEffect } from 'react';
 import { NodeGroupContext } from './nodeGroupContext';
 import { NodeItem } from './NodeItem';
 
@@ -26,7 +26,7 @@ export const NodeGroup = (inProps: NodeGroupProps) => {
     [type, onNodeChange]
   );
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const node = currentNodeRef.current;
     const { nodes } = context;
 

@@ -6,8 +6,9 @@ import {
 } from 'react';
 import { useMergedRefs } from '../hooks';
 import { cn } from '../utils';
-import classes from './treeClasses';
 import { type TreeItemProps, TreeItem } from './TreeItem';
+import classes from './treeClasses';
+import { TreeContext } from './treeContext';
 
 export type TreeProps = {
   as?: ElementType;
@@ -28,6 +29,10 @@ export const Tree = (inProps: TreeProps) => {
   const mergedRefs = useMergedRefs(refProp, ref);
 
   const highlightRef = useRef<HTMLDivElement>(null);
+
+  const context = {
+    state: new Map(),
+  };
 
   function handleOver(item: HTMLElement) {
     const parentRect = ref.current!.getBoundingClientRect();
@@ -62,15 +67,17 @@ export const Tree = (inProps: TreeProps) => {
         <>
           <div ref={highlightRef} className={classes.highlight} />
           <ul className={classes.list.root}>
-            {data.map((item, index) => (
-              <TreeItem
-                key={index}
-                index={index}
-                name={item.name}
-                items={item.items}
-                onItemOver={handleOver}
-              />
-            ))}
+            <TreeContext value={context}>
+              {data.map((item, index) => (
+                <TreeItem
+                  key={index}
+                  index={`${index}`}
+                  name={item.name}
+                  items={item.items}
+                  onItemOver={handleOver}
+                />
+              ))}
+            </TreeContext>
           </ul>
         </>
       )}

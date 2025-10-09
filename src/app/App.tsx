@@ -11,8 +11,8 @@ import tree from './demo/tree';
 
 const App = () => {
   return (
-    <div className="max-w-7xl mx-auto flex flex-wrap gap-2 p-2">
-      <div className="w-full flex justify-end ml-auto mb-2">
+    <div className="max-w-7xl mx-auto flex flex-wrap gap-4 py-4">
+      <div className="w-full flex justify-end ml-auto">
         <ThemeSwitcher />
       </div>
       <Card as="aside" className="grow-1 basis-[300px]">
@@ -32,7 +32,7 @@ const App = () => {
         </ul>
       </Card>
       <main className="grow-[9999] basis-[300px]">
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-4">
           {tree}
           {usePopper}
           {tabs}

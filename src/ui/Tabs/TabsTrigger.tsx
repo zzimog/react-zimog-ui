@@ -1,13 +1,8 @@
-import {
-  type ElementType,
-  type HTMLAttributes,
-  useRef,
-  useEffect,
-} from 'react';
+import { type ElementType, type HTMLAttributes, useRef } from 'react';
 import { cn } from '../utils';
 import classes from './tabsClasses';
 import { useTabsContext } from './tabsContext';
-import { useTabsListContext } from './tabsListContext';
+import { NodeGroup } from '../NodeGroup';
 
 export type TabsTriggerProps = {
   as?: ElementType;
@@ -28,7 +23,6 @@ export const TabsTrigger = (inProps: TabsTriggerProps) => {
   const ref = useRef<HTMLElement>(null);
 
   const { baseId, value, setValue } = useTabsContext();
-  const { setActive } = useTabsListContext();
 
   const triggerId = `${baseId}-trigger-${value}`;
   const itemId = `${baseId}-item-${value}`;
@@ -41,27 +35,20 @@ export const TabsTrigger = (inProps: TabsTriggerProps) => {
     }
   }
 
-  useEffect(() => {
-    const node = ref.current;
-    if (!node) return;
-
-    if (isActive) {
-      setActive(node);
-    }
-  }, [isActive, setActive]);
-
   return (
-    <Tag
-      ref={ref}
-      id={triggerId}
-      role="tab"
-      aria-controls={itemId}
-      aria-selected={isActive}
-      data-selected={isActive}
-      disabled={disabled}
-      className={cn(classes.trigger, className)}
-      onClick={() => handleClick()}
-      {...props}
-    />
+    <NodeGroup.Item selected={isActive}>
+      <Tag
+        ref={ref}
+        id={triggerId}
+        role="tab"
+        aria-controls={itemId}
+        aria-selected={isActive}
+        data-selected={isActive}
+        disabled={disabled}
+        className={cn(classes.trigger, className)}
+        onClick={() => handleClick()}
+        {...props}
+      />
+    </NodeGroup.Item>
   );
 };

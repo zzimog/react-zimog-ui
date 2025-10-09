@@ -24,8 +24,8 @@
     "noUncheckedSideEffectImports": true,
 
     "paths": {
-      "@ui": ["../src"]
+      "@ui": ["./src/ui"]
     }
   },
-  "include": ["./src"]
+  "include": ["src"]
 }

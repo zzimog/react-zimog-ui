@@ -51,8 +51,6 @@ export const CollapsibleElement = (inProps: CollapsibleElementProps) => {
   const preventRef = useRef(isOpen);
   const prevStyleRef = useRef<Record<string, string>>(undefined);
 
-  console.log('--- Collapsible render ---');
-
   useEffect(() => {
     const raf = requestAnimationFrame(() => (preventRef.current = false));
     return () => cancelAnimationFrame(raf);

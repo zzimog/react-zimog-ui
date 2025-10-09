@@ -9,7 +9,7 @@ import classes from './tabsClasses';
 export type TabsProps = {
   as?: ElementType;
   defaultValue?: string;
-  onChange?(value: string): void;
+  onChange?: (value: string) => void;
 } & HTMLAttributes<HTMLElement>;
 
 export const Tabs = (inProps: TabsProps) => {

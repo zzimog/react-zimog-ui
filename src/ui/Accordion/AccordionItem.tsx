@@ -69,16 +69,11 @@ export const AccordionItem = (inProps: AccordionItemProps) => {
         <ChevronDown className={classes.arrow} />
       </Button>
       <Collapsible
+        open={open}
         id={contentId}
         role="region"
         aria-hidden={!open}
         aria-labelledby={triggerId}
-        open={open}
-        className={[
-          'overflow-hidden',
-          'data-[state="closed"]:animate-height-shrink',
-          'data-[state="open"]:animate-height-grow',
-        ].join(' ')}
       >
         <div className={classes.content}>{children}</div>
       </Collapsible>

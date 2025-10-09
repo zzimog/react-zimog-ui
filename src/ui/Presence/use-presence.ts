@@ -13,8 +13,6 @@ export function usePresence(present: boolean) {
   const stylesRef = useRef<CSSStyleDeclaration>(null);
   const prevPresentRef = useRef(present);
 
-  console.log('Presence', state);
-
   useLayoutEffect(() => {
     const { display, animationName } = stylesRef.current!;
 

@@ -1,13 +1,7 @@
-import {
-  type ElementType,
-  type HTMLAttributes,
-  useRef,
-  useState,
-  useLayoutEffect,
-} from 'react';
+import { type ElementType, type HTMLAttributes, useRef } from 'react';
 import { cn } from '../utils';
 import classes from './tabsClasses';
-import { TabsListContext } from './tabsListContext';
+import { NodeGroup } from '../NodeGroup';
 
 export type TabsListProps = {
   as?: ElementType;
@@ -19,22 +13,23 @@ export const TabsList = (inProps: TabsListProps) => {
   const rootRef = useRef<HTMLElement>(null);
   const indicatorRef = useRef<HTMLDivElement>(null);
 
-  const [active, setActive] = useState<HTMLElement>();
-
-  useLayoutEffect(() => {
+  function handleNodeChange(node?: HTMLElement) {
     const root = rootRef.current;
     const indicator = indicatorRef.current;
-    if (!root || !indicator || !active) return;
 
-    const { left: rootLeft } = root.getBoundingClientRect();
-    const { width, left: nodeLeft } = active.getBoundingClientRect();
+    if (!root || !indicator || !node) {
+      return;
+    }
+
+    const { left: rootLeft } = rootRef.current!.getBoundingClientRect();
+    const { width, left: nodeLeft } = node.getBoundingClientRect();
     const left = nodeLeft - rootLeft;
 
     Object.assign(indicator.style, {
       width: `${width}px`,
       transform: `translateX(${left}px)`,
     });
-  }, [active]);
+  }
 
   return (
     <Tag
@@ -44,9 +39,11 @@ export const TabsList = (inProps: TabsListProps) => {
       {...props}
     >
       <div className={classes.list.tabs}>
-        <TabsListContext value={{ setActive }}>{children}</TabsListContext>
+        <NodeGroup defaultSelected={0} onNodeChange={handleNodeChange}>
+          {children}
+        </NodeGroup>
       </div>
-      {active && <div ref={indicatorRef} className={classes.list.indicator} />}
+      <div ref={indicatorRef} className={classes.list.indicator} />
     </Tag>
   );
 };

@@ -20,13 +20,13 @@ export type AccordionProps = {
       single: true;
       defaultValue?: string;
       value?: string;
-      onChange?(value?: string): void;
+      onChange?: (value?: string) => void;
     }
   | {
       single?: false;
       defaultValue?: string[];
       value?: string[];
-      onChange?(value: string[]): void;
+      onChange?: (value: string[]) => void;
     }
 ) &
   Omit<HTMLAttributes<HTMLElement>, 'defaultValue' | 'value' | 'onChange'>;

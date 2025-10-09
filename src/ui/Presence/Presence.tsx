@@ -26,7 +26,7 @@ export const Presence = (inProps: PresenceProps) => {
       : Children.only(children)
   ) as ReactElement<RefAttributes<HTMLElement>>;
 
-  const ref = useMergedRefs(presence.ref, child.props.ref);
+  const ref = useMergedRefs(child.props.ref, presence.ref);
 
   return typeof children === 'function' || presence.isPresent
     ? cloneElement(child, { ref })

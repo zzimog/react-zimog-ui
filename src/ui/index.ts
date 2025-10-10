@@ -9,7 +9,7 @@ export * from './Button';
 export * from './Card';
 export * from './Disclosure';
 export * from './Input';
-export * from './NodeGroup';
+export * from './Interaction';
 export * from './Popper';
 export * from './Popper';
 export * from './Spinner';

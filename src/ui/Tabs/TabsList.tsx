@@ -1,7 +1,7 @@
 import { type ElementType, type HTMLAttributes, useRef } from 'react';
 import { cn } from '../utils';
 import classes from './tabsClasses';
-import { NodeGroup } from '../NodeGroup';
+import { Interaction } from '../Interaction';
 
 export type TabsListProps = {
   as?: ElementType;
@@ -10,25 +10,19 @@ export type TabsListProps = {
 export const TabsList = (inProps: TabsListProps) => {
   const { as: Tag = 'div', className, children, ...props } = inProps;
 
-  const rootRef = useRef<HTMLDivElement>(null);
   const indicatorRef = useRef<HTMLDivElement>(null);
 
-  function handleNodeChange(node?: HTMLElement) {
-    const root = rootRef.current;
+  function handleRectChange(rect: DOMRect) {
     const indicator = indicatorRef.current;
 
-    if (!root || !indicator || !node) {
-      return;
+    if (indicator) {
+      const { width, left } = rect;
+
+      Object.assign(indicator.style, {
+        width: `${width}px`,
+        transform: `translateX(${left}px)`,
+      });
     }
-
-    const { left: rootLeft } = rootRef.current!.getBoundingClientRect();
-    const { width, left: nodeLeft } = node.getBoundingClientRect();
-    const left = nodeLeft - rootLeft;
-
-    Object.assign(indicator.style, {
-      width: `${width}px`,
-      transform: `translateX(${left}px)`,
-    });
   }
 
   return (
@@ -37,11 +31,9 @@ export const TabsList = (inProps: TabsListProps) => {
       className={cn(classes.list.root, className)}
       {...props}
     >
-      <div ref={rootRef} className={classes.list.tabs}>
-        <NodeGroup defaultSelected={0} onNodeChange={handleNodeChange}>
-          {children}
-        </NodeGroup>
-      </div>
+      <Interaction defaultSelected={0} onRectChange={handleRectChange}>
+        <div className={classes.list.tabs}>{children}</div>
+      </Interaction>
       <div ref={indicatorRef} className={classes.list.indicator} />
     </Tag>
   );

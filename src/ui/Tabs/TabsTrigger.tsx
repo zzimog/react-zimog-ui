@@ -2,7 +2,7 @@ import { type ElementType, type HTMLAttributes, useRef } from 'react';
 import { cn } from '../utils';
 import classes from './tabsClasses';
 import { useTabsContext } from './tabsContext';
-import { NodeGroup } from '../NodeGroup';
+import { Interaction } from '../Interaction';
 
 export type TabsTriggerProps = {
   as?: ElementType;
@@ -36,7 +36,7 @@ export const TabsTrigger = (inProps: TabsTriggerProps) => {
   }
 
   return (
-    <NodeGroup.Item selected={isActive}>
+    <Interaction.Node defaultSelected={isActive}>
       <Tag
         ref={ref}
         id={triggerId}
@@ -49,6 +49,6 @@ export const TabsTrigger = (inProps: TabsTriggerProps) => {
         onClick={() => handleClick()}
         {...props}
       />
-    </NodeGroup.Item>
+    </Interaction.Node>
   );
 };

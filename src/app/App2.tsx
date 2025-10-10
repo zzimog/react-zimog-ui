@@ -3,7 +3,6 @@ import {
   type ReactElement,
   type RefAttributes,
   type RefObject,
-  memo,
   Children,
   cloneElement,
   createContext,
@@ -17,18 +16,17 @@ import { useMergedRefs } from '@ui';
 
 /*---------------------------------------------------------------------------*/
 
+const Item = (props: { selected?: boolean; children: ReactNode }) => (
+  <HighlightItem selected={props.selected}>
+    <div className="relative z-10 p-2 border border-black">
+      {props.children}
+    </div>
+  </HighlightItem>
+);
+
 const App = () => {
   const [mounted, setMounted] = useState(true);
-
   const ref = useRef<HTMLDivElement>(null);
-
-  const Item = memo((props: { selected?: boolean; children: ReactNode }) => (
-    <HighlightItem selected={props.selected}>
-      <div className="relative z-10 p-2 border border-black">
-        {props.children}
-      </div>
-    </HighlightItem>
-  ));
 
   function handleHighlight(rect?: DOMRect) {
     const node = ref.current;
@@ -136,32 +134,11 @@ const HighlightGroup = (inProps: HighlightGroupProps) => {
   const child = Children.only(children) as ReactElement<RefAttributes<unknown>>;
   const mergedRefs = useMergedRefs(child.props.ref, ref);
 
-  const handleHighlightNode = useCallback(() => {
-    const root = ref.current;
-    const node = selectedRef.current;
-
-    if (root && node) {
-      const rootRect = root.getBoundingClientRect();
-      const nodeRect = node.getBoundingClientRect();
-      const relativeRect = getRelativeRect(rootRect, nodeRect);
-
-      if (
-        prevRectRef.current &&
-        !rectEquals(relativeRect, prevRectRef.current)
-      ) {
-        onHighlight?.(relativeRect);
-      }
-
-      prevRectRef.current = relativeRect;
-    }
-  }, [onHighlight]);
-
   const context = {
     type,
     nodes: nodesRef,
     highlightNode(node: HTMLElement) {
       selectedRef.current = node;
-      handleHighlightNode();
     },
   };
 
@@ -174,13 +151,30 @@ const HighlightGroup = (inProps: HighlightGroupProps) => {
     }
 
     function loop() {
-      handleHighlightNode();
+      const root = ref.current;
+      const node = selectedRef.current;
+
+      if (root && node) {
+        const rootRect = root.getBoundingClientRect();
+        const nodeRect = node.getBoundingClientRect();
+        const relativeRect = getRelativeRect(rootRect, nodeRect);
+
+        if (
+          prevRectRef.current &&
+          !rectEquals(relativeRect, prevRectRef.current)
+        ) {
+          onHighlight?.(relativeRect);
+        }
+
+        prevRectRef.current = relativeRect;
+      }
+
       raf = requestAnimationFrame(loop);
     }
 
     raf = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(raf);
-  }, [defaultSelected, handleHighlightNode]);
+  }, [defaultSelected, onHighlight]);
 
   return (
     <HighlightGroupContext value={context}>
@@ -221,7 +215,12 @@ const HighlightItem = (inProps: HighlightItemProps) => {
       }
 
       node.addEventListener(eventType, handler);
-      return () => node.removeEventListener(eventType, handler);
+      return () => {
+        const nodes = nodesRef.current;
+        nodesRef.current = nodes.filter((n) => n !== node);
+
+        node.removeEventListener(eventType, handler);
+      };
     },
     [selected, context]
   );

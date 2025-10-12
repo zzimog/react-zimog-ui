@@ -6,13 +6,13 @@ import {
 } from 'react';
 import { useMergedRefs } from '../hooks';
 import { cn } from '../utils';
-import { type TreeItemProps, TreeItem } from './TreeItem';
+import { type TreeItemData, TreeItem } from './TreeItem';
 import classes from './treeClasses';
 import { TreeContext } from './treeContext';
 
 export type TreeProps = {
   as?: ElementType;
-  data?: TreeItemProps[];
+  data?: TreeItemData[];
 } & RefAttributes<HTMLElement> &
   HTMLAttributes<HTMLElement>;
 

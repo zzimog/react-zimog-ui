@@ -2,7 +2,7 @@ import {
   type ReactElement,
   type RefAttributes,
   useRef,
-  useEffect,
+  useLayoutEffect,
   Children,
   cloneElement,
 } from 'react';
@@ -18,11 +18,6 @@ export type InteractionProps = {
   children: ReactElement;
   onNodeChange?: (node: HTMLElement) => void;
   onRectChange?: (rect: DOMRect) => void;
-
-  /**
-   * @todo To be implemented
-   */
-  persistent?: boolean;
 };
 
 export const Interaction = (inProps: InteractionProps) => {
@@ -35,51 +30,54 @@ export const Interaction = (inProps: InteractionProps) => {
   } = inProps;
 
   const ref = useRef<HTMLElement>(null);
-  const nodeRef = useRef<HTMLElement>(null);
   const nodesRef = useRef(new Set<HTMLElement>());
 
+  const nodeRef = useRef<HTMLElement>(null);
   const prevRectRef = useRef<DOMRect>(null);
 
   const context = {
     type,
     nodes: nodesRef.current,
-    setNode(node: HTMLElement) {
+    setNode: (node: HTMLElement) => {
       nodeRef.current = node;
       onNodeChange?.(node);
     },
   };
 
-  useEffect(() => {
-    const root = ref.current;
+  useLayoutEffect(() => {
     const node = nodeRef.current;
-    let rafId: number;
-
     if (!node && typeof defaultSelected === 'number') {
       nodeRef.current = [...nodesRef.current][defaultSelected];
     }
+  }, [defaultSelected]);
 
-    if (root && node) {
-      function loop() {
-        const rootRect = ref.current!.getBoundingClientRect();
-        const nodeRect = nodeRef.current!.getBoundingClientRect();
+  useLayoutEffect(() => {
+    let rafId: number;
 
-        const relativeRect = getRelativeRect(rootRect, nodeRect);
+    function loop() {
+      const root = ref.current;
+      const node = nodeRef.current;
+
+      if (root && node) {
+        const rootRect = root!.getBoundingClientRect();
+        const nodeRect = node!.getBoundingClientRect();
+        const rect = getRelativeRect(rootRect, nodeRect);
 
         if (
           prevRectRef.current === null ||
-          !rectEquals(relativeRect, prevRectRef.current)
+          !rectEquals(rect, prevRectRef.current)
         ) {
-          onRectChange?.(relativeRect);
-          prevRectRef.current = relativeRect;
+          onRectChange?.(rect);
+          prevRectRef.current = rect;
         }
-
-        rafId = requestAnimationFrame(loop);
       }
 
       rafId = requestAnimationFrame(loop);
-      return () => cancelAnimationFrame(rafId);
     }
-  }, [defaultSelected, onRectChange]);
+
+    loop();
+    return () => cancelAnimationFrame(rafId);
+  }, [onRectChange]);
 
   const child = Children.only(children) as ReactElement<RefAttributes<unknown>>;
   const mergedRefs = useMergedRefs(child.props.ref, ref);

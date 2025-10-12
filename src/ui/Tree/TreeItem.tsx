@@ -10,10 +10,15 @@ import { Collapsible } from '../Collapsible';
 import classes from './treeClasses';
 import { useTreeContext } from './treeContext';
 
+export type TreeItemData = {
+  name: string;
+  items?: TreeItemData[];
+};
+
 export type TreeItemProps = {
   index: string;
   name: ReactNode;
-  items?: TreeItemProps[];
+  items?: TreeItemData[];
   onItemOver?(item: HTMLElement): void;
 } & HTMLAttributes<HTMLElement>;
 
@@ -39,6 +44,10 @@ export const TreeItem = (inProps: TreeItemProps) => {
 
   useEffect(() => {
     state.set(indexProp, open);
+
+    return () => {
+      state.delete(indexProp);
+    };
   }, [indexProp, state, open]);
 
   return (

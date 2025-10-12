@@ -1,54 +1,65 @@
-import { type ReactNode, useState, useRef, memo } from 'react';
-import { Interaction } from '../ui/Interaction';
+import { useState } from 'react';
+import { Interaction } from '@ui';
+
+import { Highlight } from './Highlight';
+
+const items = [
+  {
+    value: 'lorem',
+    label: '1. Lorem ipsum dolor',
+  },
+  {
+    value: 'sit',
+    label: '2. Sit',
+  },
+  {
+    value: 'amet',
+    label: '3. Amet consectetur adipisicing elit',
+  },
+];
 
 const App = () => {
-  const [mounted, setMounted] = useState(true);
-  const ref = useRef<HTMLDivElement>(null);
+  const initValue = '';
 
-  function handleHighlight(rect?: DOMRect) {
-    const node = ref.current;
-
-    if (node) {
-      if (rect) {
-        const { top, left, width, height } = rect;
-
-        Object.assign(node.style, {
-          visibility: 'visible',
-          top: `${top}px`,
-          left: `${left}px`,
-          width: `${width}px`,
-          height: `${height}px`,
-        });
-      } else {
-        node.style.visibility = 'hidden';
-      }
-    }
-  }
-
-  const Item = memo((props: { selected?: boolean; children: ReactNode }) => (
-    <Interaction.Node defaultSelected={props.selected}>
-      <div className="relative z-10 p-2">{props.children}</div>
-    </Interaction.Node>
-  ));
+  const [value, setValue] = useState<string>(initValue);
+  const [rect, setRect] = useState<DOMRect>();
+  const [interact, setInteract] = useState(false);
 
   return (
-    <div className="h-60 flex flex-col gap-2 p-2 bg-gray-200">
-      <a href="#!" onClick={() => setMounted(!mounted)}>
-        Toggle
-      </a>
+    <div className="flex flex-col gap-2 p-2 bg-gray-200">
+      <Interaction type="hover" onRectChange={setRect}>
+        <div
+          className="group relative"
+          onMouseOver={() => setInteract(true)}
+          onMouseLeave={() => setInteract(false)}
+        >
+          <Highlight
+            visible={interact && rect !== undefined}
+            x={rect?.x}
+            y={rect?.y}
+            width={rect?.width}
+            height={rect?.height}
+          />
 
-      {mounted && (
-        <Interaction type="hover" onRectChange={handleHighlight}>
-          <div className="relative">
-            <div ref={ref} className="absolute bg-red-500 z-0 transition-all" />
-            <div className="flex gap-4">
-              <Item>1. Lorem ipsum dolor</Item>
-              <Item selected>2. Sit</Item>
-              <Item>3. Amet consectetur adipisicing elit</Item>
-            </div>
+          <div className="relative z-2 flex gap-4">
+            {items.map((item, index) => (
+              <Interaction.Node
+                key={index}
+                defaultSelected={item.value === value}
+              >
+                <div
+                  className="p-4 border"
+                  onMouseOver={() => setValue(item.value)}
+                >
+                  [{item.value}] {item.label}
+                </div>
+              </Interaction.Node>
+            ))}
           </div>
-        </Interaction>
-      )}
+        </div>
+      </Interaction>
+
+      <div>Current value: {value}</div>
     </div>
   );
 };

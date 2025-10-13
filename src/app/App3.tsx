@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { cn, Interaction } from '@ui';
 
-import { Highlight } from './Highlight';
+import { Highlight } from '../ui/Highlight/Highlight';
 
 const items = [
   {
@@ -20,8 +20,10 @@ const items = [
 
 const App = () => {
   const [value, setValue] = useState<string>('');
+  const [rect, setRect] = useState<DOMRect>();
   const ref = useRef<HTMLElement>(null);
 
+  /*
   function handleRectChange(rect?: DOMRect) {
     const node = ref.current;
     if (node && rect) {
@@ -34,19 +36,13 @@ const App = () => {
       });
     }
   }
+  */
 
   return (
     <div className="flex flex-col gap-2 p-2 bg-gray-200">
-      <Interaction type="hover" onRectChange={handleRectChange}>
+      <Interaction type="hover" onRectChange={setRect}>
         <div className="relative" onMouseLeave={() => setValue('')}>
-          <Highlight
-            ref={ref}
-            visible={Boolean(value)}
-            className={cn([
-              'data-[visible="false"]:animate-fade-out',
-              'data-[visible="true"]:animate-fade-in',
-            ])}
-          />
+          <Highlight ref={ref} visible={Boolean(value)} rect={rect} />
 
           <div className="relative z-2 flex gap-4">
             {items.map((item, index) => (

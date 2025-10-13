@@ -1,22 +1,24 @@
 import { type Ref, useCallback, useLayoutEffect, useRef } from 'react';
-import { usePresence, useMergedRefs, cn } from '@ui';
-
-const classes = cn([
-  'absolute z-1',
-  'rounded-md',
-  'bg-red-500',
-  'transition-all',
-]);
+import { usePresence, useMergedRefs } from '../hooks';
+import { cn } from '../utils';
+import classes from './highlightClasses';
 
 export type HighlightProps = {
   ref?: Ref<HTMLElement>;
   visible?: boolean;
   rect?: DOMRect;
   className?: string;
+  persistent?: boolean;
 };
 
 export const Highlight = (inProps: HighlightProps) => {
-  const { ref: refProp, visible = true, rect, className } = inProps;
+  const {
+    ref: refProp,
+    visible = true,
+    rect,
+    className,
+    persistent = false,
+  } = inProps;
 
   const { ref: refPresence, isPresent } = usePresence(visible);
 
@@ -28,7 +30,7 @@ export const Highlight = (inProps: HighlightProps) => {
       node.style.setProperty('transition-duration', '0s');
     }
 
-    function handleAnimationEnd() {
+    function handleAnimationStart() {
       const preventTransition = preventTransitionRef.current;
       if (preventTransition) {
         node.style.setProperty('transition-duration', '0s');
@@ -37,11 +39,9 @@ export const Highlight = (inProps: HighlightProps) => {
       }
     }
 
-    node.addEventListener('animationcancel', handleAnimationEnd);
-    node.addEventListener('animationend', handleAnimationEnd);
+    node.addEventListener('animationstart', handleAnimationStart);
     return () => {
-      node.removeEventListener('animationcancel', handleAnimationEnd);
-      node.removeEventListener('animationend', handleAnimationEnd);
+      node.removeEventListener('animationstart', handleAnimationStart);
     };
   }, []);
 
@@ -55,7 +55,7 @@ export const Highlight = (inProps: HighlightProps) => {
     <div
       ref={mergedRefs}
       data-visible={visible}
-      className={cn(classes, className)}
+      className={cn(classes({ persistent }), className)}
       style={{
         width: rect ? `${rect.width}px` : undefined,
         height: rect ? `${rect.height}px` : undefined,

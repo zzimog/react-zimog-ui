@@ -4,8 +4,7 @@ import {
   Children,
   cloneElement,
 } from 'react';
-import { useMergedRefs } from '../hooks';
-import { usePresence } from './use-presence';
+import { usePresence, useMergedRefs } from '../hooks';
 
 /**
  * Ref: https://github.com/radix-ui/primitives/blob/main/packages/react/presence/src/presence.tsx

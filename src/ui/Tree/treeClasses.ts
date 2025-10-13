@@ -1,27 +1,16 @@
-import { cn } from '../utils';
-
 const treeClasses = {
-  root: 'relative group overflow-hidden',
-  highlight: cn([
-    'absolute',
-    'rounded-md',
-    'bg-gray-500/15',
-    'transition-[width,height,transform,opacity]',
-    'duration-100',
-    'z-0',
-    'opacity-0',
-    'group-has-hover:opacity-100',
-  ]),
+  root: 'relative overflow-visible',
+  highlight: '',
   list: {
-    root: cn([
+    root: [
       'relative',
       'z-1',
       '[&_ul]:ml-3.5',
       '[&_ul]:pl-2',
       '[&_ul]:border-l',
       '[&_ul]:border-gray-500/20',
-    ]),
-    item: cn([
+    ].join(' '),
+    item: [
       'flex',
       'items-center',
       'justify-start',
@@ -34,7 +23,7 @@ const treeClasses = {
       '[&_svg]:transition-transform',
       '[&_svg]:duration-100',
       'data-[state="open"]:[&_svg]:rotate-90',
-    ]),
+    ].join(' '),
   },
 };
 

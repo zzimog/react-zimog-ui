@@ -1,7 +1,8 @@
 import { createContext, useContext } from 'react';
 
 type TreeContextType = {
-  state: Map<string, boolean>;
+  treeState: Record<string, boolean>;
+  setTreeState(index: string, open: boolean): void;
 };
 
 export const TreeContext = createContext<TreeContextType | undefined>(

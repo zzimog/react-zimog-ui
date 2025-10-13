@@ -1,86 +1,78 @@
-import {
-  type ElementType,
-  type RefAttributes,
-  type HTMLAttributes,
-  useRef,
-} from 'react';
-import { useMergedRefs } from '../hooks';
+import { type ElementType, type HTMLAttributes, useRef, useState } from 'react';
 import { cn } from '../utils';
+import { Interaction } from '../Interaction';
+import { Highlight } from '../Highlight';
 import { type TreeItemData, TreeItem } from './TreeItem';
-import classes from './treeClasses';
 import { TreeContext } from './treeContext';
+import classes from './treeClasses';
 
 export type TreeProps = {
   as?: ElementType;
   data?: TreeItemData[];
-} & RefAttributes<HTMLElement> &
-  HTMLAttributes<HTMLElement>;
+} & HTMLAttributes<HTMLElement>;
 
 export const Tree = (inProps: TreeProps) => {
-  const {
-    as: Tag = 'div',
-    ref: refProp,
-    data = [],
-    className,
-    ...props
-  } = inProps;
+  const { as: Tag = 'div', data = [], className, ...props } = inProps;
 
-  const ref = useRef<HTMLElement>(null);
-  const mergedRefs = useMergedRefs(refProp, ref);
+  const [state, setState] = useState<Record<string, boolean>>({});
 
-  const highlightRef = useRef<HTMLDivElement>(null);
+  const [over, setOver] = useState(false);
+  const highlightRef = useRef<HTMLElement>(null);
+
+  function handleRectChange(rect?: DOMRect) {
+    const node = highlightRef.current;
+    if (node && rect) {
+      const { x, y, width, height } = rect;
+
+      Object.assign(node.style, {
+        width: `${width}px`,
+        height: `${height}px`,
+        transform: `translate(${x}px, ${y}px)`,
+      });
+    }
+  }
 
   const context = {
-    state: new Map(),
+    treeState: state,
+    setTreeState(index: string, open: boolean) {
+      setState((prev) => ({
+        ...prev,
+        [index]: open,
+      }));
+    },
   };
 
-  function handleOver(item: HTMLElement) {
-    const parentRect = ref.current!.getBoundingClientRect();
-    const { top, left, width, height } = item.getBoundingClientRect();
-
-    const highlight = highlightRef.current!;
-    const x = left - parentRect.left;
-    const y = top - parentRect.top;
-
-    Object.assign(highlight.style, {
-      width: `${width}px`,
-      height: `${height}px`,
-      transform: `translate(${x}px, ${y}px)`,
-      opacity: 1,
-    });
-  }
-
-  function handleOut() {
-    Object.assign(highlightRef.current!.style, {
-      opacity: 0,
-    });
-  }
-
   return (
-    <Tag
-      ref={mergedRefs}
-      className={cn(classes.root, className)}
-      onMouseOut={handleOut}
-      {...props}
-    >
-      {data.length > 0 && (
-        <>
-          <div ref={highlightRef} className={classes.highlight} />
-          <ul className={classes.list.root}>
-            <TreeContext value={context}>
-              {data.map((item, index) => (
-                <TreeItem
-                  key={index}
-                  index={`${index}`}
-                  name={item.name}
-                  items={item.items}
-                  onItemOver={handleOver}
-                />
-              ))}
-            </TreeContext>
-          </ul>
-        </>
-      )}
-    </Tag>
+    <Interaction type="hover" onRectChange={handleRectChange}>
+      <Tag
+        {...props}
+        data-component="Tree"
+        className={cn(className, classes.root)}
+      >
+        {data.length > 0 && (
+          <>
+            <Highlight
+              ref={highlightRef}
+              visible={over}
+              className={classes.highlight}
+            />
+            <ul className={classes.list.root}>
+              <TreeContext value={context}>
+                {data.map((item, index) => (
+                  <TreeItem
+                    key={index}
+                    index={`${index}`}
+                    name={item.name}
+                    items={item.items}
+                    onMouseOver={() => setOver(true)}
+                    onMouseLeave={() => setOver(false)}
+                  />
+                ))}
+              </TreeContext>
+            </ul>
+          </>
+        )}
+      </Tag>
+    </Interaction>
   );
 };

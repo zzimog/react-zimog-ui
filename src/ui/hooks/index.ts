@@ -1,4 +1,5 @@
 export * from './use-merged-refs';
+export * from './use-presence';
 
 /**
  * @todo Refactor

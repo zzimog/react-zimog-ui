@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Interaction } from '@ui';
+import { useRef, useState } from 'react';
+import { cn, Interaction } from '@ui';
 
 import { Highlight } from './Highlight';
 
@@ -19,26 +19,33 @@ const items = [
 ];
 
 const App = () => {
-  const initValue = '';
+  const [value, setValue] = useState<string>('');
+  const ref = useRef<HTMLElement>(null);
 
-  const [value, setValue] = useState<string>(initValue);
-  const [rect, setRect] = useState<DOMRect>();
-  const [interact, setInteract] = useState(false);
+  function handleRectChange(rect?: DOMRect) {
+    const node = ref.current;
+    if (node && rect) {
+      const { x, y, width, height } = rect;
+
+      Object.assign(node.style, {
+        width: `${width}px`,
+        height: `${height}px`,
+        transform: `translate(${x}px, ${y}px)`,
+      });
+    }
+  }
 
   return (
     <div className="flex flex-col gap-2 p-2 bg-gray-200">
-      <Interaction type="hover" onRectChange={setRect}>
-        <div
-          className="group relative"
-          onMouseOver={() => setInteract(true)}
-          onMouseLeave={() => setInteract(false)}
-        >
+      <Interaction type="hover" onRectChange={handleRectChange}>
+        <div className="relative" onMouseLeave={() => setValue('')}>
           <Highlight
-            visible={interact && rect !== undefined}
-            x={rect?.x}
-            y={rect?.y}
-            width={rect?.width}
-            height={rect?.height}
+            ref={ref}
+            visible={Boolean(value)}
+            className={cn([
+              'data-[visible="false"]:animate-fade-out',
+              'data-[visible="true"]:animate-fade-in',
+            ])}
           />
 
           <div className="relative z-2 flex gap-4">
@@ -47,10 +54,7 @@ const App = () => {
                 key={index}
                 defaultSelected={item.value === value}
               >
-                <div
-                  className="p-4 border"
-                  onMouseOver={() => setValue(item.value)}
-                >
+                <div className="p-4" onMouseOver={() => setValue(item.value)}>
                   [{item.value}] {item.label}
                 </div>
               </Interaction.Node>

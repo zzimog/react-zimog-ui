@@ -1,55 +1,67 @@
-import {
-  type ElementType,
-  type HTMLAttributes,
-  type RefAttributes,
-} from 'react';
-import { cn, usePresence } from '@ui';
+import { type Ref, useCallback, useLayoutEffect, useRef } from 'react';
+import { usePresence, useMergedRefs, cn } from '@ui';
 
-const classes = [
+const classes = cn([
   'absolute z-1',
   'rounded-md',
   'bg-red-500',
   'transition-all',
-  'animate-fade-out',
-  'group-hover:animate-fade-in',
-];
+]);
 
 export type HighlightProps = {
-  as?: ElementType;
+  ref?: Ref<HTMLElement>;
   visible?: boolean;
-  x?: number;
-  y?: number;
-  width?: number;
-  height?: number;
-} & HTMLAttributes<HTMLElement> &
-  RefAttributes<HTMLElement>;
+  rect?: DOMRect;
+  className?: string;
+};
 
 export const Highlight = (inProps: HighlightProps) => {
-  const {
-    as: Tag = 'div',
-    visible: visibleProp = false,
-    x = 0,
-    y = 0,
-    width = 0,
-    height = 0,
-    ...props
-  } = inProps;
+  const { ref: refProp, visible = true, rect, className } = inProps;
 
-  const { ref, isPresent } = usePresence(visibleProp);
-  const visible = visibleProp || isPresent;
+  const { ref: refPresence, isPresent } = usePresence(visible);
+
+  const preventTransitionRef = useRef(visible);
+
+  const ref = useCallback((node: HTMLElement) => {
+    const { animationName = 'none' } = getComputedStyle(node);
+    if (animationName !== 'none') {
+      node.style.setProperty('transition-duration', '0s');
+    }
+
+    function handleAnimationEnd() {
+      const preventTransition = preventTransitionRef.current;
+      if (preventTransition) {
+        node.style.setProperty('transition-duration', '0s');
+      } else {
+        node.style.removeProperty('transition-duration');
+      }
+    }
+
+    node.addEventListener('animationcancel', handleAnimationEnd);
+    node.addEventListener('animationend', handleAnimationEnd);
+    return () => {
+      node.removeEventListener('animationcancel', handleAnimationEnd);
+      node.removeEventListener('animationend', handleAnimationEnd);
+    };
+  }, []);
+
+  const mergedRefs = useMergedRefs(refProp, refPresence, ref);
+
+  useLayoutEffect(() => {
+    preventTransitionRef.current = !visible;
+  }, [visible]);
 
   return (
-    <Tag
-      {...props}
-      ref={ref}
-      className={cn(classes, props.className)}
+    <div
+      ref={mergedRefs}
+      data-visible={visible}
+      className={cn(classes, className)}
       style={{
-        ...props.style,
-        width: `${width}px`,
-        height: `${height}px`,
-        transform: `translate(${x}px, ${y}px)`,
+        width: rect ? `${rect.width}px` : undefined,
+        height: rect ? `${rect.height}px` : undefined,
+        transform: rect ? `translate(${rect.x}px, ${rect.y}px)` : undefined,
       }}
-      hidden={!visible}
+      hidden={!isPresent}
     />
   );
 };

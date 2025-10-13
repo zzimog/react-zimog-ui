@@ -12,7 +12,9 @@ import {
 
 type PresenceState = 'mounted' | 'animating' | 'unmounted';
 
-export function usePresence(present: boolean) {
+export function usePresence<T extends HTMLElement = HTMLElement>(
+  present: boolean
+) {
   const initialState = present ? 'mounted' : 'unmounted';
   const [state, setState] = useState<PresenceState>(initialState);
 
@@ -50,7 +52,7 @@ export function usePresence(present: boolean) {
 
   return {
     isPresent: ['mounted', 'animating'].includes(state),
-    ref: useCallback((inNode: HTMLElement) => {
+    ref: useCallback((inNode: T) => {
       const node = inNode;
       let timeout: number;
 

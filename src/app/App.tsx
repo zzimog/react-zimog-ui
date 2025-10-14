@@ -1,4 +1,4 @@
-import { Card, ThemeSwitcher } from '@ui';
+import { ThemeSwitcher } from '@ui';
 import accordion from './demo/accordion';
 import buttons from './demo/buttons';
 import headings from './demo/headings';

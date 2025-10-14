@@ -6,6 +6,7 @@ import tailwindcss from '@tailwindcss/vite';
 //import pkg from './package.json';
 
 export default defineConfig({
+  base: '/ui-wip',
   plugins: [
     react({
       babel: {

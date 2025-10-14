@@ -1,3 +1,11 @@
+@utility text-muted {
+  color: var(--muted);
+
+  @variant dark {
+    color: var(--muted-foreground);
+  }
+}
+
 /* prettier-ignore */
 @utility bg-var-* {
   background-color: color-mix(

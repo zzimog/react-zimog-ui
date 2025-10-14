@@ -10,7 +10,7 @@ type AppContainerProps = {
 
 const AppContainer = ({ strict }: AppContainerProps) => {
   return (
-    <div className="min-h-screen flex justify-center items-center">
+    <div className="min-h-screen flex justify-center items-center p-4">
       {strict ? (
         <StrictMode>
           <App />

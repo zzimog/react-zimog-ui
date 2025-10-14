@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, type RefObject } from 'react';
-import { useOutsideClick } from './useOutsideClick';
+import { useOutsideClick } from './use-outside-click';
 
 type PopperPlacement = 'top' | 'right' | 'bottom' | 'left';
 

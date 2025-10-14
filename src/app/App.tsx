@@ -6,8 +6,8 @@ import inputs from './demo/inputs';
 import popper from './demo/popper';
 import spinners from './demo/spinners';
 import tabs from './demo/tabs';
-import usePopper from './demo/usePopper';
 import tree from './demo/tree';
+import usePopper from './demo/usePopper';
 
 const App = () => {
   return (
@@ -15,34 +15,16 @@ const App = () => {
       <div className="w-full flex justify-end ml-auto">
         <ThemeSwitcher />
       </div>
-      <Card as="aside" className="grow-1 basis-[300px]">
-        <ul>
-          <li>
-            <a href="#buttons">Buttons</a>
-          </li>
-          <li>
-            <a href="#headings">Headings</a>
-          </li>
-          <li>
-            <a href="#inputs">Inputs</a>
-          </li>
-          <li>
-            <a href="#spinners">Spinners</a>
-          </li>
-        </ul>
-      </Card>
-      <main className="grow-[9999] basis-[300px]">
-        <div className="flex flex-col gap-4">
-          {tree}
-          {usePopper}
-          {tabs}
-          {accordion}
-          {popper}
-          {buttons}
-          {headings}
-          {inputs}
-          {spinners}
-        </div>
+      <main className="flex flex-col gap-4">
+        {accordion}
+        {buttons}
+        {headings}
+        {inputs}
+        {popper}
+        {spinners}
+        {tabs}
+        {tree}
+        {usePopper}
       </main>
     </div>
   );

@@ -7,8 +7,8 @@ const highlightClasses = cva(
       persistent: {
         true: null,
         false: [
-          'data-[visible="false"]:animate-fade-out',
-          'data-[visible="true"]:animate-fade-in',
+          'data-[state="visible"]:animate-fade-in',
+          'data-[state="hidden"]:animate-fade-out',
         ],
       },
     },

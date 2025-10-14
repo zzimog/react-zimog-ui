@@ -3,5 +3,5 @@ import AppContainer from './app/AppContainer.tsx';
 import '@fontsource-variable/manrope/index.css';
 
 createRoot(document.getElementById('root')!).render(
-  <AppContainer strict={false} />
+  <AppContainer strict={true} />
 );

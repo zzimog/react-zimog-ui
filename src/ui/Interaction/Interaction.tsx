@@ -1,9 +1,9 @@
 import {
   type ReactElement,
   type RefAttributes,
-  useRef,
-  useLayoutEffect,
   Children,
+  useRef,
+  useEffect,
   cloneElement,
 } from 'react';
 import { getRelativeRect, rectEquals, useMergedRefs } from '@ui';
@@ -31,9 +31,11 @@ export const Interaction = (inProps: InteractionProps) => {
 
   const ref = useRef<HTMLElement>(null);
   const nodesRef = useRef(new Set<HTMLElement>());
-
   const nodeRef = useRef<HTMLElement>(null);
   const prevRectRef = useRef<DOMRect>(null);
+
+  const child = Children.only(children) as ReactElement<RefAttributes<unknown>>;
+  const mergedRefs = useMergedRefs(child.props.ref, ref);
 
   const context = {
     type,
@@ -44,14 +46,14 @@ export const Interaction = (inProps: InteractionProps) => {
     },
   };
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const node = nodeRef.current;
     if (!node && typeof defaultSelected === 'number') {
       nodeRef.current = [...nodesRef.current][defaultSelected];
     }
   }, [defaultSelected]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     let rafId: number;
 
     function loop() {
@@ -78,9 +80,6 @@ export const Interaction = (inProps: InteractionProps) => {
     loop();
     return () => cancelAnimationFrame(rafId);
   }, [onRectChange]);
-
-  const child = Children.only(children) as ReactElement<RefAttributes<unknown>>;
-  const mergedRefs = useMergedRefs(child.props.ref, ref);
 
   return (
     <InteractionContext value={context}>

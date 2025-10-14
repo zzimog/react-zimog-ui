@@ -1,67 +1,69 @@
-import { type Ref, useCallback, useLayoutEffect, useRef } from 'react';
+import {
+  type ElementType,
+  type HTMLAttributes,
+  type RefAttributes,
+  useLayoutEffect,
+  useRef,
+} from 'react';
 import { usePresence, useMergedRefs } from '../hooks';
 import { cn } from '../utils';
 import classes from './highlightClasses';
 
 export type HighlightProps = {
-  ref?: Ref<HTMLElement>;
+  as?: ElementType;
   visible?: boolean;
   rect?: DOMRect;
-  className?: string;
   persistent?: boolean;
-};
+} & HTMLAttributes<HTMLElement> &
+  RefAttributes<HTMLElement>;
 
 export const Highlight = (inProps: HighlightProps) => {
   const {
+    as: Tag = 'div',
     ref: refProp,
     visible = true,
     rect,
     className,
+    style,
     persistent = false,
+    ...props
   } = inProps;
 
-  const { ref: refPresence, present } = usePresence(visible);
+  const ref = useRef<HTMLElement>(null);
+  const prevDurationRef = useRef<string>(null);
 
-  const preventTransitionRef = useRef(visible);
-
-  const ref = useCallback((node: HTMLElement) => {
-    const { animationName = 'none' } = getComputedStyle(node);
-    if (animationName !== 'none') {
-      node.style.setProperty('transition-duration', '0s');
-    }
-
-    function handleAnimationStart() {
-      const preventTransition = preventTransitionRef.current;
-      if (preventTransition) {
-        node.style.setProperty('transition-duration', '0s');
-      } else {
-        node.style.removeProperty('transition-duration');
-      }
-    }
-
-    node.addEventListener('animationstart', handleAnimationStart);
-    return () => {
-      node.removeEventListener('animationstart', handleAnimationStart);
-    };
-  }, []);
-
-  const mergedRefs = useMergedRefs(refProp, refPresence, ref);
+  const { ref: refPresence, present } = usePresence(persistent || visible);
+  const mergedRefs = useMergedRefs(refProp, ref, refPresence);
 
   useLayoutEffect(() => {
-    preventTransitionRef.current = !visible;
+    const node = ref.current;
+    if (node && !persistent) {
+      const raf = requestAnimationFrame(() => {
+        if (visible) {
+          node.style.transitionDuration = prevDurationRef.current || '';
+        } else {
+          prevDurationRef.current = node.style.transitionDuration;
+          node.style.transitionDuration = '0s';
+        }
+      });
+
+      return () => cancelAnimationFrame(raf);
+    }
   }, [visible]);
 
   return (
-    <div
+    <Tag
       ref={mergedRefs}
-      data-visible={visible}
+      data-state={visible ? 'visible' : 'hidden'}
       className={cn(classes({ persistent }), className)}
+      hidden={!present}
       style={{
         width: rect ? `${rect.width}px` : undefined,
         height: rect ? `${rect.height}px` : undefined,
         transform: rect ? `translate(${rect.x}px, ${rect.y}px)` : undefined,
+        ...style,
       }}
-      hidden={!present}
+      {...props}
     />
   );
 };

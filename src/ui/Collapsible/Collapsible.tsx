@@ -35,19 +35,20 @@ export const Collapsible = (inProps: CollapsibleProps) => {
     ...props
   } = inProps;
 
-  const { ref: presenceRef, present } = usePresence(open);
-  const [isPresent, setIsPresent] = useState(present);
+  const [visible, setVisible] = useState(open);
 
   const ref = useRef<HTMLElement>(null);
-  const mergedRefs = useMergedRefs(refProp, presenceRef, ref);
-
-  const preventAnimationRef = useRef(present);
+  const preventAnimationRef = useRef(open);
   const prevStylesRef = useRef<Record<string, string>>(null);
-
   const widthRef = useRef(0);
-  const width = widthRef.current;
   const heightRef = useRef(0);
+
+  const { ref: presenceRef, present } = usePresence(open);
+  const mergedRefs = useMergedRefs(refProp, ref, presenceRef);
+
+  const width = widthRef.current;
   const height = heightRef.current;
+  const shouldRender = open || visible;
 
   useEffect(() => {
     const raf = requestAnimationFrame(() => {
@@ -77,11 +78,9 @@ export const Collapsible = (inProps: CollapsibleProps) => {
         node.style.animationDuration = animationDuration;
       }
 
-      setIsPresent(present);
+      setVisible(present);
     }
   }, [open, present]);
-
-  const shouldRender = open || isPresent;
 
   return (
     <Tag
@@ -89,13 +88,12 @@ export const Collapsible = (inProps: CollapsibleProps) => {
       data-state={open ? 'open' : 'closed'}
       className={cn(classes({ dir }), className)}
       hidden={!shouldRender}
-      {...props}
       style={{
         ['--width']: width ? `${width}px` : undefined,
         ['--height']: height ? `${height}px` : undefined,
         ...style,
-        animationDuration: '5s',
       }}
+      {...props}
     >
       {shouldRender && children}
     </Tag>

@@ -43,19 +43,19 @@ export const Tree = (inProps: TreeProps) => {
   };
 
   return (
-    <Interaction type="hover" onRectChange={handleRectChange}>
-      <Tag
-        {...props}
-        data-component="Tree"
-        className={cn(className, classes.root)}
-      >
-        {data.length > 0 && (
-          <>
-            <Highlight
-              ref={highlightRef}
-              visible={over}
-              className={classes.highlight}
-            />
+    <Tag
+      {...props}
+      data-component="Tree"
+      className={cn(className, classes.root)}
+    >
+      {data.length > 0 && (
+        <>
+          <Highlight
+            ref={highlightRef}
+            visible={over}
+            className={classes.highlight}
+          />
+          <Interaction type="hover" onRectChange={handleRectChange}>
             <ul className={classes.list.root}>
               <TreeContext value={context}>
                 {data.map((item, index) => (
@@ -70,9 +70,9 @@ export const Tree = (inProps: TreeProps) => {
                 ))}
               </TreeContext>
             </ul>
-          </>
-        )}
-      </Tag>
-    </Interaction>
+          </Interaction>
+        </>
+      )}
+    </Tag>
   );
 };

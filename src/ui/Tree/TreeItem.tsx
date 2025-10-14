@@ -1,4 +1,4 @@
-import { type HTMLAttributes, type ReactNode, useState } from 'react';
+import { type HTMLAttributes, type ReactNode } from 'react';
 import { ChevronRight, Dot } from 'lucide-react';
 import { Interaction } from '../Interaction';
 import { Collapsible } from '../Collapsible';
@@ -26,16 +26,13 @@ export const TreeItem = (inProps: TreeItemProps) => {
   } = inProps;
 
   const { treeState, setTreeState } = useTreeContext();
-  const initOpen = treeState[indexProp] ?? true;
-
-  const [open, setOpen] = useState(initOpen);
+  const open = treeState[indexProp] ?? true;
 
   const isParent = items.length > 0;
 
   function handleClick() {
     if (isParent) {
       setTreeState(indexProp, !open);
-      setOpen(!open);
     }
   }
 

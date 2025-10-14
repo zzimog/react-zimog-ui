@@ -6,11 +6,18 @@ const Accordion = (props: { children?: ReactNode }) => {
 
   return (
     <div className="w-100 p-2 border">
-      <button className="cursor-pointer" onClick={() => setOpen(!open)}>
+      <button
+        className="w-full p-1 text-white bg-black cursor-pointer"
+        onClick={() => setOpen(!open)}
+      >
         Toggle
       </button>
       <Collapsible open={open}>
-        <div className="border p-2">{props.children}</div>
+        <div
+          style={{ padding: '16px', lineHeight: '24px', fontFamily: 'Arial' }}
+        >
+          {props.children}
+        </div>
       </Collapsible>
     </div>
   );
@@ -18,22 +25,14 @@ const Accordion = (props: { children?: ReactNode }) => {
 
 const App = () => {
   return (
-    <Accordion>
-      Outer:
-      <br />
-      Lorem ipsum, dolor sit amet consectetur adipisicing elit. Rerum voluptate
-      perferendis repellendus, magni laborum atque, iure tempora ipsum nulla
-      sint voluptatum distinctio molestias sunt, libero iusto obcaecati aliquam?
-      Necessitatibus, assumenda!
+    <div className="h-100">
       <Accordion>
-        Inner:
-        <br />
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eos voluptate
-        ab possimus quia qui tempora tempore! Nostrum deserunt ipsa sit?
-        Consectetur eos dolor iste quibusdam aperiam voluptatem, veritatis sit
-        minima.
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Rerum
+        voluptate perferendis repellendus, magni laborum atque, iure tempora
+        ipsum nulla sint voluptatum distinctio molestias sunt, libero iusto
+        obcaecati aliquam? Necessitatibus, assumenda!
       </Accordion>
-    </Accordion>
+    </div>
   );
 };
 

@@ -20,7 +20,7 @@ export const Highlight = (inProps: HighlightProps) => {
     persistent = false,
   } = inProps;
 
-  const { ref: refPresence, isPresent } = usePresence(visible);
+  const { ref: refPresence, present } = usePresence(visible);
 
   const preventTransitionRef = useRef(visible);
 
@@ -61,7 +61,7 @@ export const Highlight = (inProps: HighlightProps) => {
         height: rect ? `${rect.height}px` : undefined,
         transform: rect ? `translate(${rect.x}px, ${rect.y}px)` : undefined,
       }}
-      hidden={!isPresent}
+      hidden={!present}
     />
   );
 };

@@ -7,10 +7,10 @@ import {
   type ElementType,
   type HTMLAttributes,
   type RefAttributes,
-  useState,
   useRef,
   useEffect,
   useLayoutEffect,
+  useState,
 } from 'react';
 import { usePresence, useMergedRefs } from '../hooks';
 import classes from './collapsibleClasses';
@@ -36,65 +36,66 @@ export const Collapsible = (inProps: CollapsibleProps) => {
   } = inProps;
 
   const { ref: presenceRef, present } = usePresence(open);
-  const [visible, setVisible] = useState(open);
+  const [isPresent, setIsPresent] = useState(present);
 
   const ref = useRef<HTMLElement>(null);
   const mergedRefs = useMergedRefs(refProp, presenceRef, ref);
 
   const preventAnimationRef = useRef(present);
+  const prevStylesRef = useRef<Record<string, string>>(null);
 
   const widthRef = useRef(0);
   const width = widthRef.current;
   const heightRef = useRef(0);
   const height = heightRef.current;
 
-  const shouldRender = open || visible;
-
   useEffect(() => {
-    const raf = requestAnimationFrame(
-      () => (preventAnimationRef.current = false)
-    );
+    const raf = requestAnimationFrame(() => {
+      preventAnimationRef.current = false;
+    });
     return () => cancelAnimationFrame(raf);
   }, []);
 
   useLayoutEffect(() => {
     const node = ref.current;
-    if (node && !preventAnimationRef.current) {
-      const previousStyles = {
+    if (node) {
+      prevStylesRef.current = prevStylesRef.current || {
         transitionDuration: node.style.transitionDuration,
-        animationName: node.style.animationName,
+        animationDuration: node.style.animationDuration,
       };
 
       node.style.transitionDuration = '0s';
-      node.style.animationName = 'none';
+      node.style.animationDuration = '0s';
 
       const { width, height } = node.getBoundingClientRect();
       widthRef.current = width;
       heightRef.current = height;
 
-      node.style.transitionDuration = previousStyles.transitionDuration;
-      node.style.animationName = previousStyles.animationName;
+      if (!preventAnimationRef.current) {
+        const { transitionDuration, animationDuration } = prevStylesRef.current;
+        node.style.transitionDuration = transitionDuration;
+        node.style.animationDuration = animationDuration;
+      }
 
-      setVisible(present);
+      setIsPresent(present);
     }
   }, [open, present]);
+
+  const shouldRender = open || isPresent;
 
   return (
     <Tag
       ref={mergedRefs}
       data-state={open ? 'open' : 'closed'}
       className={cn(classes({ dir }), className)}
+      hidden={!shouldRender}
+      {...props}
       style={{
-        ...style,
         ['--width']: width ? `${width}px` : undefined,
         ['--height']: height ? `${height}px` : undefined,
-        ...(preventAnimationRef.current && {
-          transitionDuration: '0s',
-          animationName: 'none',
-        }),
+        ...style,
+        animationDuration: '5s',
       }}
-      {...props}
-      hidden={!shouldRender}
     >
       {shouldRender && children}
     </Tag>

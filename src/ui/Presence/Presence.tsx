@@ -1,3 +1,8 @@
+/**
+ * Based on Radix UI usePresence hook
+ * Ref: https://github.com/radix-ui/primitives/blob/main/packages/react/presence/src/presence.tsx
+ */
+
 import {
   type ReactElement,
   type RefAttributes,
@@ -5,10 +10,6 @@ import {
   cloneElement,
 } from 'react';
 import { usePresence, useMergedRefs } from '../hooks';
-
-/**
- * Ref: https://github.com/radix-ui/primitives/blob/main/packages/react/presence/src/presence.tsx
- */
 
 export type PresenceProps = {
   present?: boolean;
@@ -21,13 +22,13 @@ export const Presence = (inProps: PresenceProps) => {
 
   const child = (
     typeof children === 'function'
-      ? children({ present: presence.isPresent })
+      ? children({ present: presence.present })
       : Children.only(children)
   ) as ReactElement<RefAttributes<HTMLElement>>;
 
   const ref = useMergedRefs(child.props.ref, presence.ref);
 
-  return typeof children === 'function' || presence.isPresent
+  return typeof children === 'function' || presence.present
     ? cloneElement(child, { ref })
     : null;
 };

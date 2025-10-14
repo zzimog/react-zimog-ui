@@ -14,12 +14,13 @@ import {
 } from 'react';
 import { usePresence, useMergedRefs } from '../hooks';
 import classes from './collapsibleClasses';
+import { cn } from '../utils';
 
 export type CollapsibleProps = {
   as?: ElementType;
   open?: boolean;
   dir?: 'vertical' | 'horizontal';
-} & Omit<HTMLAttributes<HTMLElement>, 'className' | 'style'> &
+} & HTMLAttributes<HTMLElement> &
   RefAttributes<HTMLElement>;
 
 export const Collapsible = (inProps: CollapsibleProps) => {
@@ -28,7 +29,10 @@ export const Collapsible = (inProps: CollapsibleProps) => {
     ref: refProp,
     open = false,
     dir = 'vertical',
+    className,
+    style,
     children,
+    ...props
   } = inProps;
 
   const { ref: presenceRef, present } = usePresence(open);
@@ -79,8 +83,9 @@ export const Collapsible = (inProps: CollapsibleProps) => {
     <Tag
       ref={mergedRefs}
       data-state={open ? 'open' : 'closed'}
-      className={classes({ dir })}
+      className={cn(classes({ dir }), className)}
       style={{
+        ...style,
         ['--width']: width ? `${width}px` : undefined,
         ['--height']: height ? `${height}px` : undefined,
         ...(preventAnimationRef.current && {
@@ -88,6 +93,7 @@ export const Collapsible = (inProps: CollapsibleProps) => {
           animationName: 'none',
         }),
       }}
+      {...props}
       hidden={!shouldRender}
     >
       {shouldRender && children}

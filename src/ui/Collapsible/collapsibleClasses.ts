@@ -1,9 +1,6 @@
 import { cva } from 'class-variance-authority';
 
 const collapsibleClasses = cva('overflow-hidden', {
-  defaultVariants: {
-    dir: 'vertical',
-  },
   variants: {
     dir: {
       vertical: [
@@ -15,6 +12,9 @@ const collapsibleClasses = cva('overflow-hidden', {
         'data-[state="open"]:animate-width-grow',
       ],
     },
+  },
+  defaultVariants: {
+    dir: 'vertical',
   },
 });
 

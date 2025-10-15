@@ -1,9 +1,6 @@
 @theme {
-  --animate-fade-in: fade-in
-    var(--tw-animation-duration, var(--tw-duration, 200ms))
-    var(--tw-ease, ease-out);
-  --animate-fade-out: fade-out
-    var(--tw-animation-duration, var(--tw-duration, 200ms))
+  --animate-fade-in: fade-in var(--tw-duration, 200ms) var(--tw-ease, ease-out);
+  --animate-fade-out: fade-out var(--tw-duration, 200ms)
     var(--tw-ease, ease-out);
 
   @keyframes fade-in {
@@ -17,11 +14,9 @@
       opacity: 0;
     }
   }
-  --animate-height-grow: height-grow
-    var(--tw-animation-duration, var(--tw-duration, 200ms))
+  --animate-height-grow: height-grow var(--tw-duration, 200ms)
     var(--tw-ease, ease-out);
-  --animate-height-shrink: height-shrink
-    var(--tw-animation-duration, var(--tw-duration, 200ms))
+  --animate-height-shrink: height-shrink var(--tw-duration, 200ms)
     var(--tw-ease, ease-out);
 
   @keyframes height-grow {
@@ -42,11 +37,9 @@
     }
   }
 
-  --animate-width-grow: width-grow
-    var(--tw-animation-duration, var(--tw-duration, 200ms))
+  --animate-width-grow: width-grow var(--tw-duration, 200ms)
     var(--tw-ease, ease-out);
-  --animate-width-shrink: width-shrink
-    var(--tw-animation-duration, var(--tw-duration, 200ms))
+  --animate-width-shrink: width-shrink var(--tw-duration, 200ms)
     var(--tw-ease, ease-out);
 
   @keyframes width-grow {
@@ -66,18 +59,4 @@
       width: 0;
     }
   }
-}
-
-/* prettier-ignore */
-@utility animate-* {
-  animation-name: --value(*);
-  animation-duration: var(--tw-duration, 200ms);
-}
-
-/* prettier-ignore */
-@utility animation-duration-* {
-  --tw-animation-duration: calc(--value(number) * 1ms);
-  --tw-animation-duration: --value(--animation-duration-*, [duration], "initial", [*]);
-  animation-duration: calc(--value(number) * 1ms);
-  animation-duration: --value(--animation-duration-*, [duration], "initial", [*]);
 }

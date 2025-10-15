@@ -1,5 +1,6 @@
 import { Tree, type TreeProps } from '@ui';
 import { DemoBox } from './DemoBox';
+import { useLayoutEffect, useRef } from 'react';
 
 const data: TreeProps['data'] = [
   {
@@ -43,10 +44,22 @@ const data: TreeProps['data'] = [
   },
 ];
 
-const tree = (
-  <DemoBox id="tree" title="Tree">
-    <Tree data={data} />
-  </DemoBox>
-);
+const DemoTree = () => {
+  const ref = useRef<HTMLDivElement>(null);
 
-export default tree;
+  useLayoutEffect(() => {
+    const node = ref.current;
+    if (node) {
+      const height = node.offsetHeight;
+      node.style.height = `${height}px`;
+    }
+  }, []);
+
+  return (
+    <DemoBox id="tree" title="Tree">
+      <Tree ref={ref} data={data} />
+    </DemoBox>
+  );
+};
+
+export default <DemoTree />;

@@ -13,7 +13,7 @@ export const DemoBox = (props: {
   return (
     <Card as="section">
       <header className="-mt-2 mb-4 pb-4 border-b border-gray-500/20">
-        <Title id={id} size={1} children={title} />
+        <Title id={id} size={2} children={title} />
       </header>
       <main
         className={cn(

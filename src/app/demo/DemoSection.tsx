@@ -13,7 +13,7 @@ export const DemoSection = (props: {
   return (
     <article>
       <header className="mb-2">
-        <Title id={id} size={2} children={title} />
+        <Title id={id} size={3} children={title} />
       </header>
       <main
         children={children}

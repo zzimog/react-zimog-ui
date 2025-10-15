@@ -1,4 +1,10 @@
-import { type ElementType, type HTMLAttributes, useRef, useState } from 'react';
+import {
+  type ElementType,
+  type HTMLAttributes,
+  type RefAttributes,
+  useRef,
+  useState,
+} from 'react';
 import { cn } from '../utils';
 import { Interaction } from '../Interaction';
 import { Highlight } from '../Highlight';
@@ -9,7 +15,8 @@ import classes from './treeClasses';
 export type TreeProps = {
   as?: ElementType;
   data?: TreeItemData[];
-} & HTMLAttributes<HTMLElement>;
+} & HTMLAttributes<HTMLElement> &
+  RefAttributes<HTMLElement>;
 
 export const Tree = (inProps: TreeProps) => {
   const { as: Tag = 'div', data = [], className, ...props } = inProps;
@@ -43,11 +50,7 @@ export const Tree = (inProps: TreeProps) => {
   };
 
   return (
-    <Tag
-      {...props}
-      data-component="Tree"
-      className={cn(className, classes.root)}
-    >
+    <Tag className={cn(classes.root, className)} {...props}>
       {data.length > 0 && (
         <>
           <Highlight

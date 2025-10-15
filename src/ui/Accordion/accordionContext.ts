@@ -1,9 +1,8 @@
 import { createContext, useContext } from 'react';
 
 type AccordionContextType = {
-  index: number;
   value?: string | string[];
-  setValue: (value: string, open: boolean) => void;
+  setValue: (value: string) => void;
 };
 
 export const AccordionContext = createContext<AccordionContextType | undefined>(

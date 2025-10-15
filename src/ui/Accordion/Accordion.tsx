@@ -6,11 +6,14 @@ import {
   useId,
   useState,
   Children,
+  useRef,
 } from 'react';
 import { cn } from '../utils';
 import { AccordionItem } from './AccordionItem';
 import { AccordionContext } from './accordionContext';
 import classes from './accordionClasses';
+import { Interaction } from '../Interaction';
+import { Highlight } from '../Highlight';
 
 type AccordionValue = string | string[] | undefined;
 
@@ -52,15 +55,17 @@ export const Accordion = (inProps: AccordionProps) => {
     );
   }
 
-  const baseId = useId();
-
   const initValue = valueProp || defaultValue || (multiple ? [] : undefined);
   const [value, setValue] = useState<AccordionValue>(initValue);
+  const [over, setOver] = useState(false);
+
+  const highlightRef = useRef<HTMLElement>(null);
+
+  const childrenCount = Children.count(children);
 
   const context = {
-    baseId,
     value,
-    setValue: (itemValue: string) => {
+    setValue(itemValue: string) {
       if (multiple) {
         if (!Array.isArray(value)) {
           return;
@@ -82,14 +87,45 @@ export const Accordion = (inProps: AccordionProps) => {
     },
   };
 
+  function handleRectChange(rect?: DOMRect) {
+    const node = highlightRef.current;
+    if (node && rect) {
+      const { y, height } = rect;
+
+      Object.assign(node.style, {
+        height: `${height}px`,
+        transform: `translateY(${y}px)`,
+      });
+    }
+  }
+
   return (
-    <Tag className={cn(classes.root, className)} {...props}>
-      {Children.map(children, (child, index) => (
-        <AccordionContext value={{ index, ...context }}>
-          {child}
+    <Interaction
+      type="hover"
+      onRectChange={handleRectChange}
+      onOver={() => setOver(true)}
+      onLeave={() => setOver(false)}
+    >
+      <Tag className={cn(classes.root, className)} {...props}>
+        <Highlight
+          ref={highlightRef}
+          visible={over}
+          className={classes.highlight}
+        />
+        <AccordionContext value={context}>
+          {Children.map(children, (child, index) => {
+            const isLast = index === childrenCount - 1;
+
+            return (
+              <>
+                {child}
+                {!isLast && <div className={classes.divider} />}
+              </>
+            );
+          })}
         </AccordionContext>
-      ))}
-    </Tag>
+      </Tag>
+    </Interaction>
   );
 };
 

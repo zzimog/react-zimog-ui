@@ -7,7 +7,7 @@ import {
 } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { cn } from '../utils';
-import { Button } from '../Button';
+import { Interaction } from '../Interaction';
 import { Collapsible } from '../Collapsible';
 import { useAccordion } from './accordionContext';
 import accordionClasses from './accordionClasses';
@@ -33,20 +33,22 @@ export const AccordionItem = (inProps: AccordionItemProps) => {
     ...props
   } = inProps;
 
-  const triggerId = useId();
-  const contentId = useId();
+  const id = useId();
+  const valueId = useId();
 
-  const { index: contextIndex, value, setValue } = useAccordion();
-  const index = `${contextIndex}`;
+  const { value: contextValue, setValue } = useAccordion();
 
-  const open = Array.isArray(value)
-    ? value.includes(propValue || index)
-    : value === (propValue || index);
+  const value = propValue ?? valueId;
+  const triggerId = `${id}-trigger-${value}`;
+  const contentId = `${id}-content-${value}`;
+
+  const multiple = Array.isArray(contextValue);
+  const open = multiple ? contextValue.includes(value) : contextValue === value;
 
   function handleClick() {
-    if (disabled) return;
-
-    setValue(propValue || index, !open);
+    if (!disabled) {
+      setValue(value);
+    }
   }
 
   return (
@@ -56,18 +58,20 @@ export const AccordionItem = (inProps: AccordionItemProps) => {
       className={cn(classes.root, className)}
       {...props}
     >
-      <Button
-        id={triggerId}
-        variant="ghost"
-        aria-expanded={open}
-        aria-controls={contentId}
-        onClick={handleClick}
-        className={classes.trigger}
-        disabled={disabled}
-      >
-        {title}
-        <ChevronDown className={classes.arrow} />
-      </Button>
+      <Interaction.Node>
+        <button
+          id={triggerId}
+          aria-controls={contentId}
+          aria-expanded={open}
+          data-expanded={open}
+          className={classes.trigger}
+          onClick={handleClick}
+          disabled={disabled}
+        >
+          {title}
+          <ChevronDown className={classes.arrow} />
+        </button>
+      </Interaction.Node>
       <Collapsible
         open={open}
         id={contentId}

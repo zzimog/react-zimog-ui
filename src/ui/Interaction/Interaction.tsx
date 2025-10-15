@@ -18,6 +18,8 @@ export type InteractionProps = {
   children: ReactElement;
   onNodeChange?: (node: HTMLElement) => void;
   onRectChange?: (rect: DOMRect) => void;
+  onOver?: () => void;
+  onLeave?: () => void;
 };
 
 export const Interaction = (inProps: InteractionProps) => {
@@ -27,6 +29,8 @@ export const Interaction = (inProps: InteractionProps) => {
     children,
     onNodeChange,
     onRectChange,
+    onOver,
+    onLeave,
   } = inProps;
 
   const ref = useRef<HTMLElement>(null);
@@ -80,6 +84,26 @@ export const Interaction = (inProps: InteractionProps) => {
     loop();
     return () => cancelAnimationFrame(rafId);
   }, [onRectChange]);
+
+  useEffect(() => {
+    const root = ref.current;
+    if (root) {
+      function handleOver() {
+        if (onOver) onOver();
+      }
+
+      function handleLeave() {
+        if (onLeave) onLeave();
+      }
+
+      root.addEventListener('mouseover', handleOver);
+      root.addEventListener('mouseleave', handleLeave);
+      return () => {
+        root.removeEventListener('mouseover', handleOver);
+        root.removeEventListener('mouseleave', handleLeave);
+      };
+    }
+  }, [onOver, onLeave]);
 
   return (
     <InteractionContext value={context}>

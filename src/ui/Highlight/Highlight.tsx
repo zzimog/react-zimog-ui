@@ -30,7 +30,6 @@ export const Highlight = (inProps: HighlightProps) => {
   } = inProps;
 
   const ref = useRef<HTMLElement>(null);
-  const prevDurationRef = useRef<string>(null);
 
   const { ref: refPresence, present } = usePresence(persistent || visible);
   const mergedRefs = useMergedRefs(refProp, ref, refPresence);
@@ -39,12 +38,9 @@ export const Highlight = (inProps: HighlightProps) => {
     const node = ref.current;
     if (node && !persistent) {
       const raf = requestAnimationFrame(() => {
-        if (visible) {
-          node.style.transitionDuration = prevDurationRef.current || '';
-        } else {
-          prevDurationRef.current = node.style.transitionDuration;
-          node.style.transitionDuration = '0s';
-        }
+        node.style.transitionDuration = visible
+          ? style?.transitionDuration || ''
+          : '0s';
       });
 
       return () => cancelAnimationFrame(raf);

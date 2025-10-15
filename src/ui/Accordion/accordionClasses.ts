@@ -1,14 +1,10 @@
 const accordionClasses = {
-  root: 'p-1 rounded-md bg-gray-500/10',
+  root: 'relative flex flex-col gap-2',
+  highlight: 'w-full',
+  divider: 'h-px bg-gray-500/20',
   item: {
-    root: 'group',
-    trigger: [
-      'flex',
-      'justify-between',
-      'items-center',
-      'w-full',
-      'not-disabled:active:scale-100',
-    ].join(' '),
+    root: 'group relative z-10',
+    trigger: 'w-full flex justify-between items-center p-3',
     arrow: [
       'size-4',
       'shrink-0',

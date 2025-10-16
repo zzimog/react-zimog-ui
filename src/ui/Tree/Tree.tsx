@@ -95,7 +95,13 @@ export const Tree = (inProps: TreeProps) => {
   }, [over]);
 
   return (
-    <Tag ref={mergedRefs} className={cn(classes.root, className)} {...props}>
+    <Interaction
+      as={Tag}
+      type="hover"
+      className={cn(classes.root, className)}
+      onRectChange={handleRectChange}
+      {...props}
+    >
       {data.length > 0 && (
         <>
           <Highlight
@@ -103,24 +109,22 @@ export const Tree = (inProps: TreeProps) => {
             visible={over}
             className={classes.highlight}
           />
-          <Interaction type="hover" onRectChange={handleRectChange}>
-            <ul className={classes.list.root}>
-              <TreeContext value={context}>
-                {data.map((item, index) => (
-                  <TreeItem
-                    key={index}
-                    index={`${index}`}
-                    name={item.name}
-                    items={item.items}
-                    onMouseOver={() => setOver(true)}
-                    onMouseLeave={() => setOver(false)}
-                  />
-                ))}
-              </TreeContext>
-            </ul>
-          </Interaction>
+          <ul className={classes.list.root}>
+            <TreeContext value={context}>
+              {data.map((item, index) => (
+                <TreeItem
+                  key={index}
+                  index={`${index}`}
+                  name={item.name}
+                  items={item.items}
+                  onMouseOver={() => setOver(true)}
+                  onMouseLeave={() => setOver(false)}
+                />
+              ))}
+            </TreeContext>
+          </ul>
         </>
       )}
-    </Tag>
+    </Interaction>
   );
 };

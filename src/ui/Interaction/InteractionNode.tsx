@@ -1,54 +1,44 @@
 import {
-  type ReactElement,
-  type RefAttributes,
+  type ElementType,
+  type ComponentPropsWithRef,
   useContext,
   useCallback,
-  Children,
-  cloneElement,
 } from 'react';
 import { useMergedRefs } from '@ui';
 import { InteractionContext } from './interactionContext';
 
-export type InteractionNodeProps = {
+export type InteractionNodeProps<T extends ElementType> = {
+  as?: T;
   defaultSelected?: boolean;
-  children: ReactElement;
-};
+  disabled?: boolean;
+} & Omit<ComponentPropsWithRef<T>, 'as'>;
 
-export const InteractionNode = (inProps: InteractionNodeProps) => {
-  const { defaultSelected, children } = inProps;
+export const InteractionNode = <T extends ElementType = 'div'>(
+  inProps: InteractionNodeProps<T>
+) => {
+  const { as: Tag = 'div', ref: refProp, defaultSelected, ...props } = inProps;
 
   const context = useContext(InteractionContext);
 
-  if (!context) {
-    throw new Error(
-      'InteractionNode must be used inside Interaction component.'
-    );
-  }
-
   const ref = useCallback(
     (node: HTMLElement) => {
-      const { type, nodes, setNode } = context;
-      const eventType = type === 'hover' ? 'mouseover' : type;
-      const handler = () => setNode(node);
+      if (context) {
+        const { type, setNode } = context;
+        const eventType = type === 'hover' ? 'mouseover' : type;
+        const handler = () => setNode(node);
 
-      if (defaultSelected) {
-        setNode(node);
+        if (defaultSelected) {
+          setNode(node);
+        }
+
+        node.addEventListener(eventType, handler);
+        return () => node.removeEventListener(eventType, handler);
       }
-
-      nodes.add(node);
-      node.addEventListener(eventType, handler);
-      return () => {
-        nodes.delete(node);
-        node.removeEventListener(eventType, handler);
-      };
     },
-    [defaultSelected, context]
+    [context, defaultSelected]
   );
 
-  const child = Children.only(children) as ReactElement<RefAttributes<unknown>>;
-  const mergedRefs = useMergedRefs(child.props.ref, ref);
+  const mergedRefs = useMergedRefs(refProp, ref);
 
-  return cloneElement(child, { ref: mergedRefs });
+  return <Tag ref={mergedRefs} {...props} />;
 };
-
-InteractionNode.displayName = 'Interaction Node';

@@ -27,15 +27,15 @@ export const TabsList = (inProps: TabsListProps) => {
   }
 
   return (
-    <Tag
+    <Interaction
+      as={Tag}
       role="tabslist"
       className={cn(classes.list.root, className)}
+      onRectChange={handleRectChange}
       {...props}
     >
       <Highlight ref={highlightRef} persistent />
-      <Interaction defaultSelected={0} onRectChange={handleRectChange}>
-        <div className={classes.list.tabs}>{children}</div>
-      </Interaction>
-    </Tag>
+      <div className={classes.list.tabs}>{children}</div>
+    </Interaction>
   );
 };

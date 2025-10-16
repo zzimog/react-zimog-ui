@@ -1,116 +1,83 @@
 import {
-  type ReactElement,
+  type ElementType,
+  type HTMLAttributes,
   type RefAttributes,
-  Children,
   useRef,
-  useEffect,
-  cloneElement,
+  useCallback,
 } from 'react';
 import { getRelativeRect, rectEquals, useMergedRefs } from '@ui';
-import { InteractionContext } from './interactionContext';
 import { InteractionNode } from './InteractionNode';
+import { InteractionContext } from './interactionContext';
 
 export type InteractionType = 'click' | 'focus' | 'hover';
 
 export type InteractionProps = {
+  as?: ElementType;
   type?: InteractionType;
   defaultSelected?: number;
-  children: ReactElement;
   onNodeChange?: (node: HTMLElement) => void;
   onRectChange?: (rect: DOMRect) => void;
-  onOver?: () => void;
-  onLeave?: () => void;
-};
+} & HTMLAttributes<HTMLElement> &
+  RefAttributes<HTMLElement>;
 
 export const Interaction = (inProps: InteractionProps) => {
   const {
+    as: Tag = 'div',
+    ref: refProp,
     type = 'click',
-    defaultSelected,
     children,
     onNodeChange,
     onRectChange,
-    onOver,
-    onLeave,
+    ...props
   } = inProps;
 
-  const ref = useRef<HTMLElement>(null);
-  const allRef = useRef(new Set<HTMLElement>());
-  const nodeRef = useRef<HTMLElement>(null);
+  const currentRef = useRef<HTMLElement>(null);
   const prevRectRef = useRef<DOMRect>(null);
 
-  const child = Children.only(children) as ReactElement<RefAttributes<unknown>>;
-  const mergedRefs = useMergedRefs(child.props.ref, ref);
+  const ref = useCallback(
+    (node: HTMLElement) => {
+      if (onRectChange) {
+        let rafId = requestAnimationFrame(function loop() {
+          const current = currentRef.current;
+
+          if (node && current) {
+            const rootRect = node!.getBoundingClientRect();
+            const currentRect = current!.getBoundingClientRect();
+            const rect = getRelativeRect(rootRect, currentRect);
+
+            if (
+              prevRectRef.current === null ||
+              !rectEquals(rect, prevRectRef.current)
+            ) {
+              onRectChange?.(rect);
+              prevRectRef.current = rect;
+            }
+          }
+
+          rafId = requestAnimationFrame(loop);
+        });
+
+        return () => cancelAnimationFrame(rafId);
+      }
+    },
+    [onRectChange]
+  );
+
+  const mergedRefs = useMergedRefs(refProp, ref);
 
   const context = {
     type,
-    nodes: allRef.current,
-    setNode(node: HTMLElement) {
-      nodeRef.current = node;
+    setNode: (node: HTMLElement) => {
+      currentRef.current = node;
       onNodeChange?.(node);
     },
   };
 
-  useEffect(() => {
-    const node = nodeRef.current;
-    if (!node && typeof defaultSelected === 'number') {
-      nodeRef.current = [...allRef.current][defaultSelected];
-    }
-  }, [defaultSelected]);
-
-  useEffect(() => {
-    let rafId: number;
-
-    function loop() {
-      const root = ref.current;
-      const node = nodeRef.current;
-
-      if (root && node) {
-        const rootRect = root!.getBoundingClientRect();
-        const nodeRect = node!.getBoundingClientRect();
-        const rect = getRelativeRect(rootRect, nodeRect);
-
-        if (
-          prevRectRef.current === null ||
-          !rectEquals(rect, prevRectRef.current)
-        ) {
-          onRectChange?.(rect);
-          prevRectRef.current = rect;
-        }
-      }
-
-      rafId = requestAnimationFrame(loop);
-    }
-
-    loop();
-    return () => cancelAnimationFrame(rafId);
-  }, [onRectChange]);
-
-  useEffect(() => {
-    const root = ref.current;
-    if (root) {
-      function handleOver() {
-        if (onOver) onOver();
-      }
-
-      function handleLeave() {
-        if (onLeave) onLeave();
-      }
-
-      root.addEventListener('mouseover', handleOver);
-      root.addEventListener('mouseleave', handleLeave);
-      return () => {
-        root.removeEventListener('mouseover', handleOver);
-        root.removeEventListener('mouseleave', handleLeave);
-      };
-    }
-  }, [onOver, onLeave]);
-
   return (
-    <InteractionContext value={context}>
-      {cloneElement(child, { ref: mergedRefs })}
-    </InteractionContext>
+    <Tag ref={mergedRefs} {...props}>
+      <InteractionContext value={context}>{children}</InteractionContext>
+    </Tag>
   );
 };
 
-Interaction.displayName = 'Interaction';
 Interaction.Node = InteractionNode;

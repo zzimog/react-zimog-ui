@@ -101,30 +101,31 @@ export const Accordion = (inProps: AccordionProps) => {
 
   return (
     <Interaction
+      as={Tag}
       type="hover"
+      className={cn(classes.root, className)}
       onRectChange={handleRectChange}
-      onOver={() => setOver(true)}
-      onLeave={() => setOver(false)}
+      onMouseOver={() => setOver(true)}
+      onMouseLeave={() => setOver(false)}
+      {...props}
     >
-      <Tag className={cn(classes.root, className)} {...props}>
-        <Highlight
-          ref={highlightRef}
-          visible={over}
-          className={classes.highlight}
-        />
-        <AccordionContext value={context}>
-          {Children.map(children, (child, index) => {
-            const isLast = index === childrenCount - 1;
+      <Highlight
+        ref={highlightRef}
+        visible={over}
+        className={classes.highlight}
+      />
+      <AccordionContext value={context}>
+        {Children.map(children, (child, index) => {
+          const isLast = index === childrenCount - 1;
 
-            return (
-              <>
-                {child}
-                {!isLast && <div className={classes.divider} />}
-              </>
-            );
-          })}
-        </AccordionContext>
-      </Tag>
+          return (
+            <>
+              {child}
+              {!isLast && <div className={classes.divider} />}
+            </>
+          );
+        })}
+      </AccordionContext>
     </Interaction>
   );
 };

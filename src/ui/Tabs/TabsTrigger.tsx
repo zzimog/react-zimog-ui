@@ -36,19 +36,19 @@ export const TabsTrigger = (inProps: TabsTriggerProps) => {
   }
 
   return (
-    <Interaction.Node defaultSelected={isActive}>
-      <Tag
-        ref={ref}
-        id={triggerId}
-        role="tab"
-        aria-controls={itemId}
-        aria-selected={isActive}
-        data-selected={isActive}
-        disabled={disabled}
-        className={cn(classes.trigger, className)}
-        onClick={() => handleClick()}
-        {...props}
-      />
-    </Interaction.Node>
+    <Interaction.Node
+      as={Tag}
+      ref={ref}
+      id={triggerId}
+      role="tab"
+      aria-controls={itemId}
+      aria-selected={isActive}
+      data-selected={isActive}
+      disabled={disabled}
+      className={cn(classes.trigger, className)}
+      defaultSelected={isActive}
+      onClick={() => handleClick()}
+      {...props}
+    />
   );
 };

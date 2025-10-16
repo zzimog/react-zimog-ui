@@ -38,17 +38,15 @@ export const TreeItem = (inProps: TreeItemProps) => {
 
   return (
     <li data-index={indexProp} data-parent={isParent}>
-      <Interaction.Node>
-        <div
-          data-state={isParent ? (open ? 'open' : 'closed') : undefined}
-          className={classes.list.item}
-          onClick={handleClick}
-          onMouseOver={onMouseOver}
-          onMouseLeave={onMouseLeave}
-        >
-          {isParent ? <ChevronRight /> : <Dot />}
-          {name}
-        </div>
+      <Interaction.Node
+        data-state={isParent ? (open ? 'open' : 'closed') : undefined}
+        className={classes.list.item}
+        onClick={handleClick}
+        onMouseOver={onMouseOver}
+        onMouseLeave={onMouseLeave}
+      >
+        {isParent ? <ChevronRight /> : <Dot />}
+        {name}
       </Interaction.Node>
 
       {isParent && (

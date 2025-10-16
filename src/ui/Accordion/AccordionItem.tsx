@@ -58,19 +58,18 @@ export const AccordionItem = (inProps: AccordionItemProps) => {
       className={cn(classes.root, className)}
       {...props}
     >
-      <Interaction.Node>
-        <button
-          id={triggerId}
-          aria-controls={contentId}
-          aria-expanded={open}
-          data-expanded={open}
-          className={classes.trigger}
-          onClick={handleClick}
-          disabled={disabled}
-        >
-          {title}
-          <ChevronDown className={classes.arrow} />
-        </button>
+      <Interaction.Node
+        as="button"
+        id={triggerId}
+        aria-controls={contentId}
+        aria-expanded={open}
+        data-expanded={open}
+        className={classes.trigger}
+        onClick={handleClick}
+        disabled={disabled}
+      >
+        {title}
+        <ChevronDown className={classes.arrow} />
       </Interaction.Node>
       <Collapsible
         open={open}

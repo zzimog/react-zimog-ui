@@ -3,7 +3,6 @@ import type { InteractionType } from './Interaction';
 
 type InteractionContextType = {
   type: InteractionType;
-  nodes: Set<HTMLElement>;
   setNode: (node: HTMLElement) => void;
 };
 

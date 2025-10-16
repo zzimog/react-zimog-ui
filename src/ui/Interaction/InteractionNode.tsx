@@ -37,7 +37,6 @@ export const InteractionNode = (inProps: InteractionNodeProps) => {
 
       nodes.add(node);
       node.addEventListener(eventType, handler);
-
       return () => {
         nodes.delete(node);
         node.removeEventListener(eventType, handler);

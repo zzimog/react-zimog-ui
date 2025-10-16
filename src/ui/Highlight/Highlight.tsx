@@ -2,8 +2,8 @@ import {
   type ElementType,
   type HTMLAttributes,
   type RefAttributes,
-  useLayoutEffect,
   useRef,
+  useEffect,
 } from 'react';
 import { usePresence, useMergedRefs } from '../hooks';
 import { cn } from '../utils';
@@ -34,16 +34,17 @@ export const Highlight = (inProps: HighlightProps) => {
   const { ref: refPresence, present } = usePresence(persistent || visible);
   const mergedRefs = useMergedRefs(refProp, ref, refPresence);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const node = ref.current;
     if (node && !persistent) {
-      const raf = requestAnimationFrame(() => {
-        node.style.transitionDuration = visible
-          ? style?.transitionDuration || ''
-          : '0s';
-      });
-
-      return () => cancelAnimationFrame(raf);
+      if (visible) {
+        const raf = requestAnimationFrame(() => {
+          node.style.transitionDuration = style?.transitionDuration || '';
+        });
+        return () => cancelAnimationFrame(raf);
+      } else {
+        node.style.transitionDuration = '0s';
+      }
     }
   }, [visible]);
 

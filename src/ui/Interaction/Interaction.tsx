@@ -34,7 +34,7 @@ export const Interaction = (inProps: InteractionProps) => {
   } = inProps;
 
   const ref = useRef<HTMLElement>(null);
-  const nodesRef = useRef(new Set<HTMLElement>());
+  const allRef = useRef(new Set<HTMLElement>());
   const nodeRef = useRef<HTMLElement>(null);
   const prevRectRef = useRef<DOMRect>(null);
 
@@ -43,8 +43,8 @@ export const Interaction = (inProps: InteractionProps) => {
 
   const context = {
     type,
-    nodes: nodesRef.current,
-    setNode: (node: HTMLElement) => {
+    nodes: allRef.current,
+    setNode(node: HTMLElement) {
       nodeRef.current = node;
       onNodeChange?.(node);
     },
@@ -53,7 +53,7 @@ export const Interaction = (inProps: InteractionProps) => {
   useEffect(() => {
     const node = nodeRef.current;
     if (!node && typeof defaultSelected === 'number') {
-      nodeRef.current = [...nodesRef.current][defaultSelected];
+      nodeRef.current = [...allRef.current][defaultSelected];
     }
   }, [defaultSelected]);
 

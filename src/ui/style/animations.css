@@ -1,7 +1,13 @@
+/* prettier-ignore */
 @theme {
-  --animate-fade-in: fade-in var(--tw-duration, 200ms) var(--tw-ease, ease-out);
-  --animate-fade-out: fade-out var(--tw-duration, 200ms)
-    var(--tw-ease, ease-out);
+  --animate-fade-in: fade-in
+    var(--tw-duration, 200ms)
+    var(--tw-ease, ease-out)
+    forwards;
+  --animate-fade-out: fade-out
+    var(--tw-duration, 200ms)
+    var(--tw-ease, ease-out)
+    forwards;
 
   @keyframes fade-in {
     from {
@@ -59,4 +65,10 @@
       width: 0;
     }
   }
+}
+
+/* prettier-ignore */
+@utility animate-delay-* {
+  animation-delay: --value(integer) ms;
+  animation-delay: --value([*]);
 }

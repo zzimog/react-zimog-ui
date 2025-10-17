@@ -10,6 +10,9 @@
 
   --muted: oklch(0% 0 0 / 60%);
   --muted-foreground: oklch(100% 0 0 / 60%);
+
+  --shape: var(--rounded-md);
+  --radius-shape: var(--shape);
 }
 
 @utility text-muted {

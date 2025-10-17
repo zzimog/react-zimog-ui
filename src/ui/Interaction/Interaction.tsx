@@ -58,7 +58,22 @@ export const Interaction = (inProps: InteractionProps) => {
           rafId = requestAnimationFrame(loop);
         });
 
-        return () => cancelAnimationFrame(rafId);
+        function handleOut() {
+          currentRef.current = null;
+          prevRectRef.current = null;
+        }
+
+        if (type === 'hover') {
+          node.addEventListener('mouseleave', handleOut);
+        }
+
+        return () => {
+          cancelAnimationFrame(rafId);
+
+          if (type === 'hover') {
+            node.removeEventListener('mouseleave', handleOut);
+          }
+        };
       }
     },
     [onRectChange]

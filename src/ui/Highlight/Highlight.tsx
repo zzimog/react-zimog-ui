@@ -3,7 +3,6 @@ import {
   type HTMLAttributes,
   type RefAttributes,
   useRef,
-  useEffect,
 } from 'react';
 import { usePresence, useMergedRefs } from '../hooks';
 import { cn } from '../utils';
@@ -33,22 +32,6 @@ export const Highlight = (inProps: HighlightProps) => {
 
   const { ref: refPresence, present } = usePresence(persistent || visible);
   const mergedRefs = useMergedRefs(refProp, ref, refPresence);
-
-  useEffect(() => {
-    const node = ref.current;
-    if (node && !persistent) {
-      if (visible) {
-        const raf = requestAnimationFrame(() => {
-          node.style.transitionDuration = style?.transitionDuration || '';
-        });
-        return () => cancelAnimationFrame(raf);
-      } else {
-        node.style.transitionDuration = '0s';
-      }
-    }
-  }, [visible]);
-
-  console.log(ref.current?.style.transform);
 
   return (
     <Tag

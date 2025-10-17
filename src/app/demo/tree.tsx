@@ -1,6 +1,6 @@
-import { Tree, type TreeProps } from '@ui';
+import { useRef, useEffect } from 'react';
 import { DemoBox } from './DemoBox';
-import { useLayoutEffect, useRef } from 'react';
+import { type TreeProps, Tree } from '@ui';
 
 const data: TreeProps['data'] = [
   {
@@ -46,12 +46,23 @@ const data: TreeProps['data'] = [
 
 const DemoTree = () => {
   const ref = useRef<HTMLDivElement>(null);
+  const heightRef = useRef(0);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const node = ref.current;
     if (node) {
-      const height = node.offsetHeight;
-      node.style.height = `${height}px`;
+      let rafId = requestAnimationFrame(function loop() {
+        const height = node.offsetHeight;
+
+        if (height > heightRef.current) {
+          node.style.height = `${height}px`;
+          heightRef.current = height;
+        }
+
+        rafId = requestAnimationFrame(loop);
+      });
+
+      return () => cancelAnimationFrame(rafId);
     }
   }, []);
 

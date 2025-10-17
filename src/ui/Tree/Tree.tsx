@@ -5,7 +5,6 @@ import {
   useState,
   useRef,
   useEffect,
-  useLayoutEffect,
 } from 'react';
 import { cn } from '../utils';
 import { Interaction } from '../Interaction';
@@ -21,33 +20,52 @@ export type TreeProps = {
   RefAttributes<HTMLElement>;
 
 export const Tree = (inProps: TreeProps) => {
-  const {
-    as: Tag = 'div',
-    ref: refProp,
-    data = [],
-    className,
-    ...props
-  } = inProps;
+  const { as: Tag = 'div', data = [], className, ...props } = inProps;
 
   const [state, setState] = useState<Record<string, boolean>>({});
   const [over, setOver] = useState(false);
 
-  const ref = useRef<HTMLElement>(null);
   const highlightRef = useRef<HTMLElement>(null);
-  const prevOverRef = useRef(over);
+  const leaveTimeoutRef = useRef<number>(null);
 
   function handleRectChange(rect?: DOMRect) {
     const node = highlightRef.current;
     if (node && rect) {
-      const { x, y, width, height } = rect;
+      const { width, height, y } = rect;
 
       Object.assign(node.style, {
+        right: 0,
         width: `${width}px`,
         height: `${height}px`,
-        transform: `translate(${x}px, ${y}px)`,
+        transform: `translateY(${y}px)`,
       });
+
+      if (leaveTimeoutRef.current !== null) {
+        clearTimeout(leaveTimeoutRef.current);
+        leaveTimeoutRef.current = null;
+      }
+
+      setOver(true);
     }
   }
+
+  function handleMouseLeave() {
+    if (leaveTimeoutRef.current !== null) {
+      clearTimeout(leaveTimeoutRef.current);
+    }
+
+    leaveTimeoutRef.current = setTimeout(() => {
+      setOver(false);
+    }, 100);
+  }
+
+  useEffect(() => {
+    return () => {
+      if (leaveTimeoutRef.current !== null) {
+        clearTimeout(leaveTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const context = {
     treeState: state,
@@ -58,38 +76,6 @@ export const Tree = (inProps: TreeProps) => {
       }));
     },
   };
-
-  useEffect(() => {
-    const node = ref.current;
-    if (node) {
-      function handleClick() {
-        if (!prevOverRef.current) {
-          setOver(true);
-        }
-      }
-
-      node.addEventListener('click', handleClick);
-      return () => node.removeEventListener('click', handleClick);
-    }
-  }, []);
-
-  useLayoutEffect(() => {
-    const node = ref.current;
-    if (node) {
-      const canUseHover = window.matchMedia('(hover: hover)').matches;
-      if (!canUseHover) {
-        const timeoutId = setTimeout(() => {
-          if (over) {
-            setOver(false);
-          }
-        }, 200);
-
-        return () => clearTimeout(timeoutId);
-      }
-    }
-
-    prevOverRef.current = over;
-  }, [over]);
 
   return (
     <Interaction
@@ -114,8 +100,7 @@ export const Tree = (inProps: TreeProps) => {
                   index={`${index}`}
                   name={item.name}
                   items={item.items}
-                  onMouseOver={() => setOver(true)}
-                  onMouseLeave={() => setOver(false)}
+                  onMouseLeave={handleMouseLeave}
                 />
               ))}
             </TreeContext>

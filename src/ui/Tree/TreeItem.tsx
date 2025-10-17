@@ -42,7 +42,6 @@ export const TreeItem = (inProps: TreeItemProps) => {
         data-state={isParent ? (open ? 'open' : 'closed') : undefined}
         className={classes.list.item}
         onClick={handleClick}
-        onMouseOver={onMouseOver}
         onMouseLeave={onMouseLeave}
       >
         {isParent ? <ChevronRight /> : <Dot />}

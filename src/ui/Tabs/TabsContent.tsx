@@ -1,4 +1,4 @@
-import { useEffect, type ElementType, type HTMLAttributes } from 'react';
+import { type ElementType, type HTMLAttributes } from 'react';
 import { cn } from '../utils';
 import classes from './tabsClasses';
 import { useTabsContext } from './tabsContext';
@@ -23,10 +23,6 @@ export const TabsContent = (inProps: TabsContentProps) => {
   const itemId = `${baseId}-item-${valueProp}`;
 
   const isActive = value === valueProp;
-
-  useEffect(() => {
-    console.log(`Tabs: isActive has changed on ${value}:`, isActive);
-  }, [value, isActive]);
 
   return (
     <Tag

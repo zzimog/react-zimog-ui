@@ -56,7 +56,6 @@ export const Accordion = (inProps: AccordionProps) => {
 
   const initValue = valueProp || defaultValue || (multiple ? [] : undefined);
   const [value, setValue] = useState<AccordionValue>(initValue);
-  const [over, setOver] = useState(false);
 
   const highlightRef = useRef<HTMLElement>(null);
 
@@ -104,15 +103,9 @@ export const Accordion = (inProps: AccordionProps) => {
       type="hover"
       className={cn(classes.root, className)}
       onRectChange={handleRectChange}
-      onMouseOver={() => setOver(true)}
-      onMouseLeave={() => setOver(false)}
       {...props}
     >
-      <Highlight
-        ref={highlightRef}
-        visible={over}
-        className={classes.highlight}
-      />
+      <Highlight ref={highlightRef} className={classes.highlight} />
       <AccordionContext value={context}>
         {Children.map(children, (child, index) => {
           const isLast = index === childrenCount - 1;

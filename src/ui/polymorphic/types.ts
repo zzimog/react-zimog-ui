@@ -1,4 +1,4 @@
-import type { ComponentPropsWithRef, ElementType, JSX } from 'react';
+import type { ElementType, ComponentPropsWithRef, JSX } from 'react';
 
 export type PolyProps<T extends ElementType, P extends object = {}> = {
   as?: T;

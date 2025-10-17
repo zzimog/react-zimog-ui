@@ -1,3 +1,9 @@
+/**
+ * Inspired from emotion styled/react component
+ *
+ * Ref: https://github.com/emotion-js/emotion/blob/main/packages/styled/src/index.ts
+ */
+
 import type { JSX } from 'react';
 import type { CreatePoly, CreatePolyElement } from './types';
 import { createPoly } from './create-poly';

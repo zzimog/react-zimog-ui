@@ -1,6 +1,5 @@
 import { StrictMode } from 'react';
-//import App from './App.tsx';
-import App from './App2.tsx';
+import App from './App.tsx';
 
 type AppContainerProps = {
   strict?: boolean;

@@ -1,6 +1,7 @@
 import './style/index.css';
 
 export * from './hooks';
+export * from './polymorphic';
 export * from './utils';
 
 export * from './Accordion';

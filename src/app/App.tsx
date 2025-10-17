@@ -1,11 +1,15 @@
-import { ThemeSwitcher, Title } from '@ui';
+import { poly, ThemeSwitcher, Title } from '@ui';
 import accordion from './demo/accordion';
 import tabs from './demo/tabs';
 import tree from './demo/tree';
 
+const Container = poly.div((Element, props) => (
+  <Element className="max-w-7xl mx-auto flex flex-wrap gap-4 py-4" {...props} />
+));
+
 const App = () => {
   return (
-    <div className="max-w-7xl mx-auto flex flex-wrap gap-4 py-4">
+    <Container>
       <div className="w-full flex justify-between items-center px-2">
         <Title size={1}>UI Demo</Title>
         <ThemeSwitcher />
@@ -15,7 +19,7 @@ const App = () => {
         {tabs}
         {tree}
       </main>
-    </div>
+    </Container>
   );
 };
 

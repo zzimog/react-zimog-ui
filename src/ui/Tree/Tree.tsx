@@ -13,7 +13,6 @@ import { Highlight } from '../Highlight';
 import { type TreeItemData, TreeItem } from './TreeItem';
 import { TreeContext } from './treeContext';
 import classes from './treeClasses';
-import { useMergedRefs } from '../hooks';
 
 export type TreeProps = {
   as?: ElementType;
@@ -36,8 +35,6 @@ export const Tree = (inProps: TreeProps) => {
   const ref = useRef<HTMLElement>(null);
   const highlightRef = useRef<HTMLElement>(null);
   const prevOverRef = useRef(over);
-
-  const mergedRefs = useMergedRefs(refProp, ref);
 
   function handleRectChange(rect?: DOMRect) {
     const node = highlightRef.current;

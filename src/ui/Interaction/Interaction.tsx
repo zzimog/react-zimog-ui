@@ -5,7 +5,8 @@ import {
   useRef,
   useCallback,
 } from 'react';
-import { getRelativeRect, rectEquals, useMergedRefs } from '@ui';
+import { getRelativeRect, rectEquals } from '../utils';
+import { useMergedRefs } from '../hooks';
 import { InteractionNode } from './InteractionNode';
 import { InteractionContext } from './interactionContext';
 

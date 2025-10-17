@@ -48,6 +48,8 @@ export const Highlight = (inProps: HighlightProps) => {
     }
   }, [visible]);
 
+  console.log(ref.current?.style.transform);
+
   return (
     <Tag
       ref={mergedRefs}

@@ -4,7 +4,7 @@ import {
   useContext,
   useCallback,
 } from 'react';
-import { useMergedRefs } from '@ui';
+import { useMergedRefs } from '../hooks';
 import { InteractionContext } from './interactionContext';
 
 export type InteractionNodeProps<T extends ElementType> = {

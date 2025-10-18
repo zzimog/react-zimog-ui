@@ -6,7 +6,7 @@ const highlightClasses = cva(
     'z-1',
     'rounded-md',
     'transition-all',
-    'duration-200',
+    'duration-250',
     'bg-highlight',
   ],
   {

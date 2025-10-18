@@ -4,6 +4,7 @@ import {
   type RefAttributes,
   useState,
   useRef,
+  useEffect,
 } from 'react';
 import { cn } from '../utils';
 import { Interaction } from '../Interaction';
@@ -11,6 +12,7 @@ import { Highlight } from '../Highlight';
 import { type TreeItemData, TreeItem } from './TreeItem';
 import { TreeContext } from './treeContext';
 import classes from './treeClasses';
+import { poly } from '../polymorphic';
 
 export type TreeProps = {
   as?: ElementType;
@@ -25,6 +27,7 @@ export const Tree = (inProps: TreeProps) => {
   const [highlight, setHighlight] = useState(false);
 
   const highlightRef = useRef<HTMLElement>(null);
+  const leaveTimeoutRef = useRef(0);
 
   const context = {
     treeState: state,
@@ -39,7 +42,7 @@ export const Tree = (inProps: TreeProps) => {
   function handleRectChange(rect?: DOMRect) {
     const node = highlightRef.current;
     if (node && rect) {
-      const { width, height, y } = rect;
+      const { y, width, height } = rect;
 
       Object.assign(node.style, {
         right: 0,
@@ -51,12 +54,20 @@ export const Tree = (inProps: TreeProps) => {
   }
 
   function handleItemOver() {
+    clearTimeout(leaveTimeoutRef.current);
     setHighlight(true);
   }
 
   function handleItemLeave() {
-    setHighlight(false);
+    clearTimeout(leaveTimeoutRef.current);
+    leaveTimeoutRef.current = setTimeout(() => {
+      setHighlight(false);
+    }, 200);
   }
+
+  useEffect(() => {
+    return () => clearTimeout(leaveTimeoutRef.current);
+  }, []);
 
   return (
     <Interaction

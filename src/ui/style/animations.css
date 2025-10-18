@@ -68,6 +68,12 @@
 }
 
 /* prettier-ignore */
+@utility animate-duration-* {
+  animation-duration: --value(integer)ms;
+  animation-duration: --value([*]);
+}
+
+/* prettier-ignore */
 @utility animate-delay-* {
   animation-delay: --value(integer)ms;
   animation-delay: --value([*]);

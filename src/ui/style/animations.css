@@ -69,6 +69,6 @@
 
 /* prettier-ignore */
 @utility animate-delay-* {
-  animation-delay: --value(integer) ms;
+  animation-delay: --value(integer)ms;
   animation-delay: --value([*]);
 }

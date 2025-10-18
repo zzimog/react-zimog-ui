@@ -4,7 +4,6 @@ import {
   type RefAttributes,
   useState,
   useRef,
-  useEffect,
 } from 'react';
 import { cn } from '../utils';
 import { Interaction } from '../Interaction';
@@ -23,10 +22,9 @@ export const Tree = (inProps: TreeProps) => {
   const { as: Tag = 'div', data = [], className, ...props } = inProps;
 
   const [state, setState] = useState<Record<string, boolean>>({});
-  const [over, setOver] = useState(false);
+  const [highlight, setHighlight] = useState(false);
 
   const highlightRef = useRef<HTMLElement>(null);
-  const leaveTimeoutRef = useRef<number>(0);
 
   const context = {
     treeState: state,
@@ -53,20 +51,12 @@ export const Tree = (inProps: TreeProps) => {
   }
 
   function handleItemOver() {
-    clearTimeout(leaveTimeoutRef.current);
-    setOver(true);
+    setHighlight(true);
   }
 
   function handleItemLeave() {
-    clearTimeout(leaveTimeoutRef.current);
-    leaveTimeoutRef.current = setTimeout(() => {
-      setOver(false);
-    }, 100);
+    setHighlight(false);
   }
-
-  useEffect(() => {
-    return () => clearTimeout(leaveTimeoutRef.current);
-  }, []);
 
   return (
     <Interaction
@@ -78,7 +68,7 @@ export const Tree = (inProps: TreeProps) => {
     >
       <Highlight
         ref={highlightRef}
-        visible={over}
+        visible={highlight}
         className={classes.highlight}
       />
       <ul className={classes.list.root}>

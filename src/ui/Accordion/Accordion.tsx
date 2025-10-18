@@ -5,6 +5,7 @@ import {
   type HTMLAttributes,
   useState,
   useRef,
+  type MouseEvent,
 } from 'react';
 import { cn } from '../utils';
 import { AccordionItem } from './AccordionItem';
@@ -44,6 +45,8 @@ export const Accordion = (inProps: AccordionProps) => {
     className,
     children,
     onValueChange,
+    onMouseOver,
+    onMouseLeave,
     ...props
   } = inProps;
 
@@ -55,6 +58,7 @@ export const Accordion = (inProps: AccordionProps) => {
 
   const initValue = valueProp || defaultValue || (multiple ? [] : undefined);
   const [value, setValue] = useState<AccordionValue>(initValue);
+  const [highlight, setHighlight] = useState(false);
 
   const highlightRef = useRef<HTMLElement>(null);
 
@@ -94,15 +98,31 @@ export const Accordion = (inProps: AccordionProps) => {
     }
   }
 
+  function handleMouseOver(event: MouseEvent<HTMLElement>) {
+    onMouseOver?.(event);
+    setHighlight(true);
+  }
+
+  function handleMouseLeave(event: MouseEvent<HTMLElement>) {
+    onMouseOver?.(event);
+    setHighlight(false);
+  }
+
   return (
     <Interaction
       as={Tag}
       type="hover"
       className={cn(classes.root, className)}
       onRectChange={handleRectChange}
+      onMouseOver={handleMouseOver}
+      onMouseLeave={handleMouseLeave}
       {...props}
     >
-      <Highlight ref={highlightRef} className={classes.highlight} />
+      <Highlight
+        ref={highlightRef}
+        visible={highlight}
+        className={classes.highlight}
+      />
       <AccordionContext value={context}>{children}</AccordionContext>
     </Interaction>
   );

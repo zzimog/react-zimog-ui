@@ -1,7 +1,7 @@
 import { cva } from 'class-variance-authority';
 
 const highlightClasses = cva(
-  ['absolute', 'z-1', 'rounded-md', 'bg-gray-500/15', 'transition-all'],
+  ['absolute', 'z-1', 'rounded-md', 'transition-all', 'bg-highlight'],
   {
     variants: {
       persistent: {

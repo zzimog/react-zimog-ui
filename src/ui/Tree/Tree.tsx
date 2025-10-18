@@ -26,7 +26,17 @@ export const Tree = (inProps: TreeProps) => {
   const [over, setOver] = useState(false);
 
   const highlightRef = useRef<HTMLElement>(null);
-  const leaveTimeoutRef = useRef<number>(null);
+  const leaveTimeoutRef = useRef<number>(0);
+
+  const context = {
+    treeState: state,
+    setTreeState(index: string, open: boolean) {
+      setState((prev) => ({
+        ...prev,
+        [index]: open,
+      }));
+    },
+  };
 
   function handleRectChange(rect?: DOMRect) {
     const node = highlightRef.current;
@@ -39,43 +49,24 @@ export const Tree = (inProps: TreeProps) => {
         height: `${height}px`,
         transform: `translateY(${y}px)`,
       });
-
-      if (leaveTimeoutRef.current !== null) {
-        clearTimeout(leaveTimeoutRef.current);
-        leaveTimeoutRef.current = null;
-      }
-
-      setOver(true);
     }
   }
 
-  function handleMouseLeave() {
-    if (leaveTimeoutRef.current !== null) {
-      clearTimeout(leaveTimeoutRef.current);
-    }
+  function handleItemOver() {
+    clearTimeout(leaveTimeoutRef.current);
+    setOver(true);
+  }
 
+  function handleItemLeave() {
+    clearTimeout(leaveTimeoutRef.current);
     leaveTimeoutRef.current = setTimeout(() => {
       setOver(false);
     }, 100);
   }
 
   useEffect(() => {
-    return () => {
-      if (leaveTimeoutRef.current !== null) {
-        clearTimeout(leaveTimeoutRef.current);
-      }
-    };
+    return () => clearTimeout(leaveTimeoutRef.current);
   }, []);
-
-  const context = {
-    treeState: state,
-    setTreeState(index: string, open: boolean) {
-      setState((prev) => ({
-        ...prev,
-        [index]: open,
-      }));
-    },
-  };
 
   return (
     <Interaction
@@ -85,28 +76,25 @@ export const Tree = (inProps: TreeProps) => {
       onRectChange={handleRectChange}
       {...props}
     >
-      {data.length > 0 && (
-        <>
-          <Highlight
-            ref={highlightRef}
-            visible={over}
-            className={classes.highlight}
-          />
-          <ul className={classes.list.root}>
-            <TreeContext value={context}>
-              {data.map((item, index) => (
-                <TreeItem
-                  key={index}
-                  index={`${index}`}
-                  name={item.name}
-                  items={item.items}
-                  onMouseLeave={handleMouseLeave}
-                />
-              ))}
-            </TreeContext>
-          </ul>
-        </>
-      )}
+      <Highlight
+        ref={highlightRef}
+        visible={over}
+        className={classes.highlight}
+      />
+      <ul className={classes.list.root}>
+        <TreeContext value={context}>
+          {data.map((item, index) => (
+            <TreeItem
+              key={index}
+              index={`${index}`}
+              name={item.name}
+              items={item.items}
+              onMouseOver={handleItemOver}
+              onMouseLeave={handleItemLeave}
+            />
+          ))}
+        </TreeContext>
+      </ul>
     </Interaction>
   );
 };

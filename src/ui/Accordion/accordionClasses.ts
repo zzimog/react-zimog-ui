@@ -1,18 +1,11 @@
 const accordionClasses = {
-  root: 'relative flex flex-col gap-2',
+  root: 'relative',
   highlight: 'w-full',
-  divider: 'h-px bg-gray-500/20',
   item: {
-    root: 'group relative z-10',
+    root: 'group relative z-10 not-first:pt-2 not-last:pb-2 not-last:border-b border-highlight',
     trigger: 'w-full flex justify-between items-center p-3',
-    arrow: [
-      'size-4',
-      'shrink-0',
-      'transition-transform',
-      'duration-200',
-      'pointer-events-none',
-      'group-[[data-state="open"]]:rotate-180',
-    ].join(' '),
+    arrow:
+      'size-4 shrink-0 transition-transform duration-200 pointer-events-none group-[[data-state="open"]]:rotate-180',
     content: 'p-2',
   },
 };

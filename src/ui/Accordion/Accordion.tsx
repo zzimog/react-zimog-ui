@@ -4,7 +4,6 @@ import {
   type ReactNode,
   type HTMLAttributes,
   useState,
-  Children,
   useRef,
 } from 'react';
 import { cn } from '../utils';
@@ -59,8 +58,6 @@ export const Accordion = (inProps: AccordionProps) => {
 
   const highlightRef = useRef<HTMLElement>(null);
 
-  const childrenCount = Children.count(children);
-
   const context = {
     value,
     setValue(itemValue: string) {
@@ -106,18 +103,7 @@ export const Accordion = (inProps: AccordionProps) => {
       {...props}
     >
       <Highlight ref={highlightRef} className={classes.highlight} />
-      <AccordionContext value={context}>
-        {Children.map(children, (child, index) => {
-          const isLast = index === childrenCount - 1;
-
-          return (
-            <>
-              {child}
-              {!isLast && <div className={classes.divider} />}
-            </>
-          );
-        })}
-      </AccordionContext>
+      <AccordionContext value={context}>{children}</AccordionContext>
     </Interaction>
   );
 };

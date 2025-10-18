@@ -1,4 +1,4 @@
-import { type HTMLAttributes, type ReactNode } from 'react';
+import { type HTMLAttributes, type MouseEvent, type ReactNode } from 'react';
 import { ChevronRight, Dot } from 'lucide-react';
 import { Interaction } from '../Interaction';
 import { Collapsible } from '../Collapsible';
@@ -17,20 +17,16 @@ export type TreeItemProps = {
 } & HTMLAttributes<HTMLElement>;
 
 export const TreeItem = (inProps: TreeItemProps) => {
-  const {
-    index: indexProp,
-    name,
-    items = [],
-    onMouseOver,
-    onMouseLeave,
-  } = inProps;
+  const { index: indexProp, name, items = [], onClick, ...itemProps } = inProps;
 
   const { treeState, setTreeState } = useTreeContext();
-  const open = treeState[indexProp] ?? true;
 
   const isParent = items.length > 0;
+  const open = treeState[indexProp] ?? true;
 
-  function handleClick() {
+  function handleClick(event: MouseEvent<HTMLElement>) {
+    onClick?.(event);
+
     if (isParent) {
       setTreeState(indexProp, !open);
     }
@@ -42,7 +38,7 @@ export const TreeItem = (inProps: TreeItemProps) => {
         data-state={isParent ? (open ? 'open' : 'closed') : undefined}
         className={classes.list.item}
         onClick={handleClick}
-        onMouseLeave={onMouseLeave}
+        {...itemProps}
       >
         {isParent ? <ChevronRight /> : <Dot />}
         {name}
@@ -57,8 +53,8 @@ export const TreeItem = (inProps: TreeItemProps) => {
                 index={`${indexProp}-${index}`}
                 name={item.name}
                 items={item.items}
-                onMouseOver={onMouseOver}
-                onMouseLeave={onMouseLeave}
+                onClick={onClick}
+                {...itemProps}
               />
             ))}
           </ul>

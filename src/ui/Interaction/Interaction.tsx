@@ -45,8 +45,16 @@ export const Interaction = (inProps: InteractionProps) => {
             const rootRect = node!.getBoundingClientRect();
             const currentRect = current!.getBoundingClientRect();
             const rect = getRelativeRect(rootRect, currentRect);
+            const styles = getComputedStyle(current);
+            const isVisible =
+              styles?.display !== 'none' &&
+              styles?.opacity !== '0' &&
+              styles?.visibility !== 'hidden';
 
-            if (
+            if (!isVisible) {
+              currentRef.current = null;
+              prevRectRef.current = null;
+            } else if (
               prevRectRef.current === null ||
               !rectEquals(rect, prevRectRef.current)
             ) {

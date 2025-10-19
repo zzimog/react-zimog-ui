@@ -3,8 +3,8 @@ import { cva } from 'class-variance-authority';
 const highlightClasses = cva(
   [
     'absolute',
-    'z-1',
-    'rounded-md',
+    'z-0',
+    'rounded-shape',
     'transition-all',
     'duration-250',
     'bg-highlight',

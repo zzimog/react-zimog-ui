@@ -16,35 +16,39 @@ export type TreeItemProps = {
   items?: TreeItemData[];
 } & HTMLAttributes<HTMLElement>;
 
+function getState(parent: boolean, open?: boolean) {
+  return parent ? (open ? 'open' : 'closed') : undefined;
+}
+
 export const TreeItem = (inProps: TreeItemProps) => {
   const { index: indexProp, name, items = [], onClick, ...itemProps } = inProps;
 
   const { treeState, setTreeState } = useTreeContext();
 
-  const isParent = items.length > 0;
-  const open = treeState[indexProp] ?? true;
+  const parent = items.length > 0;
+  const open = parent && (treeState[indexProp] ?? true);
 
   function handleClick(event: MouseEvent<HTMLElement>) {
     onClick?.(event);
 
-    if (isParent) {
+    if (parent) {
       setTreeState(indexProp, !open);
     }
   }
 
   return (
-    <li data-index={indexProp} data-parent={isParent}>
+    <li data-index={indexProp} data-parent={parent}>
       <Interaction.Node
-        data-state={isParent ? (open ? 'open' : 'closed') : undefined}
+        data-state={getState(parent, open)}
         className={classes.list.item}
         onClick={handleClick}
         {...itemProps}
       >
-        {isParent ? <ChevronRight /> : <Dot />}
+        {parent ? <ChevronRight /> : <Dot />}
         {name}
       </Interaction.Node>
 
-      {isParent && (
+      {parent && (
         <Collapsible open={open}>
           <ul className={classes.list.root}>
             {items.map((item, index) => (

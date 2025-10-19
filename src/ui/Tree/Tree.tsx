@@ -12,7 +12,6 @@ import { Highlight } from '../Highlight';
 import { type TreeItemData, TreeItem } from './TreeItem';
 import { TreeContext } from './treeContext';
 import classes from './treeClasses';
-import { poly } from '../polymorphic';
 
 export type TreeProps = {
   as?: ElementType;
@@ -27,7 +26,7 @@ export const Tree = (inProps: TreeProps) => {
   const [highlight, setHighlight] = useState(false);
 
   const highlightRef = useRef<HTMLElement>(null);
-  const leaveTimeoutRef = useRef(0);
+  const leaveFrameRef = useRef(0);
 
   const context = {
     treeState: state,
@@ -42,31 +41,30 @@ export const Tree = (inProps: TreeProps) => {
   function handleRectChange(rect?: DOMRect) {
     const node = highlightRef.current;
     if (node && rect) {
-      const { y, width, height } = rect;
+      const { x, y, width, height } = rect;
 
-      Object.assign(node.style, {
-        right: 0,
-        width: `${width}px`,
-        height: `${height}px`,
-        transform: `translateY(${y}px)`,
-      });
+      node.style.setProperty('--x', `${x}px`);
+      node.style.setProperty('--y', `${y}px`);
+      node.style.setProperty('--w', `${width}px`);
+      node.style.setProperty('--h', `${height}px`);
+
+      setHighlight(true);
     }
   }
 
   function handleItemOver() {
-    clearTimeout(leaveTimeoutRef.current);
-    setHighlight(true);
+    cancelAnimationFrame(leaveFrameRef.current);
   }
 
   function handleItemLeave() {
-    clearTimeout(leaveTimeoutRef.current);
-    leaveTimeoutRef.current = setTimeout(() => {
+    cancelAnimationFrame(leaveFrameRef.current);
+    leaveFrameRef.current = requestAnimationFrame(() => {
       setHighlight(false);
-    }, 200);
+    });
   }
 
   useEffect(() => {
-    return () => clearTimeout(leaveTimeoutRef.current);
+    return () => cancelAnimationFrame(leaveFrameRef.current);
   }, []);
 
   return (

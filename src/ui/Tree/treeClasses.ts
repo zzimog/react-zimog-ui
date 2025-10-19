@@ -2,7 +2,13 @@ import { cn } from '../utils';
 
 const treeClasses = {
   root: 'relative',
-  highlight: cn('[@media(hover:none)]:hidden'),
+  highlight: cn(
+    'right-0 ',
+    'w-[var(--w)]',
+    'h-[var(--h)]',
+    'translate-y-[var(--y)]',
+    '[@media(hover:none)]:hidden'
+  ),
   list: {
     root: cn(
       'relative z-2',
@@ -21,13 +27,16 @@ const treeClasses = {
       'rounded-shape',
       'cursor-pointer',
       'select-none',
-      'transition-colors',
-      'duration-200',
+      // icon
       '[&_svg]:size-4',
       '[&_svg]:shrink-0',
       '[&_svg]:transition-transform',
       '[&_svg]:duration-100',
       'data-[state="open"]:[&_svg]:rotate-90',
+      // highlight
+      'transition-[background-color]',
+      'duration-200',
+      'not-active:delay-100',
       '[@media(hover:none)]:active:bg-highlight'
     ),
   },

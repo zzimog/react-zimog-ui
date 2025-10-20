@@ -75,7 +75,7 @@ export const Highlight = poly.div<HighlightProps>((Tag, inProps) => {
   return (
     <Tag
       ref={mergedRefs}
-      className="relative w-200 flex flex-col gap-4 border p-4"
+      className="relative w-200 flex flex-col gap-4"
       {...props}
     >
       <div

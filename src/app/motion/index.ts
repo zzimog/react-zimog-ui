@@ -1,2 +1,2 @@
-export * from './use-animation-frame-loop';
+export * from './animation-loop';
 export * from './use-scroll';

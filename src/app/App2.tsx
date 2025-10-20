@@ -1,9 +1,6 @@
-import { useRef } from 'react';
-import {
-  type MotionScrollValue,
-  useAnimationFrameLoop,
-  useScroll,
-} from './motion';
+import { useEffect, useRef } from 'react';
+import { type MotionScrollValue, useScroll } from './motion';
+import { animationLoop } from './motion/animation-loop';
 
 type MotionProps = {
   scrollY: MotionScrollValue;
@@ -14,16 +11,16 @@ const Motion = (inProps: MotionProps) => {
 
   const ref = useRef<HTMLDivElement>(null);
 
-  useAnimationFrameLoop(() => {
-    const node = ref.current;
-    if (node) {
-      node.style.setProperty('--scroll', `${scrollY.percent}%`);
-    }
-  });
-
-  return (
-    <div ref={ref} className="w-[var(--scroll)] h-4 bg-red-500" {...props} />
+  useEffect(
+    animationLoop(() => {
+      const node = ref.current;
+      if (node) {
+        node.style.setProperty('--scroll', `${scrollY.percent}%`);
+      }
+    })
   );
+
+  return <div ref={ref} className="w-(--scroll) h-4 bg-red-500" {...props} />;
 };
 
 const App = () => {

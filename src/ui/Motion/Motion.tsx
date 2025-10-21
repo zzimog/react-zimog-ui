@@ -65,7 +65,7 @@ export const Motion = poly.div<MotionProps>((Tag, inProps) => {
         });
 
         if (!prev) {
-          stop();
+          //stop();
         }
       });
 

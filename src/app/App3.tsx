@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { cn, Motion, usePresence } from '@ui';
 
 const vals = [
@@ -7,44 +7,66 @@ const vals = [
   { id: 'amet', label: 'Amet consectetur', className: 'mx-auto' },
 ];
 
-const Highlight = (inProps: { visible?: boolean; value: string | null }) => {
-  const { visible = false, value } = inProps;
-
+const Highlight = (inProps: { selected?: boolean; value: string | null }) => {
+  const { selected = false, value } = inProps;
+  const prevSelectedRef = useRef(selected);
   const prevValueRef = useRef(value);
-  const { ref, present } = usePresence(visible);
 
-  const fadeIn = prevValueRef.current === null;
-  const fadeOut = value === null;
+  useLayoutEffect(() => {
+    prevSelectedRef.current = selected;
+  }, [selected]);
 
-  const shouldRender = (visible && (fadeIn || fadeOut)) || present;
-
-  useEffect(() => {
-    return () => {
-      prevValueRef.current = value;
-    };
+  useLayoutEffect(() => {
+    prevValueRef.current = value;
   }, [value]);
 
+  /**
+   * if selected and prev value is null
+   * - fade in
+   *
+   * if selected and prev value not null
+   * - no animation
+   *
+   * if prev selected and value is null
+   * - fade out
+   *
+   * if prev selected and value is not null
+   * - no animation
+   */
+
+  const prevValue = prevValueRef.current;
+  const shouldAnimate = prevValue === null || value === null;
+
+  return <HighlightItem visible={selected} animate={shouldAnimate} />;
+};
+
+const HighlightItem = (inProps: { visible?: boolean; animate?: boolean }) => {
+  const { visible = false, animate = true } = inProps;
+
+  const { ref, present } = usePresence(visible);
+
+  const shouldRender = visible || present;
+
   return (
-    <>
-      <div className="w-50">
-        <div>visible: {visible ? 'true' : 'false'}</div>
-        <div>present: {present ? 'true' : 'false'}</div>
-        <div>fadeIn: {fadeIn ? 'true' : 'false'}</div>
-        <div>fadeOut: {fadeOut ? 'true' : 'false'}</div>
-      </div>
-      {shouldRender && (
-        <Motion
-          ref={ref}
-          layoutId="motion-demo"
-          className={cn(
-            'rounded-shape',
-            'bg-highlight',
-            fadeIn && 'animate-fade-in',
-            fadeOut && 'animate-fade-out'
-          )}
-        />
-      )}
-    </>
+    shouldRender && (
+      <Motion
+        ref={ref}
+        data-state={visible ? 'visible' : 'hidden'}
+        layoutId="motion-demo"
+        className={cn(
+          'rounded-shape',
+          'bg-highlight',
+          'bg-red-500',
+          'mix-blend-multiply',
+          animate && [
+            'data-[state="visible"]:animate-fade-in',
+            'data-[state="hidden"]:animate-fade-out',
+          ],
+          'duration-5000'
+        )}
+        style={{ animationDuration: '5s' }}
+      />
+    )
   );
 };
 
@@ -62,7 +84,7 @@ const App = () => {
           className={cn('relative w-fit p-4 cursor-default', className)}
           onMouseOver={() => setValue(id)}
         >
-          <Highlight visible={id === value} value={value} />
+          <Highlight selected={id === value} value={value} />
           {label}
         </div>
       ))}

@@ -11,6 +11,7 @@ export * from './Collapsible';
 export * from './Highlight';
 export * from './Input';
 export * from './Interaction';
+export * from './Motion';
 export * from './Popper';
 export * from './Presence';
 export * from './Popper';

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
-import { type MotionScrollValue, useScroll } from './motion';
-import { animationLoop } from './motion/animation-loop';
+import { type MotionScrollValue, useScroll } from '../ui/Motion';
+import { animationLoop } from '../ui/Motion/animation-loop';
 
 type MotionProps = {
   scrollY: MotionScrollValue;

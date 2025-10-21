@@ -2,7 +2,7 @@ import { StrictMode } from 'react';
 import '@ui';
 //import App from './App.tsx';
 //import App from './App2.tsx';
-import App from './App2.tsx';
+import App from './App3.tsx';
 
 type AppContainerProps = {
   strict?: boolean;

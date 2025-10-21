@@ -7,6 +7,7 @@ import { animationLoop } from './animation-loop';
 type MotionStorageData = {
   node: HTMLElement;
   rect: DOMRect;
+  style: Record<string, string>;
 };
 
 const MotionStorage = new Map<string, MotionStorageData>();
@@ -22,7 +23,7 @@ export const Motion = poly.div<MotionProps>((Tag, inProps) => {
   const mergedRefs = useMergedRefs(refProp, ref);
 
   const data = MotionStorage.get(layoutId);
-  const prevRectRef = useRef(data?.rect);
+  const prevDataRef = useRef(data);
   const prevStyleRef = useRef<Record<string, string>>(null);
 
   useEffect(() => {
@@ -50,11 +51,18 @@ export const Motion = poly.div<MotionProps>((Tag, inProps) => {
   useLayoutEffect(() => {
     const node = ref.current;
     if (node) {
-      const prev = prevRectRef.current;
+      const prev = prevDataRef.current;
+      const style = getComputedStyle(node);
 
       const stop = animationLoop(() => {
         const rect = node.getBoundingClientRect();
-        MotionStorage.set(layoutId, { node, rect });
+        MotionStorage.set(layoutId, {
+          node,
+          rect,
+          style: {
+            opacity: style.opacity,
+          },
+        });
 
         if (!prev) {
           stop();
@@ -64,18 +72,19 @@ export const Motion = poly.div<MotionProps>((Tag, inProps) => {
       if (prev && !prevStyleRef.current) {
         const rect = node.getBoundingClientRect();
 
-        const scaleX = prev.width / rect.width;
-        const scaleY = prev.height / rect.height;
+        const scaleX = prev.rect.width / rect.width;
+        const scaleY = prev.rect.height / rect.height;
 
-        const prevCenterX = prev.x + prev.width / 2;
+        const prevCenterX = prev.rect.x + prev.rect.width / 2;
         const rectCenterX = rect.x + rect.width / 2;
         const x = prevCenterX - rectCenterX;
 
-        const prevCenterY = prev.y + prev.height / 2;
+        const prevCenterY = prev.rect.y + prev.rect.height / 2;
         const rectCenterY = rect.y + rect.height / 2;
         const y = prevCenterY - rectCenterY;
 
         prevStyleRef.current = {
+          ...prev.style,
           transitionDuration: '0s',
           transformOrigin: '50% 50%',
           transform: [

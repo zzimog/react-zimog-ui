@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { cn, Motion, usePresence } from '@ui';
 
 const vals = [
@@ -7,24 +7,44 @@ const vals = [
   { id: 'amet', label: 'Amet consectetur', className: 'mx-auto' },
 ];
 
-const Highlight = (inProps: { visible?: boolean }) => {
-  const { visible = false } = inProps;
+const Highlight = (inProps: { visible?: boolean; value: string | null }) => {
+  const { visible = false, value } = inProps;
 
+  const prevValueRef = useRef(value);
   const { ref, present } = usePresence(visible);
 
+  const fadeIn = prevValueRef.current === null;
+  const fadeOut = value === null;
+
+  const shouldRender = (visible && (fadeIn || fadeOut)) || present;
+
+  useEffect(() => {
+    return () => {
+      prevValueRef.current = value;
+    };
+  }, [value]);
+
   return (
-    <Motion
-      ref={ref}
-      layoutId="motion-demo"
-      data-state={visible ? 'visible' : 'hidden'}
-      className={cn(
-        'rounded-shape',
-        'bg-highlight',
-        'data-[state="visible"]:animate-fade-in',
-        'data-[state="hidden"]:animate-fade-out'
+    <>
+      <div className="w-50">
+        <div>visible: {visible ? 'true' : 'false'}</div>
+        <div>present: {present ? 'true' : 'false'}</div>
+        <div>fadeIn: {fadeIn ? 'true' : 'false'}</div>
+        <div>fadeOut: {fadeOut ? 'true' : 'false'}</div>
+      </div>
+      {shouldRender && (
+        <Motion
+          ref={ref}
+          layoutId="motion-demo"
+          className={cn(
+            'rounded-shape',
+            'bg-highlight',
+            fadeIn && 'animate-fade-in',
+            fadeOut && 'animate-fade-out'
+          )}
+        />
       )}
-      hidden={!present}
-    />
+    </>
   );
 };
 
@@ -42,7 +62,7 @@ const App = () => {
           className={cn('relative w-fit p-4 cursor-default', className)}
           onMouseOver={() => setValue(id)}
         >
-          {id === value && <Highlight visible={value !== null} />}
+          <Highlight visible={id === value} value={value} />
           {label}
         </div>
       ))}

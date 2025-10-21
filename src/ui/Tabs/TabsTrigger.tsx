@@ -2,7 +2,7 @@ import { type ElementType, type HTMLAttributes, useRef } from 'react';
 import { cn } from '../utils';
 import classes from './tabsClasses';
 import { useTabsContext } from './tabsContext';
-import { Interaction } from '../Interaction';
+import { Highlight } from '../Highlight';
 
 export type TabsTriggerProps = {
   as?: ElementType;
@@ -36,7 +36,7 @@ export const TabsTrigger = (inProps: TabsTriggerProps) => {
   }
 
   return (
-    <Interaction.Node
+    <Highlight.Item
       as={Tag}
       ref={ref}
       id={triggerId}

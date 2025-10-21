@@ -4,9 +4,9 @@ const treeClasses = {
   root: 'relative',
   highlight: cn(
     'right-0 ',
-    'w-[var(--w)]',
-    'h-[var(--h)]',
-    'translate-y-[var(--y)]',
+    'w-(--w)',
+    'h-(--h)',
+    'translate-y-(--y)',
     '[@media(hover:none)]:hidden'
   ),
   list: {

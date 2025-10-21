@@ -1,9 +1,9 @@
 import { type HTMLAttributes, type MouseEvent, type ReactNode } from 'react';
 import { ChevronRight, Dot } from 'lucide-react';
-import { Interaction } from '../Interaction';
+import { Highlight } from '../Highlight';
 import { Collapsible } from '../Collapsible';
-import classes from './treeClasses';
 import { useTreeContext } from './treeContext';
+import classes from './treeClasses';
 
 export type TreeItemData = {
   name: string;
@@ -38,7 +38,7 @@ export const TreeItem = (inProps: TreeItemProps) => {
 
   return (
     <li data-index={indexProp} data-parent={parent}>
-      <Interaction.Node
+      <Highlight.Item
         data-state={getState(parent, open)}
         className={classes.list.item}
         onClick={handleClick}
@@ -46,7 +46,7 @@ export const TreeItem = (inProps: TreeItemProps) => {
       >
         {parent ? <ChevronRight /> : <Dot />}
         {name}
-      </Interaction.Node>
+      </Highlight.Item>
 
       {parent && (
         <Collapsible open={open}>

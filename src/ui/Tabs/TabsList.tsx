@@ -1,7 +1,6 @@
 import { type ElementType, type HTMLAttributes, useRef } from 'react';
 import { cn } from '../utils';
 import classes from './tabsClasses';
-import { Interaction } from '../Interaction';
 import { Highlight } from '../Highlight';
 
 export type TabsListProps = {
@@ -27,15 +26,15 @@ export const TabsList = (inProps: TabsListProps) => {
   }
 
   return (
-    <Interaction
+    <Highlight
       as={Tag}
       role="tabslist"
       className={cn(classes.list.root, className)}
       onRectChange={handleRectChange}
       {...props}
     >
-      <Highlight ref={highlightRef} persistent />
+      <Highlight.Indicator ref={highlightRef} persistent />
       <div className={classes.list.tabs}>{children}</div>
-    </Interaction>
+    </Highlight>
   );
 };

@@ -7,7 +7,7 @@ import {
 } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { cn } from '../utils';
-import { Interaction } from '../Interaction';
+import { Highlight } from '../Highlight';
 import { Collapsible } from '../Collapsible';
 import { useAccordion } from './accordionContext';
 import accordionClasses from './accordionClasses';
@@ -58,7 +58,7 @@ export const AccordionItem = (inProps: AccordionItemProps) => {
       className={cn(classes.root, className)}
       {...props}
     >
-      <Interaction.Node
+      <Highlight.Item
         as="button"
         id={triggerId}
         aria-controls={contentId}
@@ -70,7 +70,7 @@ export const AccordionItem = (inProps: AccordionItemProps) => {
       >
         {title}
         <ChevronDown className={classes.arrow} />
-      </Interaction.Node>
+      </Highlight.Item>
       <Collapsible
         open={open}
         id={contentId}

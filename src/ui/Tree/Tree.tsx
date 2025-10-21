@@ -7,7 +7,6 @@ import {
   useEffect,
 } from 'react';
 import { cn } from '../utils';
-import { Interaction } from '../Interaction';
 import { Highlight } from '../Highlight';
 import { type TreeItemData, TreeItem } from './TreeItem';
 import { TreeContext } from './treeContext';
@@ -23,8 +22,8 @@ export const Tree = (inProps: TreeProps) => {
   const { as: Tag = 'div', data = [], className, ...props } = inProps;
 
   const [state, setState] = useState<Record<string, boolean>>({});
-  const [highlight, setHighlight] = useState(false);
 
+  const [highlight, setHighlight] = useState(false);
   const highlightRef = useRef<HTMLElement>(null);
   const leaveFrameRef = useRef(0);
 
@@ -68,14 +67,14 @@ export const Tree = (inProps: TreeProps) => {
   }, []);
 
   return (
-    <Interaction
+    <Highlight
       as={Tag}
       type="hover"
       className={cn(classes.root, className)}
       onRectChange={handleRectChange}
       {...props}
     >
-      <Highlight
+      <Highlight.Indicator
         ref={highlightRef}
         visible={highlight}
         className={classes.highlight}
@@ -94,6 +93,6 @@ export const Tree = (inProps: TreeProps) => {
           ))}
         </TreeContext>
       </ul>
-    </Interaction>
+    </Highlight>
   );
 };

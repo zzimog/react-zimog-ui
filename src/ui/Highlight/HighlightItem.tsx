@@ -5,30 +5,41 @@ import {
   useCallback,
 } from 'react';
 import { useMergedRefs } from '../hooks';
-import { InteractionContext } from './interactionContext';
+import { HighlightContext } from './highlightContext';
 
-export type InteractionNodeProps<T extends ElementType> = {
+export type HighlightItemProps<T extends ElementType> = {
   as?: T;
   defaultSelected?: boolean;
   disabled?: boolean;
 } & Omit<ComponentPropsWithRef<T>, 'as'>;
 
-export const InteractionNode = <T extends ElementType = 'div'>(
-  inProps: InteractionNodeProps<T>
+export const HighlightItem = <T extends ElementType = 'div'>(
+  inProps: HighlightItemProps<T>
 ) => {
-  const { as: Tag = 'div', ref: refProp, defaultSelected, ...props } = inProps;
+  const {
+    as: Tag = 'div',
+    ref: refProp,
+    defaultSelected,
+    disabled,
+    ...props
+  } = inProps;
 
-  const context = useContext(InteractionContext);
+  const context = useContext(HighlightContext);
 
   const ref = useCallback(
     (node: HTMLElement) => {
       if (context) {
         const { type, setNode } = context;
         const eventType = type === 'hover' ? 'mouseover' : type;
-        const handler = () => setNode(node);
+
+        function handler() {
+          if (!disabled) {
+            setNode(node);
+          }
+        }
 
         if (defaultSelected) {
-          setNode(node);
+          handler();
         }
 
         node.addEventListener(eventType, handler);

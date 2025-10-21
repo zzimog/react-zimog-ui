@@ -13,7 +13,9 @@ function loop(time: DOMHighResTimeStamp) {
   rafId = requestAnimationFrame(loop);
 }
 
-export function animationLoop(callback: AnimationCallback) {
+export function animationLoop(
+  callback: AnimationCallback
+): AnimationStopCallback {
   callbacks.add(callback);
 
   if (callbacks.size === 1) {

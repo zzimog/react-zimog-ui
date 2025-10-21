@@ -11,7 +11,6 @@ import { cn } from '../utils';
 import { AccordionItem } from './AccordionItem';
 import { AccordionContext } from './accordionContext';
 import classes from './accordionClasses';
-import { Interaction } from '../Interaction';
 import { Highlight } from '../Highlight';
 
 type AccordionValue = string | string[] | undefined;
@@ -109,7 +108,7 @@ export const Accordion = (inProps: AccordionProps) => {
   }
 
   return (
-    <Interaction
+    <Highlight
       as={Tag}
       type="hover"
       className={cn(classes.root, className)}
@@ -118,13 +117,13 @@ export const Accordion = (inProps: AccordionProps) => {
       onMouseLeave={handleMouseLeave}
       {...props}
     >
-      <Highlight
+      <Highlight.Indicator
         ref={highlightRef}
         visible={highlight}
         className={classes.highlight}
       />
       <AccordionContext value={context}>{children}</AccordionContext>
-    </Interaction>
+    </Highlight>
   );
 };
 

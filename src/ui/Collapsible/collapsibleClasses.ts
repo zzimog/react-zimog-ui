@@ -1,15 +1,15 @@
 import { cva } from 'class-variance-authority';
 
-const collapsibleClasses = cva('overflow-hidden', {
+const collapsibleClasses = cva(['overflow-hidden', 'animate-duration-300'], {
   variants: {
     dir: {
       vertical: [
-        'data-[state="open"]:animate-height-grow',
-        'data-[state="closed"]:animate-height-shrink',
+        'data-[state="open"]:with-height-grow',
+        'data-[state="closed"]:with-height-shrink',
       ],
       horizontal: [
-        'data-[state="open"]:animate-width-grow',
-        'data-[state="closed"]:animate-width-shrink',
+        'data-[state="open"]:with-width-grow',
+        'data-[state="closed"]:with-width-shrink',
       ],
     },
   },

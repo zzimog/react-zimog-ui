@@ -1,9 +1,10 @@
 import { Accordion } from '@ui';
 import { DemoBox } from './DemoBox';
+import { DemoSection } from './DemoSection';
 
 // eslint-disable-next-line react-refresh/only-export-components
 const DemoAccordion = (props: { multiple?: boolean }) => (
-  <Accordion multiple={props.multiple}>
+  <Accordion multiple={props.multiple} className="w-full">
     <Accordion.Item title="Lorem">
       Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquid nulla
       accusantium mollitia iure ab ex id laborum, aspernatur repudiandae sed
@@ -24,8 +25,12 @@ const DemoAccordion = (props: { multiple?: boolean }) => (
 
 const accordion = (
   <DemoBox id="accordion" title="Accordion">
-    <DemoAccordion />
-    <DemoAccordion multiple={true} />
+    <DemoSection title="Single" column>
+      <DemoAccordion />
+    </DemoSection>
+    <DemoSection title="Multiple" column>
+      <DemoAccordion multiple={true} />
+    </DemoSection>
   </DemoBox>
 );
 

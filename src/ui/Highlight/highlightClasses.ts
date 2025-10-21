@@ -6,16 +6,17 @@ const highlightClasses = cva(
     'z-0',
     'rounded-shape',
     'transition-all',
-    'duration-250',
     'bg-highlight',
+    'duration-200',
+    'animate-duration-300',
   ],
   {
     variants: {
       persistent: {
         true: null,
         false: [
-          'data-[state="visible"]:animate-fade-in',
-          'data-[state="hidden"]:animate-fade-out',
+          'data-[state="visible"]:with-fade-in',
+          'data-[state="hidden"]:with-fade-out',
         ],
       },
     },

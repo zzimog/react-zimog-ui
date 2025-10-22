@@ -27,19 +27,18 @@ export const HighlightIndicator = poly.div<HighlightIndicatorProps>(
       ...props
     } = inProps;
 
-    const context = useContext(HighlightContext);
     const {
       rootRef,
       currentRef,
       persistent = false,
       enabled = false,
       setEnabled,
-    } = context || {};
+    } = useContext(HighlightContext) || {};
 
     const prevRectRef = useRef<DOMRect>(null);
 
     const ref = useCallback((node: HTMLElement) => {
-      const cancelAnimation = animationLoop(() => {
+      return animationLoop(() => {
         const root = rootRef?.current;
         const current = currentRef?.current;
 
@@ -48,9 +47,6 @@ export const HighlightIndicator = poly.div<HighlightIndicatorProps>(
           const currentRect = current.getBoundingClientRect();
 
           const rect = getRelativeRect(rootRect, currentRect);
-          /**
-           * @todo save to ref?
-           */
           const styles = getComputedStyle(current);
 
           const isVisible =
@@ -79,8 +75,6 @@ export const HighlightIndicator = poly.div<HighlightIndicatorProps>(
           }
         }
       });
-
-      return cancelAnimation;
     }, []);
 
     const { ref: refPresence, present } = usePresence(

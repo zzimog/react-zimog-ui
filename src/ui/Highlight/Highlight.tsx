@@ -97,8 +97,8 @@ export const Highlight = poly.div<HighlightProps>((Tag, inProps) => {
       ref={mergedRefs}
       {...props}
       onMouseLeave={() => {
-        setEnabled(false);
         currentRef.current = null;
+        setEnabled(false);
       }}
     >
       <HighlightContext value={context}>{children}</HighlightContext>

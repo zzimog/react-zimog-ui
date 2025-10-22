@@ -3,8 +3,6 @@ import {
   type HTMLAttributes,
   type RefAttributes,
   useState,
-  useRef,
-  useEffect,
 } from 'react';
 import { cn } from '../utils';
 import { Highlight } from '../Highlight';

@@ -9,6 +9,7 @@ const highlightClasses = cva(
     'bg-highlight',
     'duration-200',
     'animate-duration-300',
+    'ease-linear',
   ],
   {
     variants: {

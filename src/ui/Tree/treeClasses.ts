@@ -4,8 +4,8 @@ const treeClasses = {
   root: 'relative',
   highlight: cn(
     'right-0 ',
-    'w-(--w)',
-    'h-(--h)',
+    'w-(--width)',
+    'h-(--height)',
     'translate-y-(--y)',
     '[@media(hover:none)]:hidden'
   ),

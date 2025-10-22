@@ -44,8 +44,8 @@ export const Tree = (inProps: TreeProps) => {
 
       node.style.setProperty('--x', `${x}px`);
       node.style.setProperty('--y', `${y}px`);
-      node.style.setProperty('--w', `${width}px`);
-      node.style.setProperty('--h', `${height}px`);
+      node.style.setProperty('--width', `${width}px`);
+      node.style.setProperty('--height', `${height}px`);
 
       setHighlight(true);
     }

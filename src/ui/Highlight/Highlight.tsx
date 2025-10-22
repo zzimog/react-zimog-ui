@@ -1,4 +1,4 @@
-import { useRef, useCallback } from 'react';
+import { useRef, useCallback, useState } from 'react';
 import { poly } from '../polymorphic';
 import { getRelativeRect, rectEquals } from '../utils';
 import { useMergedRefs } from '../hooks';
@@ -11,8 +11,8 @@ export type HighlightType = 'click' | 'focus' | 'hover';
 
 export type HighlightProps = {
   type?: HighlightType;
-  defaultSelected?: number;
-  onNodeChange?: (node: HTMLElement) => void;
+  persistent?: boolean;
+
   onRectChange?: (rect: DOMRect) => void;
 };
 
@@ -20,16 +20,20 @@ export const Highlight = poly.div<HighlightProps>((Tag, inProps) => {
   const {
     ref: refProp,
     type = 'click',
+    persistent = false,
     children,
-    onNodeChange,
+
     onRectChange,
     ...props
   } = inProps;
 
+  const initialEnabled = type === 'click';
+  const [enabled, setEnabled] = useState(initialEnabled);
+
   const currentRef = useRef<HTMLElement>(null);
   const prevRectRef = useRef<DOMRect>(null);
 
-  const ref = useCallback(
+  const __ref = useCallback(
     (node: HTMLElement) => {
       if (onRectChange) {
         const cancelAnimation = animationLoop(() => {
@@ -79,14 +83,16 @@ export const Highlight = poly.div<HighlightProps>((Tag, inProps) => {
     [onRectChange]
   );
 
+  const ref = useRef<HTMLElement>(null);
   const mergedRefs = useMergedRefs(refProp, ref);
 
   const context = {
     type,
-    setNode: (node: HTMLElement) => {
-      currentRef.current = node;
-      onNodeChange?.(node);
-    },
+    persistent,
+    rootRef: ref,
+    currentRef,
+    enabled,
+    setEnabled,
   };
 
   return (

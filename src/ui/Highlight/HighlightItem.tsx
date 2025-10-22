@@ -15,12 +15,12 @@ export const HighlightItem = poly.div<HighlightItemProps>((Tag, inProps) => {
 
   const ref = useCallback((node: HTMLElement) => {
     if (context) {
-      const { type, setNode } = context;
+      const { type, currentRef } = context;
       const eventType = type === 'hover' ? 'mouseover' : type;
 
       function handler() {
         if (!disabled) {
-          setNode(node);
+          currentRef.current = node;
         }
       }
 

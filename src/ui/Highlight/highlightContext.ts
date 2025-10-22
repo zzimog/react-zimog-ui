@@ -1,9 +1,13 @@
-import { createContext } from 'react';
+import { createContext, type RefObject } from 'react';
 import type { HighlightType } from './Highlight';
 
 type HighlightContextType = {
   type: HighlightType;
-  setNode: (node: HTMLElement) => void;
+  persistent: boolean;
+  rootRef: RefObject<HTMLElement | null>;
+  currentRef: RefObject<HTMLElement | null>;
+  enabled: boolean;
+  setEnabled: (enabled: boolean) => void;
 };
 
 export const HighlightContext = createContext<HighlightContextType | undefined>(

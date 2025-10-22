@@ -23,9 +23,11 @@ export const Tree = (inProps: TreeProps) => {
 
   const [state, setState] = useState<Record<string, boolean>>({});
 
+  /*
   const [highlight, setHighlight] = useState(false);
   const highlightRef = useRef<HTMLElement>(null);
   const leaveFrameRef = useRef(0);
+  */
 
   const context = {
     treeState: state,
@@ -37,6 +39,7 @@ export const Tree = (inProps: TreeProps) => {
     },
   };
 
+  /*
   function handleRectChange(rect?: DOMRect) {
     const node = highlightRef.current;
     if (node && rect) {
@@ -65,20 +68,16 @@ export const Tree = (inProps: TreeProps) => {
   useEffect(() => {
     return () => cancelAnimationFrame(leaveFrameRef.current);
   }, []);
+  */
 
   return (
     <Highlight
       as={Tag}
       type="hover"
       className={cn(classes.root, className)}
-      onRectChange={handleRectChange}
       {...props}
     >
-      <Highlight.Indicator
-        ref={highlightRef}
-        visible={highlight}
-        className={classes.highlight}
-      />
+      <Highlight.Indicator className={classes.highlight} />
       <ul className={classes.list.root}>
         <TreeContext value={context}>
           {data.map((item, index) => (
@@ -87,8 +86,6 @@ export const Tree = (inProps: TreeProps) => {
               index={`${index}`}
               name={item.name}
               items={item.items}
-              onMouseOver={handleItemOver}
-              onMouseLeave={handleItemLeave}
             />
           ))}
         </TreeContext>

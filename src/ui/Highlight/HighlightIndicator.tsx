@@ -33,6 +33,7 @@ export const HighlightIndicator = poly.div<HighlightIndicatorProps>(
       currentRef,
       persistent = false,
       enabled = false,
+      setEnabled,
     } = context || {};
 
     const prevRectRef = useRef<DOMRect>(null);
@@ -61,18 +62,20 @@ export const HighlightIndicator = poly.div<HighlightIndicatorProps>(
             rootRef.current = null;
             currentRef.current = null;
             return;
-          }
+          } else {
+            const prevRect = prevRectRef.current;
+            if (prevRect === null || !rectEquals(rect, prevRect)) {
+              const { x, y, width, height } = rect;
 
-          const prevRect = prevRectRef.current;
-          if (prevRect === null || !rectEquals(rect, prevRect)) {
-            const { x, y, width, height } = rect;
+              node.style.setProperty('--x', `${x}px`);
+              node.style.setProperty('--y', `${y}px`);
+              node.style.setProperty('--width', `${width}px`);
+              node.style.setProperty('--height', `${height}px`);
 
-            node.style.setProperty('--x', `${x}px`);
-            node.style.setProperty('--y', `${y}px`);
-            node.style.setProperty('--width', `${width}px`);
-            node.style.setProperty('--height', `${height}px`);
+              prevRectRef.current = rect;
+            }
 
-            prevRectRef.current = rect;
+            setEnabled?.(true);
           }
         }
       });
@@ -80,7 +83,9 @@ export const HighlightIndicator = poly.div<HighlightIndicatorProps>(
       return cancelAnimation;
     }, []);
 
-    const { ref: refPresence, present } = usePresence(persistent || visible);
+    const { ref: refPresence, present } = usePresence(
+      enabled && (persistent || visible)
+    );
     const mergedRefs = useMergedRefs(refProp, ref, refPresence);
 
     return (

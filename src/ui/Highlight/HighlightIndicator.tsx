@@ -1,51 +1,54 @@
-import {
-  type ElementType,
-  type HTMLAttributes,
-  type RefAttributes,
-  useRef,
-} from 'react';
+import { useRef } from 'react';
+import { poly } from '../polymorphic';
 import { usePresence, useMergedRefs } from '../hooks';
 import { cn } from '../utils';
 import classes from './highlightClasses';
 
 export type HighlightIndicatorProps = {
-  as?: ElementType;
   visible?: boolean;
   rect?: DOMRect;
   persistent?: boolean;
-} & HTMLAttributes<HTMLElement> &
-  RefAttributes<HTMLElement>;
-
-export const HighlightIndicator = (inProps: HighlightIndicatorProps) => {
-  const {
-    as: Tag = 'div',
-    ref: refProp,
-    visible = true,
-    rect,
-    className,
-    style,
-    persistent = false,
-    ...props
-  } = inProps;
-
-  const ref = useRef<HTMLElement>(null);
-
-  const { ref: refPresence, present } = usePresence(persistent || visible);
-  const mergedRefs = useMergedRefs(refProp, ref, refPresence);
-
-  return (
-    <Tag
-      ref={mergedRefs}
-      data-state={visible ? 'visible' : 'hidden'}
-      className={cn(classes({ persistent }), className)}
-      hidden={!present}
-      style={{
-        width: rect ? `${rect.width}px` : undefined,
-        height: rect ? `${rect.height}px` : undefined,
-        transform: rect ? `translate(${rect.x}px, ${rect.y}px)` : undefined,
-        ...style,
-      }}
-      {...props}
-    />
-  );
 };
+
+export const HighlightIndicator = poly.div<HighlightIndicatorProps>(
+  (Tag, inProps) => {
+    const {
+      ref: refProp,
+      visible = true,
+      rect,
+      className,
+      style,
+      persistent = false,
+      ...props
+    } = inProps;
+
+    const ref = useRef<HTMLElement>(null);
+
+    const { ref: refPresence, present } = usePresence(persistent || visible);
+    const mergedRefs = useMergedRefs(refProp, ref, refPresence);
+
+    return (
+      <Tag
+        ref={mergedRefs}
+        data-state={getState(visible)}
+        className={cn(classes({ persistent }), className)}
+        hidden={!present}
+        style={{
+          width: rect ? `${rect.width}px` : undefined,
+          height: rect ? `${rect.height}px` : undefined,
+          transform: rect ? `translate(${rect.x}px, ${rect.y}px)` : undefined,
+          ...style,
+        }}
+        {...props}
+      />
+    );
+  }
+);
+
+function getState(visible?: boolean) {
+  if (visible === undefined) {
+    return undefined;
+  }
+
+  return visible ? 'visible' : 'hidden';
+}

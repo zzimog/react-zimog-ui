@@ -1,10 +1,5 @@
-import {
-  type ElementType,
-  type HTMLAttributes,
-  type RefAttributes,
-  useRef,
-  useCallback,
-} from 'react';
+import { useRef, useCallback } from 'react';
+import { poly } from '../polymorphic';
 import { getRelativeRect, rectEquals } from '../utils';
 import { useMergedRefs } from '../hooks';
 import { HighlightIndicator } from './HighlightIndicator';
@@ -15,17 +10,14 @@ import { animationLoop } from '../utils/animation-loop';
 export type HighlightType = 'click' | 'focus' | 'hover';
 
 export type HighlightProps = {
-  as?: ElementType;
   type?: HighlightType;
   defaultSelected?: number;
   onNodeChange?: (node: HTMLElement) => void;
   onRectChange?: (rect: DOMRect) => void;
-} & HTMLAttributes<HTMLElement> &
-  RefAttributes<HTMLElement>;
+};
 
-export const Highlight = (inProps: HighlightProps) => {
+export const Highlight = poly.div<HighlightProps>((Tag, inProps) => {
   const {
-    as: Tag = 'div',
     ref: refProp,
     type = 'click',
     children,
@@ -40,14 +32,16 @@ export const Highlight = (inProps: HighlightProps) => {
   const ref = useCallback(
     (node: HTMLElement) => {
       if (onRectChange) {
-        const stop = animationLoop(() => {
+        const cancelAnimation = animationLoop(() => {
           const current = currentRef.current;
 
           if (node && current) {
             const rootRect = node!.getBoundingClientRect();
             const currentRect = current!.getBoundingClientRect();
+
             const rect = getRelativeRect(rootRect, currentRect);
             const styles = getComputedStyle(current);
+
             const isVisible =
               styles?.display !== 'none' &&
               styles?.opacity !== '0' &&
@@ -75,7 +69,7 @@ export const Highlight = (inProps: HighlightProps) => {
           node.addEventListener('mouseleave', handleOut);
         }
         return () => {
-          stop();
+          cancelAnimation();
           if (type === 'hover') {
             node.removeEventListener('mouseleave', handleOut);
           }
@@ -100,7 +94,7 @@ export const Highlight = (inProps: HighlightProps) => {
       <HighlightContext value={context}>{children}</HighlightContext>
     </Tag>
   );
-};
+});
 
 Highlight.Indicator = HighlightIndicator;
 Highlight.Item = HighlightItem;

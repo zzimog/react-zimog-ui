@@ -2,6 +2,8 @@ import { useContext, useCallback } from 'react';
 import { poly } from '../polymorphic';
 import { useMergedRefs } from '../hooks';
 import { HighlightContext } from './highlightContext';
+import classes from './highlightClasses';
+import { cn } from '../utils';
 
 export type HighlightItemProps = {
   selected?: boolean;
@@ -9,14 +11,15 @@ export type HighlightItemProps = {
 };
 
 export const HighlightItem = poly.div<HighlightItemProps>((Tag, inProps) => {
-  const { ref: refProp, selected, disabled, ...props } = inProps;
+  const { ref: refProp, selected, disabled, className, ...props } = inProps;
 
   const context = useContext(HighlightContext);
+  const isHover = context?.type === 'hover';
 
   const ref = useCallback(
     (node: HTMLElement) => {
       if (context) {
-        const { type, persistent, currentRef } = context;
+        const { type, leaveMode, persistent, currentRef } = context;
 
         function handleEnable() {
           if (!disabled) {
@@ -49,10 +52,14 @@ export const HighlightItem = poly.div<HighlightItemProps>((Tag, inProps) => {
 
           case 'hover':
             node.addEventListener('mouseover', handleEnable);
-            node.addEventListener('mouseleave', handleDisable);
+            if (leaveMode === 'items') {
+              node.addEventListener('mouseleave', handleDisable);
+            }
             return () => {
               node.removeEventListener('mouseover', handleEnable);
-              node.removeEventListener('mouseleave', handleDisable);
+              if (leaveMode === 'items') {
+                node.removeEventListener('mouseleave', handleDisable);
+              }
             };
         }
       }
@@ -62,5 +69,16 @@ export const HighlightItem = poly.div<HighlightItemProps>((Tag, inProps) => {
 
   const mergedRefs = useMergedRefs(refProp, ref);
 
-  return <Tag ref={mergedRefs} {...props} />;
+  return (
+    <Tag
+      ref={mergedRefs}
+      className={cn(
+        classes.item({
+          hover: isHover,
+        }),
+        className
+      )}
+      {...props}
+    />
+  );
 });

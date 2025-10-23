@@ -7,11 +7,7 @@ export type PolyProps<T extends ElementType, P extends object = {}> = {
 
 export interface PolyElement<T extends ElementType, P extends object> {
   <E extends ElementType = T>(props: PolyProps<E, P>): JSX.Element;
-
-  /**
-   * @todo Need better typing
-   */
-  [key: string]: any;
+  displayName?: string;
 }
 
 export interface RenderPoly<T extends ElementType, P extends object = {}> {

@@ -1,23 +1,17 @@
-import {
-  type ElementType,
-  type HTMLAttributes,
-  type RefAttributes,
-  useState,
-} from 'react';
+import { useState } from 'react';
+import { poly } from '../polymorphic';
 import { cn } from '../utils';
-import { Highlight, HighlightIndicator } from '../Highlight';
+import { Highlight } from '../Highlight';
 import { type TreeItemData, TreeItem } from './TreeItem';
 import { TreeContext } from './treeContext';
 import classes from './treeClasses';
 
-export type TreeProps = {
-  as?: ElementType;
+type TreeProps = {
   data?: TreeItemData[];
-} & HTMLAttributes<HTMLElement> &
-  RefAttributes<HTMLElement>;
+};
 
-export const Tree = (inProps: TreeProps) => {
-  const { as: Tag = 'div', data = [], className, ...props } = inProps;
+const TreeRoot = poly.div<TreeProps>((Tag, inProps) => {
+  const { data = [], className, ...props } = inProps;
 
   const [state, setState] = useState<Record<string, boolean>>({});
 
@@ -35,10 +29,11 @@ export const Tree = (inProps: TreeProps) => {
     <Highlight
       as={Tag}
       type="hover"
+      leaveMode="items"
       className={cn(classes.root, className)}
       {...props}
     >
-      <HighlightIndicator className={classes.highlight} />
+      <Highlight.Indicator className={classes.highlight} />
       <ul className={classes.list.root}>
         <TreeContext value={context}>
           {data.map((item, index) => (
@@ -53,4 +48,10 @@ export const Tree = (inProps: TreeProps) => {
       </ul>
     </Highlight>
   );
-};
+});
+
+export const Tree = Object.assign(TreeRoot, {
+  Item: TreeItem,
+});
+
+export type { TreeProps };

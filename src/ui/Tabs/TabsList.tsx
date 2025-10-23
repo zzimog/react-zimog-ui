@@ -1,14 +1,9 @@
-import { type ElementType, type HTMLAttributes } from 'react';
 import { poly } from '../polymorphic';
 import { cn } from '../utils';
-import { Highlight, HighlightIndicator } from '../Highlight';
+import { Highlight } from '../Highlight';
 import classes from './tabsClasses';
 
-export type TabsListProps = {
-  as?: ElementType;
-} & HTMLAttributes<HTMLElement>;
-
-export const TabsList = poly.div<TabsListProps>((Tag, inProps) => {
+export const TabsList = poly.div((Tag, inProps) => {
   const { className, children, ...props } = inProps;
 
   return (
@@ -19,7 +14,7 @@ export const TabsList = poly.div<TabsListProps>((Tag, inProps) => {
       persistent
       {...props}
     >
-      <HighlightIndicator />
+      <Highlight.Indicator />
       <div className={classes.list.tabs}>{children}</div>
     </Highlight>
   );

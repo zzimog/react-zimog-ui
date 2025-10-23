@@ -1,21 +1,14 @@
-import { type ElementType, type HTMLAttributes } from 'react';
+import { poly } from '../polymorphic';
 import { cn } from '../utils';
-import classes from './tabsClasses';
 import { useTabsContext } from './tabsContext';
+import classes from './tabsClasses';
 
 export type TabsContentProps = {
-  as?: ElementType;
   value: string;
-} & HTMLAttributes<HTMLElement>;
+};
 
-export const TabsContent = (inProps: TabsContentProps) => {
-  const {
-    as: Tag = 'div',
-    value: valueProp,
-    className,
-    children,
-    ...props
-  } = inProps;
+export const TabsContent = poly.div<TabsContentProps>((Tag, inProps) => {
+  const { value: valueProp, className, children, ...props } = inProps;
 
   const { baseId, value } = useTabsContext();
 
@@ -36,4 +29,4 @@ export const TabsContent = (inProps: TabsContentProps) => {
       {isActive && children}
     </Tag>
   );
-};
+});

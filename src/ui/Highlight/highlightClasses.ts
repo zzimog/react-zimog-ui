@@ -37,10 +37,15 @@ const highlightClasses = {
       },
     }
   ),
-  item: cva(['relative', 'z-1'], {
+  item: cva(['relative', 'z-1', 'rounded-shape'], {
     variants: {
       hover: {
-        true: '',
+        true: [
+          'transition-[background-color]',
+          'duration-200',
+          'not-active:delay-100',
+          '[@media(hover:none)]:active:bg-highlight',
+        ],
         false: null,
       },
     },

@@ -65,8 +65,8 @@ export const AccordionItem = (inProps: AccordionItemProps) => {
         aria-expanded={open}
         data-expanded={open}
         className={classes.trigger}
-        onClick={handleClick}
         disabled={disabled}
+        onClick={handleClick}
       >
         {title}
         <ChevronDown className={classes.arrow} />

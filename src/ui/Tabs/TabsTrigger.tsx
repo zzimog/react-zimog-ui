@@ -1,9 +1,10 @@
-import { type MouseEvent } from 'react';
+import { useCallback } from 'react';
 import { poly } from '../polymorphic';
+import { useMergedRefs } from '../hooks';
 import { cn } from '../utils';
-import classes from './tabsClasses';
+import { Highlight } from '../Highlight';
 import { useTabsContext } from './tabsContext';
-import { HighlightItem } from '../Highlight';
+import classes from './tabsClasses';
 
 export type TabsTriggerProps = {
   value: string;
@@ -11,7 +12,13 @@ export type TabsTriggerProps = {
 };
 
 export const TabsTrigger = poly.button<TabsTriggerProps>((Tag, inProps) => {
-  const { value: valueProp, disabled, className, onClick, ...props } = inProps;
+  const {
+    ref: refProp,
+    value: valueProp,
+    disabled,
+    className,
+    ...props
+  } = inProps;
 
   const { baseId, value, setValue } = useTabsContext();
 
@@ -20,26 +27,34 @@ export const TabsTrigger = poly.button<TabsTriggerProps>((Tag, inProps) => {
 
   const isActive = valueProp === value;
 
-  function handleClick(event: MouseEvent<HTMLElement>) {
-    if (!disabled) {
-      setValue(valueProp);
-    }
+  const ref = useCallback(
+    (node: HTMLElement) => {
+      function handleClick() {
+        if (!disabled) {
+          setValue(valueProp);
+        }
+      }
 
-    onClick?.(event);
-  }
+      node.addEventListener('click', handleClick);
+      return () => node.removeEventListener('click', handleClick);
+    },
+    [disabled]
+  );
+
+  const mergedRefs = useMergedRefs(refProp, ref);
 
   return (
-    <HighlightItem
+    <Highlight.Item
       as={Tag}
+      ref={mergedRefs}
       id={triggerId}
       role="tab"
       aria-controls={itemId}
       aria-selected={isActive}
       data-selected={isActive}
-      disabled={disabled}
       className={cn(classes.trigger, className)}
       selected={isActive}
-      onClick={handleClick}
+      disabled={disabled}
       {...props}
     />
   );

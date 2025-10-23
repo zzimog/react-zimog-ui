@@ -4,8 +4,6 @@ import {
   type ReactNode,
   type HTMLAttributes,
   useState,
-  useRef,
-  type MouseEvent,
 } from 'react';
 import { cn } from '../utils';
 import { AccordionItem } from './AccordionItem';
@@ -15,7 +13,7 @@ import { Highlight } from '../Highlight';
 
 type AccordionValue = string | string[] | undefined;
 
-export type AccordionProps = {
+type AccordionProps = {
   ref?: Ref<HTMLElement>;
   as?: ElementType;
   children: ReactNode;
@@ -35,7 +33,7 @@ export type AccordionProps = {
 ) &
   Omit<HTMLAttributes<HTMLElement>, 'defaultValue' | 'value' | 'onChange'>;
 
-export const Accordion = (inProps: AccordionProps) => {
+const AccordionRoot = (inProps: AccordionProps) => {
   const {
     as: Tag = 'div',
     multiple,
@@ -57,9 +55,6 @@ export const Accordion = (inProps: AccordionProps) => {
 
   const initValue = valueProp || defaultValue || (multiple ? [] : undefined);
   const [value, setValue] = useState<AccordionValue>(initValue);
-  const [highlight, setHighlight] = useState(false);
-
-  const highlightRef = useRef<HTMLElement>(null);
 
   const context = {
     value,
@@ -85,46 +80,21 @@ export const Accordion = (inProps: AccordionProps) => {
     },
   };
 
-  function handleRectChange(rect?: DOMRect) {
-    const node = highlightRef.current;
-    if (node && rect) {
-      const { y, height } = rect;
-
-      Object.assign(node.style, {
-        height: `${height}px`,
-        transform: `translateY(${y}px)`,
-      });
-    }
-  }
-
-  function handleMouseOver(event: MouseEvent<HTMLElement>) {
-    onMouseOver?.(event);
-    setHighlight(true);
-  }
-
-  function handleMouseLeave(event: MouseEvent<HTMLElement>) {
-    onMouseOver?.(event);
-    setHighlight(false);
-  }
-
   return (
     <Highlight
       as={Tag}
       type="hover"
       className={cn(classes.root, className)}
-      onRectChange={handleRectChange}
-      onMouseOver={handleMouseOver}
-      onMouseLeave={handleMouseLeave}
       {...props}
     >
-      <Highlight.Indicator
-        ref={highlightRef}
-        visible={highlight}
-        className={classes.highlight}
-      />
+      <Highlight.Indicator className={classes.highlight} />
       <AccordionContext value={context}>{children}</AccordionContext>
     </Highlight>
   );
 };
 
-Accordion.Item = AccordionItem;
+export const Accordion = Object.assign(AccordionRoot, {
+  Item: AccordionItem,
+});
+
+export type { AccordionProps };

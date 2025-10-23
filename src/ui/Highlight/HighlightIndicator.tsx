@@ -29,6 +29,7 @@ export const HighlightIndicator = poly.div<HighlightIndicatorProps>(
     const [enabled, setEnabled] = useState(visible);
 
     const {
+      type,
       rootRef,
       currentRef,
       persistent = false,
@@ -84,11 +85,16 @@ export const HighlightIndicator = poly.div<HighlightIndicatorProps>(
     const { ref: refPresence, present } = usePresence(persistent || enabled);
     const mergedRefs = useMergedRefs(refProp, ref, refPresence);
 
+    const classNames = classes.indicator({
+      hover: type === 'hover',
+      persistent,
+    });
+
     return (
       <Tag
         ref={mergedRefs}
         data-state={getState(enabled)}
-        className={cn(classes.indicator({ persistent }), className)}
+        className={cn(classNames, className)}
         hidden={!present}
         style={{
           ...(rect && {

@@ -7,17 +7,21 @@ import { HighlightItem } from './HighlightItem';
 import { HighlightContext } from './highlightContext';
 import classes from './highlightClasses';
 
-export type HighlightType = 'click' | 'focus' | 'hover';
+type HighlightType = 'click' | 'focus' | 'hover';
 
-export type HighlightProps = {
+type HighlightLeaveMode = 'parent' | 'items';
+
+type HighlightProps = {
   type?: HighlightType;
+  leaveMode?: HighlightLeaveMode;
   persistent?: boolean;
 };
 
-export const Highlight = poly.div<HighlightProps>((Tag, inProps) => {
+const HighlightRoot = poly.div<HighlightProps>((Tag, inProps) => {
   const {
     ref: refProp,
     type = 'click',
+    leaveMode = 'parent',
     persistent = false,
     className,
     children,
@@ -31,6 +35,7 @@ export const Highlight = poly.div<HighlightProps>((Tag, inProps) => {
 
   const context = {
     type,
+    leaveMode,
     persistent,
     rootRef: ref,
     currentRef,
@@ -44,11 +49,11 @@ export const Highlight = poly.div<HighlightProps>((Tag, inProps) => {
 
   useEffect(() => {
     const node = ref.current;
-    if (node && type === 'hover') {
+    if (node && type === 'hover' && leaveMode === 'parent') {
       node.addEventListener('mouseleave', handleDisable);
       return () => node.removeEventListener('mouseleave', handleDisable);
     }
-  }, []);
+  }, [type, leaveMode]);
 
   return (
     <Tag ref={mergedRefs} className={cn(classes.root, className)} {...props}>
@@ -57,5 +62,9 @@ export const Highlight = poly.div<HighlightProps>((Tag, inProps) => {
   );
 });
 
-Highlight.Indicator = HighlightIndicator;
-Highlight.Item = HighlightItem;
+export const Highlight = Object.assign(HighlightRoot, {
+  Item: HighlightItem,
+  Indicator: HighlightIndicator,
+});
+
+export type { HighlightType, HighlightLeaveMode, HighlightProps };

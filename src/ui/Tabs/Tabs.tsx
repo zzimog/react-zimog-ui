@@ -1,4 +1,5 @@
-import { type ElementType, type HTMLAttributes, useId, useState } from 'react';
+import { useId, useState } from 'react';
+import { poly } from '../polymorphic';
 import { cn } from '../utils';
 import { TabsList } from './TabsList';
 import { TabsTrigger } from './TabsTrigger';
@@ -6,22 +7,14 @@ import { TabsContent } from './TabsContent';
 import { TabsContext } from './tabsContext';
 import classes from './tabsClasses';
 
-export type TabsProps = {
-  as?: ElementType;
+type TabsProps = {
   defaultValue?: string;
-  onChange?: (value: string) => void;
-} & HTMLAttributes<HTMLElement>;
+  onValueChange?: (value: string) => void;
+};
 
-export const Tabs = (inProps: TabsProps) => {
-  const {
-    as: Tag = 'div',
-    id,
-    defaultValue,
-    className,
-    children,
-    onChange,
-    ...props
-  } = inProps;
+const TabsRoot = poly.div<TabsProps>((Tag, inProps) => {
+  const { id, defaultValue, className, children, onValueChange, ...props } =
+    inProps;
 
   const uniqueId = useId();
   const baseId = id ?? uniqueId;
@@ -32,7 +25,7 @@ export const Tabs = (inProps: TabsProps) => {
     baseId,
     value,
     setValue(value: string) {
-      onChange?.(value);
+      onValueChange?.(value);
       setValue(value);
     },
   };
@@ -42,8 +35,12 @@ export const Tabs = (inProps: TabsProps) => {
       <TabsContext value={context}>{children}</TabsContext>
     </Tag>
   );
-};
+});
 
-Tabs.List = TabsList;
-Tabs.Trigger = TabsTrigger;
-Tabs.Content = TabsContent;
+export const Tabs = Object.assign(TabsRoot, {
+  List: TabsList,
+  Trigger: TabsTrigger,
+  Content: TabsContent,
+});
+
+export type { TabsProps };

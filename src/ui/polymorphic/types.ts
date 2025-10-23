@@ -5,13 +5,17 @@ export type PolyProps<T extends ElementType, P extends object = {}> = {
 } & P &
   Omit<ComponentPropsWithRef<T>, 'as'>;
 
-export interface RenderPoly<T extends ElementType, P extends object = {}> {
-  (Tag: T, props: P & ComponentPropsWithRef<T>): any /*JSX.Element*/;
-}
-
 export interface PolyElement<T extends ElementType, P extends object> {
   <E extends ElementType = T>(props: PolyProps<E, P>): JSX.Element;
+
+  /**
+   * @todo Need better typing
+   */
   [key: string]: any;
+}
+
+export interface RenderPoly<T extends ElementType, P extends object = {}> {
+  (Tag: T, props: P & ComponentPropsWithRef<T>): JSX.Element;
 }
 
 /*---------------------------------------------------------------------------*/

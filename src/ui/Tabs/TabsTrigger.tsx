@@ -1,26 +1,17 @@
-import { type ElementType, type HTMLAttributes, useRef } from 'react';
+import { type MouseEvent } from 'react';
+import { poly } from '../polymorphic';
 import { cn } from '../utils';
 import classes from './tabsClasses';
 import { useTabsContext } from './tabsContext';
-import { Highlight } from '../Highlight';
+import { HighlightItem } from '../Highlight';
 
 export type TabsTriggerProps = {
-  as?: ElementType;
-  index?: number;
   value: string;
   disabled?: boolean;
-} & HTMLAttributes<HTMLElement>;
+};
 
-export const TabsTrigger = (inProps: TabsTriggerProps) => {
-  const {
-    as: Tag = 'button',
-    value: valueProp,
-    disabled,
-    className,
-    ...props
-  } = inProps;
-
-  const ref = useRef<HTMLElement>(null);
+export const TabsTrigger = poly.button<TabsTriggerProps>((Tag, inProps) => {
+  const { value: valueProp, disabled, className, onClick, ...props } = inProps;
 
   const { baseId, value, setValue } = useTabsContext();
 
@@ -29,16 +20,17 @@ export const TabsTrigger = (inProps: TabsTriggerProps) => {
 
   const isActive = valueProp === value;
 
-  function handleClick() {
-    if (!isActive && !disabled) {
+  function handleClick(event: MouseEvent<HTMLElement>) {
+    if (!disabled) {
       setValue(valueProp);
     }
+
+    onClick?.(event);
   }
 
   return (
-    <Highlight.Item
+    <HighlightItem
       as={Tag}
-      ref={ref}
       id={triggerId}
       role="tab"
       aria-controls={itemId}
@@ -46,9 +38,9 @@ export const TabsTrigger = (inProps: TabsTriggerProps) => {
       data-selected={isActive}
       disabled={disabled}
       className={cn(classes.trigger, className)}
-      defaultSelected={isActive}
-      onClick={() => handleClick()}
+      selected={isActive}
+      onClick={handleClick}
       {...props}
     />
   );
-};
+});

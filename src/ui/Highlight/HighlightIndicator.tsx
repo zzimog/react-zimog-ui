@@ -1,10 +1,9 @@
-import { useCallback, useContext, useRef } from 'react';
+import { useCallback, useContext, useRef, useState } from 'react';
 import { poly } from '../polymorphic';
 import { usePresence, useMergedRefs } from '../hooks';
-import { cn, getRelativeRect, rectEquals } from '../utils';
-import classes from './highlightClasses';
+import { animationLoop, getRelativeRect, rectEquals, cn } from '../utils';
 import { HighlightContext } from './highlightContext';
-import { animationLoop } from '../utils/animation-loop';
+import classes from './highlightClasses';
 
 export type HighlightIndicatorProps = {
   visible?: boolean;
@@ -20,19 +19,19 @@ export const HighlightIndicator = poly.div<HighlightIndicatorProps>(
   (Tag, inProps) => {
     const {
       ref: refProp,
-      visible = true,
+      visible = false,
       rect,
       className,
       style,
       ...props
     } = inProps;
 
+    const [enabled, setEnabled] = useState(visible);
+
     const {
       rootRef,
       currentRef,
       persistent = false,
-      enabled = false,
-      setEnabled,
     } = useContext(HighlightContext) || {};
 
     const prevRectRef = useRef<DOMRect>(null);
@@ -41,6 +40,10 @@ export const HighlightIndicator = poly.div<HighlightIndicatorProps>(
       return animationLoop(() => {
         const root = rootRef?.current;
         const current = currentRef?.current;
+
+        if (!current) {
+          setEnabled(false);
+        }
 
         if (root && current) {
           const rootRect = root.getBoundingClientRect();
@@ -57,7 +60,8 @@ export const HighlightIndicator = poly.div<HighlightIndicatorProps>(
           if (!isVisible) {
             rootRef.current = null;
             currentRef.current = null;
-            return;
+
+            setEnabled(false);
           } else {
             const prevRect = prevRectRef.current;
             if (prevRect === null || !rectEquals(rect, prevRect)) {
@@ -71,25 +75,28 @@ export const HighlightIndicator = poly.div<HighlightIndicatorProps>(
               prevRectRef.current = rect;
             }
 
-            setEnabled?.(true);
+            setEnabled(true);
           }
         }
       });
     }, []);
 
-    const { ref: refPresence, present } = usePresence(
-      enabled && (persistent || visible)
-    );
+    const { ref: refPresence, present } = usePresence(persistent || enabled);
     const mergedRefs = useMergedRefs(refProp, ref, refPresence);
 
     return (
       <Tag
         ref={mergedRefs}
-        data-state={getState(visible)}
-        className={cn(classes({ persistent }), className)}
+        data-state={getState(enabled)}
+        className={cn(classes.indicator({ persistent }), className)}
         hidden={!present}
         style={{
-          ...(rect && getStyle(rect)),
+          ...(rect && {
+            ['--x']: `${rect.x}px`,
+            ['--y']: `${rect.y}px`,
+            ['--width']: `${rect.width}px`,
+            ['--height']: `${rect.height}px`,
+          }),
           ...style,
         }}
         {...props}
@@ -104,18 +111,4 @@ function getState(visible?: boolean) {
   }
 
   return visible ? 'visible' : 'hidden';
-}
-
-function getStyle(rect: {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}) {
-  return {
-    ['--x']: `${rect.x}px`,
-    ['--y']: `${rect.y}px`,
-    ['--width']: `${rect.width}px`,
-    ['--height']: `${rect.height}px`,
-  };
 }

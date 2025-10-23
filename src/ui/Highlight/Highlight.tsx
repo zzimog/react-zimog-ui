@@ -1,9 +1,11 @@
-import { useRef, useState } from 'react';
+import { useRef, useEffect, useCallback } from 'react';
 import { poly } from '../polymorphic';
 import { useMergedRefs } from '../hooks';
+import { cn } from '../utils';
 import { HighlightIndicator } from './HighlightIndicator';
 import { HighlightItem } from './HighlightItem';
 import { HighlightContext } from './highlightContext';
+import classes from './highlightClasses';
 
 export type HighlightType = 'click' | 'focus' | 'hover';
 
@@ -17,12 +19,10 @@ export const Highlight = poly.div<HighlightProps>((Tag, inProps) => {
     ref: refProp,
     type = 'click',
     persistent = false,
+    className,
     children,
     ...props
   } = inProps;
-
-  const initialEnabled = type === 'click';
-  const [enabled, setEnabled] = useState(initialEnabled);
 
   const ref = useRef<HTMLElement>(null);
   const mergedRefs = useMergedRefs(refProp, ref);
@@ -34,73 +34,24 @@ export const Highlight = poly.div<HighlightProps>((Tag, inProps) => {
     persistent,
     rootRef: ref,
     currentRef,
-    enabled,
-    setEnabled,
   };
 
-  /*
-  const prevRectRef = useRef<DOMRect>(null);
+  const handleDisable = useCallback(() => {
+    if (!persistent) {
+      currentRef.current = null;
+    }
+  }, [persistent]);
 
-  const __ref = useCallback(
-    (node: HTMLElement) => {
-      if (onRectChange) {
-        const cancelAnimation = animationLoop(() => {
-          const current = currentRef.current;
-
-          if (node && current) {
-            const rootRect = node!.getBoundingClientRect();
-            const currentRect = current!.getBoundingClientRect();
-
-            const rect = getRelativeRect(rootRect, currentRect);
-            const styles = getComputedStyle(current);
-
-            const isVisible =
-              styles?.display !== 'none' &&
-              styles?.opacity !== '0' &&
-              styles?.visibility !== 'hidden';
-
-            if (!isVisible) {
-              currentRef.current = null;
-              prevRectRef.current = null;
-            } else if (
-              prevRectRef.current === null ||
-              !rectEquals(rect, prevRectRef.current)
-            ) {
-              onRectChange?.(rect);
-              prevRectRef.current = rect;
-            }
-          }
-        });
-
-        function handleOut() {
-          currentRef.current = null;
-          prevRectRef.current = null;
-        }
-
-        if (type === 'hover') {
-          node.addEventListener('mouseleave', handleOut);
-        }
-        return () => {
-          cancelAnimation();
-          if (type === 'hover') {
-            node.removeEventListener('mouseleave', handleOut);
-          }
-        };
-      }
-    },
-    [onRectChange]
-  );
-  */
+  useEffect(() => {
+    const node = ref.current;
+    if (node && type === 'hover') {
+      node.addEventListener('mouseleave', handleDisable);
+      return () => node.removeEventListener('mouseleave', handleDisable);
+    }
+  }, []);
 
   return (
-    <Tag
-      ref={mergedRefs}
-      {...props}
-      onMouseLeave={() => {
-        currentRef.current = null;
-        setEnabled(false);
-      }}
-    >
+    <Tag ref={mergedRefs} className={cn(classes.root, className)} {...props}>
       <HighlightContext value={context}>{children}</HighlightContext>
     </Tag>
   );

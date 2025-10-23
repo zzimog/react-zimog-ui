@@ -2,13 +2,7 @@ import { cn } from '../utils';
 
 const treeClasses = {
   root: 'relative',
-  highlight: cn(
-    'right-0 ',
-    'w-(--width)',
-    'h-(--height)',
-    'translate-y-(--y)',
-    '[@media(hover:none)]:hidden'
-  ),
+  highlight: cn('right-0 ', 'translate-x-0', '[@media(hover:none)]:hidden'),
   list: {
     root: cn(
       'relative z-2',

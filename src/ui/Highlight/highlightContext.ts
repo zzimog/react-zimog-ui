@@ -6,8 +6,6 @@ type HighlightContextType = {
   persistent: boolean;
   rootRef: RefObject<HTMLElement | null>;
   currentRef: RefObject<HTMLElement | null>;
-  enabled: boolean;
-  setEnabled: (enabled: boolean) => void;
 };
 
 export const HighlightContext = createContext<HighlightContextType | undefined>(

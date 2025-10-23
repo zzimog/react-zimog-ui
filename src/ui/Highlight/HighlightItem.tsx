@@ -1,37 +1,64 @@
 import { useContext, useCallback } from 'react';
+import { poly } from '../polymorphic';
 import { useMergedRefs } from '../hooks';
 import { HighlightContext } from './highlightContext';
-import { poly } from '../polymorphic';
 
 export type HighlightItemProps = {
-  defaultSelected?: boolean;
+  selected?: boolean;
   disabled?: boolean;
 };
 
 export const HighlightItem = poly.div<HighlightItemProps>((Tag, inProps) => {
-  const { ref: refProp, defaultSelected, disabled, ...props } = inProps;
+  const { ref: refProp, selected, disabled, ...props } = inProps;
 
   const context = useContext(HighlightContext);
 
-  const ref = useCallback((node: HTMLElement) => {
-    if (context) {
-      const { type, currentRef } = context;
-      const eventType = type === 'hover' ? 'mouseover' : type;
+  const ref = useCallback(
+    (node: HTMLElement) => {
+      if (context) {
+        const { type, persistent, currentRef } = context;
 
-      function handler() {
-        if (!disabled) {
-          currentRef.current = node;
+        function handleEnable() {
+          if (!disabled) {
+            currentRef.current = node;
+          }
+        }
+
+        function handleDisable() {
+          if (!persistent) {
+            currentRef.current = null;
+          }
+        }
+
+        if (selected) {
+          handleEnable();
+        }
+
+        switch (type) {
+          case 'click':
+            node.addEventListener('click', handleEnable);
+            return () => node.removeEventListener('click', handleEnable);
+
+          case 'focus':
+            node.addEventListener('focus', handleEnable);
+            node.addEventListener('blur', handleDisable);
+            return () => {
+              node.removeEventListener('focus', handleEnable);
+              node.removeEventListener('blur', handleDisable);
+            };
+
+          case 'hover':
+            node.addEventListener('mouseover', handleEnable);
+            node.addEventListener('mouseleave', handleDisable);
+            return () => {
+              node.removeEventListener('mouseover', handleEnable);
+              node.removeEventListener('mouseleave', handleDisable);
+            };
         }
       }
-
-      if (defaultSelected) {
-        handler();
-      }
-
-      node.addEventListener(eventType, handler);
-      return () => node.removeEventListener(eventType, handler);
-    }
-  }, []);
+    },
+    [context]
+  );
 
   const mergedRefs = useMergedRefs(refProp, ref);
 

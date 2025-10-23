@@ -5,7 +5,7 @@ import {
   useState,
 } from 'react';
 import { cn } from '../utils';
-import { Highlight } from '../Highlight';
+import { Highlight, HighlightIndicator } from '../Highlight';
 import { type TreeItemData, TreeItem } from './TreeItem';
 import { TreeContext } from './treeContext';
 import classes from './treeClasses';
@@ -21,12 +21,6 @@ export const Tree = (inProps: TreeProps) => {
 
   const [state, setState] = useState<Record<string, boolean>>({});
 
-  /*
-  const [highlight, setHighlight] = useState(false);
-  const highlightRef = useRef<HTMLElement>(null);
-  const leaveFrameRef = useRef(0);
-  */
-
   const context = {
     treeState: state,
     setTreeState(index: string, open: boolean) {
@@ -37,37 +31,6 @@ export const Tree = (inProps: TreeProps) => {
     },
   };
 
-  /*
-  function handleRectChange(rect?: DOMRect) {
-    const node = highlightRef.current;
-    if (node && rect) {
-      const { x, y, width, height } = rect;
-
-      node.style.setProperty('--x', `${x}px`);
-      node.style.setProperty('--y', `${y}px`);
-      node.style.setProperty('--width', `${width}px`);
-      node.style.setProperty('--height', `${height}px`);
-
-      setHighlight(true);
-    }
-  }
-
-  function handleItemOver() {
-    cancelAnimationFrame(leaveFrameRef.current);
-  }
-
-  function handleItemLeave() {
-    cancelAnimationFrame(leaveFrameRef.current);
-    leaveFrameRef.current = requestAnimationFrame(() => {
-      setHighlight(false);
-    });
-  }
-
-  useEffect(() => {
-    return () => cancelAnimationFrame(leaveFrameRef.current);
-  }, []);
-  */
-
   return (
     <Highlight
       as={Tag}
@@ -75,7 +38,7 @@ export const Tree = (inProps: TreeProps) => {
       className={cn(classes.root, className)}
       {...props}
     >
-      <Highlight.Indicator className={classes.highlight} />
+      <HighlightIndicator className={classes.highlight} />
       <ul className={classes.list.root}>
         <TreeContext value={context}>
           {data.map((item, index) => (

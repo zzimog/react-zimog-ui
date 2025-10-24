@@ -14,8 +14,6 @@ export interface RenderPoly<T extends ElementType, P extends object = {}> {
   (Tag: T, props: P & ComponentPropsWithRef<T>): JSX.Element;
 }
 
-/*---------------------------------------------------------------------------*/
-
 export interface CreatePolyElement<T extends ElementType> {
   <P extends object = {}>(render: RenderPoly<T, P>): PolyElement<T, P>;
 }

@@ -13,8 +13,7 @@ const highlightClasses = {
       'rounded-shape',
       'bg-highlight',
       'transition-all',
-      'ease-linear',
-      'duration-200',
+      'duration-300',
     ],
     {
       variants: {
@@ -28,6 +27,7 @@ const highlightClasses = {
             'animate-duration-300',
             'data-[state="visible"]:with-fade-in',
             'data-[state="hidden"]:with-fade-out',
+            'data-[state="hidden"]:animate-delay-200',
           ],
         },
       },

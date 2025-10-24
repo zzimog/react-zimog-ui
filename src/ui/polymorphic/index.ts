@@ -7,7 +7,7 @@
 import type { JSX } from 'react';
 import type { CreatePolyElement, CreatePoly } from './types';
 import { tags } from './tags';
-import { createPoly } from './poly';
+import { createPoly } from './create-poly';
 
 type PolyTags = {
   [Tag in keyof JSX.IntrinsicElements]: CreatePolyElement<Tag>;

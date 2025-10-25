@@ -1,3 +1,8 @@
+/**
+ * Based on Radix UI Primitive component
+ * Ref: https://github.com/radix-ui/primitives/blob/main/packages/react/primitive/src/primitive.tsx
+ */
+
 import type { JSX, ElementType, ComponentPropsWithRef } from 'react';
 import { tags } from './tags';
 
@@ -12,14 +17,14 @@ export type PolyProps<E extends ElementType> = ComponentPropsWithRef<E> & {
 /**
  * @example
  *
- * type ComponentProps = PolyProps<typeof poly.button> & {
+ * type ComponentProps = PolyProps<typeof Poly.button> & {
  *   prop?: any;
  * };
  *
- * const Componen = (inProps: ComponentProps) => {
+ * const Component = (inProps: ComponentProps) => {
  *   const { prop, ...props } = inProps;
  *
- *   return <poly.button {...props} />;
+ *   return <Poly.button {...props} />;
  * };
  */
 export const Poly = tags.reduce((poly, tag) => {

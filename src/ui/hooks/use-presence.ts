@@ -13,10 +13,6 @@ import {
 
 type PresenceState = 'mounted' | 'unmounting' | 'unmounted';
 
-function getAnimationName(styles: CSSStyleDeclaration | null) {
-  return styles?.animationName || 'none';
-}
-
 export function usePresence(present: boolean) {
   const initState = present ? 'mounted' : 'unmounted';
   const [state, setState] = useState<PresenceState>(initState);
@@ -111,4 +107,8 @@ export function usePresence(present: boolean) {
       };
     }, []),
   };
+}
+
+function getAnimationName(styles: CSSStyleDeclaration | null) {
+  return styles?.animationName || 'none';
 }

@@ -1,13 +1,13 @@
-import { poly } from '../polymorphic';
+import { type PolyProps, Poly } from '../polymorphic';
 import { cn } from '../utils';
 import { useTabsContext } from './tabsContext';
 import classes from './tabsClasses';
 
-export type TabsContentProps = {
+export type TabsContentProps = PolyProps<typeof Poly.div> & {
   value: string;
 };
 
-export const TabsContent = poly.div<TabsContentProps>((Tag, inProps) => {
+export const TabsContent = (inProps: TabsContentProps) => {
   const { value: valueProp, className, children, ...props } = inProps;
 
   const { baseId, value } = useTabsContext();
@@ -18,7 +18,7 @@ export const TabsContent = poly.div<TabsContentProps>((Tag, inProps) => {
   const isActive = value === valueProp;
 
   return (
-    <Tag
+    <Poly.div
       id={itemId}
       role="tabpanel"
       aria-labelledby={triggerId}
@@ -27,6 +27,6 @@ export const TabsContent = poly.div<TabsContentProps>((Tag, inProps) => {
       {...props}
     >
       {isActive && children}
-    </Tag>
+    </Poly.div>
   );
-});
+};

@@ -1,5 +1,5 @@
 import { useId, useState } from 'react';
-import { poly } from '../polymorphic';
+import { type PolyProps, Poly } from '../polymorphic';
 import { cn } from '../utils';
 import { TabsList } from './TabsList';
 import { TabsTrigger } from './TabsTrigger';
@@ -7,12 +7,12 @@ import { TabsContent } from './TabsContent';
 import { TabsContext } from './tabsContext';
 import classes from './tabsClasses';
 
-type TabsProps = {
+export type TabsProps = PolyProps<typeof Poly.div> & {
   defaultValue?: string;
   onValueChange?: (value: string) => void;
 };
 
-const TabsRoot = poly.div<TabsProps>((Tag, inProps) => {
+export const Tabs = (inProps: TabsProps) => {
   const { id, defaultValue, className, children, onValueChange, ...props } =
     inProps;
 
@@ -31,16 +31,12 @@ const TabsRoot = poly.div<TabsProps>((Tag, inProps) => {
   };
 
   return (
-    <Tag className={cn(classes.root, className)} {...props}>
+    <Poly.div className={cn(classes.root, className)} {...props}>
       <TabsContext value={context}>{children}</TabsContext>
-    </Tag>
+    </Poly.div>
   );
-});
+};
 
-export const Tabs = Object.assign(TabsRoot, {
-  List: TabsList,
-  Trigger: TabsTrigger,
-  Content: TabsContent,
-});
-
-export type { TabsProps };
+Tabs.List = TabsList;
+Tabs.Trigger = TabsTrigger;
+Tabs.Content = TabsContent;

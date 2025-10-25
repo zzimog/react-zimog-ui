@@ -1,16 +1,16 @@
 import { useState } from 'react';
-import { poly } from '../polymorphic';
+import { type PolyProps, Poly } from '../polymorphic';
 import { cn } from '../utils';
 import { Highlight } from '../Highlight';
 import { type TreeItemData, TreeItem } from './TreeItem';
 import { TreeContext } from './treeContext';
 import classes from './treeClasses';
 
-type TreeProps = {
+export type TreeProps = PolyProps<typeof Poly.div> & {
   data?: TreeItemData[];
 };
 
-const TreeRoot = poly.div<TreeProps>((Tag, inProps) => {
+export const Tree = (inProps: TreeProps) => {
   const { data = [], className, ...props } = inProps;
 
   const [state, setState] = useState<Record<string, boolean>>({});
@@ -27,13 +27,12 @@ const TreeRoot = poly.div<TreeProps>((Tag, inProps) => {
 
   return (
     <Highlight
-      as={Tag}
       type="hover"
       leaveMode="items"
       className={cn(classes.root, className)}
       {...props}
     >
-      <Highlight.Indicator className={classes.highlight} />
+      <Highlight.Indicator bound="right" className={classes.highlight} />
       <ul className={classes.list.root}>
         <TreeContext value={context}>
           {data.map((item, index) => (
@@ -48,10 +47,6 @@ const TreeRoot = poly.div<TreeProps>((Tag, inProps) => {
       </ul>
     </Highlight>
   );
-});
+};
 
-export const Tree = Object.assign(TreeRoot, {
-  Item: TreeItem,
-});
-
-export type { TreeProps };
+Tree.Item = TreeItem;

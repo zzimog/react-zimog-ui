@@ -1,14 +1,13 @@
-import { poly } from '../polymorphic';
+import { type PolyProps, Poly } from '../polymorphic';
 import { cn } from '../utils';
 import { Highlight } from '../Highlight';
 import classes from './tabsClasses';
 
-export const TabsList = poly.div((Tag, inProps) => {
+export const TabsList = (inProps: PolyProps<typeof Poly.div>) => {
   const { className, children, ...props } = inProps;
 
   return (
     <Highlight
-      as={Tag}
       role="tabslist"
       className={cn(classes.list.root, className)}
       persistent
@@ -18,4 +17,4 @@ export const TabsList = poly.div((Tag, inProps) => {
       <div className={classes.list.tabs}>{children}</div>
     </Highlight>
   );
-});
+};

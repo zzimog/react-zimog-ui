@@ -1,74 +1,45 @@
-import { Children, type HTMLAttributes, type Ref } from 'react';
+import { type PolyProps, Poly } from '../polymorphic';
 import { cn } from '../utils';
 import type { ButtonColor, ButtonSize, ButtonVariant } from './Button';
 import ButtonGroupContext from './buttonGroupContext';
+import classes from './buttonClasses';
 
-export type ButtonGroupProps = {
+export type ButtonGroupProps = PolyProps<typeof Poly.div> & {
+  column?: boolean;
+  joined?: boolean;
   size?: ButtonSize;
   variant?: ButtonVariant;
   color?: ButtonColor;
   disabled?: boolean;
-  direction?: 'row' | 'col';
-  joined?: boolean;
-  ref?: Ref<HTMLDivElement>;
-} & HTMLAttributes<HTMLDivElement>;
+};
 
 export const ButtonGroup = (inProps: ButtonGroupProps) => {
   const {
-    direction = 'row',
+    column = false,
     joined = false,
     size,
     variant,
     color,
     disabled,
-    children,
     className,
-    ref,
+    children,
     ...props
   } = inProps;
 
-  const childrenCount = Children.count(children);
+  const context = {
+    column,
+    joined,
+    size,
+    variant,
+    color,
+    disabled,
+  };
 
-  function getPosClassName(pos: number) {
-    const isRow = direction === 'row';
-    const isFirst = pos === 0;
-    const isLast = pos === childrenCount - 1;
-
-    if (isFirst) {
-      return isRow ? 'rounded-r-none' : 'rounded-b-none';
-    } else if (isLast) {
-      return isRow ? 'rounded-l-none' : 'rounded-t-none';
-    } else {
-      return 'rounded-none';
-    }
-  }
+  const classNames = classes.group({ column, joined });
 
   return (
-    <div
-      ref={ref}
-      role="group"
-      className={cn(
-        'inline-flex',
-        'items-center',
-        joined ? 'gap-[1px]' : 'gap-1',
-        direction === 'col' && 'flex-col',
-        className
-      )}
-      {...props}
-    >
-      {Children.map(children, (child, index) => (
-        <ButtonGroupContext
-          value={{
-            size,
-            variant,
-            color,
-            disabled,
-            className: cn('w-full', joined && getPosClassName(index)),
-          }}
-        >
-          {child}
-        </ButtonGroupContext>
-      ))}
-    </div>
+    <Poly.div role="group" className={cn(classNames, className)} {...props}>
+      <ButtonGroupContext value={context}>{children}</ButtonGroupContext>
+    </Poly.div>
   );
 };

@@ -19,10 +19,8 @@ const highlightClasses = {
       variants: {
         hover: {
           true: '[@media(hover:none)]:hidden',
-          false: null,
         },
         persistent: {
-          true: null,
           false: [
             'animate-duration-300',
             'data-[state="visible"]:with-fade-in',
@@ -46,7 +44,6 @@ const highlightClasses = {
           'not-active:delay-100',
           '[@media(hover:none)]:active:bg-highlight',
         ],
-        false: null,
       },
     },
     defaultVariants: {

@@ -1,16 +1,16 @@
 import { useContext, useCallback } from 'react';
-import { poly } from '../polymorphic';
+import { type PolyProps, Poly } from '../polymorphic';
 import { useMergedRefs } from '../hooks';
+import { cn } from '../utils';
 import { HighlightContext } from './highlightContext';
 import classes from './highlightClasses';
-import { cn } from '../utils';
 
-export type HighlightItemProps = {
+export type HighlightItemProps = PolyProps<typeof Poly.div> & {
   selected?: boolean;
   disabled?: boolean;
 };
 
-export const HighlightItem = poly.div<HighlightItemProps>((Tag, inProps) => {
+export const HighlightItem = (inProps: HighlightItemProps) => {
   const { ref: refProp, selected, disabled, className, ...props } = inProps;
 
   const context = useContext(HighlightContext);
@@ -70,8 +70,9 @@ export const HighlightItem = poly.div<HighlightItemProps>((Tag, inProps) => {
   const mergedRefs = useMergedRefs(refProp, ref);
 
   return (
-    <Tag
+    <Poly.div
       ref={mergedRefs}
+      data-highlight={isHover}
       className={cn(
         classes.item({
           hover: isHover,
@@ -81,4 +82,4 @@ export const HighlightItem = poly.div<HighlightItemProps>((Tag, inProps) => {
       {...props}
     />
   );
-});
+};

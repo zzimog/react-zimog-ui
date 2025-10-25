@@ -1,11 +1,5 @@
 import { Home } from 'lucide-react';
-import {
-  type ButtonColor,
-  type ButtonVariant,
-  Button,
-  ButtonGroup,
-  capitalize,
-} from '@ui';
+import { type ButtonColor, type ButtonVariant, Button, capitalize } from '@ui';
 import { DemoBox } from './DemoBox';
 import { DemoSection } from './DemoSection';
 
@@ -33,23 +27,23 @@ const buttons = (
 
     <DemoSection title="Variants">
       {buttonColors.map((color, key) => (
-        <ButtonGroup key={key} color={color} direction="col">
+        <Button.Group key={key} color={color} column>
           {buttonVariants.map((variant, key) => (
             <Button key={key} variant={variant}>
               {`${capitalize(color)} ${variant}`}
             </Button>
           ))}
-        </ButtonGroup>
+        </Button.Group>
       ))}
     </DemoSection>
 
     <DemoSection title="Icons" column>
-      <ButtonGroup>
+      <Button.Group>
         <Button icon={<Home />} size="sm" />
         <Button icon={<Home />} size="md" />
         <Button icon={<Home />} size="lg" />
-      </ButtonGroup>
-      <ButtonGroup>
+      </Button.Group>
+      <Button.Group>
         <Button icon={<Home />} size="sm">
           Home
         </Button>
@@ -59,39 +53,39 @@ const buttons = (
         <Button icon={<Home />} size="lg">
           Home
         </Button>
-      </ButtonGroup>
+      </Button.Group>
     </DemoSection>
 
     <DemoSection title="Loading" column>
-      <ButtonGroup size="sm">
+      <Button.Group size="sm">
         <Button loading />
         <Button loading>Loading</Button>
-      </ButtonGroup>
-      <ButtonGroup color="primary">
+      </Button.Group>
+      <Button.Group color="primary">
         <Button loading />
         <Button loading>Loading</Button>
-      </ButtonGroup>
-      <ButtonGroup size="lg">
+      </Button.Group>
+      <Button.Group size="lg">
         <Button loading />
         <Button loading>Loading</Button>
-      </ButtonGroup>
+      </Button.Group>
     </DemoSection>
 
     <DemoSection title="Groups" column>
-      <ButtonGroup>
+      <Button.Group>
         <Button>Buttons...</Button>
         <Button>...group</Button>
-      </ButtonGroup>
-      <ButtonGroup size="sm" color="primary" joined>
+      </Button.Group>
+      <Button.Group size="sm" color="primary" joined>
         <Button>Small...</Button>
         <Button color="secondary">...joined...</Button>
         <Button color="danger">...buttons</Button>
-      </ButtonGroup>
-      <ButtonGroup color="primary" joined disabled>
+      </Button.Group>
+      <Button.Group color="primary" joined disabled>
         <Button>Disabled...</Button>
         <Button>...joined...</Button>
         <Button>...buttons</Button>
-      </ButtonGroup>
+      </Button.Group>
     </DemoSection>
   </DemoBox>
 );

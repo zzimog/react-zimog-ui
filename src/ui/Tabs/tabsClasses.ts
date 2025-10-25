@@ -1,7 +1,7 @@
 const tabsClasses = {
   root: 'relative flex flex-col',
   list: {
-    root: 'border-b border-neutral-500/25',
+    root: 'border-b border-border',
     tabs: 'relative z-10 flex gap-4 pb-3',
   },
   trigger: [

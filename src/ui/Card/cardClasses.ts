@@ -3,9 +3,9 @@ import { cva } from 'class-variance-authority';
 const cardClasses = cva(
   [
     'p-8',
-    'rounded-md',
+    'rounded-shape',
     'border',
-    'border-neutral-500/20',
+    'border-border',
     'bg-neutral-100',
     'dark:bg-neutral-900',
   ],
@@ -14,7 +14,6 @@ const cardClasses = cva(
       opticalCorrection: {
         top: 'pt-6',
         both: 'py-6',
-        none: null,
       },
     },
   }

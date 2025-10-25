@@ -7,29 +7,26 @@ const buttonClasses = cva(
     'items-center',
     'gap-1',
     'p-2',
-    'rounded-md',
+    'rounded-shape',
     'text-black',
     'whitespace-nowrap',
     'cursor-pointer',
     'transition-all',
-    'duration-100',
-    'hover:[--bg-opacity:75%]',
+    'duration-200',
     'not-disabled:active:scale-95',
     'disabled:opacity-50',
     'disabled:cursor-not-allowed',
+    // outline
     'outline-0',
-    'outline-primary/30',
+    'outline-offset-2',
+    'outline-(--base)/50',
     'focus-visible:outline-4',
+    // icon
     '[&_svg]:shrink-0',
     '[&_svg]:pointer-events-none',
     '[&_svg:not([class*="size-"])]:size-6',
   ],
   {
-    defaultVariants: {
-      size: 'md',
-      variant: 'solid',
-      color: 'default',
-    },
     variants: {
       size: {
         sm: 'p-1 text-sm leading-6',
@@ -44,38 +41,72 @@ const buttonClasses = cva(
       },
       color: {
         default: [
-          'text-black dark:text-white',
-          'bg-var-gray-300 border-gray-300',
-          'dark:bg-var-gray-700 dark:border-gray-500',
+          '[--base:var(--color-gray-500)]',
+          'bg-gray-500',
+          'border-gray-500',
+          'text-white',
         ],
-        primary: 'bg-var-primary border-primary',
-        secondary: 'bg-var-secondary border-secondary',
-        danger: 'bg-var-red-600 border-red-600',
+        primary: [
+          '[--base:var(--color-primary)]',
+          'bg-primary',
+          'border-primary',
+          'text-primary-contrast',
+        ],
+        secondary: [
+          '[--base:var(--color-secondary)]',
+          'bg-secondary',
+          'border-secondary',
+          'text-secondary-contrast',
+        ],
+        danger: [
+          '[--base:var(--color-danger)]',
+          'bg-danger',
+          'border-danger',
+          'text-danger-contrast',
+        ],
       },
       loading: {
         true: 'cursor-progress!',
       },
+      joined: {
+        col: 'not-first:rounded-t-none not-last:rounded-b-none',
+        row: 'not-first:rounded-l-none not-last:rounded-r-none',
+      },
     },
     compoundVariants: [
       {
-        variant: 'solid',
-        className: 'shadow-xs',
-      },
-      {
         variant: ['outlined', 'dashed', 'ghost'],
         className: [
+          'text-black',
           'dark:text-white',
-          '[--bg-opacity:0%]',
-          'hover:[--bg-opacity:10%]',
+          'bg-transparent',
+          'dark:bg-transparent',
+          'hover:bg-(--base)/25',
+          'not-disabled:active:bg-(--base)/25',
         ],
       },
-      {
-        variant: ['outlined', 'dashed', 'ghost'],
-        color: 'default',
-        className: ['hover:[--bg-opacity:40%]'],
-      },
     ],
+    defaultVariants: {
+      size: 'md',
+      variant: 'solid',
+      color: 'default',
+    },
   }
 );
 
-export default buttonClasses;
+const buttonGroupClasses = cva('group inline-flex items-center', {
+  variants: {
+    column: {
+      true: 'flex-col items-stretch',
+    },
+    joined: {
+      true: 'gap-px',
+      false: 'gap-1',
+    },
+  },
+});
+
+export default {
+  button: buttonClasses,
+  group: buttonGroupClasses,
+};

@@ -1,10 +1,11 @@
-export type SpinnerProps = {
+import type { SVGAttributes } from 'react';
+
+export type SpinnerProps = Omit<SVGAttributes<SVGElement>, 'children'> & {
   size?: number;
-  className?: string;
 };
 
 export const Spinner = (inProps: SpinnerProps) => {
-  const { size = 24, className } = inProps;
+  const { size = 24, ...props } = inProps;
 
   return (
     <svg
@@ -12,7 +13,7 @@ export const Spinner = (inProps: SpinnerProps) => {
       width={size}
       height={size}
       viewBox="0 0 24 24"
-      className={className}
+      {...props}
     >
       <path
         fill="currentColor"

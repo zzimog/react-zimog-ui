@@ -54,9 +54,9 @@ export function usePresence(present: boolean) {
           }
         }
       }
-    }
 
-    prevPresentRef.current = present;
+      prevPresentRef.current = present;
+    }
   }, [present]);
 
   return {

@@ -1,49 +1,44 @@
-import {
-  type Ref,
-  type ElementType,
-  type ReactNode,
-  type HTMLAttributes,
-  useState,
-} from 'react';
+import { type Ref, type ElementType, type ReactNode, useState } from 'react';
+import { type PolyProps, Poly } from '../polymorphic';
 import { cn } from '../utils';
 import { AccordionItem } from './AccordionItem';
 import { AccordionContext } from './accordionContext';
 import classes from './accordionClasses';
 import { Highlight } from '../Highlight';
 
-type AccordionValue = string | string[] | undefined;
+export type AccordionValue = string | string[] | undefined;
 
-type AccordionProps = {
+export type AccordionBaseProps = PolyProps<typeof Poly.div> & {
   ref?: Ref<HTMLElement>;
   as?: ElementType;
   children: ReactNode;
-} & (
-  | {
-      multiple?: false;
-      defaultValue?: string;
-      value?: string;
-      onValueChange?: (value?: string) => void;
-    }
-  | {
-      multiple: true;
-      defaultValue?: string[];
-      value?: string[];
-      onValueChange?: (value: string[]) => void;
-    }
-) &
-  Omit<HTMLAttributes<HTMLElement>, 'defaultValue' | 'value' | 'onChange'>;
+};
 
-const AccordionRoot = (inProps: AccordionProps) => {
+export type AccordionSingleProps = {
+  multiple?: false;
+  defaultValue?: string;
+  value?: string;
+  onValueChange?: (value?: string) => void;
+};
+
+export type AccordionMultipleProps = {
+  multiple: true;
+  defaultValue?: string[];
+  value?: string[];
+  onValueChange?: (value: string[]) => void;
+};
+
+export type AccordionProps = AccordionBaseProps &
+  (AccordionSingleProps | AccordionMultipleProps);
+
+export const Accordion = (inProps: AccordionProps) => {
   const {
-    as: Tag = 'div',
     multiple,
     defaultValue,
     value: valueProp,
     className,
     children,
     onValueChange,
-    onMouseOver,
-    onMouseLeave,
     ...props
   } = inProps;
 
@@ -81,20 +76,11 @@ const AccordionRoot = (inProps: AccordionProps) => {
   };
 
   return (
-    <Highlight
-      as={Tag}
-      type="hover"
-      className={cn(classes.root, className)}
-      {...props}
-    >
+    <Highlight type="hover" className={cn(classes.root, className)} {...props}>
       <Highlight.Indicator className={classes.highlight} />
       <AccordionContext value={context}>{children}</AccordionContext>
     </Highlight>
   );
 };
 
-export const Accordion = Object.assign(AccordionRoot, {
-  Item: AccordionItem,
-});
-
-export type { AccordionProps };
+Accordion.Item = AccordionItem;

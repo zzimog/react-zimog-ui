@@ -1,17 +1,17 @@
 import { useCallback } from 'react';
-import { poly } from '../polymorphic';
+import { type PolyProps, Poly } from '../polymorphic';
 import { useMergedRefs } from '../hooks';
 import { cn } from '../utils';
 import { Highlight } from '../Highlight';
 import { useTabsContext } from './tabsContext';
 import classes from './tabsClasses';
 
-export type TabsTriggerProps = {
+export type TabsTriggerProps = PolyProps<typeof Poly.div> & {
   value: string;
   disabled?: boolean;
 };
 
-export const TabsTrigger = poly.button<TabsTriggerProps>((Tag, inProps) => {
+export const TabsTrigger = (inProps: TabsTriggerProps) => {
   const {
     ref: refProp,
     value: valueProp,
@@ -45,7 +45,6 @@ export const TabsTrigger = poly.button<TabsTriggerProps>((Tag, inProps) => {
 
   return (
     <Highlight.Item
-      as={Tag}
       ref={mergedRefs}
       id={triggerId}
       role="tab"
@@ -58,4 +57,4 @@ export const TabsTrigger = poly.button<TabsTriggerProps>((Tag, inProps) => {
       {...props}
     />
   );
-});
+};

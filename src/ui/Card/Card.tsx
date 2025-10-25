@@ -1,22 +1,15 @@
-import type { ElementType, HTMLAttributes, Ref } from 'react';
+import { type PolyProps, Poly } from '../polymorphic';
 import { cn } from '../utils';
-import cardClasses from './cardClasses';
+import classes from './cardClasses';
 
-export type CardProps = {
-  as?: ElementType;
-  ref?: Ref<HTMLElement>;
-  opticalCorrection?: 'top' | 'both' | 'none';
-} & HTMLAttributes<HTMLElement>;
+export type CardProps = PolyProps<typeof Poly.div> & {
+  opticalCorrection?: 'top' | 'both';
+};
 
 export const Card = (inProps: CardProps) => {
-  const {
-    as: Tag = 'div',
-    opticalCorrection = 'none',
-    className,
-    ...props
-  } = inProps;
+  const { opticalCorrection, className, ...props } = inProps;
 
-  const classes = cardClasses({ opticalCorrection });
+  const classNames = classes({ opticalCorrection });
 
-  return <Tag className={cn(classes, className)} {...props} />;
+  return <Poly.div className={cn(classNames, className)} {...props} />;
 };

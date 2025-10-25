@@ -1,5 +1,5 @@
 import { useRef, useEffect, useCallback } from 'react';
-import { poly } from '../polymorphic';
+import { type PolyProps, Poly } from '../polymorphic';
 import { useMergedRefs } from '../hooks';
 import { cn } from '../utils';
 import { HighlightIndicator } from './HighlightIndicator';
@@ -7,17 +7,17 @@ import { HighlightItem } from './HighlightItem';
 import { HighlightContext } from './highlightContext';
 import classes from './highlightClasses';
 
-type HighlightType = 'click' | 'focus' | 'hover';
+export type HighlightType = 'click' | 'focus' | 'hover';
 
-type HighlightLeaveMode = 'parent' | 'items';
+export type HighlightLeaveMode = 'parent' | 'items';
 
-type HighlightProps = {
+export type HighlightProps = PolyProps<typeof Poly.div> & {
   type?: HighlightType;
   leaveMode?: HighlightLeaveMode;
   persistent?: boolean;
 };
 
-const HighlightRoot = poly.div<HighlightProps>((Tag, inProps) => {
+export const Highlight = (inProps: HighlightProps) => {
   const {
     ref: refProp,
     type = 'click',
@@ -56,15 +56,15 @@ const HighlightRoot = poly.div<HighlightProps>((Tag, inProps) => {
   }, [type, leaveMode]);
 
   return (
-    <Tag ref={mergedRefs} className={cn(classes.root, className)} {...props}>
+    <Poly.div
+      ref={mergedRefs}
+      className={cn(classes.root, className)}
+      {...props}
+    >
       <HighlightContext value={context}>{children}</HighlightContext>
-    </Tag>
+    </Poly.div>
   );
-});
+};
 
-export const Highlight = Object.assign(HighlightRoot, {
-  Item: HighlightItem,
-  Indicator: HighlightIndicator,
-});
-
-export type { HighlightType, HighlightLeaveMode, HighlightProps };
+Highlight.Item = HighlightItem;
+Highlight.Indicator = HighlightIndicator;

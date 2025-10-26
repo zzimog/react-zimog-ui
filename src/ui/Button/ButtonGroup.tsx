@@ -1,10 +1,10 @@
+import type { ButtonColor, ButtonSize, ButtonVariant } from './Button';
 import { type PolyProps, Poly } from '../polymorphic';
 import { cn } from '../utils';
-import type { ButtonColor, ButtonSize, ButtonVariant } from './Button';
-import ButtonGroupContext from './buttonGroupContext';
+import { ButtonGroupContext } from './buttonGroupContext';
 import classes from './buttonClasses';
 
-export type ButtonGroupProps = PolyProps<typeof Poly.div> & {
+export type ButtonGroupProps = PolyProps<'div'> & {
   column?: boolean;
   joined?: boolean;
   size?: ButtonSize;

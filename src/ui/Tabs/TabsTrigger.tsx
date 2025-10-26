@@ -6,9 +6,8 @@ import { Highlight } from '../Highlight';
 import { useTabsContext } from './tabsContext';
 import classes from './tabsClasses';
 
-export type TabsTriggerProps = PolyProps<typeof Poly.div> & {
+export type TabsTriggerProps = PolyProps<'button'> & {
   value: string;
-  disabled?: boolean;
 };
 
 export const TabsTrigger = (inProps: TabsTriggerProps) => {
@@ -44,17 +43,17 @@ export const TabsTrigger = (inProps: TabsTriggerProps) => {
   const mergedRefs = useMergedRefs(refProp, ref);
 
   return (
-    <Highlight.Item
-      ref={mergedRefs}
-      id={triggerId}
-      role="tab"
-      aria-controls={itemId}
-      aria-selected={isActive}
-      data-selected={isActive}
-      className={cn(classes.trigger, className)}
-      selected={isActive}
-      disabled={disabled}
-      {...props}
-    />
+    <Highlight.Item asChild selected={isActive} disabled={disabled}>
+      <Poly.button
+        ref={mergedRefs}
+        id={triggerId}
+        role="tab"
+        aria-controls={itemId}
+        aria-selected={isActive}
+        data-selected={isActive}
+        className={cn(classes.trigger, className)}
+        {...props}
+      />
+    </Highlight.Item>
   );
 };

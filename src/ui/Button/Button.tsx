@@ -3,7 +3,7 @@ import { type PolyProps, Poly } from '../polymorphic';
 import { cn } from '../utils';
 import { Spinner } from '../Spinner';
 import { ButtonGroup } from './ButtonGroup';
-import ButtonGroupContext from './buttonGroupContext';
+import { ButtonGroupContext } from './buttonGroupContext';
 import classes from './buttonClasses';
 
 export type ButtonSize = 'sm' | 'md' | 'lg';
@@ -35,7 +35,7 @@ export const Button = (inProps: ButtonProps) => {
 
   const context = useContext(ButtonGroupContext);
 
-  const mergedSize = context?.size || size;
+  const mergedSize = size || context?.size;
   const mergedVariant = variant || context?.variant;
   const mergedColor = color || context?.color;
   const mergedDisabled = loading || disabled || context?.disabled || false;

@@ -1,7 +1,7 @@
 import { createContext } from 'react';
 import type { ButtonVariant, ButtonColor, ButtonSize } from './Button';
 
-export type ButtonGroupContextType = {
+type ButtonGroupContextType = {
   column?: boolean;
   joined?: boolean;
   size?: ButtonSize;
@@ -10,6 +10,6 @@ export type ButtonGroupContextType = {
   disabled?: boolean;
 };
 
-const ButtonGroupContext = createContext<ButtonGroupContextType>({});
-
-export default ButtonGroupContext;
+export const ButtonGroupContext = createContext<
+  ButtonGroupContextType | undefined
+>(undefined);

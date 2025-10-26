@@ -18,7 +18,8 @@ const accordionClasses = {
       'items-center',
       'p-3',
       'cursor-pointer',
-      'not-hover:text-muted',
+      'transition-colors',
+      'data-[expanded="false"]:not-hover:text-muted',
       'data-[expanded="true"]:[&_svg]:-scale-y-100'
     ),
     arrow: cn(

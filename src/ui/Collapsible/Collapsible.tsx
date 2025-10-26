@@ -3,29 +3,19 @@
  * Ref: https://github.com/radix-ui/primitives/blob/main/packages/react/collapsible/src/collapsible.tsx
  */
 
-import {
-  type ElementType,
-  type HTMLAttributes,
-  type RefAttributes,
-  useRef,
-  useEffect,
-  useLayoutEffect,
-  useState,
-} from 'react';
+import { useRef, useEffect, useLayoutEffect, useState } from 'react';
 import { usePresence, useMergedRefs } from '../hooks';
 import classes from './collapsibleClasses';
 import { cn } from '../utils';
+import { type PolyProps, Poly } from '../polymorphic';
 
-export type CollapsibleProps = {
-  as?: ElementType;
+export type CollapsibleProps = PolyProps<'div'> & {
   open?: boolean;
   dir?: 'vertical' | 'horizontal';
-} & HTMLAttributes<HTMLElement> &
-  RefAttributes<HTMLElement>;
+};
 
 export const Collapsible = (inProps: CollapsibleProps) => {
   const {
-    as: Tag = 'div',
     ref: refProp,
     open = false,
     dir = 'vertical',
@@ -83,19 +73,21 @@ export const Collapsible = (inProps: CollapsibleProps) => {
   }, [open, present]);
 
   return (
-    <Tag
+    <Poly.div
       ref={mergedRefs}
-      data-state={open ? 'open' : 'closed'}
+      data-open={open}
       className={cn(classes({ dir }), className)}
       hidden={!shouldRender}
       style={{
-        ['--width']: width ? `${width}px` : undefined,
-        ['--height']: height ? `${height}px` : undefined,
         ...style,
+        ...{
+          '--width': width ? `${width}px` : undefined,
+          '--height': height ? `${height}px` : undefined,
+        },
       }}
       {...props}
     >
       {shouldRender && children}
-    </Tag>
+    </Poly.div>
   );
 };

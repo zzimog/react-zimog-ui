@@ -11,13 +11,13 @@ type PolyTags = {
 };
 
 export type PolyProps<E extends ElementType> = ComponentPropsWithRef<E> & {
-  as?: ElementType;
+  as?: ElementType | 'child';
 };
 
 /**
  * @example
  *
- * type ComponentProps = PolyProps<typeof Poly.button> & {
+ * type ComponentProps = PolyProps<'button'> & {
  *   prop?: any;
  * };
  *
@@ -34,6 +34,7 @@ export const Poly = tags.reduce((poly, tag) => {
 
     return <Comp {...props} />;
   };
+
   return {
     ...poly,
     [tag]: PolyElement,

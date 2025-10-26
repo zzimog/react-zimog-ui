@@ -4,12 +4,12 @@ const collapsibleClasses = cva(['overflow-hidden', 'animate-duration-300'], {
   variants: {
     dir: {
       vertical: [
-        'data-[state="open"]:with-height-grow',
-        'data-[state="closed"]:with-height-shrink',
+        'data-[open="true"]:with-height-grow',
+        'data-[open="false"]:with-height-shrink',
       ],
       horizontal: [
-        'data-[state="open"]:with-width-grow',
-        'data-[state="closed"]:with-width-shrink',
+        'data-[open="true"]:with-width-grow',
+        'data-[open="false"]:with-width-shrink',
       ],
     },
   },

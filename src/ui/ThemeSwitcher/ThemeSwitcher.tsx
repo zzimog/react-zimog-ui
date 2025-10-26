@@ -1,10 +1,10 @@
 import { Moon, Sun } from 'lucide-react';
 import { Button } from '../Button';
-import { useColorScheme } from '../hooks';
+import { useTheme } from '../hooks';
 import { capitalize } from '../utils';
 
 export const ThemeSwitcher = () => {
-  const [scheme, setScheme] = useColorScheme();
+  const [scheme, setScheme] = useTheme();
 
   const isDark = scheme === 'dark';
 

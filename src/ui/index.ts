@@ -10,6 +10,7 @@ export * from './Card';
 export * from './Collapsible';
 export * from './Highlight';
 export * from './Input';
+export * from './Popover';
 export * from './Popper';
 export * from './Popper';
 export * from './Spinner';

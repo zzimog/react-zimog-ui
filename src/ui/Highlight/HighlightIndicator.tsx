@@ -17,7 +17,7 @@ export type HighlightIndicatorProps = PolyProps<typeof Poly.div> & {
   y?: number;
   width?: number;
   height?: number;
-  bound?: 'top' | 'right' | 'bottom' | 'left';
+  bound?: 'top' | 'right' | 'bottom' | 'left' | 'x' | 'y';
 };
 
 export const HighlightIndicator = (inProps: HighlightIndicatorProps) => {
@@ -106,21 +106,21 @@ export const HighlightIndicator = (inProps: HighlightIndicatorProps) => {
     persistent,
   });
 
-  const styles = {
-    ['--x']: x ? `${x}px` : undefined,
-    ['--y']: y ? `${y}px` : undefined,
-    ['--width']: width ? `${width}px` : undefined,
-    ['--height']: height ? `${height}px` : undefined,
-    ...style,
-  };
-
   return (
     <Poly.div
       ref={mergedRefs}
       data-state={getState(enabled)}
       className={cn(classNames, className)}
       hidden={!present}
-      style={styles}
+      style={{
+        ...style,
+        ...{
+          '--x': x ? `${x}px` : undefined,
+          '--y': y ? `${y}px` : undefined,
+          '--width': width ? `${width}px` : undefined,
+          '--height': height ? `${height}px` : undefined,
+        },
+      }}
       {...props}
     />
   );

@@ -1,16 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState, useLayoutEffect } from 'react';
 
-type ColorScheme = 'light' | 'dark' | 'system';
+type Theme = 'light' | 'dark' | 'system';
 
-export function useColorScheme(): [ColorScheme, (scheme: ColorScheme) => void] {
-  const [scheme, setScheme] = useState<ColorScheme>(() => {
-    const scheme = localStorage.getItem('color-scheme') as ColorScheme;
+export function useTheme(): [Theme, (scheme: Theme) => void] {
+  const [scheme, setScheme] = useState<Theme>(() => {
+    const scheme = localStorage.getItem('color-scheme') as Theme;
     return scheme || 'system';
   });
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const root = window.document.documentElement;
-
     root.classList.remove('light', 'dark');
 
     if (scheme === 'system') {
@@ -28,7 +27,7 @@ export function useColorScheme(): [ColorScheme, (scheme: ColorScheme) => void] {
 
   return [
     scheme,
-    (scheme: ColorScheme) => {
+    (scheme: Theme) => {
       localStorage.setItem('color-scheme', scheme);
       setScheme(scheme);
     },

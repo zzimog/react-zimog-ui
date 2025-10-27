@@ -1,44 +1,29 @@
-import {
-  type Ref,
-  type ElementType,
-  type ReactNode,
-  type HTMLAttributes,
-  useId,
-} from 'react';
+import { type ReactNode, useId } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { cn } from '../utils';
 import { Highlight } from '../Highlight';
 import { Collapsible } from '../Collapsible';
-import { useAccordion } from './accordionContext';
+import { useAccordionContext } from './accordionContext';
 import accordionClasses from './accordionClasses';
+import { Poly, type PolyProps } from '../polymorphic';
 
 const { item: classes } = accordionClasses;
 
-export type AccordionItemProps = {
-  as?: ElementType;
-  ref?: Ref<HTMLElement>;
+export type AccordionItemProps = PolyProps<'div'> & {
   title: ReactNode;
-  disabled?: boolean;
   value?: string;
-} & HTMLAttributes<HTMLElement>;
+  disabled?: boolean;
+};
 
 export const AccordionItem = (inProps: AccordionItemProps) => {
-  const {
-    as: Tag = 'div',
-    title,
-    disabled,
-    value: propValue,
-    className,
-    children,
-    ...props
-  } = inProps;
+  const { value: valueProp, disabled, className, children, ...props } = inProps;
 
   const id = useId();
   const valueId = useId();
 
-  const { value: contextValue, setValue } = useAccordion();
+  const { value: contextValue, setValue } = useAccordionContext();
 
-  const value = propValue ?? valueId;
+  const value = valueProp ?? valueId;
   const triggerId = `${id}-trigger-${value}`;
   const contentId = `${id}-content-${value}`;
 
@@ -52,7 +37,7 @@ export const AccordionItem = (inProps: AccordionItemProps) => {
   }
 
   return (
-    <Tag
+    <Poly.div
       data-disabled={disabled}
       data-state={open ? 'open' : 'closed'}
       className={cn(classes.root, className)}
@@ -68,7 +53,7 @@ export const AccordionItem = (inProps: AccordionItemProps) => {
         disabled={disabled}
         onClick={handleClick}
       >
-        {title}
+        wip
         <ChevronDown className={classes.arrow} />
       </Highlight.Item>
       <Collapsible
@@ -80,6 +65,6 @@ export const AccordionItem = (inProps: AccordionItemProps) => {
       >
         <div className={classes.content}>{children}</div>
       </Collapsible>
-    </Tag>
+    </Poly.div>
   );
 };

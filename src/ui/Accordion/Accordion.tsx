@@ -1,18 +1,13 @@
-import { type Ref, type ElementType, type ReactNode, useState } from 'react';
-import { type PolyProps, Poly } from '../polymorphic';
+import { useState } from 'react';
+import { type PolyProps } from '../polymorphic';
 import { cn } from '../utils';
+import { AccordionTrigger } from './AccordionTrigger';
 import { AccordionItem } from './AccordionItem';
 import { AccordionContext } from './accordionContext';
 import classes from './accordionClasses';
 import { Highlight } from '../Highlight';
 
 export type AccordionValue = string | string[] | undefined;
-
-export type AccordionBaseProps = PolyProps<typeof Poly.div> & {
-  ref?: Ref<HTMLElement>;
-  as?: ElementType;
-  children: ReactNode;
-};
 
 export type AccordionSingleProps = {
   multiple?: false;
@@ -28,7 +23,7 @@ export type AccordionMultipleProps = {
   onValueChange?: (value: string[]) => void;
 };
 
-export type AccordionProps = AccordionBaseProps &
+export type AccordionProps = PolyProps<'div'> &
   (AccordionSingleProps | AccordionMultipleProps);
 
 export const Accordion = (inProps: AccordionProps) => {
@@ -83,4 +78,5 @@ export const Accordion = (inProps: AccordionProps) => {
   );
 };
 
+Accordion.Trigger = AccordionTrigger;
 Accordion.Item = AccordionItem;

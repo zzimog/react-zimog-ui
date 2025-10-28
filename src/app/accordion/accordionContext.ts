@@ -3,7 +3,8 @@ import { createContext, useContext } from 'react';
 type AccordionContextValue = {
   baseId: string;
   value: string;
-  onValueChange(value: string): void;
+  onItemOpen(value: string): void;
+  onItemClose(value: string): void;
 };
 
 export const AccordionContext = createContext<

@@ -12,12 +12,12 @@ export const AccordionTrigger = (inProps: AccordionTriggerProps) => {
 
   const ref = useCallback((node: HTMLElement) => {
     function handleClick() {
-      onOpenChange();
+      onOpenChange(!open);
     }
 
     node.addEventListener('click', handleClick);
     return () => node.removeEventListener('click', handleClick);
-  }, []);
+  }, [open]);
 
   const mergedRefs = useMergedRefs(refProp, ref);
 

@@ -11,7 +11,7 @@ export type AccordionItemProps = PolyProps<'div'> & {
 export const AccordionItem = (inProps: AccordionItemProps) => {
   const { value: valueProp, disabled, children, ...props } = inProps;
 
-  const { baseId, value, onValueChange } = useAccordionContext();
+  const { baseId, value, onItemOpen, onItemClose } = useAccordionContext();
   const open = valueProp === value;
 
   const itemId = useId();
@@ -23,9 +23,13 @@ export const AccordionItem = (inProps: AccordionItemProps) => {
     contentId,
     open,
     disabled,
-    onOpenChange() {
+    onOpenChange(open: boolean) {
       if (!disabled) {
-        onValueChange(valueProp);
+        if (open) {
+          onItemOpen(value);
+        } else {
+          onItemClose(value);
+        }
       }
     },
   };

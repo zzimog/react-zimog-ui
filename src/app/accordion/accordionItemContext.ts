@@ -5,7 +5,7 @@ type AccordionItemContextValue = {
   contentId: string;
   disabled?: boolean;
   open: boolean;
-  onOpenChange(): void;
+  onOpenChange(open: boolean): void;
 };
 
 export const AccordionItemContext = createContext<

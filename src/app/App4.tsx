@@ -1,8 +1,11 @@
+import { useState } from 'react';
 import { Accordion } from './accordion';
 
 const App = () => {
+  const [value, setValue] = useState('');
+
   return (
-    <Accordion onValueChange={(value) => console.log(value)}>
+    <Accordion value={value} onValueChange={setValue}>
       <Accordion.Item value="foo" className="w-80">
         <Accordion.Trigger className="w-full p-2 border cursor-pointer">
           Foo

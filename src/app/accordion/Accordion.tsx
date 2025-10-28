@@ -1,4 +1,4 @@
-import { useId, useState } from 'react';
+import { useId, useLayoutEffect, useState } from 'react';
 import { type PolyProps, Poly } from '@ui';
 import { AccordionItem } from './AccordionItem';
 import { AccordionTrigger } from './AccordionTrigger';
@@ -17,18 +17,23 @@ export const Accordion = (inProps: AccordionProps) => {
 
   const baseId = useId();
 
-  function handleValueChange(value: string) {
-    onValueChange?.(value);
-    setValue(value);
-  }
-
   const context = {
     baseId,
     value,
-    onValueChange(newValue: string) {
-      handleValueChange(newValue === value ? '' : newValue);
+    onValueChange(value: string) {
+      setValue((prev) => {
+        const isCurrent = value === prev;
+
+        console.log('set', value);
+
+        return isCurrent ? '' : value;
+      });
     },
   };
+
+  useLayoutEffect(() => {
+    onValueChange?.(value);
+  }, [value]);
 
   return (
     <Poly.div {...props}>

@@ -12,12 +12,11 @@ export const AccordionItem = (inProps: AccordionItemProps) => {
   const { value: valueProp, disabled, children, ...props } = inProps;
 
   const { baseId, value, onValueChange } = useAccordionContext();
+  const open = valueProp === value;
 
   const itemId = useId();
   const triggerId = `${baseId}-trigger-${itemId}`;
   const contentId = `${baseId}-content-${itemId}`;
-
-  const open = value === valueProp;
 
   const context = {
     triggerId,
@@ -26,7 +25,7 @@ export const AccordionItem = (inProps: AccordionItemProps) => {
     disabled,
     onOpenChange() {
       if (!disabled) {
-        onValueChange(value);
+        onValueChange(valueProp);
       }
     },
   };

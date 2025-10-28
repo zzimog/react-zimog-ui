@@ -5,13 +5,28 @@ const App = () => {
     <Accordion onValueChange={(value) => console.log(value)}>
       <Accordion.Item value="foo" className="w-80">
         <Accordion.Trigger className="w-full p-2 border cursor-pointer">
-          Trigger
+          Foo
         </Accordion.Trigger>
-        <Accordion.Content className="p-2 border">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus, vitae
-          ratione! Quis veritatis explicabo adipisci maiores optio voluptas iste
-          amet non nesciunt soluta impedit, hic aspernatur, voluptatem porro
-          eveniet vitae.
+        <Accordion.Content className="border">
+          <div className="p-2">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus,
+            vitae ratione! Quis veritatis explicabo adipisci maiores optio
+            voluptas iste amet non nesciunt soluta impedit, hic aspernatur,
+            voluptatem porro eveniet vitae.
+          </div>
+        </Accordion.Content>
+      </Accordion.Item>
+      <Accordion.Item value="bar" className="w-80">
+        <Accordion.Trigger className="w-full p-2 border cursor-pointer">
+          Bar
+        </Accordion.Trigger>
+        <Accordion.Content className="border">
+          <div className="p-2">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus,
+            vitae ratione! Quis veritatis explicabo adipisci maiores optio
+            voluptas iste amet non nesciunt soluta impedit, hic aspernatur,
+            voluptatem porro eveniet vitae.
+          </div>
         </Accordion.Content>
       </Accordion.Item>
     </Accordion>

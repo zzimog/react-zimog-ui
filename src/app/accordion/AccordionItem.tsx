@@ -10,7 +10,7 @@ export type AccordionItemProps = PolyProps<'div'> & {
 };
 
 export const AccordionItem = (inProps: AccordionItemProps) => {
-  const { value, disabled, className, children, ...props } = inProps;
+  const { value, disabled, className, ...props } = inProps;
 
   const { baseId, ...context } = useAccordionContext();
   const open = value === context.value;
@@ -36,10 +36,8 @@ export const AccordionItem = (inProps: AccordionItemProps) => {
   };
 
   return (
-    <Poly.div className={cn(classes.item, className)} {...props}>
-      <AccordionItemContext value={itemContext}>
-        {children}
-      </AccordionItemContext>
-    </Poly.div>
+    <AccordionItemContext value={itemContext}>
+      <Poly.div className={cn(classes.item, className)} {...props} />
+    </AccordionItemContext>
   );
 };

@@ -1,37 +1,38 @@
-import { useCallback, useEffect, useRef } from 'react';
-import { type PolyProps, cn, Poly, useMergedRefs } from '@ui';
+import { type PolyProps, cn, Poly } from '@ui';
 import { useAccordionItemContext } from './accordionItemContext';
 import classes from './accordionClasses';
 
 export type AccordionTriggerProps = PolyProps<'button'>;
 
+type EventHandler<E> = (event: E) => void;
+function useMergedHandler<E extends { defaultPrevented: boolean }>(
+  propHandler: EventHandler<E> | undefined,
+  customHandler: EventHandler<E>,
+  checkPrevented: boolean = false
+) {
+  return (event: E) => {
+    propHandler?.(event);
+
+    if (!checkPrevented || event.defaultPrevented) {
+      customHandler(event);
+    }
+  };
+}
+
 export const AccordionTrigger = (inProps: AccordionTriggerProps) => {
-  const { ref: refProp, className, ...props } = inProps;
+  const { className, onClick, ...props } = inProps;
 
   const { triggerId, contentId, open, disabled, onOpenChange } =
     useAccordionItemContext();
 
-  const openRef = useRef(open);
-
-  const ref = useCallback((node: HTMLElement) => {
-    function handleClick() {
-      const open = openRef.current;
-      onOpenChange(!open);
-    }
-
-    node.addEventListener('click', handleClick);
-    return () => node.removeEventListener('click', handleClick);
-  }, []);
-
-  const mergedRefs = useMergedRefs(refProp, ref);
-
-  useEffect(() => {
-    openRef.current = open;
-  }, [open]);
+  const handleClick = useMergedHandler(
+    onClick,
+    () => onOpenChange(!open),
+    true
+  );
 
   return (
     <Poly.button
-      ref={mergedRefs}
       id={triggerId}
       aria-controls={contentId}
       aria-expanded={open}
@@ -39,6 +40,7 @@ export const AccordionTrigger = (inProps: AccordionTriggerProps) => {
       data-disabled={disabled ? '' : undefined}
       disabled={disabled}
       className={cn(classes.trigger, className)}
+      onClick={handleClick}
       {...props}
     />
   );

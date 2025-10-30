@@ -1,25 +1,33 @@
-import { type PolyProps, Poly, useMergedRefs } from '@ui';
+import { useCallback, useEffect, useRef } from 'react';
+import { type PolyProps, cn, Poly, useMergedRefs } from '@ui';
 import { useAccordionItemContext } from './accordionItemContext';
-import { useCallback } from 'react';
+import classes from './accordionClasses';
 
 export type AccordionTriggerProps = PolyProps<'button'>;
 
 export const AccordionTrigger = (inProps: AccordionTriggerProps) => {
-  const { ref: refProp, ...props } = inProps;
+  const { ref: refProp, className, ...props } = inProps;
 
   const { triggerId, contentId, open, disabled, onOpenChange } =
     useAccordionItemContext();
 
+  const openRef = useRef(open);
+
   const ref = useCallback((node: HTMLElement) => {
     function handleClick() {
+      const open = openRef.current;
       onOpenChange(!open);
     }
 
     node.addEventListener('click', handleClick);
     return () => node.removeEventListener('click', handleClick);
-  }, [open]);
+  }, []);
 
   const mergedRefs = useMergedRefs(refProp, ref);
+
+  useEffect(() => {
+    openRef.current = open;
+  }, [open]);
 
   return (
     <Poly.button
@@ -30,6 +38,7 @@ export const AccordionTrigger = (inProps: AccordionTriggerProps) => {
       data-state={open ? 'open' : 'closed'}
       data-disabled={disabled ? '' : undefined}
       disabled={disabled}
+      className={cn(classes.trigger, className)}
       {...props}
     />
   );

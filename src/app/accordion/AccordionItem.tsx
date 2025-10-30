@@ -1,7 +1,8 @@
-import { type PolyProps, Poly } from '@ui';
+import { type PolyProps, cn, Poly } from '@ui';
 import { AccordionItemContext } from './accordionItemContext';
 import { useId } from 'react';
 import { useAccordionContext } from './accordionContext';
+import classes from './accordionClasses';
 
 export type AccordionItemProps = PolyProps<'div'> & {
   value: string;
@@ -9,16 +10,16 @@ export type AccordionItemProps = PolyProps<'div'> & {
 };
 
 export const AccordionItem = (inProps: AccordionItemProps) => {
-  const { value: valueProp, disabled, children, ...props } = inProps;
+  const { value, disabled, className, children, ...props } = inProps;
 
-  const { baseId, value, onItemOpen, onItemClose } = useAccordionContext();
-  const open = valueProp === value;
+  const { baseId, ...context } = useAccordionContext();
+  const open = value === context.value;
 
   const itemId = useId();
   const triggerId = `${baseId}-trigger-${itemId}`;
   const contentId = `${baseId}-content-${itemId}`;
 
-  const context = {
+  const itemContext = {
     triggerId,
     contentId,
     open,
@@ -26,17 +27,19 @@ export const AccordionItem = (inProps: AccordionItemProps) => {
     onOpenChange(open: boolean) {
       if (!disabled) {
         if (open) {
-          onItemOpen(value);
+          context.onItemOpen(value);
         } else {
-          onItemClose(value);
+          context.onItemClose(value);
         }
       }
     },
   };
 
   return (
-    <Poly.div {...props}>
-      <AccordionItemContext value={context}>{children}</AccordionItemContext>
+    <Poly.div className={cn(classes.item, className)} {...props}>
+      <AccordionItemContext value={itemContext}>
+        {children}
+      </AccordionItemContext>
     </Poly.div>
   );
 };

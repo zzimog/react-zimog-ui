@@ -6,11 +6,9 @@ const App = () => {
 
   return (
     <Accordion value={value} onValueChange={setValue}>
-      <Accordion.Item value="foo" className="w-80">
-        <Accordion.Trigger className="w-full p-2 border cursor-pointer">
-          Foo
-        </Accordion.Trigger>
-        <Accordion.Content className="border">
+      <Accordion.Item value="foo">
+        <Accordion.Trigger>Foo</Accordion.Trigger>
+        <Accordion.Content>
           <div className="p-2">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus,
             vitae ratione! Quis veritatis explicabo adipisci maiores optio
@@ -19,11 +17,9 @@ const App = () => {
           </div>
         </Accordion.Content>
       </Accordion.Item>
-      <Accordion.Item value="bar" className="w-80">
-        <Accordion.Trigger className="w-full p-2 border cursor-pointer">
-          Bar
-        </Accordion.Trigger>
-        <Accordion.Content className="border">
+      <Accordion.Item value="bar">
+        <Accordion.Trigger>Bar</Accordion.Trigger>
+        <Accordion.Content>
           <div className="p-2">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus,
             vitae ratione! Quis veritatis explicabo adipisci maiores optio

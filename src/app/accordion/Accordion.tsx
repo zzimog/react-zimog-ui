@@ -1,9 +1,10 @@
-import { useEffect, useId, useRef, useState } from 'react';
-import { type PolyProps, Poly } from '@ui';
+import { useId } from 'react';
+import { type PolyProps, cn, Poly, useControllableState } from '@ui';
 import { AccordionItem } from './AccordionItem';
 import { AccordionTrigger } from './AccordionTrigger';
 import { AccordionContent } from './AccordionContent';
 import { AccordionContext } from './accordionContext';
+import classes from './accordionClasses';
 
 export type AccordionProps = PolyProps<'div'> & {
   defaultValue?: string;
@@ -13,49 +14,35 @@ export type AccordionProps = PolyProps<'div'> & {
 
 export const Accordion = (inProps: AccordionProps) => {
   const {
+    value: valueProp = '',
     defaultValue = '',
-    value = '',
+    className,
     children,
     onValueChange,
     ...props
   } = inProps;
 
-  const isControlled = !value && !onValueChange;
-  const [_value, setValue] = useState(isControlled ? value : defaultValue);
-  const prevValueRef = useRef(value);
+  const [value, setValue] = useControllableState({
+    prop: valueProp,
+    defaultValue,
+    onChange: onValueChange,
+  });
 
   const baseId = useId();
 
-  function handleChange(newValue: string) {
-    if (isControlled) {
-      setValue((prev) => {
-        const shouldClose = newValue === prev;
-        return shouldClose ? '' : newValue;
-      });
-    } else {
-      const current = prevValueRef.current;
-      const shouldClose = newValue === current;
-      onValueChange?.(shouldClose ? '' : newValue);
-    }
-  }
-
   const context = {
     baseId,
-    value: isControlled ? _value : value,
-    onItemOpen(value: string) {
-      handleChange(value);
+    value,
+    onItemOpen(newValue: string) {
+      setValue(newValue);
     },
     onItemClose() {
-      handleChange('');
+      setValue('');
     },
   };
 
-  useEffect(() => {
-    prevValueRef.current = value;
-  }, [value]);
-
   return (
-    <Poly.div {...props}>
+    <Poly.div className={cn(classes.root, className)} {...props}>
       <AccordionContext value={context}>{children}</AccordionContext>
     </Poly.div>
   );

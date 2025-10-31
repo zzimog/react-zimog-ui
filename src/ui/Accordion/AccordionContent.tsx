@@ -1,11 +1,12 @@
-import { type PolyProps, cn, Collapsible } from '@ui';
-import { useAccordionItemContext } from './accordionItemContext';
+import { Collapsible } from '../Collapsible';
+import type { PolyProps } from '../polymorphic';
 import classes from './accordionClasses';
+import { useAccordionItemContext } from './accordionItemContext';
 
 export type AccordionContentProps = PolyProps<typeof Collapsible>;
 
 export const AccordionContent = (inProps: AccordionContentProps) => {
-  const { className, ...props } = inProps;
+  const { className, children, ...props } = inProps;
 
   const { triggerId, contentId, open } = useAccordionItemContext();
 
@@ -14,8 +15,10 @@ export const AccordionContent = (inProps: AccordionContentProps) => {
       open={open}
       id={contentId}
       aria-labelledby={triggerId}
-      className={cn(classes.content, className)}
+      className={className}
       {...props}
-    />
+    >
+      <div className={classes.content}>{children}</div>
+    </Collapsible>
   );
 };

@@ -1,9 +1,9 @@
-import { type PolyProps, Poly } from '../polymorphic';
-import { cn } from '../utils';
 import { Highlight } from '../Highlight';
+import { type PolyProps } from '../polymorphic';
+import { cn } from '../utils';
 import classes from './tabsClasses';
 
-export const TabsList = (inProps: PolyProps<typeof Poly.div>) => {
+export const TabsList = (inProps: PolyProps<'div'>) => {
   const { className, children, ...props } = inProps;
 
   return (

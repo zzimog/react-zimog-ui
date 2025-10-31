@@ -13,7 +13,8 @@ const highlightClasses = {
       'rounded-shape',
       'bg-highlight',
       'transition-all',
-      'duration-300',
+      'duration-200',
+      'ease-linear',
     ],
     {
       variants: {

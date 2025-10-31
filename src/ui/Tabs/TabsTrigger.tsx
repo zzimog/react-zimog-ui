@@ -1,10 +1,10 @@
 import { useCallback } from 'react';
-import { type PolyProps, Poly } from '../polymorphic';
-import { useMergedRefs } from '../hooks';
-import { cn } from '../utils';
 import { Highlight } from '../Highlight';
-import { useTabsContext } from './tabsContext';
+import { useMergedRefs } from '../hooks';
+import { type PolyProps, Poly } from '../polymorphic';
+import { cn } from '../utils';
 import classes from './tabsClasses';
+import { useTabsContext } from './tabsContext';
 
 export type TabsTriggerProps = PolyProps<'button'> & {
   value: string;
@@ -19,7 +19,7 @@ export const TabsTrigger = (inProps: TabsTriggerProps) => {
     ...props
   } = inProps;
 
-  const { baseId, value, setValue } = useTabsContext();
+  const { baseId, value, onValueChange } = useTabsContext();
 
   const triggerId = `${baseId}-trigger-${value}`;
   const itemId = `${baseId}-item-${value}`;
@@ -30,7 +30,7 @@ export const TabsTrigger = (inProps: TabsTriggerProps) => {
     (node: HTMLElement) => {
       function handleClick() {
         if (!disabled) {
-          setValue(valueProp);
+          onValueChange(valueProp);
         }
       }
 
@@ -43,7 +43,7 @@ export const TabsTrigger = (inProps: TabsTriggerProps) => {
   const mergedRefs = useMergedRefs(refProp, ref);
 
   return (
-    <Highlight.Item asChild selected={isActive} disabled={disabled}>
+    <Highlight.Item selected={isActive} disabled={disabled} asChild>
       <Poly.button
         ref={mergedRefs}
         id={triggerId}

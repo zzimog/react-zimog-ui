@@ -3,7 +3,7 @@ import { createContext, useContext } from 'react';
 type AccordionItemContextValue = {
   triggerId: string;
   contentId: string;
-  disabled?: boolean;
+  disabled: boolean;
   open: boolean;
   onOpenChange(open: boolean): void;
 };
@@ -23,3 +23,5 @@ export function useAccordionItemContext() {
 
   return context;
 }
+
+AccordionItemContext.displayName = 'AccordionItemContext';

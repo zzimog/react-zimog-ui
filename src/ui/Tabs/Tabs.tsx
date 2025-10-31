@@ -1,31 +1,43 @@
-import { useId, useState } from 'react';
+import { useId } from 'react';
+import { useControllableState } from '../hooks';
 import { type PolyProps, Poly } from '../polymorphic';
 import { cn } from '../utils';
-import { TabsList } from './TabsList';
-import { TabsTrigger } from './TabsTrigger';
+import classes from './tabsClasses';
 import { TabsContent } from './TabsContent';
 import { TabsContext } from './tabsContext';
-import classes from './tabsClasses';
+import { TabsList } from './TabsList';
+import { TabsTrigger } from './TabsTrigger';
 
-export type TabsProps = PolyProps<typeof Poly.div> & {
+export type TabsProps = PolyProps<'div'> & {
+  value?: string;
   defaultValue?: string;
   onValueChange?: (value: string) => void;
 };
 
 export const Tabs = (inProps: TabsProps) => {
-  const { id, defaultValue, className, children, onValueChange, ...props } =
-    inProps;
+  const {
+    id,
+    value: valueProp,
+    defaultValue = '',
+    className,
+    children,
+    onValueChange,
+    ...props
+  } = inProps;
 
   const uniqueId = useId();
   const baseId = id ?? uniqueId;
 
-  const [value, setValue] = useState(defaultValue || undefined);
+  const [value, setValue] = useControllableState({
+    prop: valueProp,
+    defaultValue,
+    onChange: onValueChange,
+  });
 
   const context = {
     baseId,
     value,
-    setValue(value: string) {
-      onValueChange?.(value);
+    onValueChange(value: string) {
       setValue(value);
     },
   };

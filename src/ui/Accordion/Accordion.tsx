@@ -1,71 +1,50 @@
-import { useState } from 'react';
-import { type PolyProps } from '../polymorphic';
-import { cn } from '../utils';
-import { AccordionTrigger } from './AccordionTrigger';
-import { AccordionItem } from './AccordionItem';
-import { AccordionContext } from './accordionContext';
-import classes from './accordionClasses';
+import { useId } from 'react';
 import { Highlight } from '../Highlight';
+import { useControllableState } from '../hooks';
+import type { PolyProps } from '../polymorphic';
+import { cn } from '../utils';
+import classes from './accordionClasses';
+import { AccordionContent } from './AccordionContent';
+import { AccordionContext } from './accordionContext';
+import { AccordionItem } from './AccordionItem';
+import { AccordionTrigger } from './AccordionTrigger';
 
-export type AccordionValue = string | string[] | undefined;
-
-export type AccordionSingleProps = {
-  multiple?: false;
-  defaultValue?: string;
+export type AccordionProps = PolyProps<'div'> & {
+  collapse?: boolean;
   value?: string;
-  onValueChange?: (value?: string) => void;
+  defaultValue?: string;
+  onValueChange?: (value: string) => void;
 };
-
-export type AccordionMultipleProps = {
-  multiple: true;
-  defaultValue?: string[];
-  value?: string[];
-  onValueChange?: (value: string[]) => void;
-};
-
-export type AccordionProps = PolyProps<'div'> &
-  (AccordionSingleProps | AccordionMultipleProps);
 
 export const Accordion = (inProps: AccordionProps) => {
   const {
-    multiple,
-    defaultValue,
+    collapse = true,
     value: valueProp,
+    defaultValue = '',
     className,
     children,
     onValueChange,
     ...props
   } = inProps;
 
-  if (defaultValue && valueProp) {
-    throw new Error(
-      'Accordion cannot accept both `defaultValue` and `value` props.'
-    );
-  }
+  const [value, setValue] = useControllableState({
+    prop: valueProp,
+    defaultValue,
+    onChange: onValueChange,
+  });
 
-  const initValue = valueProp || defaultValue || (multiple ? [] : undefined);
-  const [value, setValue] = useState<AccordionValue>(initValue);
+  const baseId = useId();
 
   const context = {
+    baseId,
+    collapse,
     value,
-    setValue(itemValue: string) {
-      if (multiple) {
-        if (!Array.isArray(value)) {
-          return;
-        }
-
-        const newValue = value.includes(itemValue)
-          ? value.filter((v) => v !== itemValue)
-          : [...value, itemValue];
-
-        onValueChange?.(newValue);
-        setValue(newValue);
-      } else {
-        const isCurrent = itemValue === value;
-        const newVal = isCurrent ? '' : itemValue;
-
-        onValueChange?.(newVal);
-        setValue(newVal);
+    onItemOpen(newValue: string) {
+      setValue(newValue);
+    },
+    onItemClose() {
+      if (collapse) {
+        setValue('');
       }
     },
   };
@@ -78,5 +57,6 @@ export const Accordion = (inProps: AccordionProps) => {
   );
 };
 
-Accordion.Trigger = AccordionTrigger;
 Accordion.Item = AccordionItem;
+Accordion.Trigger = AccordionTrigger;
+Accordion.Content = AccordionContent;

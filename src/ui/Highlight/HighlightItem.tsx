@@ -21,10 +21,12 @@ export const HighlightItem = (inProps: HighlightItemProps) => {
       if (context) {
         const { type, leaveMode, persistent, currentRef } = context;
 
+        if (disabled) {
+          return;
+        }
+
         function handleEnable() {
-          if (!disabled) {
-            currentRef.current = node;
-          }
+          currentRef.current = node;
         }
 
         function handleDisable() {
@@ -72,7 +74,6 @@ export const HighlightItem = (inProps: HighlightItemProps) => {
   return (
     <Poly.div
       ref={mergedRefs}
-      data-highlight={isHover}
       className={cn(
         classes.item({
           hover: isHover,

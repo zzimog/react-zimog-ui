@@ -1,9 +1,9 @@
 import { type PolyProps, Poly } from '../polymorphic';
 import { cn } from '../utils';
-import { useTabsContext } from './tabsContext';
 import classes from './tabsClasses';
+import { useTabsContext } from './tabsContext';
 
-export type TabsContentProps = PolyProps<typeof Poly.div> & {
+export type TabsContentProps = PolyProps<'div'> & {
   value: string;
 };
 
@@ -11,11 +11,10 @@ export const TabsContent = (inProps: TabsContentProps) => {
   const { value: valueProp, className, children, ...props } = inProps;
 
   const { baseId, value } = useTabsContext();
+  const isActive = value === valueProp;
 
   const triggerId = `${baseId}-trigger-${valueProp}`;
   const itemId = `${baseId}-item-${valueProp}`;
-
-  const isActive = value === valueProp;
 
   return (
     <Poly.div

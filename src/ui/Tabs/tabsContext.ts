@@ -3,7 +3,7 @@ import { createContext, useContext } from 'react';
 type TabsContextType = {
   baseId: string;
   value?: string;
-  setValue(value: string): void;
+  onValueChange(value: string): void;
 };
 
 export const TabsContext = createContext<TabsContextType | undefined>(

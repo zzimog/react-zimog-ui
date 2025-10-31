@@ -68,6 +68,8 @@ export const Poly = tags.reduce((poly, tag) => {
     return <Comp {...polyProps} />;
   };
 
+  PolyElement.displayName = `Poly.${tag}`;
+
   return {
     ...poly,
     [tag]: PolyElement,

@@ -1,21 +1,24 @@
 import { createContext, useContext } from 'react';
 
-type AccordionContextType = {
-  multiple?: boolean;
-  value?: string | string[];
-  setValue: (value: string) => void;
+type AccordionContextValue = {
+  baseId: string;
+  value: string;
+  onItemOpen(value: string): void;
+  onItemClose(value: string): void;
 };
 
-export const AccordionContext = createContext<AccordionContextType | undefined>(
-  undefined
-);
+export const AccordionContext = createContext<
+  AccordionContextValue | undefined
+>(undefined);
 
 export function useAccordionContext() {
   const context = useContext(AccordionContext);
 
   if (!context) {
-    throw new Error('useAccordion must be used inside AccordionContext.');
+    throw new Error('useAccordionContext must be used within AccordionContext');
   }
 
   return context;
 }
+
+AccordionContext.displayName = 'AccordionContext';

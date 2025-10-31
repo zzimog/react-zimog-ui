@@ -17,7 +17,7 @@ const App = () => {
           </div>
         </Accordion.Content>
       </Accordion.Item>
-      <Accordion.Item value="bar">
+      <Accordion.Item value="bar" >
         <Accordion.Trigger>Bar</Accordion.Trigger>
         <Accordion.Content>
           <div className="p-2">

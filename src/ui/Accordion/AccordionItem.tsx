@@ -1,70 +1,46 @@
-import { type ReactNode, useId } from 'react';
-import { ChevronDown } from 'lucide-react';
+import { useId } from 'react';
+import { type PolyProps, Poly } from '../polymorphic';
 import { cn } from '../utils';
-import { Highlight } from '../Highlight';
-import { Collapsible } from '../Collapsible';
+import classes from './accordionClasses';
 import { useAccordionContext } from './accordionContext';
-import accordionClasses from './accordionClasses';
-import { Poly, type PolyProps } from '../polymorphic';
-
-const { item: classes } = accordionClasses;
+import { AccordionItemContext } from './accordionItemContext';
 
 export type AccordionItemProps = PolyProps<'div'> & {
-  title: ReactNode;
-  value?: string;
+  value: string;
   disabled?: boolean;
 };
 
 export const AccordionItem = (inProps: AccordionItemProps) => {
-  const { value: valueProp, disabled, className, children, ...props } = inProps;
+  const { value, disabled = false, className, children, ...props } = inProps;
 
-  const id = useId();
-  const valueId = useId();
+  const { baseId, ...context } = useAccordionContext();
+  const open = value === context.value;
 
-  const { value: contextValue, setValue } = useAccordionContext();
+  const itemId = useId();
+  const triggerId = `${baseId}-trigger-${itemId}`;
+  const contentId = `${baseId}-content-${itemId}`;
 
-  const value = valueProp ?? valueId;
-  const triggerId = `${id}-trigger-${value}`;
-  const contentId = `${id}-content-${value}`;
-
-  const multiple = Array.isArray(contextValue);
-  const open = multiple ? contextValue.includes(value) : contextValue === value;
-
-  function handleClick() {
-    if (!disabled) {
-      setValue(value);
-    }
-  }
+  const itemContext = {
+    triggerId,
+    contentId,
+    open,
+    disabled,
+    onOpenChange(open: boolean) {
+      if (!disabled) {
+        if (open) {
+          context.onItemOpen(value);
+        } else {
+          context.onItemClose(value);
+        }
+      }
+    },
+  };
 
   return (
-    <Poly.div
-      data-disabled={disabled}
-      data-state={open ? 'open' : 'closed'}
-      className={cn(classes.root, className)}
-      {...props}
-    >
-      <Highlight.Item
-        as="button"
-        id={triggerId}
-        aria-controls={contentId}
-        aria-expanded={open}
-        data-expanded={open}
-        className={classes.trigger}
-        disabled={disabled}
-        onClick={handleClick}
-      >
-        wip
-        <ChevronDown className={classes.arrow} />
-      </Highlight.Item>
-      <Collapsible
-        open={open}
-        id={contentId}
-        role="region"
-        aria-hidden={!open}
-        aria-labelledby={triggerId}
-      >
-        <div className={classes.content}>{children}</div>
-      </Collapsible>
+    <Poly.div className={cn(classes.item, className)} {...props}>
+      <AccordionItemContext value={itemContext}>
+        {children}
+      </AccordionItemContext>
     </Poly.div>
   );
 };

@@ -2,12 +2,18 @@ import { cva } from 'class-variance-authority';
 
 const cardClasses = cva(
   [
+    'relative',
     'p-8',
     'rounded-shape',
     'border',
+    'transition-colors',
     'border-border',
-    'bg-neutral-100',
-    'dark:bg-neutral-900',
+    // light
+    'text-foreground',
+    'bg-background',
+    // dark
+    'dark:text-background',
+    'dark:bg-foreground',
   ],
   {
     variants: {

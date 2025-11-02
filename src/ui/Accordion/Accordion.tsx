@@ -1,7 +1,6 @@
 import { useId } from 'react';
-import { Highlight } from '../Highlight';
 import { useControllableState } from '../hooks';
-import type { PolyProps } from '../polymorphic';
+import { Poly, type PolyProps } from '../polymorphic';
 import { cn } from '../utils';
 import classes from './accordionClasses';
 import { AccordionContent } from './AccordionContent';
@@ -50,10 +49,9 @@ export const Accordion = (inProps: AccordionProps) => {
   };
 
   return (
-    <Highlight type="hover" className={cn(classes.root, className)} {...props}>
-      <Highlight.Indicator className={classes.highlight} />
+    <Poly.div className={cn(classes.root, className)} {...props}>
       <AccordionContext value={context}>{children}</AccordionContext>
-    </Highlight>
+    </Poly.div>
   );
 };
 

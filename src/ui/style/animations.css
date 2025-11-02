@@ -86,3 +86,7 @@
   animation-delay: --value(integer)ms;
   animation-delay: --value([*]);
 }
+
+@utility animate-state-pause {
+  animation-play-state: paused;
+}

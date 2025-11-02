@@ -40,7 +40,10 @@ export const Popover = (inProps: PopoverProps) => {
       //const triggerCenterY = triggerRect.height / 2;
 
       const top = triggerRect.bottom + 8;
-      const left = triggerRect.left + triggerCenterX - contentRect.width / 2;
+      const left = Math.max(
+        triggerRect.left + triggerCenterX - contentRect.width / 2,
+        16
+      );
 
       const maxWidth = innerWidth - 32;
       const maxHeight = innerHeight - top - 32;
@@ -80,9 +83,7 @@ export const Popover = (inProps: PopoverProps) => {
         contentRef,
         contentId,
         open,
-        setOpen(open) {
-          setOpen(open);
-        },
+        setOpen,
       }}
     >
       {children}

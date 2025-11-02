@@ -7,7 +7,9 @@ const tabsClasses = {
   trigger: [
     'p-2',
     'rounded-md',
-    'transition-colors',
+    'transition-all',
+    'focusable',
+    'focus-visible:focus',
     'data-[selected="false"]:not-hover:text-muted',
   ].join(' '),
   content: 'p-2 pt-1.5',

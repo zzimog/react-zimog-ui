@@ -2,6 +2,8 @@ import { type PolyProps, Poly, ThemeSwitcher, Title } from '@ui';
 import accordion from './demo/accordion';
 import tabs from './demo/tabs';
 import tree from './demo/tree';
+import buttons from './demo/buttons';
+import inputs from './demo/inputs';
 
 const Container = (props: PolyProps<typeof Poly.div>) => (
   <div className="max-w-7xl mx-auto flex flex-wrap gap-4 py-4" {...props} />
@@ -15,6 +17,8 @@ const App = () => {
         <ThemeSwitcher />
       </div>
       <main className="flex flex-col gap-4">
+        {inputs}
+        {buttons}
         {accordion}
         {tabs}
         {tree}

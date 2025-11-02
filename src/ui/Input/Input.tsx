@@ -1,61 +1,43 @@
-import type { InputHTMLAttributes, ReactNode, Ref } from 'react';
+import { type ComponentPropsWithRef, useContext } from 'react';
+import { useMergedRefs } from '../hooks/use-merged-refs';
 import { cn } from '../utils';
-import { textboxClasses as classes } from './inputClasses';
-import { InputCheckable } from './InputCheckable';
+import { InputAddon } from './InputAddon';
+import { checkClasses, textboxClasses } from './inputClasses';
+import { InputGroup } from './InputGroup';
+import { InputGroupContext } from './inputGroupContext';
 
-export type InputProps = {
-  ref?: Ref<HTMLInputElement>;
-  prefix?: ReactNode;
-  suffix?: ReactNode;
-} & Omit<InputHTMLAttributes<HTMLInputElement>, 'prefix' | 'suffix'>;
-
-function createAddon(content: ReactNode, type: 'prefix' | 'suffix') {
-  return (
-    content && (
-      <div
-        className={cn(classes.addon.root, classes.addon[type])}
-        children={content}
-      />
-    )
-  );
-}
-
+type InputProps = ComponentPropsWithRef<'input'>;
 export const Input = (inProps: InputProps) => {
-  const { type, prefix, suffix, className, ref, ...props } = inProps;
+  const { ref, type, className, ...props } = inProps;
+
+  const { inputRef } = useContext(InputGroupContext) || {};
+
+  const mergedRefs = useMergedRefs(ref, inputRef);
 
   if (type === 'checkbox' || type === 'radio') {
     return (
-      <InputCheckable ref={ref} type={type} className={className} {...props} />
-    );
-  }
-
-  if (prefix || suffix) {
-    return (
-      <div className={cn(classes.group, className)}>
-        {createAddon(prefix, 'prefix')}
-
+      <div className={cn(checkClasses.root({ type: type as any }), className)}>
+        <div className={checkClasses.mark} />
         <input
-          ref={ref}
+          ref={mergedRefs}
           type={type}
-          className={cn(
-            classes.input.root,
-            prefix && classes.input.prefix,
-            suffix && classes.input.suffix
-          )}
+          className={checkClasses.input}
           {...props}
         />
-
-        {createAddon(suffix, 'suffix')}
       </div>
     );
   }
 
   return (
     <input
-      ref={ref}
+      ref={mergedRefs}
       type={type}
-      className={cn(classes.input.root, className)}
+      className={cn(textboxClasses.input, className)}
       {...props}
     />
   );
 };
+
+Input.displayName = 'Input';
+Input.Group = InputGroup;
+Input.Addon = InputAddon;

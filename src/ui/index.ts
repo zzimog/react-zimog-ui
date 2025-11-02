@@ -9,6 +9,7 @@ export * from './Button';
 export * from './Card';
 export * from './Collapsible';
 export * from './Highlight';
+export * from './Hovering';
 export * from './Input';
 export * from './Popover';
 export * from './Popper';

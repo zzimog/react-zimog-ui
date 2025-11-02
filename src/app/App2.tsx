@@ -1,5 +1,5 @@
 import { MoreVertical } from 'lucide-react';
-import { Popover } from './popover';
+import { Popover } from '@ui';
 
 const App = () => {
   return (

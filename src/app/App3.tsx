@@ -1,24 +1,81 @@
-import { Poly, type PolyProps } from '@ui';
+import { type PolyProps, Poly, cn } from '@ui';
+import { Children, cloneElement, type ReactElement } from 'react';
 
-type ItemProps = PolyProps<'div'>;
+type MarqueeProps = Omit<PolyProps<'div'>, 'children'> & {
+  direction?: 'left' | 'right';
+  children?: ReactElement<PolyProps<'div'>>;
+};
 
-const Item = (props: ItemProps) => {
-  function click() {
-    console.log('item click');
-  }
+const Marquee = (inProps: MarqueeProps) => {
+  const { direction = 'left', className, children, ...props } = inProps;
 
-  return <Poly.section data-slot="item" onClick={click} {...props} />;
+  const left = direction === 'left';
+  const right = direction === 'right';
+  const child = Children.only(children);
+
+  return (
+    <>
+      <style>{`
+        @keyframes slide-left {
+          to {
+            transform: translateX(-100%);
+          }
+        }
+        @keyframes slide-right {
+          from {
+            transform: translateX(-100%);
+          }
+        }
+      `}</style>
+      <Poly.div
+        className={cn(
+          'w-200',
+          'flex',
+          'overflow-hidden',
+          'hover:*:animate-state-pause',
+          left &&
+            '*:animate-[slide-left_var(--animate-duration,10s)_infinite_linear]',
+          right &&
+            '*:animate-[slide-right_var(--animate-duration,10s)_infinite_linear]',
+          className
+        )}
+        {...props}
+      >
+        {children}
+        {child && cloneElement(child, { 'aria-hidden': true })}
+      </Poly.div>
+    </>
+  );
 };
 
 const App = () => {
-  function click() {
-    console.log('child click');
-  }
+  const content = (
+    <ul className="flex shrink-0 min-w-full gap-2 p-1">
+      <li>Lorem</li>
+      <li>ipsum</li>
+      <li>dolor</li>
+      <li>sit</li>
+      <li>amet,</li>
+      <li>consectetur</li>
+      <li>adipisicing</li>
+      <li>elit.</li>
+      <li>Error</li>
+      <li>atque</li>
+      <li>necessitatibus</li>
+      <li>eum</li>
+      <li>quis</li>
+      <li>a</li>
+      <li>veniam.</li>
+    </ul>
+  );
 
   return (
-    <Item asChild>
-      <button onClick={click}>button</button>
-    </Item>
+    <div className="flex flex-col gap-2">
+      <Marquee className="border-y-2">{content}</Marquee>
+      <Marquee direction={'right'} className="border-y-2">
+        {content}
+      </Marquee>
+    </div>
   );
 };
 

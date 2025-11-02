@@ -6,44 +6,39 @@ const buttonClasses = cva(
     'justify-center',
     'items-center',
     'gap-1',
-    'p-2',
     'rounded-shape',
-    'text-black',
     'whitespace-nowrap',
     'cursor-pointer',
     'transition-all',
-    'duration-200',
     'not-disabled:active:scale-95',
     'disabled:opacity-50',
     'disabled:cursor-not-allowed',
     // outline
-    'outline-0',
-    'outline-offset-2',
     'outline-(--base)/50',
-    'focus-visible:outline-4',
+    'focusable',
+    'focus-visible:focus',
     // icon
     '[&_svg]:shrink-0',
     '[&_svg]:pointer-events-none',
-    '[&_svg:not([class*="size-"])]:size-6',
   ],
   {
     variants: {
       size: {
-        sm: 'p-1 text-sm leading-6',
-        md: null,
-        lg: 'p-3 text-lg leading-6',
+        sm: 'p-1 text-sm/5 [&_svg]:size-5',
+        md: 'p-2 text-base/6 [&_svg]:size-6',
+        lg: 'p-3 text-lg/7 [&_svg]:size-7',
       },
       variant: {
-        solid: 'text-white',
+        solid: 'text-background',
         outlined: 'border',
         dashed: 'border border-dashed',
         ghost: null,
       },
       color: {
         default: [
-          '[--base:var(--color-gray-500)]',
-          'bg-gray-500',
-          'border-gray-500',
+          '[--base:var(--color-zinc-500)]',
+          'bg-zinc-500',
+          'border-zinc-500',
           'text-white',
         ],
         primary: [
@@ -66,7 +61,7 @@ const buttonClasses = cva(
         ],
       },
       loading: {
-        true: 'cursor-progress!',
+        true: 'opacity-75! cursor-progress!',
       },
       joined: {
         col: 'not-first:rounded-t-none not-last:rounded-b-none',
@@ -77,8 +72,8 @@ const buttonClasses = cva(
       {
         variant: ['outlined', 'dashed', 'ghost'],
         className: [
-          'text-black',
-          'dark:text-white',
+          'text-foreground',
+          'dark:text-background',
           'bg-transparent',
           'dark:bg-transparent',
           'hover:bg-(--base)/25',

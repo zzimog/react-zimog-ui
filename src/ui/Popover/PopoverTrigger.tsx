@@ -1,4 +1,4 @@
-import { useCallback, useRef, useEffect } from 'react';
+import { useCallback } from 'react';
 import { useMergedRefs } from '../hooks';
 import { type PolyProps, Poly } from '../polymorphic';
 import { usePopoverContext } from './popoverContext';
@@ -12,8 +12,7 @@ export const PopoverTrigger = (inProps: PopoverTriggerProps) => {
 
   const ref = useCallback((node: HTMLElement) => {
     function handleClick() {
-      const open = prevOpenRef.current;
-      setOpen(!open);
+      setOpen((prev) => !prev);
     }
 
     node.addEventListener('click', handleClick);
@@ -21,11 +20,6 @@ export const PopoverTrigger = (inProps: PopoverTriggerProps) => {
   }, []);
 
   const mergedRefs = useMergedRefs(refProp, triggerRef, ref);
-
-  const prevOpenRef = useRef(open);
-  useEffect(() => {
-    prevOpenRef.current = open;
-  }, [open]);
 
   return (
     <Poly.button

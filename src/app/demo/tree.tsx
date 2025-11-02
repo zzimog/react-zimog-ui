@@ -50,6 +50,8 @@ const DemoTree = () => {
 
   useEffect(() => {
     const node = ref.current;
+    console.log('here', node);
+
     if (node) {
       let rafId = requestAnimationFrame(function loop() {
         const height = node.offsetHeight;

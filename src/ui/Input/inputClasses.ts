@@ -20,108 +20,113 @@
 'file:font-medium',
 */
 
+import { cva } from 'class-variance-authority';
+import { cn } from '../utils';
+
 const common = [
-  'rounded-md',
   'border',
-  'border-gray-500/50',
-  'bg-white/50',
-  'dark:bg-black/50',
+  'border-border',
+  'bg-foreground/5',
+  'dark:bg-background/5',
 ];
 
-const textboxCommon = ['h-10', 'md:h-8', 'px-2.5', 'text-sm', ...common];
+const textboxCommon = ['h-10', 'px-2.5', 'text-sm', 'rounded-shape'];
 
 export const textboxClasses = {
-  group: [
-    'group',
-    'flex',
-    'items-center',
-    'w-full',
-    '[&_input]:shadow-none',
-    'has-disabled:text-gray-500',
-    'has-disabled:cursor-not-allowed',
-  ],
-  addon: {
-    root: [
+  group: {
+    root: cn([
+      'group',
+      'flex',
+      'w-full',
+      '[&_input]:shadow-none',
+      'has-disabled:text-gray-500',
+      'has-disabled:cursor-not-allowed',
+      '*:not-first:rounded-l-none',
+      '*:not-last:rounded-r-none',
+      '*:has-[~input]:border-r-0',
+      '*:[input~&]:border-l-0',
+    ]),
+    addon: cn([
+      ...common,
       ...textboxCommon,
       'flex',
       'items-center',
-      'bg-gray-300/20',
-      'dark:bg-gray-700/20',
+      'transition-colors',
+      'bg-foreground/10',
+      'dark:bg-background/10',
+      'whitespace-nowrap',
       'group-has-[input:read-only]:border-dashed',
-      '[&_svg]:stroke-1',
-    ],
-    prefix: 'border-r-0 rounded-r-none',
-    suffix: 'border-l-0 rounded-l-none',
+    ]),
   },
-  input: {
-    root: [
-      ...textboxCommon,
-      'peer',
-      'block',
-      'w-full',
-      'min-w-0',
-      'outline-0',
-      'outline-primary/30',
-      'transition-all',
-      'duration-100',
-      'focus-visible:border-primary',
-      'focus-visible:outline-4',
-      'invalid:border-red-500',
-      'invalid:outline-4',
-      'invalid:outline-red-500/20',
-      'disabled:text-gray-500',
-      'disabled:cursor-not-allowed',
-      'read-only:text-gray-700',
-      'read-only:border-dashed',
-    ],
-    prefix: 'rounded-l-none',
-    suffix: 'rounded-r-none',
-  },
+  input: cn([
+    ...common,
+    ...textboxCommon,
+    'peer',
+    'block',
+    'w-full',
+    'min-w-0',
+    'transition-all',
+    'focusable',
+    'focus-visible:focus',
+    'focus-visible:border-primary',
+    'hover:not-disabled:border-primary',
+    'invalid:border-red-500',
+    'invalid:outline-4',
+    'invalid:outline-red-500/20',
+    'disabled:text-border',
+    'disabled:bg-transparent',
+    'disabled:cursor-not-allowed',
+    'read-only:bg-transparent',
+    'read-only:border-dashed',
+    'read-only:cursor-default',
+    'placeholder:text-muted-foreground',
+    'dark:placeholder:text-muted-background',
+  ]),
 };
 
-export const checkboxClasses = {
-  box: [
-    ...common,
-    'relative',
-    'size-6',
-    'outline-0',
-    'outline-primary/30',
-    'transition-all',
-    'duration-100',
-    'has-focus-visible:border-primary',
-    'has-focus-visible:outline-4',
-    'has-checked:border-primary',
-    'has-invalid:border-red-500',
-    'has-invalid:outline-4',
-    'has-invalid:outline-red-500/20',
-    'has-disabled:opacity-50',
-    'has-disabled:border-dashed',
-  ],
-  input: [
-    'size-full',
+export const checkClasses = {
+  root: cva(
+    [
+      ...common,
+      'relative',
+      'size-6',
+      'm-2',
+      'transition-all',
+      'hover:not-disabled:border-primary',
+      'focusable',
+      'has-focus:focus',
+      'has-focus:border-primary',
+      'has-invalid:focus',
+      'has-invalid:border-danger',
+      'has-invalid:outline-danger/25',
+      'has-disabled:opacity-50',
+      'has-disabled:border-dashed',
+    ],
+    {
+      variants: {
+        type: {
+          checkbox: 'rounded-shape',
+          radio: 'rounded-full',
+        },
+      },
+    }
+  ),
+  input: cn([
     'absolute',
+    'inset-0',
     'opacity-0',
     'cursor-pointer',
     'disabled:cursor-not-allowed',
-  ],
-  mark: [
-    'absolute',
-    'top-1',
-    'left-2',
-    'w-1.5',
-    'h-3',
+  ]),
+  mark: cn([
+    'absolute top-1 left-2',
+    'w-1.5 h-3',
     'rotate-45',
-    'border-r-2',
-    'border-b-2',
-    'border-transparent',
-    'transition-all',
-    'duration-100',
-    'has-[+:checked]:border-primary',
-  ],
-};
-
-export const radioClasses = {
-  box: [checkboxClasses.box, 'rounded-full'],
-  input: checkboxClasses.input,
-  mark: checkboxClasses.mark,
+    'border-r-2 border-b-2',
+    'border-foreground',
+    'dark:border-background',
+    'transition-[border,opacity]',
+    'opacity-0',
+    'has-[+:checked]:opacity-100',
+  ]),
 };

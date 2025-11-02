@@ -7,9 +7,13 @@ export type CardProps = PolyProps<typeof Poly.div> & {
 };
 
 export const Card = (inProps: CardProps) => {
-  const { opticalCorrection, className, ...props } = inProps;
+  const { opticalCorrection, className, children, ...props } = inProps;
 
   const classNames = classes({ opticalCorrection });
 
-  return <Poly.div className={cn(classNames, className)} {...props} />;
+  return (
+    <Poly.div className={cn(classNames, className)} {...props}>
+      {children}
+    </Poly.div>
+  );
 };

@@ -1,5 +1,5 @@
 import { Star } from 'lucide-react';
-import { Input } from '@ui';
+import { Button, Input } from '@ui';
 import { DemoBox } from './DemoBox';
 import { DemoSection } from './DemoSection';
 
@@ -13,21 +13,16 @@ const inputs = (
     </DemoSection>
 
     <DemoSection title="Prefix & suffix" column>
-      <Input name="input_4" defaultValue="With prefix" prefix="Px" />
-      <Input name="input_5" defaultValue="With suffix" suffix="Sx" />
-      <Input
-        name="input_6"
-        defaultValue="With both"
-        prefix={<Star />}
-        suffix="Sx"
-      />
-      <Input
-        name="input_7"
-        defaultValue="With both (but disabled)"
-        prefix={<Star />}
-        suffix="Sx"
-        disabled
-      />
+      <Input.Group>
+        <Input.Addon>Px</Input.Addon>
+        <Input.Addon>
+          <Star />
+        </Input.Addon>
+        <Input defaultValue="Input group with addons" />
+        <Input.Addon>Suffix</Input.Addon>
+        <Input.Addon>Suffix 2</Input.Addon>
+        <Button color="primary">Button</Button>
+      </Input.Group>
     </DemoSection>
 
     <DemoSection title="Checkbox & radio" column>

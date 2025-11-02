@@ -29,8 +29,7 @@ export const PopoverContent = (inProps: PopoverContentProps) => {
   const animate = useAnimationRef.current;
 
   useEffect(() => {
-    const rafId = requestAnimationFrame(() => (useAnimationRef.current = true));
-    return () => cancelAnimationFrame(rafId);
+    useAnimationRef.current = true;
   }, []);
 
   return present

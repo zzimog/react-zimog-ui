@@ -1,11 +1,17 @@
-import { type Ref, createContext, useContext } from 'react';
+import {
+  type Ref,
+  type Dispatch,
+  type SetStateAction,
+  createContext,
+  useContext,
+} from 'react';
 
 type PopoverContextType = {
   triggerRef: Ref<HTMLElement | null>;
   contentRef: Ref<HTMLElement | null>;
   contentId: string;
   open: boolean;
-  setOpen: (open: boolean) => void;
+  setOpen: Dispatch<SetStateAction<boolean>>;
 };
 
 export const PopoverContext = createContext<PopoverContextType | undefined>(

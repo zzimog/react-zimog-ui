@@ -50,11 +50,11 @@
 }
 
 @utility focusable {
-  outline: 0 solid var(--color-outline);
+  outline: 4px solid transparent;
   outline-offset: 1px;
 }
 @utility focus {
-  @apply outline-4;
+  outline-color: var(--color-outline);
 }
 
 @utility hover-effect {

@@ -2,16 +2,13 @@ import { cva } from 'class-variance-authority';
 
 const cardClasses = cva(
   [
-    'relative',
     'p-8',
     'rounded-shape',
     'border',
-    'transition-colors',
+    'transition',
     'border-border',
-    // light
     'text-foreground',
     'bg-background',
-    // dark
     'dark:text-background',
     'dark:bg-foreground',
   ],
@@ -20,6 +17,9 @@ const cardClasses = cva(
       opticalCorrection: {
         top: 'pt-6',
         both: 'py-6',
+      },
+      isFocusable: {
+        true: 'focusable focus:focus',
       },
     },
   }

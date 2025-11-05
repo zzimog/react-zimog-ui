@@ -1,27 +1,26 @@
 import {
-  type ReactNode,
-  useState,
-  useRef,
-  useId,
-  useLayoutEffect,
+  type PropsWithChildren,
   useCallback,
+  useEffect,
+  useId,
+  useRef,
+  useState,
 } from 'react';
+import { useOutsideClick } from '../hooks';
 import { animationLoop } from '../utils';
-import { PopoverTrigger } from './PopoverTrigger';
 import { PopoverContent } from './PopoverContent';
 import { PopoverContext } from './popoverContext';
+import { PopoverTrigger } from './PopoverTrigger';
 
-export type PopoverProps = {
-  update?: 'always' | 'optimized';
-  open?: boolean;
-  children?: ReactNode;
-};
+type PopoverProps = PropsWithChildren<{
+  updateMode?: 'always' | 'optimized';
+  defaultOpen?: boolean;
+}>;
 
 export const Popover = (inProps: PopoverProps) => {
-  const { update = 'optimized', open: openProp, children } = inProps;
+  const { updateMode = 'optimized', defaultOpen, children } = inProps;
 
-  const initialOpen = openProp || false;
-  const [open, setOpen] = useState(initialOpen);
+  const [open, setOpen] = useState(defaultOpen || false);
 
   const triggerRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLElement>(null);
@@ -36,34 +35,34 @@ export const Popover = (inProps: PopoverProps) => {
       const triggerRect = trigger.getBoundingClientRect();
       const contentRect = content.getBoundingClientRect();
 
-      const triggerCenterX = triggerRect.width / 2;
+      const triggerCenterX = triggerRect.left + triggerRect.width / 2;
       //const triggerCenterY = triggerRect.height / 2;
 
       const top = triggerRect.bottom + 8;
-      const left = Math.max(
-        triggerRect.left + triggerCenterX - contentRect.width / 2,
-        16
+      const left = Math.min(
+        Math.max(triggerCenterX - contentRect.width / 2, 16),
+        innerWidth - contentRect.width - 16
       );
 
+      const contentOriginX = triggerCenterX - left;
+
       const maxWidth = innerWidth - 32;
-      const maxHeight = innerHeight - top - 32;
+      const maxHeight = innerHeight - 32;
 
-      Object.assign(content.style, {
-        transformOrigin: 'center',
-        transform: `translate3d(${left}px, ${top}px, 0px)`,
-      });
-
+      content.style.transformOrigin = `${contentOriginX}px 0px`;
       content.style.setProperty('--max-width', `${maxWidth}px`);
       content.style.setProperty('--max-height', `${maxHeight}px`);
+      content.style.setProperty('--x', `${left}px`);
+      content.style.setProperty('--y', `${top}px`);
     }
   }, []);
 
-  useLayoutEffect(() => {
-    if (open) {
-      if (update === 'always') {
-        doTheMath();
-        return animationLoop(doTheMath);
-      } else {
+  useEffect(() => {
+    if (updateMode === 'always') {
+      doTheMath();
+      return animationLoop(doTheMath);
+    } else {
+      if (open) {
         const rafId = requestAnimationFrame(doTheMath);
         window.addEventListener('resize', doTheMath);
         window.addEventListener('scroll', doTheMath);
@@ -74,11 +73,16 @@ export const Popover = (inProps: PopoverProps) => {
         };
       }
     }
-  }, [update, open]);
+  }, [updateMode, open]);
+
+  useOutsideClick([triggerRef, contentRef], () => {
+    setOpen(false);
+  });
 
   return (
     <PopoverContext
       value={{
+        updateMode,
         triggerRef,
         contentRef,
         contentId,

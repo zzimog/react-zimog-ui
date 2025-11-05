@@ -7,6 +7,7 @@ import {
 } from 'react';
 
 type PopoverContextType = {
+  updateMode: 'always' | 'optimized';
   triggerRef: Ref<HTMLElement | null>;
   contentRef: Ref<HTMLElement | null>;
   contentId: string;

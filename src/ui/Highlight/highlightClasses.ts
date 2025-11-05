@@ -24,9 +24,9 @@ const highlightClasses = {
         persistent: {
           false: [
             'animate-duration-300',
-            'data-[state="visible"]:with-fade-in',
-            'data-[state="hidden"]:with-fade-out',
-            'data-[state="hidden"]:animate-delay-200',
+            'data-[state="visible"]:animate-in',
+            'data-[state="hidden"]:animate-out',
+            'data-[state="hidden"]:animation-delay-200',
           ],
         },
       },

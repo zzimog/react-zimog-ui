@@ -32,11 +32,11 @@ const Marquee = (inProps: MarqueeProps) => {
           'w-200',
           'flex',
           'overflow-hidden',
-          'hover:*:animate-state-pause',
+          'hover:*:play-state-paused',
           left &&
-            '*:animate-[slide-left_var(--animate-duration,10s)_infinite_linear]',
+            '*:animate-[slide-left_var(--animation-duration,10s)_infinite_linear]',
           right &&
-            '*:animate-[slide-right_var(--animate-duration,10s)_infinite_linear]',
+            '*:animate-[slide-right_var(--animation-duration,10s)_infinite_linear]',
           className
         )}
         {...props}

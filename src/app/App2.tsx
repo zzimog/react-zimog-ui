@@ -1,12 +1,16 @@
 import { MoreVertical } from 'lucide-react';
-import { Popover } from '@ui';
+import { Card, Popover } from '@ui';
 
-const App = () => {
+const PopoverTest = ({ className }: any) => {
   return (
-    <Popover open>
+    <Popover defaultOpen>
       <Popover.Trigger
+        aria-label="Open layer"
+        title="Open layer"
         className={[
-          'p-1',
+          className,
+          'absolute',
+          'p-2',
           'rounded-shape',
           'transition-colors',
           'duration-300',
@@ -26,32 +30,25 @@ const App = () => {
       >
         <MoreVertical className="size-4" />
       </Popover.Trigger>
-      <Popover.Content
-        className={[
-          'flex',
-          'w-80',
-          'rounded-shape',
-          'border',
-          'overflow-hidden',
-          // focus
-          'focusable',
-          'focus:focus',
-          // light
-          'border-zinc-200',
-          'bg-zinc-100',
-          // dark
-          'dark:border-zinc-800',
-          'dark:bg-zinc-900',
-        ].join(' ')}
-      >
-        <div className="px-4 pt-2.5 pb-3 overflow-auto">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus iure
-          et, deleniti repudiandae perspiciatis ducimus! Quos voluptates dicta
-          deserunt, nesciunt numquam suscipit neque impedit? Asperiores quasi
-          cupiditate animi commodi!
-        </div>
+      <Popover.Content className="flex w-80">
+        <Card tabIndex={-1} className="overflow-auto" opticalCorrection="both">
+          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quo optio
+          cum dolorem porro hic impedit rem error, facilis recusandae, amet
+          dolores cumque modi debitis exercitationem. Iure nemo perspiciatis
+          molestiae perferendis!
+        </Card>
       </Popover.Content>
     </Popover>
+  );
+};
+
+const App = () => {
+  return (
+    <>
+      <PopoverTest className="top-8 left-8" />
+      <PopoverTest className="top-8 left-1/2 -translate-x-1/2" />
+      <PopoverTest className="top-8 right-8" />
+    </>
   );
 };
 

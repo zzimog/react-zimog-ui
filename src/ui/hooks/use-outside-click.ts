@@ -1,22 +1,15 @@
 import { type RefObject, useEffect } from 'react';
 
 export function useOutsideClick(
-  refs: RefObject<HTMLElement | null> | RefObject<HTMLElement | null>[],
-  callback: (evt?: MouseEvent) => void,
-  listen: boolean = true
+  refs: RefObject<HTMLElement | null>[],
+  callback: (event: MouseEvent) => void
 ) {
   useEffect(() => {
-    if (!listen) {
-      return;
-    }
-
-    const refsArray = Array.isArray(refs) ? refs : [refs];
-
     function handler(event: MouseEvent) {
       const target = event.target as HTMLElement;
 
-      for (const ref of refsArray) {
-        if (ref.current && ref.current.contains(target)) {
+      for (const ref of refs) {
+        if (ref.current?.contains(target)) {
           return;
         }
       }
@@ -25,9 +18,6 @@ export function useOutsideClick(
     }
 
     document.addEventListener('click', handler);
-
-    return () => {
-      document.removeEventListener('click', handler);
-    };
-  }, [refs, callback, listen]);
+    return () => document.removeEventListener('click', handler);
+  }, [callback]);
 }

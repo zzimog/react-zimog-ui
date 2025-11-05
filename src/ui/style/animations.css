@@ -1,29 +1,56 @@
 /* prettier-ignore */
 @theme {
-  --animate-fade-in: fade-in
-    var(--animate-duration, 200ms)
-    var(--animate-ease, ease-out)
-    forwards;
-  --animate-fade-out: fade-out
-    var(--animate-duration, 200ms)
-    var(--animate-ease, ease-out)
-    forwards;
+  --animate-in: enter
+    var(--animation-duration, var(--tw-duration, 150ms))
+    var(--animation-ease, var(--tw-ease, ease))
+    var(--animation-fill-mode, forwards);
+  --animate-out: exit
+    var(--animation-duration, var(--tw-duration, 150ms))
+    var(--animation-ease, var(--tw-ease, ease))
+    var(--animation-fill-mode, forwards);
 
-  @keyframes fade-in {
+  @keyframes enter {
     from {
-      opacity: 0;
+      opacity: var(--enter-opacity, 0);
+      filter: blur(var(--enter-blur, 0));
+      transform:
+        translate3d(
+          var(--enter-translate-x, 0),
+          var(--enter-translate-y, 0),
+          var(--enter-translate-z, 0))
+        scale3d(
+          var(--enter-scale, 1),
+          var(--enter-scale, 1),
+          var(--enter-scale, 1))
+        rotate(var(--enter-rotate, 0));
     }
   }
 
-  @keyframes fade-out {
+  @keyframes exit {
     to {
-      opacity: 0;
+      opacity: var(--exit-opacity, 0);
+      filter: blur(var(--exit-blur, 0));
+      transform:
+        translate3d(
+          var(--exit-translate-x, 0),
+          var(--exit-translate-y, 0),
+          var(--exit-translate-z, 0))
+        scale3d(
+          var(--exit-scale, 1),
+          var(--exit-scale, 1),
+          var(--exit-scale, 1))
+        rotate(var(--exit-rotate, 0));
     }
   }
-  --animate-height-grow: height-grow var(--animate-duration, 200ms)
-    var(--animate-ease, ease-out);
-  --animate-height-shrink: height-shrink var(--animate-duration, 200ms)
-    var(--animate-ease, ease-out);
+
+  --animate-height-grow: height-grow
+    var(--animation-duration, var(--tw-duration, 150ms))
+    var(--animation-ease, var(--tw-ease, ease))
+    var(--animation-fill-mode, forwards);
+  --animate-height-shrink: height-shrink
+    var(--animation-duration, var(--tw-duration, 150ms))
+    var(--animation-ease, var(--tw-ease, ease))
+    var(--animation-fill-mode, forwards);
 
   @keyframes height-grow {
     from {
@@ -43,8 +70,14 @@
     }
   }
 
-  --animate-width-grow: width-grow var(--animate-duration, 200ms);
-  --animate-width-shrink: width-shrink var(--animate-duration, 200ms);
+  --animate-width-grow: width-grow
+    var(--animation-duration, var(--tw-duration, 150ms))
+    var(--animation-ease, var(--tw-ease, ease))
+    var(--animation-fill-mode, forwards);
+  --animate-width-shrink: width-shrink
+    var(--animation-duration, var(--tw-duration, 150ms))
+    var(--animation-ease, var(--tw-ease, ease))
+    var(--animation-fill-mode, forwards);
 
   @keyframes width-grow {
     from {
@@ -65,28 +98,43 @@
   }
 }
 
-/* prettier-ignore */
-@utility with-* {
-  animation: --value(--animate-*);
-  animation-duration: var(--animate-duration, 200ms);
-}
+/* Duration & delay */
 
 /* prettier-ignore */
-@utility animate-duration-* {
-  --animate-duration: --value(integer)ms;
-  --animate-duration: --value([*]);
-  animation-duration: --value(integer)ms;
-  animation-duration: --value([*]);
+@utility animation-duration-* {
+  --animation-duration: calc(--value(number) * 1ms);
+  --animation-duration: --value(--animation-duration-*, [duration], "initial", [*]);
+  animation-duration: var(--animation-duration, 150ms);
 }
-
 /* prettier-ignore */
-@utility animate-delay-* {
-  --animate-delay: --value(integer)ms;
-  --animate-delay: --value([*]);
-  animation-delay: --value(integer)ms;
-  animation-delay: --value([*]);
+@utility animation-delay-* {
+  --animation-delay: calc(--value(number) * 1ms);
+  --animation-delay: --value(--animation-delay-*, [duration], "initial", [*]);
+  animation-delay: var(--animation-delay, 0s);
 }
 
-@utility animate-state-pause {
-  animation-play-state: paused;
+/* Fill mode */
+
+@theme {
+  --fill-mode-normal: normal;
+  --fill-mode-reverse: reverse;
+  --fill-mode-alternate: alternate;
+  --fill-mode-alternate-reverse: alternate-reverse;
+}
+/* prettier-ignore */
+@utility fill-mode-* {
+  --animation-fill-mode: --value(--animation-fill-mode-*, "initial", [*]);
+  animation-fill-mode: var(--animation-fill-mode, normal);
+}
+
+/* Play state */
+
+@theme {
+  --play-state-running: running;
+  --play-state-paused: paused;
+}
+/* prettier-ignore */
+@utility play-state-* {
+  --animation-play-state: --value(--play-state-*, 'initial', [*]);
+  animation-play-state: var(--animation-play-state, running);
 }

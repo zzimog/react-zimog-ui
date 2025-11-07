@@ -12,8 +12,6 @@ export * from './Highlight';
 export * from './Hovering';
 export * from './Input';
 export * from './Popover';
-export * from './Popper';
-export * from './Popper';
 export * from './Spinner';
 export * from './Tabs';
 export * from './Text';

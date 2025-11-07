@@ -1,5 +1,5 @@
 import {
-  type Ref,
+  type RefObject,
   type Dispatch,
   type SetStateAction,
   createContext,
@@ -8,8 +8,8 @@ import {
 
 type PopoverContextType = {
   updateMode: 'always' | 'optimized';
-  triggerRef: Ref<HTMLElement | null>;
-  contentRef: Ref<HTMLElement | null>;
+  triggerRef: RefObject<HTMLElement | null>;
+  contentRef: RefObject<HTMLElement | null>;
   contentId: string;
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;

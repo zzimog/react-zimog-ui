@@ -1,7 +1,7 @@
 import { type ComponentPropsWithRef, useCallback, useContext } from 'react';
 import { useMergedRefs } from '../hooks';
 import { cn } from '../utils';
-import { textboxClasses } from './inputClasses';
+import classes from './inputClasses';
 import { InputGroupContext } from './inputGroupContext';
 
 type InputAddonProps = ComponentPropsWithRef<'div'>;
@@ -32,11 +32,7 @@ export const InputAddon = (inProps: InputAddonProps) => {
   );
 
   return (
-    <div
-      ref={mergedRef}
-      className={cn(textboxClasses.group.addon, className)}
-      {...props}
-    />
+    <div ref={mergedRef} className={cn(classes.addon, className)} {...props} />
   );
 };
 

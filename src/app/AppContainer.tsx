@@ -1,5 +1,5 @@
 import { StrictMode } from 'react';
-import App from './App2.tsx';
+import App from './App.tsx';
 import '../ui/style/index.css';
 
 type AppContainerProps = {

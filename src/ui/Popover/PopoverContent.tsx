@@ -1,18 +1,32 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { useMergedRefs, usePresence } from '../hooks';
 import { type PolyProps, Poly } from '../polymorphic';
-import { cn } from '../utils';
+import { animationLoop, cn } from '../utils';
 import { usePopoverContext } from './popoverContext';
 
-export type PopoverContentProps = PolyProps<typeof Poly.div> & {
-  container?: Element | DocumentFragment;
+type PopoverContentProps = PolyProps<'div'> & {
+  distance?: number;
+  padding?: number;
+  align?: 'start' | 'center' | 'end';
 };
 
-export const PopoverContent = (inProps: PopoverContentProps) => {
-  const { ref, container = document.body, className, ...props } = inProps;
+function clamp(value: number, min: number, max: number) {
+  return Math.max(Math.min(value, max), min);
+}
 
-  const { contentRef, contentId, open } = usePopoverContext();
+export const PopoverContent = (inProps: PopoverContentProps) => {
+  const {
+    ref,
+    distance = 8,
+    padding = 16,
+    align = 'center',
+    className,
+    ...props
+  } = inProps;
+
+  const { updateMode, triggerRef, contentRef, contentId, open } =
+    usePopoverContext();
 
   const { ref: presenceRef, present } = usePresence(open);
   const mergedRefs = useMergedRefs(ref, contentRef, presenceRef);
@@ -20,10 +34,82 @@ export const PopoverContent = (inProps: PopoverContentProps) => {
   const useAnimationRef = useRef(!open);
   const animate = useAnimationRef.current;
 
+  const doTheMath = useCallback(() => {
+    const trigger = triggerRef.current;
+    const content = contentRef.current;
+    if (trigger && content) {
+      const { innerWidth, innerHeight } = window;
+      const triggerRect = trigger.getBoundingClientRect();
+      const contentRect = content.getBoundingClientRect();
+
+      const maxWidth = innerWidth - padding * 2;
+      //const maxHeight = innerHeight - padding * 2;
+
+      const triggerCenterX = triggerRect.left + triggerRect.width / 2;
+      //const triggerCenterY = triggerRect.height / 2;
+
+      let posX = triggerCenterX - contentRect.width / 2;
+
+      if (align === 'start') {
+        posX = triggerRect.left;
+      } else if (align === 'end') {
+        posX = triggerRect.right - contentRect.width;
+      }
+
+      const pos = {
+        x: clamp(
+          posX,
+          padding,
+          Math.max(innerWidth - contentRect.width - padding, padding)
+        ),
+        y: triggerRect.bottom + distance,
+      };
+
+      const origin = {
+        x: clamp(triggerCenterX - pos.x, 0, contentRect.width),
+        y: clamp(0, 0, contentRect.height),
+      };
+
+      if (
+        pos.y + contentRect.height > innerHeight - padding &&
+        contentRect.height <= triggerRect.top - distance - padding
+      ) {
+        pos.y = triggerRect.top - distance - contentRect.height;
+        origin.y = contentRect.height;
+      }
+
+      content.style.transformOrigin = `${origin.x}px ${origin.y}px`;
+      content.style.setProperty('--x', `${pos.x}px`);
+      content.style.setProperty('--y', `${pos.y}px`);
+      content.style.setProperty('--max-width', `${maxWidth}px`);
+      //content.style.setProperty('--max-height', `${maxHeight}px`);
+    }
+  }, [distance, padding, align]);
+
   useEffect(() => {
     const raf = requestAnimationFrame(() => (useAnimationRef.current = true));
     return () => cancelAnimationFrame(raf);
   }, []);
+
+  useEffect(() => {
+    if (updateMode === 'always') {
+      doTheMath();
+      return animationLoop(doTheMath);
+    }
+  }, [updateMode]);
+
+  useEffect(() => {
+    if (updateMode !== 'always' && open) {
+      const rafId = requestAnimationFrame(doTheMath);
+      window.addEventListener('resize', doTheMath);
+      window.addEventListener('scroll', doTheMath);
+      return () => {
+        cancelAnimationFrame(rafId);
+        window.removeEventListener('resize', doTheMath);
+        window.removeEventListener('scroll', doTheMath);
+      };
+    }
+  }, [updateMode, open]);
 
   return present
     ? createPortal(
@@ -36,7 +122,7 @@ export const PopoverContent = (inProps: PopoverContentProps) => {
           className={cn(
             'fixed top-0 left-0',
             'max-w-(--max-width)',
-            'max-h-(--max-height)',
+            //'max-h-(--max-height)',
             'translate-x-(--x)',
             'translate-y-(--y)',
             animate && [
@@ -49,7 +135,9 @@ export const PopoverContent = (inProps: PopoverContentProps) => {
           )}
           {...props}
         />,
-        container
+        document.body
       )
     : null;
 };
+
+PopoverContent.displayName = 'PopoverContent';

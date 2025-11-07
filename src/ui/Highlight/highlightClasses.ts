@@ -13,7 +13,6 @@ const highlightClasses = {
       'rounded-shape',
       'bg-highlight',
       'transition-all',
-      'duration-200',
       'ease-linear',
     ],
     {
@@ -40,8 +39,7 @@ const highlightClasses = {
     variants: {
       hover: {
         true: [
-          'transition-[background-color]',
-          'duration-200',
+          'transition',
           'not-active:delay-100',
           '[@media(hover:none)]:active:bg-highlight',
         ],

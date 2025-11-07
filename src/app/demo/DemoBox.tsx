@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Card, cn, Title } from '@ui';
+import { Card, cn } from '@ui';
 
 export const DemoBox = (props: {
   id?: string;
@@ -11,11 +11,14 @@ export const DemoBox = (props: {
   const { id, title, children, row, center } = props;
 
   return (
-    <Card as="section">
-      <header className="-mt-2 mb-4 pb-4 border-b border-gray-500/20">
-        <Title id={id} size={2} children={title} />
-      </header>
-      <main
+    <Card as="article">
+      <Card.Header>
+        <Card.Title as="h2" id={id}>
+          {title}
+        </Card.Title>
+      </Card.Header>
+      <Card.Content
+        as="main"
         className={cn(
           'flex gap-4',
           !row && 'flex-col',
@@ -23,7 +26,7 @@ export const DemoBox = (props: {
         )}
       >
         {children}
-      </main>
+      </Card.Content>
     </Card>
   );
 };

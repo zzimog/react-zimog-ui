@@ -3,7 +3,7 @@ import { useMergedRefs } from '../hooks';
 import { type PolyProps, Poly } from '../polymorphic';
 import { usePopoverContext } from './popoverContext';
 
-export type PopoverTriggerProps = PolyProps<typeof Poly.button>;
+type PopoverTriggerProps = PolyProps<'button'>;
 
 export const PopoverTrigger = (inProps: PopoverTriggerProps) => {
   const { ref: refProp, ...props } = inProps;
@@ -32,3 +32,5 @@ export const PopoverTrigger = (inProps: PopoverTriggerProps) => {
     />
   );
 };
+
+PopoverTrigger.displayName = 'PopoverTrigger';

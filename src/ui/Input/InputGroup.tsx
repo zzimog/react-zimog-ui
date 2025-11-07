@@ -1,6 +1,6 @@
 import { type ComponentPropsWithRef, useRef } from 'react';
 import { cn } from '../utils';
-import { textboxClasses } from './inputClasses';
+import classes from './inputClasses';
 import { InputGroupContext } from './inputGroupContext';
 
 type InputGroupProps = ComponentPropsWithRef<'div'>;
@@ -13,7 +13,7 @@ export const InputGroup = (inProps: InputGroupProps) => {
   };
 
   return (
-    <div className={cn(textboxClasses.group.root, className)} {...props}>
+    <div className={cn(classes.group, className)} {...props}>
       <InputGroupContext value={context}>{children}</InputGroupContext>
     </div>
   );

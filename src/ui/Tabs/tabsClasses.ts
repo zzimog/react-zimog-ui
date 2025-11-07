@@ -6,9 +6,7 @@ const tabsClasses = {
   },
   trigger: [
     'p-2',
-    'rounded-md',
-    'transition-all',
-    'focusable',
+    'transition',
     'focus-visible:focus',
     'data-[selected="false"]:not-hover:text-muted',
   ].join(' '),

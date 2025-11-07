@@ -31,7 +31,7 @@
   --color-danger-dark-contrast: var(--color-white);
 
   --color-border: --alpha(var(--color-zinc-500) / 25%);
-  --color-highlight: --alpha(var(--color-violet-500) / 20%);
+  --color-highlight: --alpha(var(--color-violet-500) / 15%);
   --color-outline: --alpha(var(--color-violet-500) / 50%);
 
   --color-muted-foreground: --alpha(var(--color-foreground) / 50%);
@@ -49,22 +49,22 @@
   }
 }
 
-@utility focusable {
-  outline: 4px solid transparent;
-  outline-offset: 1px;
-}
 @utility focus {
-  outline-color: var(--color-outline);
+  outline: 0;
+  @apply ring-4 ring-offset-1;
+  @apply ring-outline;
+  @apply ring-offset-background;
+  @apply dark:ring-offset-foreground;
 }
 
-@utility hover-effect {
+@utility halo {
   --color: oklch(71.4% 0.203 305.504 / 8%); /* purple-400 */
-  --pos-x: calc(var(--x) - (var(--hover-size) / 2));
-  --pos-y: calc(var(--y) - (var(--hover-size) / 2));
+  --pos-x: calc(var(--x) - (var(--halo-size) / 2));
+  --pos-y: calc(var(--y) - (var(--halo-size) / 2));
   background-image: radial-gradient(var(--color) 0, transparent 50%);
   background-repeat: no-repeat;
   background-position: var(--pos-x) var(--pos-y);
-  background-size: var(--hover-size) var(--hover-size);
+  background-size: var(--halo-size) var(--halo-size);
   @apply transition-opacity duration-200;
 }
 

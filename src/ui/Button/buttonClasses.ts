@@ -9,14 +9,14 @@ const buttonClasses = cva(
     'rounded-shape',
     'whitespace-nowrap',
     'cursor-pointer',
-    'transition-all',
-    'not-disabled:active:scale-95',
+    'transition',
     'disabled:opacity-50',
     'disabled:cursor-not-allowed',
+    'not-disabled:active:scale-95',
     // outline
-    'outline-(--base)/50',
     'focusable',
     'focus-visible:focus',
+    'focus-visible:outline-(--base)/50',
     // icon
     '[&_svg]:shrink-0',
     '[&_svg]:pointer-events-none',
@@ -29,7 +29,7 @@ const buttonClasses = cva(
         lg: 'p-3 text-lg/7 [&_svg]:size-7',
       },
       variant: {
-        solid: 'text-background',
+        solid: null,
         outlined: 'border',
         dashed: 'border border-dashed',
         ghost: null,
@@ -37,9 +37,12 @@ const buttonClasses = cva(
       color: {
         default: [
           '[--base:var(--color-zinc-500)]',
-          'bg-zinc-500',
-          'border-zinc-500',
-          'text-white',
+          'bg-zinc-300',
+          'border-zinc-300',
+          'text-foreground',
+          'dark:bg-zinc-700',
+          'dark:border-zinc-700',
+          'dark:text-background',
         ],
         primary: [
           '[--base:var(--color-primary)]',

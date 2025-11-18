@@ -6,8 +6,8 @@ const accordionClasses = {
   item: cn(
     'w-full',
     'border-border',
-    'not-first:pt-2',
-    'not-last:pb-2',
+    'not-first:pt-1',
+    'not-last:pb-1',
     'not-last:border-b'
   ),
   trigger: cn(

@@ -1,18 +1,18 @@
 import { type ReactNode, useContext } from 'react';
 import { type PolyProps, Poly } from '../polymorphic';
-import { cn } from '../utils';
 import { Spinner } from '../Spinner';
+import { cn } from '../utils';
+import classes from './buttonClasses';
 import { ButtonGroup } from './ButtonGroup';
 import { ButtonGroupContext } from './buttonGroupContext';
-import classes from './buttonClasses';
 
 export type ButtonSize = 'sm' | 'md' | 'lg';
 
-export type ButtonVariant = 'solid' | 'outlined' | 'dashed' | 'ghost';
+export type ButtonVariant = 'solid' | 'outlined' | 'ghost';
 
-export type ButtonColor = 'default' | 'primary' | 'secondary' | 'danger';
+export type ButtonColor = 'default' | 'primary' | 'danger';
 
-export type ButtonProps = PolyProps<typeof Poly.button> & {
+type ButtonProps = PolyProps<'button'> & {
   size?: ButtonSize;
   variant?: ButtonVariant;
   color?: ButtonColor;
@@ -64,4 +64,5 @@ export const Button = (inProps: ButtonProps) => {
   );
 };
 
+Button.displayName = 'Button';
 Button.Group = ButtonGroup;

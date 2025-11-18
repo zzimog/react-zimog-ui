@@ -79,11 +79,9 @@ export const Collapsible = (inProps: CollapsibleProps) => {
       className={cn(classes({ dir }), className)}
       hidden={!shouldRender}
       style={{
+        ['--width' as any]: width ? `${width}px` : undefined,
+        ['--height' as any]: height ? `${height}px` : undefined,
         ...style,
-        ...{
-          '--width': width ? `${width}px` : undefined,
-          '--height': height ? `${height}px` : undefined,
-        },
       }}
       {...props}
     >

@@ -3,19 +3,9 @@ import { type ButtonColor, type ButtonVariant, Button, capitalize } from '@ui';
 import { DemoBox } from './DemoBox';
 import { DemoSection } from './DemoSection';
 
-const buttonColors: ButtonColor[] = [
-  'default',
-  'primary',
-  'secondary',
-  'danger',
-];
+const buttonColors: ButtonColor[] = ['default', 'primary', 'danger'];
 
-const buttonVariants: ButtonVariant[] = [
-  'solid',
-  'outlined',
-  'dashed',
-  'ghost',
-];
+const buttonVariants: ButtonVariant[] = ['solid', 'outlined', 'ghost'];
 
 const buttons = (
   <DemoBox id="buttons" title="Buttons">
@@ -78,7 +68,7 @@ const buttons = (
       </Button.Group>
       <Button.Group size="sm" color="primary" joined>
         <Button>Small...</Button>
-        <Button color="secondary">...joined...</Button>
+        <Button color="default">...joined...</Button>
         <Button color="danger">...buttons</Button>
       </Button.Group>
       <Button.Group color="primary" joined disabled>

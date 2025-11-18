@@ -3,36 +3,35 @@ import { cva } from 'class-variance-authority';
 const buttonClasses = cva(
   [
     'inline-flex',
-    'justify-center',
-    'items-center',
-    'gap-1',
+    'place-content-center',
+    'gap-2',
     'rounded-shape',
+    'border',
     'whitespace-nowrap',
-    'cursor-pointer',
     'transition',
     'disabled:opacity-50',
     'disabled:cursor-not-allowed',
     'not-disabled:active:scale-95',
-    // outline
+    // focus
     'focusable',
-    'focus-visible:focus',
-    'focus-visible:outline-(--base)/50',
+    'focus:outline-(--base)/50',
+    'focus:z-10',
     // icon
+    '[&_svg]:-mx-1',
     '[&_svg]:shrink-0',
     '[&_svg]:pointer-events-none',
   ],
   {
     variants: {
       size: {
-        sm: 'p-1 text-sm/5 [&_svg]:size-5',
-        md: 'p-2 text-base/6 [&_svg]:size-6',
-        lg: 'p-3 text-lg/7 [&_svg]:size-7',
+        sm: 'px-2 py-1 text-xs/4 [&_svg]:size-4',
+        md: 'px-3 py-2 text-sm/5 [&_svg]:size-5',
+        lg: 'px-4 py-3 text-base/6 [&_svg]:size-6',
       },
       variant: {
         solid: null,
-        outlined: 'border',
-        dashed: 'border border-dashed',
-        ghost: null,
+        outlined: null,
+        ghost: 'border-transparent!',
       },
       color: {
         default: [
@@ -49,12 +48,6 @@ const buttonClasses = cva(
           'bg-primary',
           'border-primary',
           'text-primary-contrast',
-        ],
-        secondary: [
-          '[--base:var(--color-secondary)]',
-          'bg-secondary',
-          'border-secondary',
-          'text-secondary-contrast',
         ],
         danger: [
           '[--base:var(--color-danger)]',
@@ -73,14 +66,16 @@ const buttonClasses = cva(
     },
     compoundVariants: [
       {
-        variant: ['outlined', 'dashed', 'ghost'],
+        variant: ['outlined', 'ghost'],
         className: [
           'text-foreground',
           'dark:text-background',
           'bg-transparent',
           'dark:bg-transparent',
-          'hover:bg-(--base)/25',
-          'not-disabled:active:bg-(--base)/25',
+          'hover:bg-(--base)/10',
+          'not-disabled:active:bg-(--base)/10',
+          'dark:hover:bg-(--base)/20',
+          'dark:not-disabled:active:bg-(--base)/20',
         ],
       },
     ],

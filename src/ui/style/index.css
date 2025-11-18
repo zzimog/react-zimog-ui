@@ -9,52 +9,26 @@
   --color-foreground: --alpha(var(--color-zinc-900) / 90%);
   --color-background: --alpha(var(--color-zinc-100) / 90%);
 
-  --color-primary: var(--color-violet-700);
+  --color-primary: var(--color-violet-500);
   --color-primary-contrast: var(--color-white);
-  --color-primary-light: var(--color-violet-600);
-  --color-primary-light-contrast: var(--color-white);
-  --color-primary-dark: var(--color-violet-800);
-  --color-primary-dark-contrast: var(--color-white);
 
-  --color-secondary: var(--color-orange-400);
-  --color-secondary-contrast: var(--color-white);
-  --color-secondary-light: var(--color-orange-300);
-  --color-secondary-light-contrast: var(--color-white);
-  --color-secondary-dark: var(--color-orange-500);
-  --color-secondary-dark-contrast: var(--color-white);
-
-  --color-danger: var(--color-red-600);
+  --color-danger: var(--color-red-700);
   --color-danger-contrast: var(--color-white);
-  --color-danger-light: var(--color-red-500);
-  --color-danger-light-contrast: var(--color-white);
-  --color-danger-dark: var(--color-red-700);
-  --color-danger-dark-contrast: var(--color-white);
 
   --color-border: --alpha(var(--color-zinc-500) / 25%);
-  --color-highlight: --alpha(var(--color-violet-500) / 15%);
-  --color-outline: --alpha(var(--color-violet-500) / 50%);
+  --color-highlight: --alpha(var(--color-primary) / 15%);
+  --color-outline: --alpha(var(--color-primary) / 50%);
 
-  --color-muted-foreground: --alpha(var(--color-foreground) / 50%);
-  --color-muted-background: --alpha(var(--color-background) / 50%);
+  --color-muted-foreground: --alpha(var(--color-foreground) / 75%);
+  --color-muted-background: --alpha(var(--color-background) / 75%);
 
-  --radius-shape: 0.375rem;
+  --radius-shape: calc(var(--spacing) * 1);
 }
 
-@utility text-muted {
-  --muted: oklch(0% 0 0 / 60%);
-  color: var(--muted);
-
-  @variant dark {
-    --muted: oklch(100% 0 0 / 60%);
-  }
-}
-
-@utility focus {
-  outline: 0;
-  @apply ring-4 ring-offset-1;
-  @apply ring-outline;
-  @apply ring-offset-background;
-  @apply dark:ring-offset-foreground;
+@utility focusable {
+  @apply outline-3;
+  @apply outline-offset-1;
+  @apply outline-transparent;
 }
 
 @utility halo {
@@ -78,4 +52,11 @@ body {
     background-color: var(--color-black);
     @apply text-background;
   }
+}
+
+:checked {
+  background-image: url('data:image/svg+xml,<svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 16"><path stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M1 7.917 5.724 12.5 15 3.5"/></svg>');
+  background-repeat: no-repeat;
+  background-position: 50%;
+  background-size: 0.5rem;
 }

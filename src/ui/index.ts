@@ -8,6 +8,7 @@ export * from './Accordion';
 export * from './Button';
 export * from './Card';
 export * from './Collapsible';
+export * from './Form';
 export * from './Highlight';
 export * from './Hovering';
 export * from './Input';

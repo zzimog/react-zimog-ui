@@ -14,7 +14,7 @@ export const Card = (inProps: PolyProps<'div'>) => {
           'py-6',
           'rounded-shape',
           'border',
-          'transition',
+          'transition-colors',
           'border-border',
           'text-foreground',
           'bg-background',

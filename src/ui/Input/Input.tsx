@@ -1,15 +1,12 @@
-import { useContext } from 'react';
+import { useContext, type ComponentPropsWithRef } from 'react';
 import { useMergedRefs } from '../hooks/use-merged-refs';
-import { type PolyProps, Poly } from '../polymorphic';
 import { cn } from '../utils';
 import { InputAddon } from './InputAddon';
 import classes from './inputClasses';
 import { InputGroup } from './InputGroup';
 import { InputGroupContext } from './inputGroupContext';
 
-type InputProps = PolyProps<'input'>;
-
-export const Input = (inProps: InputProps) => {
+export const Input = (inProps: ComponentPropsWithRef<'input'>) => {
   const { ref, type, className, ...props } = inProps;
 
   const { inputRef } = useContext(InputGroupContext) || {};
@@ -20,7 +17,7 @@ export const Input = (inProps: InputProps) => {
   const isCheckable = type === 'checkbox' || isRadio;
 
   return (
-    <Poly.input
+    <input
       ref={mergedRefs}
       type={type}
       className={cn(

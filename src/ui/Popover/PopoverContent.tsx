@@ -81,6 +81,7 @@ export const PopoverContent = (inProps: PopoverContentProps) => {
       content.style.transformOrigin = `${origin.x}px ${origin.y}px`;
       content.style.setProperty('--x', `${pos.x}px`);
       content.style.setProperty('--y', `${pos.y}px`);
+      content.style.setProperty('--width', `${triggerRect.width}px`);
       content.style.setProperty('--max-width', `${maxWidth}px`);
       //content.style.setProperty('--max-height', `${maxHeight}px`);
     }

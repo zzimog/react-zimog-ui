@@ -23,11 +23,11 @@ export const PopoverTrigger = (inProps: PopoverTriggerProps) => {
 
   return (
     <Poly.button
+      ref={mergedRefs}
       data-open={open}
       aria-haspopup="dialog"
       aria-expanded={open}
       aria-controls={contentId}
-      ref={mergedRefs}
       {...props}
     />
   );

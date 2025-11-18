@@ -1,5 +1,5 @@
-import { Button, Card, cn, ThemeSwitcher } from '@ui';
-import { Form } from '../ui/Form';
+import { Button, Card, Form, ThemeSwitcher, cn } from '@ui';
+import { Select } from './Select';
 
 const App = () => {
   function handleSubmit(data: any) {
@@ -59,6 +59,13 @@ const App = () => {
               .
             </Form.Field.Text>
           </Form.Field>
+
+          <Select>
+            <Select.Option label="Lorem" />
+            <Select.Option label="Ipsum" />
+            <Select.Option label="Dolor" />
+            <Select.Option label="Sit" />
+          </Select>
 
           <div className="flex justify-end gap-2">
             <Button type="submit" color="primary">

@@ -51,13 +51,13 @@ const classes = {
       'block',
       'w-full',
       'min-w-0',
-      'bg-white/95',
-      'dark:bg-white/5',
+      'bg-white',
+      'dark:bg-zinc-800',
       // basic states
       'focusable',
       'focus:outline-outline',
       'focus:border-primary',
-      'hover:not-disabled:border-primary',
+      'not-disabled:hover:border-primary',
       // disabled
       'disabled:text-border',
       'disabled:bg-transparent',

@@ -32,7 +32,7 @@ export function useControllableState<T>(
         setUncontrolled(next);
       }
     },
-    [isControlled, onChange]
+    [prop, isControlled, onChange]
   );
 
   return [value, setValue];

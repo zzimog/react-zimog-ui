@@ -1,8 +1,9 @@
 import { Popover, cn, useControllableState } from '@ui';
-import { ChevronDown } from 'lucide-react';
+import { Check, ChevronDown } from 'lucide-react';
 import {
   createContext,
   useContext,
+  useLayoutEffect,
   useState,
   type ComponentPropsWithoutRef,
 } from 'react';
@@ -36,7 +37,8 @@ export const Select = (inProps: SelectProps) => {
     onChange,
   });
 
-  const [label, setLabel] = useState('');
+  const [label, setLabel] = useState<string | undefined>(undefined);
+  const [open, setOpen] = useState(true);
 
   const context = {
     value,
@@ -44,8 +46,12 @@ export const Select = (inProps: SelectProps) => {
     setLabel,
   };
 
+  useLayoutEffect(() => {
+    setOpen(false);
+  }, []);
+
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={(o) => setOpen(o)}>
       <Popover.Trigger
         type="button"
         className={cn(
@@ -58,6 +64,7 @@ export const Select = (inProps: SelectProps) => {
           'text-sm',
           'border-border',
           'bg-white',
+          'dark:bg-zinc-800',
           'rounded-shape',
           'cursor-pointer',
           'select-none',
@@ -84,6 +91,7 @@ export const Select = (inProps: SelectProps) => {
           'hover:border-primary',
           'transition-colors',
           'bg-white',
+          'dark:bg-zinc-800',
           'rounded-shape',
           'overflow-hidden'
         )}
@@ -98,13 +106,13 @@ export const Select = (inProps: SelectProps) => {
 
 type SelectOptionProps = {
   label: string;
-  value?: string;
+  value: string;
   selected?: boolean;
   disabled?: boolean;
 };
 
 const SelectOption = (inProps: SelectOptionProps) => {
-  const { label, value = '' } = inProps;
+  const { label, value, selected, disabled } = inProps;
 
   const context = useContext(SelectContext);
 
@@ -112,14 +120,29 @@ const SelectOption = (inProps: SelectOptionProps) => {
     throw new Error('SelectOption must be used within Select element.');
   }
 
+  const isSelected = selected || value === context.value;
+
   function handleClick() {
-    context?.setValue(value);
-    context?.setLabel(label);
+    if (!disabled) {
+      context?.setValue(value);
+      context?.setLabel(label);
+    }
   }
 
+  useLayoutEffect(() => {
+    if (!context.value || selected) {
+      context?.setValue(value);
+      context?.setLabel(label);
+    }
+  }, []);
+
   return (
-    <li className="p-2 hover:bg-zinc-100 cursor-pointer" onClick={handleClick}>
-      {label}
+    <li
+      className="grid grid-cols-[calc(var(--spacing)*4)_1fr] items-center gap-2 p-2 hover:bg-zinc-100 dark:hover:bg-zinc-900 cursor-pointer"
+      onClick={handleClick}
+    >
+      {isSelected && <Check className="size-4" />}
+      <span className="col-start-2">{label}</span>
     </li>
   );
 };

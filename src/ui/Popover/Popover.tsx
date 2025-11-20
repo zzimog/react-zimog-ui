@@ -1,18 +1,30 @@
-import { type PropsWithChildren, useId, useRef, useState } from 'react';
-import { useOutsideClick } from '../hooks';
+import { type PropsWithChildren, useId, useRef } from 'react';
+import { useControllableState, useOutsideClick } from '../hooks';
 import { PopoverContent } from './PopoverContent';
 import { PopoverContext } from './popoverContext';
 import { PopoverTrigger } from './PopoverTrigger';
 
 type PopoverProps = PropsWithChildren<{
   updateMode?: 'always' | 'optimized';
+  open?: boolean;
   defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }>;
 
 export const Popover = (inProps: PopoverProps) => {
-  const { updateMode = 'optimized', defaultOpen, children } = inProps;
+  const {
+    updateMode = 'optimized',
+    open: openProp,
+    defaultOpen = false,
+    onOpenChange,
+    children,
+  } = inProps;
 
-  const [open, setOpen] = useState(defaultOpen || false);
+  const [open, setOpen] = useControllableState({
+    prop: openProp,
+    defaultValue: defaultOpen,
+    onChange: onOpenChange,
+  });
 
   const triggerRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLElement>(null);

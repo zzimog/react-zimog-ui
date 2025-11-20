@@ -61,10 +61,10 @@ const App = () => {
           </Form.Field>
 
           <Select>
-            <Select.Option label="Lorem" />
-            <Select.Option label="Ipsum" />
-            <Select.Option label="Dolor" />
-            <Select.Option label="Sit" />
+            <Select.Option value="1" label="Lorem" />
+            <Select.Option value="2" label="Ipsum" />
+            <Select.Option value="3" label="Dolor" />
+            <Select.Option value="4" label="Sit" />
           </Select>
 
           <div className="flex justify-end gap-2">

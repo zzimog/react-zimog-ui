@@ -1,4 +1,4 @@
-import { MessageCircleWarning, TriangleAlert } from 'lucide-react';
+import { MessageCircleWarning } from 'lucide-react';
 import {
   type ComponentPropsWithRef,
   createContext,
@@ -116,10 +116,10 @@ const FormFieldInvalid = (inProps: ComponentPropsWithRef<'p'>) => {
   return (
     shouldRender && (
       <p
-        className={cn('pl-6', 'text-sm/5', 'text-danger', className)}
+        className={cn('pl-5', 'text-sm/5', 'text-danger', className)}
         {...props}
       >
-        <MessageCircleWarning className="float-left size-4 mt-0.5 -ml-5" />
+        <MessageCircleWarning className="float-left size-4 my-0.5 -ml-5" />
         {children}
       </p>
     )

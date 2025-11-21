@@ -1,20 +1,15 @@
 import { Popover, cn, useControllableState } from '@ui';
-import { Check, ChevronDown } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import {
-  createContext,
-  useContext,
-  useLayoutEffect,
-  useState,
   type ComponentPropsWithoutRef,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
 } from 'react';
-
-type SelectContextValue = {
-  value: string;
-  setValue(value: string): void;
-  setLabel(label: string): void;
-};
-
-const SelectContext = createContext<SelectContextValue | undefined>(undefined);
+import { SelectContext } from './selectContext';
+import { SelectOption } from './SelectOption';
+import { useFocusGuards } from './useFocusGuards';
 
 type SelectProps = ComponentPropsWithoutRef<'button'> & {
   value?: string;
@@ -42,24 +37,72 @@ export const Select = (inProps: SelectProps) => {
 
   const context = {
     value,
-    setValue,
-    setLabel,
+    setSelected(value: string, label: string) {
+      setValue(value);
+      setLabel(label);
+      setOpen(false);
+    },
   };
+
+  const ref = useRef<HTMLDivElement>(null);
+
+  function handleOpenChange(open: boolean) {
+    setOpen(open);
+  }
+
+  const prevFocusRef = useRef<HTMLElement>(null);
+
+  useFocusGuards(open);
+
+  useEffect(() => {
+    function handleFocusIn(event: Event) {
+      const target = event.target as HTMLElement;
+      const content = ref.current;
+      if (content) {
+        const options = content.querySelectorAll<HTMLElement>(
+          '[role="option"][tabIndex]'
+        );
+
+        const first = options[0];
+        const last = options[options.length - 1];
+
+        const lastFocus = prevFocusRef.current;
+
+        if (!content.contains(target)) {
+          if (lastFocus === first) {
+            last.focus();
+            prevFocusRef.current = last;
+          }
+
+          if (lastFocus === last) {
+            first.focus();
+            prevFocusRef.current = first;
+          }
+        } else {
+          prevFocusRef.current = target;
+        }
+      }
+    }
+
+    window.addEventListener('focusin', handleFocusIn);
+    return () => window.addEventListener('focusin', handleFocusIn);
+  }, []);
 
   useLayoutEffect(() => {
     setOpen(false);
   }, []);
 
   return (
-    <Popover open={open} onOpenChange={(o) => setOpen(o)}>
+    <Popover open={open} onOpenChange={handleOpenChange}>
       <Popover.Trigger
+        role="combobox"
         type="button"
         className={cn(
           'flex',
           'justify-between',
           'items-center',
           'h-10',
-          'p-2',
+          'px-3 py-2',
           'border',
           'text-sm',
           'border-border',
@@ -80,6 +123,7 @@ export const Select = (inProps: SelectProps) => {
         <ChevronDown className="size-4" />
       </Popover.Trigger>
       <Popover.Content
+        ref={ref}
         align="start"
         className={cn(
           'flex',
@@ -87,16 +131,21 @@ export const Select = (inProps: SelectProps) => {
           'max-h-32',
           'border',
           'text-sm',
+          'focusable',
+          'focus-within:outline-outline',
+          'focus-within:border-primary',
           'border-border',
           'hover:border-primary',
           'transition-colors',
           'bg-white',
           'dark:bg-zinc-800',
           'rounded-shape',
-          'overflow-hidden'
+          'overflow-hidden',
+          '[--exit-scale-y:0]',
+          '[--enter-scale-y:0]'
         )}
       >
-        <ul tabIndex={-1} className="w-full overflow-auto">
+        <ul tabIndex={-1} className="w-full p-2 overflow-auto outline-0">
           <SelectContext value={context}>{children}</SelectContext>
         </ul>
       </Popover.Content>
@@ -104,49 +153,5 @@ export const Select = (inProps: SelectProps) => {
   );
 };
 
-type SelectOptionProps = {
-  label: string;
-  value: string;
-  selected?: boolean;
-  disabled?: boolean;
-};
-
-const SelectOption = (inProps: SelectOptionProps) => {
-  const { label, value, selected, disabled } = inProps;
-
-  const context = useContext(SelectContext);
-
-  if (!context) {
-    throw new Error('SelectOption must be used within Select element.');
-  }
-
-  const isSelected = selected || value === context.value;
-
-  function handleClick() {
-    if (!disabled) {
-      context?.setValue(value);
-      context?.setLabel(label);
-    }
-  }
-
-  useLayoutEffect(() => {
-    if (!context.value || selected) {
-      context?.setValue(value);
-      context?.setLabel(label);
-    }
-  }, []);
-
-  return (
-    <li
-      className="grid grid-cols-[calc(var(--spacing)*4)_1fr] items-center gap-2 p-2 hover:bg-zinc-100 dark:hover:bg-zinc-900 cursor-pointer"
-      onClick={handleClick}
-    >
-      {isSelected && <Check className="size-4" />}
-      <span className="col-start-2">{label}</span>
-    </li>
-  );
-};
-
 Select.displayName = 'Select';
-SelectOption.displayName = 'SelectOption';
 Select.Option = SelectOption;

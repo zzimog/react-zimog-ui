@@ -8,11 +8,9 @@ const App = () => {
 
   return (
     <Card>
-      <Card.Header>
-        <Card.Title className="flex justify-between items-center -mt-1.5">
-          Register
-          <ThemeSwitcher />
-        </Card.Title>
+      <Card.Header className="flex-row justify-between items-center -mt-1.5">
+        <Card.Title as="h1">Register</Card.Title>
+        <ThemeSwitcher />
       </Card.Header>
       <Card.Content>
         <Form onFormSubmit={handleSubmit}>
@@ -35,11 +33,18 @@ const App = () => {
               Email must be in format <b>username@domain.xx</b>
             </Form.Field.Invalid>
           </Form.Field>
-          <Form.Field name="privacy" type="checkbox">
-            <Form.Field.Text className="leading-6">
+          <Form.Field
+            title="Accept the Privacy Policy"
+            aria-label="Accept the Privacy Policy"
+            aria-describedby="privacy-label"
+            name="privacy"
+            type="checkbox"
+          >
+            <Form.Field.Text id="privacy-label" className="leading-6">
               I have read and agree with the{' '}
               <a
                 href="#!"
+                title="Privacy Policy"
                 className={cn(
                   'font-bold',
                   'underline',
@@ -65,6 +70,7 @@ const App = () => {
             <Select.Option value="2" label="Ipsum" />
             <Select.Option value="3" label="Dolor" />
             <Select.Option value="4" label="Sit" />
+            <Select.Option value="5" label="Amet" />
           </Select>
 
           <div className="flex justify-end gap-2">

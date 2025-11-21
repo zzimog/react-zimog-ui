@@ -19,9 +19,9 @@
           var(--enter-translate-y, 0),
           var(--enter-translate-z, 0))
         scale3d(
-          var(--enter-scale, 1),
-          var(--enter-scale, 1),
-          var(--enter-scale, 1))
+          var(--enter-scale-x, var(--enter-scale, 1)),
+          var(--enter-scale-y, var(--enter-scale, 1)),
+          var(--enter-scale-z, var(--enter-scale, 1)))
         rotate(var(--enter-rotate, 0));
     }
   }
@@ -36,9 +36,9 @@
           var(--exit-translate-y, 0),
           var(--exit-translate-z, 0))
         scale3d(
-          var(--exit-scale, 1),
-          var(--exit-scale, 1),
-          var(--exit-scale, 1))
+          var(--exit-scale-x, var(--exit-scale, 1)),
+          var(--exit-scale-y, var(--exit-scale, 1)),
+          var(--exit-scale-z, var(--exit-scale, 1)))
         rotate(var(--exit-rotate, 0));
     }
   }

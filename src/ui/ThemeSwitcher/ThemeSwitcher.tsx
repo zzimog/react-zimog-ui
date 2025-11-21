@@ -7,13 +7,14 @@ export const ThemeSwitcher = () => {
   const [scheme, setScheme] = useTheme();
 
   const isDark = scheme === 'dark';
+  const other = isDark ? 'light' : 'dark';
 
   return (
     <Button
       size="sm"
       variant="ghost"
-      title={`${capitalize(scheme)} mode`}
-      onClick={() => setScheme(isDark ? 'light' : 'dark')}
+      title={`${capitalize(other)} mode`}
+      onClick={() => setScheme(other)}
     >
       {isDark ? <Sun /> : <Moon />}
     </Button>

@@ -34,6 +34,8 @@ export const PopoverContent = (inProps: PopoverContentProps) => {
   const useAnimationRef = useRef(!open);
   const animate = useAnimationRef.current;
 
+  const shouldRender = open || present;
+
   const doTheMath = useCallback(() => {
     const trigger = triggerRef.current;
     const content = contentRef.current;
@@ -79,10 +81,10 @@ export const PopoverContent = (inProps: PopoverContentProps) => {
       }
 
       content.style.transformOrigin = `${origin.x}px ${origin.y}px`;
-      content.style.setProperty('--x', `${pos.x}px`);
-      content.style.setProperty('--y', `${pos.y}px`);
-      content.style.setProperty('--width', `${triggerRect.width}px`);
+      content.style.setProperty('--x', `${Math.floor(pos.x)}px`);
+      content.style.setProperty('--y', `${Math.floor(pos.y)}px`);
       content.style.setProperty('--max-width', `${maxWidth}px`);
+      content.style.setProperty('--width', `${triggerRect.width}px`);
       //content.style.setProperty('--max-height', `${maxHeight}px`);
     }
   }, [distance, padding, align]);
@@ -112,14 +114,14 @@ export const PopoverContent = (inProps: PopoverContentProps) => {
     }
   }, [updateMode, open]);
 
-  return present
+  return shouldRender
     ? createPortal(
         <Poly.div
           ref={mergedRefs}
+          role="dialog"
           id={contentId}
           data-open={open}
-          role="dialog"
-          hidden={!present}
+          hidden={!shouldRender}
           className={cn(
             'fixed top-0 left-0',
             'max-w-(--max-width)',
@@ -127,8 +129,8 @@ export const PopoverContent = (inProps: PopoverContentProps) => {
             'translate-x-(--x)',
             'translate-y-(--y)',
             animate && [
-              '[--exit-blur:40px]',
-              '[--exit-scale:0]',
+              //'[--exit-blur:40px]',
+              //'[--exit-scale:0]',
               'data-[open="true"]:animate-in',
               'data-[open="false"]:animate-out',
             ],

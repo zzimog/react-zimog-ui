@@ -6,6 +6,7 @@ import { animationLoop, cn } from '../utils';
 import { usePopoverContext } from './popoverContext';
 
 type PopoverContentProps = PolyProps<'div'> & {
+  avoidCollisions?: boolean;
   distance?: number;
   padding?: number;
   align?: 'start' | 'center' | 'end';
@@ -18,6 +19,7 @@ function clamp(value: number, min: number, max: number) {
 export const PopoverContent = (inProps: PopoverContentProps) => {
   const {
     ref,
+    avoidCollisions = false,
     distance = 8,
     padding = 16,
     align = 'center',
@@ -70,6 +72,7 @@ export const PopoverContent = (inProps: PopoverContentProps) => {
       };
 
       if (
+        avoidCollisions &&
         pos.y + contentRect.height > innerHeight - padding &&
         contentRect.height <= triggerRect.top - distance - padding
       ) {
@@ -86,7 +89,7 @@ export const PopoverContent = (inProps: PopoverContentProps) => {
       content.style.setProperty('--max-width', `${maxWidth}px`);
       content.style.setProperty('--max-height', `${maxHeight}px`);
     }
-  }, [distance, padding, align]);
+  }, [avoidCollisions, distance, padding, align]);
 
   useEffect(() => {
     const raf = requestAnimationFrame(() => (useAnimationRef.current = true));

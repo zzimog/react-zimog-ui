@@ -27,10 +27,7 @@ export function useControllableState<T>(
     (next) => {
       if (isControlled) {
         const value = isFunction(next) ? next(prop) : next;
-        if (value !== uncontrolled) {
-          onChange?.(value);
-          setUncontrolled(value);
-        }
+        onChange?.(value);
       } else {
         setUncontrolled(next);
       }

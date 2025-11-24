@@ -14,15 +14,15 @@ type PopoverProps = PropsWithChildren<{
 export const Popover = (inProps: PopoverProps) => {
   const {
     updateMode = 'optimized',
-    open: openProp,
     defaultOpen = false,
+    open: openProp,
     onOpenChange,
     children,
   } = inProps;
 
   const [open, setOpen] = useControllableState({
-    prop: openProp,
     defaultValue: defaultOpen,
+    prop: openProp,
     onChange: onOpenChange,
   });
 

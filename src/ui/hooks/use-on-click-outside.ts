@@ -1,9 +1,13 @@
 import { type RefObject, useEffect } from 'react';
 
-export function useOutsideClick(
-  refs: RefObject<HTMLElement | null>[],
+type Ref = RefObject<HTMLElement | null>;
+
+export function useOnClickOutside(
+  ref: Ref | Ref[],
   callback: (event: MouseEvent) => void
 ) {
+  const refs = Array.isArray(ref) ? ref : [ref];
+
   useEffect(() => {
     function handler(event: MouseEvent) {
       const target = event.target as HTMLElement;

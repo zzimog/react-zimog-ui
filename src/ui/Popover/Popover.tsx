@@ -1,5 +1,5 @@
 import { type PropsWithChildren, useId, useRef } from 'react';
-import { useControllableState, useOutsideClick } from '../hooks';
+import { useControllableState, useOnClickOutside } from '../hooks';
 import { PopoverContent } from './PopoverContent';
 import { PopoverContext } from './popoverContext';
 import { PopoverTrigger } from './PopoverTrigger';
@@ -31,7 +31,7 @@ export const Popover = (inProps: PopoverProps) => {
 
   const contentId = useId();
 
-  useOutsideClick([triggerRef, contentRef], () => {
+  useOnClickOutside([triggerRef, contentRef], () => {
     setOpen(false);
   });
 

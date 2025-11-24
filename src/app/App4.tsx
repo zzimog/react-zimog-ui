@@ -65,12 +65,19 @@ const App = () => {
             </Form.Field.Text>
           </Form.Field>
 
-          <Select>
-            <Select.Option value="1" label="Lorem" />
-            <Select.Option value="2" label="Ipsum" />
-            <Select.Option value="3" label="Dolor" />
-            <Select.Option value="4" label="Sit" />
-            <Select.Option value="5" label="Amet" />
+          <Select defaultValue="2">
+            <Select.Option value="0" label="Hello world!" />
+            <Select.OptionsGroup label="Lorem">
+              <Select.Option value="1" label="Lorem" />
+              <Select.Option value="2" label="Ipsum" />
+              <Select.Option value="3" label="Dolor" />
+              <Select.Option value="4" label="Sit" disabled />
+              <Select.Option value="5" label="Amet" disabled />
+            </Select.OptionsGroup>
+            <Select.OptionsGroup label="Foo" disabled>
+              <Select.Option value="6" label="Foo" />
+              <Select.Option value="7" label="Bar" disabled={false} />
+            </Select.OptionsGroup>
           </Select>
 
           <div className="flex justify-end gap-2">

@@ -1,4 +1,4 @@
-import { Popover, cn, useControllableState } from '@ui';
+import { Popover, useControllableState, useFocusGuards, cn } from '@ui';
 import { ChevronDown } from 'lucide-react';
 import {
   type ComponentPropsWithoutRef,
@@ -9,44 +9,84 @@ import {
 } from 'react';
 import { SelectContext } from './selectContext';
 import { SelectOption } from './SelectOption';
-import { useFocusGuards } from './useFocusGuards';
+import { SelectOptionsGroup } from './SelectOptionsGroup';
+import classes from './selectClasses';
 
 type SelectProps = ComponentPropsWithoutRef<'button'> & {
-  value?: string;
   defaultValue?: string;
-  onChange?: (value: string) => void;
+  value?: string;
+  onValueChange?: (value: string) => void;
 };
+
+function getFocusables(container: HTMLElement) {
+  const nodes: HTMLElement[] = [];
+  const walker = document.createTreeWalker(container, NodeFilter.SHOW_ELEMENT, {
+    acceptNode: (node: any) => {
+      const isHiddenInput = node.tagName === 'INPUT' && node.type === 'hidden';
+      if (node.disabled || node.hidden || isHiddenInput) {
+        return NodeFilter.FILTER_SKIP;
+      }
+
+      return node.tabIndex >= 0
+        ? NodeFilter.FILTER_ACCEPT
+        : NodeFilter.FILTER_SKIP;
+    },
+  });
+
+  while (walker.nextNode()) {
+    nodes.push(walker.currentNode as HTMLElement);
+  }
+
+  return nodes;
+}
+
+function getFocusableEdges(container: HTMLElement) {
+  const focusables = getFocusables(container);
+  const first = focusables[0];
+  const last = focusables[focusables.length - 1];
+
+  return [first, last];
+}
 
 export const Select = (inProps: SelectProps) => {
   const {
-    value: valueProp,
     defaultValue = '',
-    onChange,
+    value: valueProp,
+    className,
     children,
+    onValueChange,
     ...props
   } = inProps;
 
   const [value, setValue] = useControllableState({
-    prop: valueProp,
     defaultValue,
-    onChange,
+    prop: valueProp,
+    onChange: onValueChange,
   });
 
-  const [label, setLabel] = useState<string | undefined>(undefined);
+  const [node, setNode] = useState<HTMLElement | undefined>(undefined);
+
   const [open, setOpen] = useState(true);
+  const [rect, setRect] = useState<DOMRect | undefined>(undefined);
 
   const context = {
     value,
-    setSelected(value: string, label: string) {
+    setOpen,
+    setSelected(value: string, node: HTMLElement) {
       setValue(value);
-      setLabel(label);
-      setOpen(false);
+      setNode(node);
     },
   };
 
-  const ref = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   function handleOpenChange(open: boolean) {
+    const trigger = triggerRef.current;
+    if (trigger && open) {
+      setRect(trigger.getBoundingClientRect());
+    }
+
     setOpen(open);
   }
 
@@ -57,24 +97,18 @@ export const Select = (inProps: SelectProps) => {
   useEffect(() => {
     function handleFocusIn(event: Event) {
       const target = event.target as HTMLElement;
-      const content = ref.current;
+      const content = contentRef.current;
       if (content) {
-        const options = content.querySelectorAll<HTMLElement>(
-          '[role="option"][tabIndex]'
-        );
-
-        const first = options[0];
-        const last = options[options.length - 1];
-
-        const lastFocus = prevFocusRef.current;
+        const [first, last] = getFocusableEdges(content);
+        const prevFocus = prevFocusRef.current;
 
         if (!content.contains(target)) {
-          if (lastFocus === first) {
+          if (prevFocus === first) {
             last.focus();
             prevFocusRef.current = last;
           }
 
-          if (lastFocus === last) {
+          if (prevFocus === last) {
             first.focus();
             prevFocusRef.current = first;
           }
@@ -84,9 +118,59 @@ export const Select = (inProps: SelectProps) => {
       }
     }
 
+    function handleKeydown(event: KeyboardEvent) {
+      const content = contentRef.current;
+      if (content) {
+        const focusables = getFocusables(content);
+        const current = document.activeElement as HTMLElement;
+        const currentIndex = current ? focusables.indexOf(current) : -1;
+        let newIndex: number = -1;
+
+        if (event.key === 'ArrowUp') {
+          newIndex = Math.max(currentIndex - 1, 0);
+        } else if (event.key === 'ArrowDown') {
+          newIndex = Math.min(currentIndex + 1, focusables.length - 1);
+        }
+
+        if (newIndex > -1) {
+          focusables[newIndex].focus();
+          event.preventDefault();
+        }
+      }
+    }
+
     window.addEventListener('focusin', handleFocusIn);
-    return () => window.addEventListener('focusin', handleFocusIn);
+    window.addEventListener('keydown', handleKeydown);
+    return () => {
+      window.removeEventListener('focusin', handleFocusIn);
+      window.removeEventListener('keydown', handleKeydown);
+    };
   }, []);
+
+  useEffect(() => {
+    const content = contentRef.current;
+    const active = document.activeElement;
+    if (content && active && open) {
+      const [first] = getFocusableEdges(content);
+
+      /**
+       * @todo
+       * Need to understand how to remove this setTimeout.
+       * At the moment it doesn't work without it.
+       */
+      const timeout = setTimeout(() => {
+        const { offsetTop } = active as HTMLElement;
+
+        if (active === first) {
+          content.scrollTop = 0;
+        } else {
+          content.scrollTop = offsetTop - 8;
+        }
+      });
+
+      return () => clearTimeout(timeout);
+    }
+  }, [open]);
 
   useLayoutEffect(() => {
     setOpen(false);
@@ -95,59 +179,24 @@ export const Select = (inProps: SelectProps) => {
   return (
     <Popover open={open} onOpenChange={handleOpenChange}>
       <Popover.Trigger
+        ref={triggerRef}
         role="combobox"
-        type="button"
-        className={cn(
-          'flex',
-          'justify-between',
-          'items-center',
-          'h-10',
-          'px-3 py-2',
-          'border',
-          'text-sm',
-          'border-border',
-          'bg-white',
-          'dark:bg-zinc-800',
-          'rounded-shape',
-          'cursor-pointer',
-          'select-none',
-          'focusable',
-          'focus:outline-outline',
-          'focus:border-primary',
-          'hover:border-primary',
-          'transition-colors'
-        )}
+        className={cn(classes.trigger, className)}
         {...props}
       >
-        {label}
-        <ChevronDown className="size-4" />
+        {node?.innerText || '-'}
+        <ChevronDown className={classes.arrow} />
       </Popover.Trigger>
       <Popover.Content
-        ref={ref}
+        ref={contentRef}
         align="start"
-        className={cn(
-          'flex',
-          'w-(--width)',
-          'max-h-32',
-          'border',
-          'text-sm',
-          'focusable',
-          'focus-within:outline-outline',
-          'focus-within:border-primary',
-          'border-border',
-          'hover:border-primary',
-          'transition-colors',
-          'bg-white',
-          'dark:bg-zinc-800',
-          'rounded-shape',
-          'overflow-hidden',
-          '[--exit-scale-y:0]',
-          '[--enter-scale-y:0]'
-        )}
+        tabIndex={-1}
+        className={classes.content}
+        style={{
+          ['--width' as any]: rect ? `${rect.width}px` : undefined,
+        }}
       >
-        <ul tabIndex={-1} className="w-full p-2 overflow-auto outline-0">
-          <SelectContext value={context}>{children}</SelectContext>
-        </ul>
+        <SelectContext value={context}>{children}</SelectContext>
       </Popover.Content>
     </Popover>
   );
@@ -155,3 +204,4 @@ export const Select = (inProps: SelectProps) => {
 
 Select.displayName = 'Select';
 Select.Option = SelectOption;
+Select.OptionsGroup = SelectOptionsGroup;

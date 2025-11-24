@@ -1,8 +1,14 @@
-import { createContext, useContext } from 'react';
+import {
+  type Dispatch,
+  type SetStateAction,
+  createContext,
+  useContext,
+} from 'react';
 
 type SelectContextValue = {
   value: string;
-  setSelected(value: string, label: string): void;
+  setSelected(value: string, node: HTMLElement): void;
+  setOpen: Dispatch<SetStateAction<boolean>>;
 };
 
 export const SelectContext = createContext<SelectContextValue | undefined>(

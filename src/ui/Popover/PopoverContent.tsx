@@ -44,9 +44,6 @@ export const PopoverContent = (inProps: PopoverContentProps) => {
       const triggerRect = trigger.getBoundingClientRect();
       const contentRect = content.getBoundingClientRect();
 
-      const maxWidth = innerWidth - padding * 2;
-      //const maxHeight = innerHeight - padding * 2;
-
       const triggerCenterX = triggerRect.left + triggerRect.width / 2;
       //const triggerCenterY = triggerRect.height / 2;
 
@@ -80,12 +77,14 @@ export const PopoverContent = (inProps: PopoverContentProps) => {
         origin.y = contentRect.height;
       }
 
+      const maxWidth = innerWidth - pos.x - padding;
+      const maxHeight = innerHeight - pos.y - padding;
+
       content.style.transformOrigin = `${origin.x}px ${origin.y}px`;
       content.style.setProperty('--x', `${Math.floor(pos.x)}px`);
       content.style.setProperty('--y', `${Math.floor(pos.y)}px`);
       content.style.setProperty('--max-width', `${maxWidth}px`);
-      content.style.setProperty('--width', `${triggerRect.width}px`);
-      //content.style.setProperty('--max-height', `${maxHeight}px`);
+      content.style.setProperty('--max-height', `${maxHeight}px`);
     }
   }, [distance, padding, align]);
 

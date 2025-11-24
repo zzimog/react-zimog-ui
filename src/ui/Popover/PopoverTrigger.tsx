@@ -19,6 +19,8 @@ export const PopoverTrigger = (inProps: PopoverTriggerProps) => {
   return (
     <Poly.button
       ref={mergedRefs}
+      type="button"
+      role={inProps.as !== 'button' ? 'button' : undefined}
       data-open={open}
       aria-haspopup="dialog"
       aria-expanded={open}

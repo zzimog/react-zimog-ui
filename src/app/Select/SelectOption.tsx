@@ -1,7 +1,8 @@
 import { Check } from 'lucide-react';
-import { useEffect, useRef } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import { useSelectContext } from './selectContext';
-import { cn } from '@ui';
+import { SelectOptionsGroupContext } from './SelectOptionsGroup';
+import classes from './selectClasses';
 
 type SelectOptionProps = {
   label: string;
@@ -10,61 +11,64 @@ type SelectOptionProps = {
 };
 
 export const SelectOption = (inProps: SelectOptionProps) => {
-  const { label, value, disabled } = inProps;
-
-  const ref = useRef<HTMLLIElement>(null);
+  const { label, value, disabled: disabledProp } = inProps;
 
   const context = useSelectContext();
   const isSelected = value === context.value;
 
-  function handleClick() {
-    if (!disabled) {
-      context?.setSelected(value, label);
-    }
-  }
+  const groupContext = useContext(SelectOptionsGroupContext);
+  const disabled = (disabledProp ?? groupContext?.disabled) || false;
 
-  function handleMouseOver() {
+  const ref = useRef<HTMLElement>(null);
+
+  function handleSelect() {
     const node = ref.current;
-    node?.focus({ preventScroll: true });
+    if (node && !disabled) {
+      context?.setSelected(value, node);
+      context?.setOpen(false);
+    }
   }
 
   useEffect(() => {
     const node = ref.current;
-    if (node && isSelected) {
-      node.scrollIntoView();
-      node.focus();
-    }
+    if (node) {
+      if (isSelected) {
+        node.focus({ preventScroll: true });
+      }
 
-    if (!context.value) {
-      handleClick();
+      if (isSelected || (!context.value && !disabled)) {
+        context?.setSelected(value, node);
+      }
     }
   }, []);
 
   return (
-    <li
+    <span
       ref={ref}
       role="option"
       data-selected={isSelected ? '' : undefined}
-      tabIndex={0}
-      className={cn(
-        'grid',
-        'grid-cols-[1fr_calc(var(--spacing)*4)]',
-        'items-center',
-        'gap-2',
-        'px-2 py-1',
-        'rounded-shape',
-        'outline-0',
-        'focus:bg-zinc-100',
-        'dark:focus:bg-highlight',
-        'cursor-pointer',
-        'select-none'
-      )}
-      onClick={handleClick}
-      onMouseOver={handleMouseOver}
+      data-disabled={disabled ? '' : undefined}
+      tabIndex={disabled ? -1 : 0}
+      className={classes.option({ disabled })}
+      onClick={handleSelect}
+      onPointerMove={(event) => {
+        const isMouse = event.pointerType === 'mouse';
+        if (isMouse && !disabled) {
+          event.currentTarget.focus({ preventScroll: true });
+        }
+      }}
+      onKeyDown={(event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          handleSelect();
+          if (event.key === ' ') {
+            event.preventDefault();
+          }
+        }
+      }}
     >
       <span>{label}</span>
       {isSelected && <Check className="size-4 col-start-2" />}
-    </li>
+    </span>
   );
 };
 

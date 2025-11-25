@@ -89,7 +89,7 @@ CardDescription.displayName = 'CardDescription';
 const CardContent = (inProps: PolyProps<'div'>) => {
   const { className, ...props } = inProps;
 
-  return <Poly.div className={cn('mx-6', className)} {...props} />;
+  return <Poly.div className={cn('px-6', className)} {...props} />;
 };
 
 CardContent.displayName = 'CardContent';

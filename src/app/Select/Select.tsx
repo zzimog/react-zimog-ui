@@ -1,4 +1,10 @@
-import { Popover, useControllableState, useFocusGuards, cn } from '@ui';
+import {
+  Popover,
+  useControllableState,
+  useFocusGuards,
+  cn,
+  ScrollArea,
+} from '@ui';
 import { ChevronDown } from 'lucide-react';
 import {
   type ComponentPropsWithoutRef,
@@ -65,9 +71,12 @@ export const Select = (inProps: SelectProps) => {
   });
 
   const [node, setNode] = useState<HTMLElement | undefined>(undefined);
-
   const [open, setOpen] = useState(true);
   const [rect, setRect] = useState<DOMRect | undefined>(undefined);
+
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const viewportRef = useRef<HTMLElement>(null);
 
   const context = {
     value,
@@ -77,9 +86,6 @@ export const Select = (inProps: SelectProps) => {
       setNode(node);
     },
   };
-
-  const triggerRef = useRef<HTMLButtonElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
 
   function handleOpenChange(open: boolean) {
     const trigger = triggerRef.current;
@@ -124,15 +130,23 @@ export const Select = (inProps: SelectProps) => {
         const focusables = getFocusables(content);
         const current = document.activeElement as HTMLElement;
         const currentIndex = current ? focusables.indexOf(current) : -1;
-        let newIndex: number = -1;
+        let newIndex = undefined;
 
         if (event.key === 'ArrowUp') {
-          newIndex = Math.max(currentIndex - 1, 0);
+          newIndex = currentIndex - 1;
+
+          if (newIndex < 0) {
+            newIndex = focusables.length - 1;
+          }
         } else if (event.key === 'ArrowDown') {
-          newIndex = Math.min(currentIndex + 1, focusables.length - 1);
+          newIndex = currentIndex + 1;
+
+          if (newIndex === focusables.length) {
+            newIndex = 0;
+          }
         }
 
-        if (newIndex > -1) {
+        if (newIndex !== undefined) {
           focusables[newIndex].focus();
           event.preventDefault();
         }
@@ -159,12 +173,10 @@ export const Select = (inProps: SelectProps) => {
        * At the moment it doesn't work without it.
        */
       const timeout = setTimeout(() => {
-        const { offsetTop } = active as HTMLElement;
-
         if (active === first) {
           content.scrollTop = 0;
         } else {
-          content.scrollTop = offsetTop - 8;
+          active.scrollIntoView();
         }
       });
 
@@ -191,12 +203,14 @@ export const Select = (inProps: SelectProps) => {
         ref={contentRef}
         align="start"
         tabIndex={-1}
-        className={classes.content}
+        className={classes.portal}
         style={{
           ['--width' as any]: rect ? `${rect.width}px` : undefined,
         }}
       >
-        <SelectContext value={context}>{children}</SelectContext>
+        <ScrollArea viewportRef={viewportRef} className={classes.content}>
+          <SelectContext value={context}>{children}</SelectContext>
+        </ScrollArea>
       </Popover.Content>
     </Popover>
   );

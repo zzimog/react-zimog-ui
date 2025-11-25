@@ -23,7 +23,21 @@ const selectClasses = {
     'transition-colors'
   ),
   arrow: 'size-4',
-  content: cn(
+  portal: cn([
+    'flex',
+    'w-(--width)',
+    'max-h-[min(var(--max-height),calc(var(--spacing)*64))]',
+    'text-sm',
+    'rounded-shape',
+    'border',
+    'border-border',
+    'bg-white',
+    'dark:bg-zinc-800',
+    '[--exit-scale-y:0]',
+    '[--enter-scale-y:0]',
+  ]),
+  content: 'w-full p-3',
+  content2: cn(
     'w-(--width)',
     'max-h-[min(var(--max-height),calc(var(--spacing)*64))]',
     'p-1',
@@ -51,6 +65,7 @@ const selectClasses = {
       'px-2 py-1',
       'rounded-shape',
       'outline-0',
+      'transition-colors',
       'focus:bg-highlight',
       'cursor-pointer',
       'select-none',

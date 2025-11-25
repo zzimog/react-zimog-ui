@@ -1,42 +1,67 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, type Ref } from 'react';
 import { type PolyProps, Poly } from '../polymorphic';
 import { cn } from '../utils';
 import classes from './scrollAreaClasses';
+import { useMergedRefs } from '../hooks';
 
-type ScrollAreaProps = PolyProps<'div'>;
+type ScrollAreaProps = PolyProps<'div'> & {
+  viewportRef?: Ref<HTMLElement>;
+};
 
 export const ScrollArea = (inProps: ScrollAreaProps) => {
-  const { className, children, ...props } = inProps;
+  const {
+    ref: refProp,
+    viewportRef: viewportRefProp,
+    className,
+    children,
+    ...props
+  } = inProps;
 
   const ref = useRef<HTMLDivElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
   const scrollbarRef = useRef<HTMLDivElement>(null);
   const thumbRef = useRef<HTMLDivElement>(null);
 
+  const mergedRef = useMergedRefs(refProp, ref);
+  const mergedViewportRef = useMergedRefs(viewportRefProp, viewportRef);
+
+  /**
+   * Viewport
+   */
+  useEffect(() => {
+    const viewport = viewportRef.current;
+    const scrollbar = scrollbarRef.current;
+    const thumb = thumbRef.current;
+
+    if (!viewport || !scrollbar || !thumb) {
+      return;
+    }
+
+    const handleScroll = () => {
+      const scrollableHeight = viewport.scrollHeight - viewport.offsetHeight;
+      const offsetScrollHeight = scrollbar.offsetHeight - thumb.offsetHeight;
+      const scrollRatioY = viewport.scrollTop / scrollableHeight;
+      const thumbScroll = scrollRatioY * offsetScrollHeight;
+
+      thumb.style.setProperty('--scroll', `${thumbScroll}px`);
+    };
+
+    viewport.addEventListener('scroll', handleScroll);
+    return () => viewport.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  /**
+   * Scrollbar
+   */
   useEffect(() => {
     const root = ref.current;
     const viewport = viewportRef.current;
-    const scrollbar = viewportRef.current;
+    const scrollbar = scrollbarRef.current;
     const thumb = thumbRef.current;
 
     if (!root || !viewport || !scrollbar || !thumb) {
       return;
     }
-
-    const thumbRatio = viewport.clientHeight / viewport.scrollHeight;
-    const thumbSize = Math.max(scrollbar.clientHeight * thumbRatio, 18);
-
-    thumb.style.height = `${thumbSize}px`;
-
-    const handleScroll = () => {
-      const { scrollTop, scrollHeight, clientHeight } = viewport;
-      const scrollbarHeight = scrollbar.clientHeight;
-      const thumbScroll =
-        (scrollTop / (scrollHeight - clientHeight)) *
-        (scrollbarHeight - thumbSize);
-
-      thumb.style.transform = `translateY(${thumbScroll}px)`;
-    };
 
     let startX: number;
     let startY: number;
@@ -48,13 +73,13 @@ export const ScrollArea = (inProps: ScrollAreaProps) => {
       startX = clientX;
       startY = clientY;
 
-      const scrollableWidth = viewport.scrollWidth - viewport.clientWidth;
-      const offsetWidth = scrollbar.clientWidth - thumb.clientWidth;
-      const scrollRatioX = deltaX / offsetWidth;
+      const scrollableWidth = viewport.scrollWidth - viewport.offsetWidth;
+      const offsetScrollWidth = scrollbar.offsetWidth - thumb.offsetWidth;
+      const scrollRatioX = deltaX / offsetScrollWidth;
 
-      const scrollableHeight = viewport.scrollHeight - viewport.clientHeight;
-      const offsetHeight = scrollbar.clientHeight - thumb.clientHeight;
-      const scrollRatioY = deltaY / offsetHeight;
+      const scrollableHeight = viewport.scrollHeight - viewport.offsetHeight;
+      const offsetScrollHeight = scrollbar.offsetHeight - thumb.offsetHeight;
+      const scrollRatioY = deltaY / offsetScrollHeight;
 
       viewport.scrollLeft += scrollableWidth * scrollRatioX * 0;
       viewport.scrollTop += scrollableHeight * scrollRatioY;
@@ -76,23 +101,46 @@ export const ScrollArea = (inProps: ScrollAreaProps) => {
       document.addEventListener('pointerup', handlePointerUp);
     };
 
-    viewport.addEventListener('scroll', handleScroll);
-    thumb.addEventListener('pointerdown', handlePointerDown);
+    scrollbar.addEventListener('pointerdown', handlePointerDown);
     return () => {
-      viewport.removeEventListener('scroll', handleScroll);
-      thumb.removeEventListener('pointerdown', handlePointerDown);
+      scrollbar.removeEventListener('pointerdown', handlePointerDown);
     };
+  }, []);
+
+  /**
+   * Thumb
+   */
+  useEffect(() => {
+    const root = ref.current;
+    const viewport = viewportRef.current;
+    const scrollbar = scrollbarRef.current;
+    const thumb = thumbRef.current;
+
+    if (!root || !viewport || !scrollbar || !thumb) {
+      return;
+    }
+
+    const observer = new ResizeObserver(() => {
+      const thumbRatio = viewport.offsetHeight / viewport.scrollHeight;
+      const thumbSize = Math.max(scrollbar.offsetHeight * thumbRatio, 18);
+
+      scrollbar.hidden = thumbRatio >= 1;
+      thumb.style.setProperty('--size', `${thumbSize}px`);
+    });
+
+    observer.observe(root);
+    return () => observer.disconnect();
   }, []);
 
   return (
     <Poly.div
-      ref={ref}
+      ref={mergedRef}
       data-scrollarea="root"
       className={cn(classes.root, className)}
       {...props}
     >
       <div
-        ref={viewportRef}
+        ref={mergedViewportRef}
         data-scrollarea="viewport"
         className={classes.viewport}
       >
@@ -101,9 +149,14 @@ export const ScrollArea = (inProps: ScrollAreaProps) => {
       <div
         ref={scrollbarRef}
         data-scrollarea="scrollbar"
-        className={classes.scrollbar}
+        className={classes.scrollbar({ direction: 'vertical' })}
       >
-        <div ref={thumbRef} data-scrollarea="thumb" className={classes.thumb} />
+        <div
+          ref={thumbRef}
+          data-scrollarea="thumb"
+          data-direction="vertical"
+          className={classes.thumb({ direction: 'vertical' })}
+        />
       </div>
     </Poly.div>
   );

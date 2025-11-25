@@ -21,13 +21,13 @@ export const SelectOptionsGroup = (inProps: SelectOptionsGroupProps) => {
     <div
       role="group"
       data-disabled={disabled ? '' : undefined}
-      className={className}
+      className={cn('pl-2', className)}
       {...props}
     >
       {label && (
         <div
           className={cn(
-            'px-1 py-2',
+            'py-2',
             'text-xs',
             'font-light',
             'text-muted-foreground',
@@ -40,8 +40,7 @@ export const SelectOptionsGroup = (inProps: SelectOptionsGroupProps) => {
       <div
         className={cn(
           'border-l',
-          'px-1',
-          'ml-1',
+          'pl-2',
           'border-muted-foreground/25',
           'dark:border-muted-background/25'
         )}

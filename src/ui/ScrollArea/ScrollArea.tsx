@@ -1,8 +1,8 @@
 import { useEffect, useRef, type Ref } from 'react';
-import { type PolyProps, Poly } from '../polymorphic';
+import { useMergedRefs } from '../hooks';
+import { Poly, type PolyProps } from '../polymorphic';
 import { cn } from '../utils';
 import classes from './scrollAreaClasses';
-import { useMergedRefs } from '../hooks';
 
 type ScrollAreaProps = PolyProps<'div'> & {
   viewportRef?: Ref<HTMLElement>;

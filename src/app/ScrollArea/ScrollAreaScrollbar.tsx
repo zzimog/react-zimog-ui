@@ -1,10 +1,9 @@
 import { cn, useMergedRefs } from '@ui';
-import { type ComponentPropsWithRef, useEffect, useRef } from 'react';
-import scrollAreaClasses from './scrollAreaClasses';
+import { type ComponentPropsWithRef, type Ref, useEffect, useRef } from 'react';
+import classes from './scrollAreaClasses';
 
-const classes = scrollAreaClasses.scrollbar;
-
-type ScrollbarProps = ComponentPropsWithRef<'div'> & {
+type ScrollAreaScrollbarProps = ComponentPropsWithRef<'div'> & {
+  thumbRef?: Ref<HTMLDivElement | null>;
   direction?: 'vertical' | 'horizontal';
   onScrollChange?: (value: number) => void;
 };
@@ -13,9 +12,10 @@ function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
 }
 
-export const Scrollbar = (inProps: ScrollbarProps) => {
+export const ScrollAreaScrollbar = (inProps: ScrollAreaScrollbarProps) => {
   const {
     ref: refProp,
+    thumbRef: thumbRefProp,
     direction = 'vertical',
     className,
     children,
@@ -27,6 +27,7 @@ export const Scrollbar = (inProps: ScrollbarProps) => {
   const thumbRef = useRef<HTMLDivElement>(null);
 
   const ref = useMergedRefs(refProp, scrollbarRef);
+  const mergedThumbRef = useMergedRefs(thumbRefProp, thumbRef);
 
   useEffect(() => {
     const isVertical = direction === 'vertical';
@@ -68,10 +69,15 @@ export const Scrollbar = (inProps: ScrollbarProps) => {
         scrollbarRect = scrollbar.getBoundingClientRect();
 
         if (target === scrollbar) {
-          pointerOffset = thumb.offsetHeight / 2;
+          const offsetSize = isVertical
+            ? thumb.offsetHeight
+            : thumb.offsetWidth;
+
+          pointerOffset = offsetSize / 2;
           handlePointerMove(event);
-        } else {
+        } else if (target === thumb) {
           const thumbRect = thumb.getBoundingClientRect();
+
           pointerOffset = isVertical
             ? clientY - thumbRect.top
             : clientX - thumbRect.left;
@@ -90,14 +96,14 @@ export const Scrollbar = (inProps: ScrollbarProps) => {
 
   return (
     <div
+      {...props}
       ref={ref}
       data-scrollbar="root"
       data-direction={direction}
-      className={cn(classes.root({ direction }), className)}
-      {...props}
+      className={cn(classes.scrollbar({ direction }), className)}
     >
       <div
-        ref={thumbRef}
+        ref={mergedThumbRef}
         data-scrollbar="thumb"
         className={classes.thumb({ direction })}
       />
@@ -105,4 +111,4 @@ export const Scrollbar = (inProps: ScrollbarProps) => {
   );
 };
 
-Scrollbar.displayName = 'Scrollbar';
+ScrollAreaScrollbar.displayName = 'ScrollAreaScrollbar';

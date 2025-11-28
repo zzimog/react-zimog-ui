@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 import { type PolyProps, Poly } from '../polymorphic';
 import { cn } from '../utils';
 import classes from './scrollAreaClasses';
@@ -20,79 +20,86 @@ export const ScrollArea = (inProps: ScrollAreaProps) => {
   function handleViewportScroll() {
     const viewport = viewportRef.current;
     const scrollbarX = scrollbarXRef.current;
-    const scrollbarY = scrollbarYRef.current;
     const thumbX = thumbXRef.current;
+    const scrollbarY = scrollbarYRef.current;
     const thumbY = thumbYRef.current;
-    if (viewport && scrollbarX && scrollbarY && thumbX && thumbY) {
-      const scrollableWidth = viewport.scrollWidth - viewport.offsetWidth;
-      const offsetScrollWidth = scrollbarX.offsetWidth - thumbX.offsetWidth;
-      const scrollRatioX = viewport.scrollLeft / scrollableWidth;
-      const thumbScrollX = scrollRatioX * offsetScrollWidth;
+    if (viewport) {
+      if (scrollbarX && thumbX) {
+        const scrollableWidth = viewport.scrollWidth - viewport.offsetWidth;
+        const ratioX = viewport.scrollLeft / scrollableWidth;
 
-      thumbX.style.setProperty('--scroll', `${thumbScrollX}px`);
+        thumbX.style.setProperty(
+          '--scroll',
+          `${(scrollbarX.offsetWidth - thumbX.offsetWidth) * ratioX}px`
+        );
+      }
 
-      const scrollableHeight = viewport.scrollHeight - viewport.offsetHeight;
-      const offsetScrollHeight = scrollbarY.offsetHeight - thumbY.offsetHeight;
-      const scrollRatioY = viewport.scrollTop / scrollableHeight;
-      const thumbScrollY = scrollRatioY * offsetScrollHeight;
+      if (scrollbarY && thumbY) {
+        const scrollableHeight = viewport.scrollHeight - viewport.offsetHeight;
+        const ratioY = viewport.scrollTop / scrollableHeight;
 
-      thumbY.style.setProperty('--scroll', `${thumbScrollY}px`);
+        thumbY.style.setProperty(
+          '--scroll',
+          `${(scrollbarY.offsetHeight - thumbY.offsetHeight) * ratioY}px`
+        );
+      }
     }
   }
 
-  function handleScrollX(scrollRatio: number) {
+  function handleScrollX(ratio: number) {
     const viewport = viewportRef.current;
     if (viewport) {
       const scrollable = viewport.scrollWidth - viewport.clientWidth;
-      viewport.scrollLeft = scrollable * scrollRatio;
+      viewport.scrollLeft = scrollable * ratio;
     }
   }
 
-  function handleScrollY(scrollRatio: number) {
+  function handleScrollY(ratio: number) {
     const viewport = viewportRef.current;
     if (viewport) {
       const scrollable = viewport.scrollHeight - viewport.clientHeight;
-      viewport.scrollTop = scrollable * scrollRatio;
+      viewport.scrollTop = scrollable * ratio;
     }
   }
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const root = rootRef.current;
     const viewport = viewportRef.current;
-    const scrollbarX = scrollbarXRef.current;
-    const scrollbarY = scrollbarYRef.current;
-    const thumbX = thumbXRef.current;
-    const thumbY = thumbYRef.current;
-    const corner = cornerRef.current;
+    if (root && viewport) {
+      const scrollbarX = scrollbarXRef.current;
+      const thumbX = thumbXRef.current;
+      const scrollbarY = scrollbarYRef.current;
+      const thumbY = thumbYRef.current;
 
-    if (
-      !root ||
-      !viewport ||
-      !scrollbarX ||
-      !scrollbarY ||
-      !thumbX ||
-      !thumbY ||
-      !corner
-    ) {
-      return;
+      let raf = 0;
+
+      const observer = new ResizeObserver(() => {
+        cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(() => {
+          if (scrollbarX && thumbX) {
+            const ratioX = viewport.offsetWidth / viewport.scrollWidth;
+            const sizeX = Math.max(scrollbarX.offsetWidth * ratioX, 18);
+
+            scrollbarX.hidden = ratioX >= 1;
+            thumbX.style.setProperty('--size', `${sizeX}px`);
+          }
+
+          if (scrollbarY && thumbY) {
+            const ratioY = viewport.offsetHeight / viewport.scrollHeight;
+            const sizeY = Math.max(scrollbarY.offsetHeight * ratioY, 18);
+
+            scrollbarY.hidden = ratioY >= 1;
+            thumbY.style.setProperty('--size', `${sizeY}px`);
+          }
+        });
+      });
+
+      observer.observe(root);
+      return () => {
+        cancelAnimationFrame(raf);
+        observer.unobserve(root);
+      };
     }
-
-    const observer = new ResizeObserver(() => {
-      const thumbRatioX = viewport.offsetWidth / viewport.scrollWidth;
-      const thumbSizeX = Math.max(scrollbarX.offsetWidth * thumbRatioX, 18);
-
-      scrollbarX.hidden = thumbRatioX >= 1;
-      thumbX.style.setProperty('--size', `${thumbSizeX}px`);
-
-      const thumbRatioY = viewport.offsetHeight / viewport.scrollHeight;
-      const thumbSizeY = Math.max(scrollbarY.offsetHeight * thumbRatioY, 18);
-
-      scrollbarY.hidden = thumbRatioY >= 1;
-      thumbY.style.setProperty('--size', `${thumbSizeY}px`);
-    });
-
-    observer.observe(root);
-    return () => observer.disconnect();
   }, []);
 
   return (

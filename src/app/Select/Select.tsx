@@ -76,7 +76,6 @@ export const Select = (inProps: SelectProps) => {
 
   const triggerRef = useRef<HTMLButtonElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-  const viewportRef = useRef<HTMLElement>(null);
 
   const context = {
     value,
@@ -166,6 +165,7 @@ export const Select = (inProps: SelectProps) => {
     const active = document.activeElement;
     if (content && active && open) {
       const [first] = getFocusableEdges(content);
+      const rect = active.getBoundingClientRect();
 
       /**
        * @todo
@@ -176,7 +176,7 @@ export const Select = (inProps: SelectProps) => {
         if (active === first) {
           content.scrollTop = 0;
         } else {
-          active.scrollIntoView();
+          content.scrollTop = rect.top - 8;
         }
       });
 
@@ -208,7 +208,7 @@ export const Select = (inProps: SelectProps) => {
           ['--width' as any]: rect ? `${rect.width}px` : undefined,
         }}
       >
-        <ScrollArea viewportRef={viewportRef} className={classes.content}>
+        <ScrollArea className={classes.content}>
           <SelectContext value={context}>{children}</SelectContext>
         </ScrollArea>
       </Popover.Content>

@@ -15,6 +15,7 @@ export const ScrollArea = (inProps: ScrollAreaProps) => {
   const thumbXRef = useRef<HTMLDivElement>(null);
   const scrollbarYRef = useRef<HTMLDivElement>(null);
   const thumbYRef = useRef<HTMLDivElement>(null);
+  const cornerRef = useRef<HTMLDivElement>(null);
 
   function handleViewportScroll() {
     const viewport = viewportRef.current;
@@ -62,6 +63,7 @@ export const ScrollArea = (inProps: ScrollAreaProps) => {
     const scrollbarY = scrollbarYRef.current;
     const thumbX = thumbXRef.current;
     const thumbY = thumbYRef.current;
+    const corner = cornerRef.current;
 
     if (
       !root ||
@@ -69,7 +71,8 @@ export const ScrollArea = (inProps: ScrollAreaProps) => {
       !scrollbarX ||
       !scrollbarY ||
       !thumbX ||
-      !thumbY
+      !thumbY ||
+      !corner
     ) {
       return;
     }
@@ -126,7 +129,11 @@ export const ScrollArea = (inProps: ScrollAreaProps) => {
         tabIndex={3}
         onScrollChange={handleScrollX}
       />
-      <div data-scrollarea="corner" className={classes.corner} />
+      <div
+        ref={cornerRef}
+        data-scrollarea="corner"
+        className={classes.corner}
+      />
     </Poly.div>
   );
 };

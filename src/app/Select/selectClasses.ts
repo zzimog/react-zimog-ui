@@ -37,7 +37,7 @@ const selectClasses = {
     '[--enter-scale-y:0]',
   ]),
   content: 'w-full p-3',
-  content2: cn(
+  __content: cn(
     'w-(--width)',
     'max-h-[min(var(--max-height),calc(var(--spacing)*64))]',
     'p-1',

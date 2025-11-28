@@ -7,7 +7,6 @@ const scrollbarCommon = [
   'outline-0',
   'opacity-0',
   'group-hover:opacity-100',
-  'group-has-focus:opacity-100',
 ];
 
 const classes = {

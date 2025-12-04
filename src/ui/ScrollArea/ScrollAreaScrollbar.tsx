@@ -1,10 +1,11 @@
-import { type ComponentPropsWithRef, type Ref, useEffect, useRef } from 'react';
+import { type ComponentPropsWithRef, useEffect, useRef } from 'react';
 import { useMergedRefs } from '../hooks';
 import { cn } from '../utils';
 import classes from './scrollAreaClasses';
 
+const DISPLAY_NAME = 'ScrollAreaScrollbar';
+
 type ScrollAreaScrollbarProps = ComponentPropsWithRef<'div'> & {
-  thumbRef?: Ref<HTMLDivElement | null>;
   direction?: 'vertical' | 'horizontal';
   onScrollChange?: (value: number) => void;
 };
@@ -16,7 +17,6 @@ function clamp(value: number, min: number, max: number) {
 export const ScrollAreaScrollbar = (inProps: ScrollAreaScrollbarProps) => {
   const {
     ref: refProp,
-    thumbRef: thumbRefProp,
     direction = 'vertical',
     className,
     children,
@@ -28,7 +28,6 @@ export const ScrollAreaScrollbar = (inProps: ScrollAreaScrollbarProps) => {
   const thumbRef = useRef<HTMLDivElement>(null);
 
   const ref = useMergedRefs(refProp, scrollbarRef);
-  const mergedThumbRef = useMergedRefs(thumbRefProp, thumbRef);
 
   useEffect(() => {
     const isVertical = direction === 'vertical';
@@ -53,7 +52,7 @@ export const ScrollAreaScrollbar = (inProps: ScrollAreaScrollbarProps) => {
         const ratio = clamp(scroll / track, 0, 1);
 
         onScrollChange?.(ratio);
-        thumb.style.setProperty('--scroll', `${thumbScroll}px`);
+        scrollbar.style.setProperty('--scroll', `${thumbScroll}px`);
       };
 
       const handlePointerUp = (event: PointerEvent) => {
@@ -78,6 +77,7 @@ export const ScrollAreaScrollbar = (inProps: ScrollAreaScrollbarProps) => {
           handlePointerMove(event);
         } else if (target === thumb) {
           const thumbRect = thumb.getBoundingClientRect();
+
           pointerOffset = isVertical
             ? clientY - thumbRect.top
             : clientX - thumbRect.left;
@@ -90,6 +90,8 @@ export const ScrollAreaScrollbar = (inProps: ScrollAreaScrollbarProps) => {
       scrollbar.addEventListener('pointerdown', handlePointerDown);
       return () => {
         scrollbar.removeEventListener('pointerdown', handlePointerDown);
+        document.removeEventListener('pointermove', handlePointerMove);
+        document.removeEventListener('pointerup', handlePointerUp);
       };
     }
   }, [direction, onScrollChange]);
@@ -103,7 +105,7 @@ export const ScrollAreaScrollbar = (inProps: ScrollAreaScrollbarProps) => {
       className={cn(classes.scrollbar({ direction }), className)}
     >
       <div
-        ref={mergedThumbRef}
+        ref={thumbRef}
         data-scrollbar="thumb"
         className={classes.thumb({ direction })}
       />
@@ -111,4 +113,4 @@ export const ScrollAreaScrollbar = (inProps: ScrollAreaScrollbarProps) => {
   );
 };
 
-ScrollAreaScrollbar.displayName = 'ScrollAreaScrollbar';
+ScrollAreaScrollbar.displayName = DISPLAY_NAME;

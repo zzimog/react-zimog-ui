@@ -40,8 +40,8 @@ const classes = {
     {
       variants: {
         direction: {
-          vertical: 'w-full h-(--size) translate-y-(--scroll)',
-          horizontal: 'w-(--size) h-full translate-x-(--scroll)',
+          vertical: 'w-full h-(--thumb-size) translate-y-(--scroll)',
+          horizontal: 'w-(--thumb-size) h-full translate-x-(--scroll)',
         },
       },
     }

@@ -14,6 +14,7 @@ const App = () => {
       <Card.Content as={ScrollArea} className="size-80">
         {Array.from({ length: 50 }).map((_, i) => (
           <div
+            key={i}
             ref={i === 25 ? halfRef : undefined}
             className="w-120 py-4 text-justify not-last:mb-2 not-last:border-b"
           >

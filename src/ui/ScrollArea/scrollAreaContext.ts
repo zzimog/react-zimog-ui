@@ -1,7 +1,15 @@
-import type { RefObject } from 'react';
+import { type Dispatch, type SetStateAction } from 'react';
+import { createScopedContext } from '../utils';
 
-type Ref = RefObject<HTMLElement | null>;
+type SetState = Dispatch<SetStateAction<HTMLElement>>;
 
 type ScrollAreaContextValue = {
-  //
+  viewport?: HTMLElement;
+  setViewport: SetState;
 };
+
+const [ScrollAreaContext, useScrollAreaContext] = createScopedContext<
+  ScrollAreaContextValue | undefined
+>('ScrollArea', undefined);
+
+export { ScrollAreaContext, useScrollAreaContext };

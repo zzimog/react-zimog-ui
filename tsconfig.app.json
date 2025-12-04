@@ -29,5 +29,5 @@
       "@ui": ["./src/ui"]
     }
   },
-  "include": ["src/app", "src/ui/Form", "src/ui/hooks/use-focus-guards.ts", "src/ui/ScrollArea"]
+  "include": ["src/app"]
 }

@@ -161,28 +161,11 @@ export const Select = (inProps: SelectProps) => {
   }, []);
 
   useEffect(() => {
-    const content = contentRef.current;
-    const active = document.activeElement;
-    if (content && active && open) {
-      const [first] = getFocusableEdges(content);
-      const rect = active.getBoundingClientRect();
-
-      /**
-       * @todo
-       * Need to understand how to remove this setTimeout.
-       * At the moment it doesn't work without it.
-       */
-      const timeout = setTimeout(() => {
-        if (active === first) {
-          content.scrollTop = 0;
-        } else {
-          content.scrollTop = rect.top - 8;
-        }
-      });
-
-      return () => clearTimeout(timeout);
+    if (open && node) {
+      const raf = requestAnimationFrame(() => node.focus());
+      return () => cancelAnimationFrame(raf);
     }
-  }, [open]);
+  }, [open, node]);
 
   useLayoutEffect(() => {
     setOpen(false);
@@ -209,7 +192,9 @@ export const Select = (inProps: SelectProps) => {
         }}
       >
         <ScrollArea className={classes.content}>
-          <SelectContext value={context}>{children}</SelectContext>
+          <ScrollArea.Viewport>
+            <SelectContext value={context}>{children}</SelectContext>
+          </ScrollArea.Viewport>
         </ScrollArea>
       </Popover.Content>
     </Popover>

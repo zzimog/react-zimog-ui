@@ -1,10 +1,11 @@
 import { type Dispatch, type SetStateAction } from 'react';
 import { createScopedContext } from '../utils';
 
-type SetState = Dispatch<SetStateAction<HTMLElement>>;
+type SetState = Dispatch<SetStateAction<HTMLElement | null>>;
 
 type ScrollAreaContextValue = {
-  viewport?: HTMLElement;
+  viewport: HTMLElement | null;
+  useCorner: boolean;
   setViewport: SetState;
 };
 

@@ -31,14 +31,8 @@ export const SelectOption = (inProps: SelectOptionProps) => {
 
   useEffect(() => {
     const node = ref.current;
-    if (node) {
-      if (isSelected) {
-        node.focus({ preventScroll: true });
-      }
-
-      if (isSelected || (!context.value && !disabled)) {
-        context?.setSelected(value, node);
-      }
+    if (node && (isSelected || (!context.value && !disabled))) {
+      context?.setSelected(value, node);
     }
   }, []);
 

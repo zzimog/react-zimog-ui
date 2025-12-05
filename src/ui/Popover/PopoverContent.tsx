@@ -116,33 +116,35 @@ export const PopoverContent = (inProps: PopoverContentProps) => {
     }
   }, [updateMode, open]);
 
-  return shouldRender
-    ? createPortal(
-        <Poly.div
-          ref={mergedRefs}
-          role="dialog"
-          id={contentId}
-          data-open={open}
-          hidden={!shouldRender}
-          className={cn(
-            'fixed top-0 left-0',
-            'max-w-(--max-width)',
-            //'max-h-(--max-height)',
-            'translate-x-(--x)',
-            'translate-y-(--y)',
-            animate && [
-              //'[--exit-blur:40px]',
-              //'[--exit-scale:0]',
-              'data-[open="true"]:animate-in',
-              'data-[open="false"]:animate-out',
-            ],
-            className
-          )}
-          {...props}
-        />,
-        document.body
-      )
-    : null;
+  if (!shouldRender) {
+    return null;
+  }
+
+  return createPortal(
+    <Poly.div
+      ref={mergedRefs}
+      role="dialog"
+      id={contentId}
+      data-open={open}
+      hidden={!shouldRender}
+      className={cn(
+        'fixed top-0 left-0',
+        'max-w-(--max-width)',
+        //'max-h-(--max-height)',
+        'translate-x-(--x)',
+        'translate-y-(--y)',
+        animate && [
+          //'[--exit-blur:40px]',
+          //'[--exit-scale:0]',
+          'data-[open="true"]:animate-in',
+          'data-[open="false"]:animate-out',
+        ],
+        className
+      )}
+      {...props}
+    />,
+    document.body
+  );
 };
 
 PopoverContent.displayName = 'PopoverContent';

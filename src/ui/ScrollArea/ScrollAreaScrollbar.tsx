@@ -1,13 +1,18 @@
-import { type ComponentPropsWithRef, useEffect, useRef } from 'react';
-import { useMergedRefs } from '../hooks';
+import {
+  type ComponentPropsWithRef,
+  useCallback,
+  useEffect,
+  useRef,
+} from 'react';
+import { useMergedRefs, useResizeObserver } from '../hooks';
 import { cn } from '../utils';
 import classes from './scrollAreaClasses';
+import { useScrollAreaContext } from './scrollAreaContext';
 
 const DISPLAY_NAME = 'ScrollAreaScrollbar';
 
 type ScrollAreaScrollbarProps = ComponentPropsWithRef<'div'> & {
   direction?: 'vertical' | 'horizontal';
-  onScrollChange?: (value: number) => void;
 };
 
 function clamp(value: number, min: number, max: number) {
@@ -20,20 +25,20 @@ export const ScrollAreaScrollbar = (inProps: ScrollAreaScrollbarProps) => {
     direction = 'vertical',
     className,
     children,
-    onScrollChange,
     ...props
   } = inProps;
 
+  const { viewport, useCorner } = useScrollAreaContext(DISPLAY_NAME);
+
   const scrollbarRef = useRef<HTMLDivElement>(null);
   const thumbRef = useRef<HTMLDivElement>(null);
-
   const ref = useMergedRefs(refProp, scrollbarRef);
 
   useEffect(() => {
     const isVertical = direction === 'vertical';
     const scrollbar = scrollbarRef.current;
     const thumb = thumbRef.current;
-    if (scrollbar && thumb) {
+    if (viewport && scrollbar && thumb) {
       let scrollbarRect: DOMRect;
       let pointerOffset: number;
 
@@ -51,7 +56,14 @@ export const ScrollAreaScrollbar = (inProps: ScrollAreaScrollbarProps) => {
         const thumbScroll = clamp(scroll, 0, track);
         const ratio = clamp(scroll / track, 0, 1);
 
-        onScrollChange?.(ratio);
+        if (direction === 'vertical') {
+          const scrollable = viewport.scrollHeight - viewport.clientHeight;
+          viewport.scrollTop = scrollable * ratio;
+        } else {
+          const scrollable = viewport.scrollWidth - viewport.clientWidth;
+          viewport.scrollLeft = scrollable * ratio;
+        }
+
         scrollbar.style.setProperty('--scroll', `${thumbScroll}px`);
       };
 
@@ -69,11 +81,26 @@ export const ScrollAreaScrollbar = (inProps: ScrollAreaScrollbarProps) => {
         thumb.setPointerCapture(pointerId);
 
         if (target === scrollbar) {
-          const offsetSize = isVertical
-            ? thumb.offsetHeight
-            : thumb.offsetWidth;
+          if (isVertical) {
+            pointerOffset = thumb.offsetHeight / 2;
 
-          pointerOffset = offsetSize / 2;
+            if (clientY - scrollbarRect.top < pointerOffset) {
+              pointerOffset = clientY - scrollbarRect.top;
+            } else if (scrollbarRect.bottom - clientY < pointerOffset) {
+              const distance = scrollbarRect.bottom - clientY;
+              pointerOffset = thumb.offsetHeight - distance;
+            }
+          } else {
+            pointerOffset = thumb.offsetWidth / 2;
+
+            if (clientX - scrollbarRect.left < pointerOffset) {
+              pointerOffset = clientX - scrollbarRect.left;
+            } else if (scrollbarRect.right - clientX < pointerOffset) {
+              const distance = scrollbarRect.right - clientX;
+              pointerOffset = thumb.offsetWidth - distance;
+            }
+          }
+
           handlePointerMove(event);
         } else if (target === thumb) {
           const thumbRect = thumb.getBoundingClientRect();
@@ -87,22 +114,66 @@ export const ScrollAreaScrollbar = (inProps: ScrollAreaScrollbarProps) => {
         document.addEventListener('pointerup', handlePointerUp);
       };
 
+      const handleScroll = () => {
+        const { sizeY, sizeX } = getThumbSize(viewport, scrollbar);
+
+        if (isVertical) {
+          const scrollable = viewport.scrollHeight - viewport.offsetHeight;
+          const ratio = viewport.scrollTop / scrollable;
+          const size = thumb.offsetHeight || sizeY;
+          const value = (scrollbar.offsetHeight - size) * ratio;
+
+          scrollbar.style.setProperty('--scroll', `${value}px`);
+        } else {
+          const scrollable = viewport.scrollWidth - viewport.offsetWidth;
+          const ratio = viewport.scrollLeft / scrollable;
+          const size = thumb.offsetWidth || sizeX;
+          const value = (scrollbar.offsetWidth - size) * ratio;
+
+          scrollbar.style.setProperty('--scroll', `${value}px`);
+        }
+      };
+
+      viewport.addEventListener('scroll', handleScroll);
       scrollbar.addEventListener('pointerdown', handlePointerDown);
       return () => {
+        viewport.removeEventListener('scroll', handleScroll);
         scrollbar.removeEventListener('pointerdown', handlePointerDown);
         document.removeEventListener('pointermove', handlePointerMove);
         document.removeEventListener('pointerup', handlePointerUp);
       };
     }
-  }, [direction, onScrollChange]);
+  }, [viewport, direction]);
+
+  useResizeObserver(
+    viewport,
+    useCallback(() => {
+      const scrollbar = scrollbarRef.current;
+      if (viewport && scrollbar) {
+        const { ratioX, sizeX, ratioY, sizeY } = getThumbSize(
+          viewport,
+          scrollbar
+        );
+
+        if (direction === 'vertical') {
+          scrollbar.hidden = ratioY >= 1;
+          scrollbar.style.setProperty('--thumb-size', `${sizeY}px`);
+        } else {
+          scrollbar.hidden = ratioX >= 1;
+          scrollbar.style.setProperty('--thumb-size', `${sizeX}px`);
+        }
+      }
+    }, [viewport, direction])
+  );
 
   return (
     <div
       {...props}
       ref={ref}
+      data-scrollarea="scrollbar"
       data-scrollbar="root"
       data-direction={direction}
-      className={cn(classes.scrollbar({ direction }), className)}
+      className={cn(classes.scrollbar({ direction, useCorner }), className)}
     >
       <div
         ref={thumbRef}
@@ -112,5 +183,14 @@ export const ScrollAreaScrollbar = (inProps: ScrollAreaScrollbarProps) => {
     </div>
   );
 };
+
+function getThumbSize(viewport: HTMLElement, scrollbar: HTMLElement) {
+  const ratioX = viewport.offsetWidth / viewport.scrollWidth;
+  const ratioY = viewport.offsetHeight / viewport.scrollHeight;
+  const sizeX = Math.max(scrollbar.offsetWidth * ratioX, 18);
+  const sizeY = Math.max(scrollbar.offsetHeight * ratioY, 18);
+
+  return { ratioX, ratioY, sizeX, sizeY };
+}
 
 ScrollAreaScrollbar.displayName = DISPLAY_NAME;

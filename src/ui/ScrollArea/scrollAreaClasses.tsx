@@ -6,7 +6,7 @@ const scrollbarCommon = [
   'transition',
   'outline-0',
   'opacity-0',
-  'group-hover:opacity-100',
+  'group-hover:opacity-75',
 ];
 
 const classes = {
@@ -23,10 +23,25 @@ const classes = {
   scrollbar: cva(scrollbarCommon, {
     variants: {
       direction: {
-        vertical: 'w-2 inset-[0_0_calc(var(--spacing)*2)_auto]',
-        horizontal: 'h-2 inset-[auto_calc(var(--spacing)*2)_0_0]',
+        vertical: 'w-2 inset-[0_0_0_auto]',
+        horizontal: 'h-2 inset-[auto_0_0_0]',
+      },
+      useCorner: {
+        true: null,
       },
     },
+    compoundVariants: [
+      {
+        direction: 'vertical',
+        useCorner: true,
+        className: 'bottom-2',
+      },
+      {
+        direction: 'horizontal',
+        useCorner: true,
+        className: 'right-2',
+      },
+    ],
   }),
   thumb: cva(
     [

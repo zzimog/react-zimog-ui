@@ -1,5 +1,5 @@
 import { type PropsWithChildren, useId, useRef } from 'react';
-import { useControllableState, useOnClickOutside } from '../hooks';
+import { useControllableState } from '../hooks';
 import { PopoverContent } from './PopoverContent';
 import { PopoverContext } from './popoverContext';
 import { PopoverTrigger } from './PopoverTrigger';
@@ -27,23 +27,17 @@ export const Popover = (inProps: PopoverProps) => {
   });
 
   const triggerRef = useRef<HTMLElement>(null);
-  const contentRef = useRef<HTMLElement>(null);
 
   const contentId = useId();
-
-  useOnClickOutside([triggerRef, contentRef], () => {
-    setOpen(false);
-  });
 
   return (
     <PopoverContext
       value={{
         updateMode,
         triggerRef,
-        contentRef,
         contentId,
         open,
-        setOpen,
+        onOpenChange: setOpen,
       }}
     >
       {children}

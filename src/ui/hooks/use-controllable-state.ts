@@ -13,6 +13,10 @@ type ControllableStateParams<T> = {
   onChange?: (state: T) => void;
 };
 
+function isFunction(value: unknown) {
+  return typeof value === 'function';
+}
+
 export function useControllableState<T>(
   inParams: ControllableStateParams<T>
 ): [T, SetState<T>] {
@@ -25,19 +29,16 @@ export function useControllableState<T>(
 
   const setValue = useCallback<SetState<T>>(
     (next) => {
-      if (isControlled) {
-        const value = isFunction(next) ? next(prop) : next;
-        onChange?.(value);
-      } else {
-        setUncontrolled(next);
+      const nextValue = isFunction(next) ? next(value) : next;
+
+      if (!isControlled) {
+        setUncontrolled(nextValue);
       }
+
+      onChange?.(nextValue);
     },
-    [prop, isControlled, onChange]
+    [isControlled, value, onChange]
   );
 
   return [value, setValue];
-}
-
-function isFunction(value: unknown) {
-  return typeof value === 'function';
 }

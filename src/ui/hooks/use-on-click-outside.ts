@@ -1,19 +1,15 @@
-import { type RefObject, useEffect } from 'react';
-
-type Ref = RefObject<HTMLElement | null>;
+import { useEffect } from 'react';
 
 export function useOnClickOutside(
-  ref: Ref | Ref[],
+  elements: (HTMLElement | null)[],
   callback: (event: MouseEvent) => void
 ) {
-  const refs = Array.isArray(ref) ? ref : [ref];
-
   useEffect(() => {
     function handler(event: MouseEvent) {
       const target = event.target as HTMLElement;
 
-      for (const ref of refs) {
-        if (ref.current?.contains(target)) {
+      for (const element of elements) {
+        if (element && element.contains(target)) {
           return;
         }
       }
@@ -23,5 +19,5 @@ export function useOnClickOutside(
 
     document.addEventListener('click', handler);
     return () => document.removeEventListener('click', handler);
-  }, [callback]);
+  }, [callback, ...elements]);
 }

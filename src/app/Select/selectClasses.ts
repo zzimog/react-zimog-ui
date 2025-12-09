@@ -17,8 +17,8 @@ const selectClasses = {
     'cursor-pointer',
     'select-none',
     'focusable',
-    'focus-visible:outline-outline',
-    'focus-visible:border-primary',
+    'focus:outline-outline',
+    'focus:border-primary',
     'hover:border-primary',
     'transition-colors'
   ),
@@ -27,6 +27,7 @@ const selectClasses = {
     'flex',
     'w-(--width)',
     'max-h-[min(var(--max-height),calc(var(--spacing)*64))]',
+    'h-50',
     'text-sm',
     'rounded-shape',
     'border',

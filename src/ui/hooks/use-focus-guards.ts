@@ -17,24 +17,22 @@ function createGuard() {
   return span;
 }
 
-export function useFocusGuards(enabled: boolean = true) {
+export function useFocusGuards() {
   useEffect(() => {
-    if (enabled) {
-      const { body } = document;
-      const guards = document.querySelectorAll('[data-focus-guard]');
-      body.insertAdjacentElement('afterbegin', guards[0] ?? createGuard());
-      body.insertAdjacentElement('beforeend', guards[1] ?? createGuard());
-      count++;
+    const { body } = document;
+    const guards = document.querySelectorAll('[data-focus-guard]');
+    body.insertAdjacentElement('afterbegin', guards[0] ?? createGuard());
+    body.insertAdjacentElement('beforeend', guards[1] ?? createGuard());
+    count++;
 
-      return () => {
-        if (count === 1) {
-          document
-            .querySelectorAll('[data-focus-guard]')
-            .forEach((node) => node.remove());
-        }
+    return () => {
+      if (count === 1) {
+        document
+          .querySelectorAll('[data-focus-guard]')
+          .forEach((node) => node.remove());
+      }
 
-        count--;
-      };
-    }
-  }, [enabled]);
+      count--;
+    };
+  }, []);
 }

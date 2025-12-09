@@ -3,18 +3,17 @@ import { type PolyProps, Poly } from '../polymorphic';
 import { usePopoverContext } from './popoverContext';
 import { composeHandlers } from '../utils';
 
+const DISPLAY_NAME = 'PopoverTrigger';
+
 type PopoverTriggerProps = PolyProps<'button'>;
 
 export const PopoverTrigger = (inProps: PopoverTriggerProps) => {
   const { ref, onClick, ...props } = inProps;
 
-  const { triggerRef, contentId, open, setOpen } = usePopoverContext();
+  const context = usePopoverContext(DISPLAY_NAME);
+  const { triggerRef, contentId, open, onOpenChange } = context;
 
   const mergedRefs = useMergedRefs(ref, triggerRef);
-
-  const handleClick = composeHandlers(onClick, () => {
-    setOpen(!open);
-  });
 
   return (
     <Poly.button
@@ -25,10 +24,12 @@ export const PopoverTrigger = (inProps: PopoverTriggerProps) => {
       aria-haspopup="dialog"
       aria-expanded={open}
       aria-controls={contentId}
-      onClick={handleClick}
+      onClick={composeHandlers(onClick, () => {
+        onOpenChange(!open);
+      })}
       {...props}
     />
   );
 };
 
-PopoverTrigger.displayName = 'PopoverTrigger';
+PopoverTrigger.displayName = DISPLAY_NAME;

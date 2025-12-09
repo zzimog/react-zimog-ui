@@ -1,9 +1,11 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { useMergedRefs, usePresence } from '../hooks';
+import { useAnimationFrame, useMergedRefs, usePresence } from '../hooks';
 import { type PolyProps, Poly } from '../polymorphic';
-import { animationLoop, cn } from '../utils';
+import { cn } from '../utils';
 import { usePopoverContext } from './popoverContext';
+
+const DISPLAY_NAME = 'PopoverContent';
 
 type PopoverContentProps = PolyProps<'div'> & {
   avoidCollisions?: boolean;
@@ -18,29 +20,31 @@ function clamp(value: number, min: number, max: number) {
 
 export const PopoverContent = (inProps: PopoverContentProps) => {
   const {
-    ref,
+    ref: refProp,
     avoidCollisions = false,
     distance = 8,
     padding = 16,
     align = 'center',
     className,
+    style,
     ...props
   } = inProps;
 
-  const { updateMode, triggerRef, contentRef, contentId, open } =
-    usePopoverContext();
+  const context = usePopoverContext(DISPLAY_NAME);
+  const { updateMode, triggerRef, contentId, open } = context;
 
+  const ref = useRef<HTMLElement>(null);
   const { ref: presenceRef, present } = usePresence(open);
-  const mergedRefs = useMergedRefs(ref, contentRef, presenceRef);
+  const mergedRefs = useMergedRefs(refProp, ref, presenceRef);
 
   const useAnimationRef = useRef(!open);
   const animate = useAnimationRef.current;
 
   const shouldRender = open || present;
 
-  const doTheMath = useCallback(() => {
+  const calculate = useCallback(() => {
     const trigger = triggerRef.current;
-    const content = contentRef.current;
+    const content = ref.current;
     if (trigger && content) {
       const { innerWidth, innerHeight } = window;
       const triggerRect = trigger.getBoundingClientRect();
@@ -83,68 +87,73 @@ export const PopoverContent = (inProps: PopoverContentProps) => {
       const maxWidth = innerWidth - pos.x - padding;
       const maxHeight = innerHeight - pos.y - padding;
 
-      content.style.transformOrigin = `${origin.x}px ${origin.y}px`;
-      content.style.setProperty('--x', `${Math.floor(pos.x)}px`);
-      content.style.setProperty('--y', `${Math.floor(pos.y)}px`);
+      const x = Math.floor(pos.x);
+      const y = Math.floor(pos.y);
+
+      content.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+      content.style.setProperty('--origin', `${origin.x}px ${origin.y}px`);
       content.style.setProperty('--max-width', `${maxWidth}px`);
       content.style.setProperty('--max-height', `${maxHeight}px`);
     }
-  }, [avoidCollisions, distance, padding, align]);
+  }, []);
 
   useEffect(() => {
     const raf = requestAnimationFrame(() => (useAnimationRef.current = true));
     return () => cancelAnimationFrame(raf);
   }, []);
 
-  useEffect(() => {
-    if (updateMode === 'always') {
-      doTheMath();
-      return animationLoop(doTheMath);
-    }
-  }, [updateMode]);
-
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (updateMode !== 'always' && open) {
-      const rafId = requestAnimationFrame(doTheMath);
-      window.addEventListener('resize', doTheMath);
-      window.addEventListener('scroll', doTheMath);
+      calculate();
+      window.addEventListener('resize', calculate);
+      window.addEventListener('scroll', calculate);
       return () => {
-        cancelAnimationFrame(rafId);
-        window.removeEventListener('resize', doTheMath);
-        window.removeEventListener('scroll', doTheMath);
+        window.removeEventListener('resize', calculate);
+        window.removeEventListener('scroll', calculate);
       };
     }
   }, [updateMode, open]);
 
-  if (!shouldRender) {
-    return null;
-  }
+  useAnimationFrame(() => {
+    if (updateMode === 'always') {
+      calculate();
+    }
+  }, [updateMode]);
 
-  return createPortal(
-    <Poly.div
-      ref={mergedRefs}
-      role="dialog"
-      id={contentId}
-      data-open={open}
-      hidden={!shouldRender}
-      className={cn(
-        'fixed top-0 left-0',
-        'max-w-(--max-width)',
-        //'max-h-(--max-height)',
-        'translate-x-(--x)',
-        'translate-y-(--y)',
-        animate && [
-          //'[--exit-blur:40px]',
-          //'[--exit-scale:0]',
-          'data-[open="true"]:animate-in',
-          'data-[open="false"]:animate-out',
-        ],
-        className
-      )}
-      {...props}
-    />,
-    document.body
+  return (
+    shouldRender &&
+    createPortal(
+      <Poly.div
+        ref={mergedRefs}
+        role="dialog"
+        id={contentId}
+        data-open={open}
+        hidden={!shouldRender}
+        className={cn(
+          //'max-w-(--max-width)',
+          //'max-h-(--max-height)',
+          //'translate-x-(--x)',
+          //'translate-y-(--y)',
+          animate &&
+            [
+              //'[--exit-blur:40px]',
+              //'[--exit-scale:0]',
+              //'data-[open="true"]:animate-in',
+              //'data-[open="false"]:animate-out',
+            ],
+          className
+        )}
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          ...style,
+        }}
+        {...props}
+      />,
+      document.body
+    )
   );
 };
 
-PopoverContent.displayName = 'PopoverContent';
+PopoverContent.displayName = DISPLAY_NAME;

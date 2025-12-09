@@ -1,10 +1,4 @@
-import {
-  Popover,
-  useControllableState,
-  useFocusGuards,
-  cn,
-  ScrollArea,
-} from '@ui';
+import { Popover, useControllableState, useFocusGuards, cn } from '@ui';
 import { ChevronDown } from 'lucide-react';
 import {
   type ComponentPropsWithoutRef,
@@ -72,7 +66,7 @@ export const Select = (inProps: SelectProps) => {
 
   const [node, setNode] = useState<HTMLElement | undefined>(undefined);
   const [open, setOpen] = useState(true);
-  const [rect, setRect] = useState<DOMRect | undefined>(undefined);
+  const [width, setWidth] = useState<number | undefined>(undefined);
 
   const triggerRef = useRef<HTMLButtonElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -87,11 +81,6 @@ export const Select = (inProps: SelectProps) => {
   };
 
   function handleOpenChange(open: boolean) {
-    const trigger = triggerRef.current;
-    if (trigger && open) {
-      setRect(trigger.getBoundingClientRect());
-    }
-
     setOpen(open);
   }
 
@@ -161,15 +150,27 @@ export const Select = (inProps: SelectProps) => {
   }, []);
 
   useEffect(() => {
-    if (open && node) {
-      const raf = requestAnimationFrame(() => node.focus());
-      return () => cancelAnimationFrame(raf);
+    if (open && width) {
+      node?.focus();
+      node?.scrollIntoView({ block: 'nearest' });
+    } else {
+      triggerRef.current?.focus();
     }
-  }, [open, node]);
+  }, [node, open, width]);
 
   useLayoutEffect(() => {
     setOpen(false);
   }, []);
+
+  useLayoutEffect(() => {
+    const trigger = triggerRef.current;
+    if (open && trigger) {
+      const { width } = trigger.getBoundingClientRect();
+      setWidth(width);
+    } else {
+      setWidth(undefined);
+    }
+  }, [open]);
 
   return (
     <Popover open={open} onOpenChange={handleOpenChange}>
@@ -188,14 +189,12 @@ export const Select = (inProps: SelectProps) => {
         tabIndex={-1}
         className={classes.portal}
         style={{
-          ['--width' as any]: rect ? `${rect.width}px` : undefined,
+          ['--width' as any]: width ? `${width}px` : undefined,
         }}
       >
-        <ScrollArea className={classes.content}>
-          <ScrollArea.Viewport>
-            <SelectContext value={context}>{children}</SelectContext>
-          </ScrollArea.Viewport>
-        </ScrollArea>
+        <div className={classes.content}>
+          <SelectContext value={context}>{children}</SelectContext>
+        </div>
       </Popover.Content>
     </Popover>
   );

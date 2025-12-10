@@ -5,7 +5,7 @@ const scrollbarCommon = [
   'bg-border',
   'transition',
   'outline-0',
-  'opacity-0',
+  'opacity-25',
   'group-hover:opacity-75',
 ];
 

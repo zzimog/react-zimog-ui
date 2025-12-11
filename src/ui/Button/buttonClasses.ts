@@ -14,8 +14,8 @@ const buttonClasses = cva(
     'not-disabled:active:scale-95',
     // focus
     'focusable',
-    'focus:outline-(--base)/50',
-    'focus:z-10',
+    'focus-visible:outline-(--base)/50',
+    'focus-visible:z-10',
     // icon
     '[&_svg]:-mx-1',
     '[&_svg]:shrink-0',

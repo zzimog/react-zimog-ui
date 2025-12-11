@@ -18,9 +18,8 @@
   "dependencies": {
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "hast-util-to-html": "^9.0.5",
     "lucide-react": "^0.559.0",
-    "refractor": "^5.0.0",
+    "shiki": "^3.19.0",
     "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.1.17"
   },

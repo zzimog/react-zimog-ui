@@ -8,10 +8,6 @@ export const Card = (inProps: PolyProps<'div'>) => {
     <Poly.div
       className={cn(
         [
-          'flex',
-          'flex-col',
-          'gap-3',
-          'py-6',
           'rounded-shape',
           'border',
           'transition-colors',
@@ -42,8 +38,7 @@ const CardHeader = (inProps: PolyProps<'div'>) => {
         'flex',
         'flex-col',
         'gap-2',
-        'mx-6',
-        'pb-3',
+        'p-6',
         'border-b',
         'border-border',
         className
@@ -77,7 +72,13 @@ const CardDescription = (inProps: PolyProps<'div'>) => {
 
   return (
     <Poly.div
-      className={cn('text-sm', 'text-muted', 'transition-colors', className)}
+      className={cn(
+        'text-sm',
+        'transition-colors',
+        'text-muted-foreground',
+        'dark:text-muted-background',
+        className
+      )}
       {...props}
     />
   );
@@ -90,7 +91,7 @@ CardDescription.displayName = 'CardDescription';
 const CardContent = (inProps: PolyProps<'div'>) => {
   const { className, ...props } = inProps;
 
-  return <Poly.div className={cn('px-6', className)} {...props} />;
+  return <Poly.div className={cn('p-6', className)} {...props} />;
 };
 
 CardContent.displayName = 'CardContent';
@@ -103,16 +104,13 @@ const CardFooter = (inProps: PolyProps<'div'>) => {
   return (
     <Poly.div
       className={cn(
-        'flex',
-        'flex-col',
-        'gap-2',
-        'mx-6',
-        'pt-3',
+        'p-6',
         'border-t',
-        'border-border',
-        'text-muted',
         'text-sm',
         'transition-colors',
+        'border-border',
+        'text-muted-foreground',
+        'dark:text-muted-background',
         className
       )}
       {...props}

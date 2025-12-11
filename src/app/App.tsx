@@ -1,10 +1,10 @@
 import { type PolyProps, Poly, ThemeSwitcher, Title } from '@ui';
-import accordion from './demo/accordion';
-import tabs from './demo/tabs';
-import tree from './demo/tree';
-import buttons from './demo/buttons';
-import inputs from './demo/inputs';
-import { CardDemo } from './demo/CardDemo';
+import accordion from './__demo/accordion';
+import tabs from './__demo/tabs';
+import tree from './__demo/tree';
+import buttons from './__demo/buttons';
+import inputs from './__demo/inputs';
+import { CardDemo } from './__demo/CardDemo';
 
 const Container = (props: PolyProps<typeof Poly.div>) => (
   <div className="max-w-7xl mx-auto flex flex-wrap gap-4 py-4" {...props} />

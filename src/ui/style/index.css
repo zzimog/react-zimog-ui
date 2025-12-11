@@ -6,8 +6,8 @@
 @theme {
   --default-font-family: 'Manrope Variable';
 
-  --color-foreground: --alpha(var(--color-zinc-900) / 90%);
-  --color-background: --alpha(var(--color-zinc-100) / 90%);
+  --color-foreground: var(--color-zinc-900);
+  --color-background: var(--color-zinc-100);
 
   --color-primary: var(--color-violet-500);
   --color-primary-contrast: var(--color-white);

@@ -1,5 +1,5 @@
 import { StrictMode } from 'react';
-import App from './App2.tsx';
+import App from './DemoPopover.tsx';
 import '../ui/style/index.css';
 import { ThemeSwitcher } from '@ui';
 

@@ -1,7 +1,9 @@
+import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import AppContainer from '../app/AppContainer.tsx';
-import '@fontsource-variable/manrope/index.css';
+import AppContainer from './AppContainer.tsx';
 
 createRoot(document.getElementById('root')!).render(
-  <AppContainer strict={true} />
+  <StrictMode>
+    <AppContainer />
+  </StrictMode>
 );

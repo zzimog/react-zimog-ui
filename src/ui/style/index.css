@@ -46,7 +46,6 @@ body {
   min-height: 100vh;
   background-color: var(--color-white);
   @apply text-foreground;
-  @apply transition-colors;
 
   @variant dark {
     background-color: var(--color-black);

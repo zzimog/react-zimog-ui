@@ -38,6 +38,7 @@ export function useFocusScope<T extends HTMLElement>(): RefCallback<T> {
     first?.focus();
 
     function handleFocusIn(event: Event) {
+      /*
       const target = event.target as HTMLElement;
       if (node) {
         const [first, last] = getFocusableEdges(node);
@@ -57,11 +58,13 @@ export function useFocusScope<T extends HTMLElement>(): RefCallback<T> {
           prevFocusRef.current = target;
         }
       }
+      */
     }
 
     function handleKeydown(event: KeyboardEvent) {
       if (node) {
         const focusables = getFocusables(node);
+        const [first, last] = getFocusableEdges(node);
         const current = document.activeElement as HTMLElement;
         const currentIndex = current ? focusables.indexOf(current) : -1;
         let newIndex = undefined;
@@ -81,7 +84,11 @@ export function useFocusScope<T extends HTMLElement>(): RefCallback<T> {
         }
 
         if (newIndex !== undefined) {
-          focusables[newIndex]?.focus();
+          const element = focusables[newIndex];
+          element.scrollIntoView({ block: 'nearest' });
+          if (element === first) node.scrollTop = 0;
+          if (element === last) node.scrollTop = node.scrollHeight;
+          element.focus();
           event.preventDefault();
         }
       }

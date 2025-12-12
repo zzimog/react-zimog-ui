@@ -10,8 +10,8 @@ type Props = {
 
 export const DemoContainer = (props: Props) => {
   return (
-    <div className="max-w-200 w-full">
-      <Title size={2} className="px-6 mb-4 leading-none">
+    <div className="w-full">
+      <Title size={2} className="p-6 leading-none">
         {props.title}
       </Title>
 
@@ -20,9 +20,6 @@ export const DemoContainer = (props: Props) => {
       </div>
 
       <Card className="w-full rounded-t-none">
-        <Card.Header>
-          <Card.Title>Anathomy</Card.Title>
-        </Card.Header>
         <CodeBlock>{props.code}</CodeBlock>
       </Card>
     </div>

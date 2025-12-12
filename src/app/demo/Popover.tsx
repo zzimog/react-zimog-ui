@@ -6,8 +6,8 @@ import {
   useFocusScope,
   useMergedRefs,
 } from '@ui';
-import { type ComponentPropsWithRef, useEffect, useRef } from 'react';
-import { DemoContainer } from './demo/DemoContainer';
+import { type ComponentPropsWithRef, useEffect, useRef, useState } from 'react';
+import { DemoContainer } from './DemoContainer';
 
 const code = `// Example code
 import { Popover } from '@ui';
@@ -43,7 +43,9 @@ const Content = (inProps: ComponentPropsWithRef<'div'>) => {
           key={i}
           tabIndex={0}
           className="p-2 rounded-shape outline-0 focus:bg-highlight"
-          onPointerOver={({ target }) => (target as any).focus()}
+          onPointerOver={({ target }) =>
+            (target as HTMLElement).focus({ preventScroll: true })
+          }
         >
           {i}. Lorem ipsum dolor sit amet
         </div>
@@ -52,25 +54,32 @@ const Content = (inProps: ComponentPropsWithRef<'div'>) => {
   );
 };
 
-const DemoPopover = () => {
+export default () => {
+  const [open, setOpen] = useState(false);
+
+  const triggerRef = useRef<HTMLButtonElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef(0);
 
-  function handleOpenChange(open: boolean) {
-    if (open) {
-      requestAnimationFrame(() => {
-        const content = contentRef.current;
-        if (content) {
-          content.scrollTop = scrollRef.current;
-        }
-      });
+  useEffect(() => {
+    const content = contentRef.current;
+    if (content && open) {
+      content.scrollTop = scrollRef.current;
     }
-  }
+  }, [open]);
 
   useEffect(() => {
     function handlePointerDown(event: PointerEvent) {
       const target = event.target as HTMLElement;
-      //console.log(target);
+      const trigger = triggerRef.current;
+      const content = contentRef.current;
+      for (const element of [trigger, content]) {
+        if (element && element.contains(target)) {
+          return;
+        }
+
+        setOpen(false);
+      }
     }
 
     window.addEventListener('pointerdown', handlePointerDown);
@@ -79,8 +88,8 @@ const DemoPopover = () => {
 
   return (
     <DemoContainer title="Popover" code={code}>
-      <Popover onOpenChange={handleOpenChange}>
-        <Popover.Trigger asChild>
+      <Popover open={open} onOpenChange={setOpen}>
+        <Popover.Trigger ref={triggerRef} asChild>
           <Button>Toggle</Button>
         </Popover.Trigger>
         <Popover.Content avoidCollisions>
@@ -98,5 +107,3 @@ const DemoPopover = () => {
     </DemoContainer>
   );
 };
-
-export default DemoPopover;

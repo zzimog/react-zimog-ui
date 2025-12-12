@@ -1,6 +1,6 @@
 import { Card, ScrollArea, Title } from '@ui';
 import { useEffect, useRef } from 'react';
-import { CodeBlock } from './CodeBlock';
+import { CodeBlock } from '../CodeBlock';
 
 const code = `// Example code
 import { ScrollArea } from '@ui';
@@ -24,7 +24,7 @@ const Content = () => {
     <div
       key={i}
       ref={i === 25 ? halfRef : undefined}
-      className="w-fit p-1 whitespace-nowrap border"
+      className="w-fit p-1 whitespace-nowrap border border-border"
     >
       {i}. Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto
       consectetur atque adipisci sunt repudiandae magnam, molestiae corporis
@@ -34,7 +34,7 @@ const Content = () => {
   ));
 };
 
-const DemoScrollArea = () => {
+export default () => {
   return (
     <div className="max-w-200 w-full">
       <Title size={2} className="mb-4 leading-none">
@@ -55,5 +55,3 @@ const DemoScrollArea = () => {
     </div>
   );
 };
-
-export default DemoScrollArea;

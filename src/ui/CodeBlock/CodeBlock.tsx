@@ -6,8 +6,6 @@ import {
   useState,
 } from 'react';
 import { codeToHtml } from 'shiki';
-import './codeblock.css';
-import { cn } from '@ui';
 
 type CodeBlockProps = ComponentPropsWithRef<'figure'> & {
   title?: string;
@@ -32,16 +30,26 @@ function getContent(node: ReactNode) {
   return string;
 }
 
-function getEscapedCode(code: string) {
-  const chars = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-  };
+function getPlaceholderCode(code: string) {
+  const html = code
+    .replace(/[&<>]/g, (c) => {
+      switch (c) {
+        case '&':
+          return '&amp;';
+        case '<':
+          return '&lt;';
+        case '>':
+          return '&gt;';
+      }
+      return c;
+    })
+    .split('\n')
+    .map((line, i) => {
+      return `<span class="line" data-line="${i + 1}">${line}</span>`;
+    })
+    .join('\n');
 
-  return code.replace(/[&<>]/g, (c) => {
-    return (chars as any)[c] || c;
-  });
+  return `<pre><code>${html}</code></pre>`;
 }
 
 async function getHighlightedCode(code: string, lang: string) {
@@ -54,9 +62,6 @@ async function getHighlightedCode(code: string, lang: string) {
     },
     transformers: [
       {
-        pre(node) {
-          node.properties['class'] = 'py-4';
-        },
         code(node) {
           node.properties['style'] = 'all: unset; display: contents;';
         },
@@ -81,9 +86,11 @@ async function getHighlightedCode(code: string, lang: string) {
 export const CodeBlock = (inProps: CodeBlockProps) => {
   const { title, language = 'tsx', children = '', ...props } = inProps;
 
+  const [highlighted, setHighlighted] = useState<string | null>(null);
+
   const code = getContent(children);
-  const placeholder = getEscapedCode(code);
-  const [html, setHtml] = useState<string | null>(null);
+  const placeholder = getPlaceholderCode(code);
+  const html = highlighted || placeholder;
 
   useEffect(() => {
     let isMounted = true;
@@ -91,7 +98,7 @@ export const CodeBlock = (inProps: CodeBlockProps) => {
     async function fetchHtml() {
       const html = await getHighlightedCode(code, language);
       if (isMounted) {
-        setHtml(html);
+        setHighlighted(html);
       }
     }
 
@@ -102,26 +109,17 @@ export const CodeBlock = (inProps: CodeBlockProps) => {
   });
 
   return (
-    <figure
-      {...props}
-      className={cn(
-        '**:transition-colors',
-        '**:dark:text-(--shiki-dark)!',
-        props.className
-      )}
-    >
+    <figure {...props}>
       {title && (
         <figcaption className="px-4 py-2 border-b border-border font-mono text-sm">
           {title}
         </figcaption>
       )}
-      {html ? (
-        <div dangerouslySetInnerHTML={{ __html: html }} />
-      ) : (
-        <pre className="py-4 pl-16">
-          <code dangerouslySetInnerHTML={{ __html: placeholder }} />
-        </pre>
-      )}
+      <div
+        data-codeblock=""
+        className="py-4"
+        dangerouslySetInnerHTML={{ __html: html }}
+      />
     </figure>
   );
 };

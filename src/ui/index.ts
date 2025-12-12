@@ -7,6 +7,7 @@ export * from './utils';
 export * from './Accordion';
 export * from './Button';
 export * from './Card';
+export * from './CodeBlock';
 export * from './Collapsible';
 export * from './Form';
 export * from './Highlight';

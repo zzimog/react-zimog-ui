@@ -104,6 +104,10 @@ const CardFooter = (inProps: PolyProps<'div'>) => {
   return (
     <Poly.div
       className={cn(
+        'flex',
+        'flex-col',
+        'items-center',
+        'gap-2',
         'p-6',
         'border-t',
         'text-sm',

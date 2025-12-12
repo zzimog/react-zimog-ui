@@ -22,7 +22,7 @@
   --color-muted-foreground: --alpha(var(--color-foreground) / 75%);
   --color-muted-background: --alpha(var(--color-background) / 75%);
 
-  --radius-shape: calc(var(--spacing) * 1);
+  --radius-shape: calc(var(--spacing) * 2);
 }
 
 @utility focusable {
@@ -58,4 +58,26 @@ body {
   background-repeat: no-repeat;
   background-position: 50%;
   background-size: 0.5rem;
+}
+
+[data-codeblock] [data-line] {
+  display: inline-block;
+  width: 100%;
+
+  &::before {
+    @apply w-16 pr-4 text-sm;
+    content: attr(data-line);
+    position: sticky;
+    left: 0;
+    display: inline-block;
+    text-align: right;
+  }
+
+  span {
+    @apply transition-colors;
+
+    @variant dark {
+      color: var(--shiki-dark) !important;
+    }
+  }
 }

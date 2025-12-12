@@ -1,6 +1,6 @@
 import { Card, Title } from '@ui';
 import type { ReactNode } from 'react';
-import { CodeBlock } from '../CodeBlock';
+import { CodeBlock } from '../../ui/CodeBlock';
 
 type Props = {
   title: string;
@@ -11,7 +11,7 @@ type Props = {
 export const DemoContainer = (props: Props) => {
   return (
     <div className="w-full">
-      <Title size={2} className="p-6 leading-none">
+      <Title size={2} className="py-6 leading-none">
         {props.title}
       </Title>
 

@@ -13,8 +13,8 @@ const classes = {
   root: 'group relative',
   viewport: [
     'size-full',
-    'overflow-scroll',
     'outline-0',
+    'overflow-scroll',
     '[scrollbar-width:none]',
     '[-ms-overflow-style:none]',
     '[-webkit-overflow-scrolling:touch]',
@@ -22,23 +22,23 @@ const classes = {
   ].join(' '),
   scrollbar: cva(scrollbarCommon, {
     variants: {
+      useCorner: {
+        true: null,
+      },
       direction: {
         vertical: 'w-2 inset-[0_0_0_auto]',
         horizontal: 'h-2 inset-[auto_0_0_0]',
       },
-      useCorner: {
-        true: null,
-      },
     },
     compoundVariants: [
       {
-        direction: 'vertical',
         useCorner: true,
+        direction: 'vertical',
         className: 'bottom-2',
       },
       {
-        direction: 'horizontal',
         useCorner: true,
+        direction: 'horizontal',
         className: 'right-2',
       },
     ],

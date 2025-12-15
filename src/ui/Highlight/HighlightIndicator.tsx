@@ -1,13 +1,22 @@
 import { useRef, useState } from 'react';
 import { useAnimationFrame, useMergedRefs } from '../hooks';
 import { type PolyProps, Poly } from '../polymorphic';
-import { cn, rectEquals } from '../utils';
+import { cn } from '../utils';
 import classes from './highlightClasses';
 import { useHighlightContext } from './highlightContext';
 
 const DISPLAY_NAME = 'HighlightIndicator';
 
 type HighlightIndicatorProps = PolyProps<'div'>;
+
+export function rectEquals(rect1: DOMRect, rect2: DOMRect): boolean {
+  return (
+    rect1.x === rect2.x &&
+    rect1.y === rect2.y &&
+    rect1.width === rect2.width &&
+    rect1.height === rect2.height
+  );
+}
 
 export const HighlightIndicator = (inProps: HighlightIndicatorProps) => {
   const { ref: refProp, className, style, ...props } = inProps;

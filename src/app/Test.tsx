@@ -7,7 +7,7 @@ export default () => (
     <DemoContainer title="Highlight" code="// Work in progress">
       <Card asChild>
         <Card.Content className="w-80">
-          <Highlight className="p-1 border-8">
+          <Highlight>
             <Highlight.Indicator className="bg-highlight" />
             <div className="relative z-10 flex flex-col gap-2">
               <Highlight.Item className="p-2 border mr-auto">

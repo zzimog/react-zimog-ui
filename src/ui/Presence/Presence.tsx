@@ -5,11 +5,13 @@ import { type PolyProps, Poly } from '../polymorphic';
 type PresenceProps = PolyProps<'div'> & {
   present?: boolean;
   forceMount?: boolean;
+  onMeasure?(node: HTMLElement): void;
 };
 
 function useForcedState() {
   const [, force] = useState(0);
-  return () => force((p) => p + 1);
+  const renderRef = useRef(() => force((p) => p + 1));
+  return renderRef.current;
 }
 
 function getAnimationName(styles: CSSStyleDeclaration | null) {
@@ -17,7 +19,13 @@ function getAnimationName(styles: CSSStyleDeclaration | null) {
 }
 
 export const Presence = (inProps: PresenceProps) => {
-  const { ref: refProp, present = true, forceMount, ...props } = inProps;
+  const {
+    ref: refProp,
+    present = true,
+    forceMount,
+    onMeasure,
+    ...props
+  } = inProps;
 
   /**
    * Using useState directly for mounted state would cause an extra render on
@@ -45,20 +53,9 @@ export const Presence = (inProps: PresenceProps) => {
   const shouldRender = present || mounted;
 
   useEffect(() => {
-    const current = getAnimationName(stylesRef.current);
-    prevAnimationRef.current = present ? current : 'none';
-  }, []);
-
-  useEffect(() => {
     const node = ref.current;
     if (node) {
       let timeoutId: number;
-
-      stylesRef.current = getComputedStyle(node);
-
-      const rafId = requestAnimationFrame(() => {
-        preventAnimationRef.current = false;
-      });
 
       const handleAnimationStart = (event: AnimationEvent) => {
         if (event.target === node) {
@@ -94,17 +91,18 @@ export const Presence = (inProps: PresenceProps) => {
       node.addEventListener('animationend', handleAnimationEnd);
       return () => {
         clearTimeout(timeoutId);
-        cancelAnimationFrame(rafId);
         node.removeEventListener('animationstart', handleAnimationStart);
         node.removeEventListener('animationcancel', handleAnimationEnd);
         node.removeEventListener('animationend', handleAnimationEnd);
       };
     }
-  }, [ref.current]);
+  }, [present]);
 
   useLayoutEffect(() => {
     const node = ref.current;
     if (node) {
+      stylesRef.current = getComputedStyle(node);
+
       prevStylesRef.current = prevStylesRef.current || {
         transitionDuration: node.style.transitionDuration,
         animationDuration: node.style.animationDuration,
@@ -113,12 +111,26 @@ export const Presence = (inProps: PresenceProps) => {
       node.style.transitionDuration = '0s';
       node.style.animationDuration = '0s';
 
+      /**
+       * This callback will be called before the closing animation and
+       * before the opening animation is restored, allowing to get the
+       * correct element size.
+       */
+      onMeasure?.(node);
+
       if (!preventAnimationRef.current) {
         const { transitionDuration, animationDuration } = prevStylesRef.current;
         node.style.transitionDuration = transitionDuration;
         node.style.animationDuration = animationDuration;
+      } else {
+        preventAnimationRef.current = false;
       }
     }
+  }, [present, onMeasure]);
+
+  useLayoutEffect(() => {
+    const current = getAnimationName(stylesRef.current);
+    prevAnimationRef.current = present ? current : 'none';
 
     if (present) {
       mountedRef.current = true;

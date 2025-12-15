@@ -1,9 +1,11 @@
-import { useContext, useCallback } from 'react';
-import { type PolyProps, Poly } from '../polymorphic';
+import { useCallback } from 'react';
 import { useMergedRefs } from '../hooks';
+import { type PolyProps, Poly } from '../polymorphic';
 import { cn } from '../utils';
-import { HighlightContext } from './highlightContext';
 import classes from './highlightClasses';
+import { useHighlightContext } from './highlightContext';
+
+const DISPLAY_NAME = 'HighlightItem';
 
 export type HighlightItemProps = PolyProps<typeof Poly.div> & {
   selected?: boolean;
@@ -13,25 +15,25 @@ export type HighlightItemProps = PolyProps<typeof Poly.div> & {
 export const HighlightItem = (inProps: HighlightItemProps) => {
   const { ref: refProp, selected, disabled, className, ...props } = inProps;
 
-  const context = useContext(HighlightContext);
-  const isHover = context?.type === 'hover';
+  const context = useHighlightContext(DISPLAY_NAME);
+  const isHover = context.type === 'hover';
 
   const ref = useCallback(
     (node: HTMLElement) => {
       if (context) {
-        const { type, leaveMode, persistent, currentRef } = context;
+        const { type, leaveMode, persistent, onCurrentChange } = context;
 
         if (disabled) {
           return;
         }
 
         function handleEnable() {
-          currentRef.current = node;
+          onCurrentChange(node);
         }
 
         function handleDisable() {
           if (!persistent) {
-            currentRef.current = null;
+            onCurrentChange(null);
           }
         }
 
@@ -84,3 +86,5 @@ export const HighlightItem = (inProps: HighlightItemProps) => {
     />
   );
 };
+
+HighlightItem.displayName = DISPLAY_NAME;

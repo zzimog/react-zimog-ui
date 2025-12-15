@@ -4,8 +4,6 @@ const highlightClasses = {
   root: 'relative',
   indicator: cva(
     [
-      'absolute',
-      'z-0',
       'w-(--width)',
       'h-(--height)',
       'translate-x-(--x)',

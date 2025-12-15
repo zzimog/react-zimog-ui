@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { useAnimationFrame, useMergedRefs, usePresence } from '../hooks';
+import { useMergedRefs, usePresence } from '../hooks';
 import { type PolyProps, Poly } from '../polymorphic';
 import { cn } from '../utils';
 import { usePopoverContext } from './popoverContext';
@@ -31,19 +31,15 @@ export const PopoverContent = (inProps: PopoverContentProps) => {
   } = inProps;
 
   const context = usePopoverContext(DISPLAY_NAME);
-  const { updateMode, triggerRef, contentId, open } = context;
+  const { contentId, trigger, open, setOpen } = context;
 
   const ref = useRef<HTMLElement>(null);
   const { ref: presenceRef, present } = usePresence(open);
   const mergedRefs = useMergedRefs(refProp, ref, presenceRef);
 
-  const useAnimationRef = useRef(!open);
-  const animate = useAnimationRef.current;
-
   const shouldRender = open || present;
 
-  const calculate = useCallback(() => {
-    const trigger = triggerRef.current;
+  const handleResize = useCallback(() => {
     const content = ref.current;
     if (trigger && content) {
       const { innerWidth, innerHeight } = window;
@@ -90,35 +86,47 @@ export const PopoverContent = (inProps: PopoverContentProps) => {
       const x = Math.floor(pos.x);
       const y = Math.floor(pos.y);
 
-      content.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-      content.style.setProperty('--origin', `${origin.x}px ${origin.y}px`);
-      content.style.setProperty('--max-width', `${maxWidth}px`);
-      content.style.setProperty('--max-height', `${maxHeight}px`);
+      content.style.translate = `${x}px ${y}px`;
+      content.style.transformOrigin = `${origin.x}px ${origin.y}px`;
+      content.style.setProperty('--available-width', `${maxWidth}px`);
+      content.style.setProperty('--available-height', `${maxHeight}px`);
     }
-  }, []);
+  }, [avoidCollisions, trigger]);
+
+  const handleOutside = useCallback((event: Event) => {
+    const content = ref.current;
+    for (const element of [trigger, content]) {
+      const target = event.target as HTMLElement;
+      if (element && element.contains(target)) {
+        return;
+      }
+    }
+
+    setOpen(false);
+  }, [trigger]);
 
   useEffect(() => {
-    const raf = requestAnimationFrame(() => (useAnimationRef.current = true));
-    return () => cancelAnimationFrame(raf);
-  }, []);
-
-  useLayoutEffect(() => {
-    if (updateMode !== 'always' && open) {
-      calculate();
-      window.addEventListener('resize', calculate);
-      window.addEventListener('scroll', calculate);
+    if (trigger && shouldRender) {
+      handleResize();
+      window.addEventListener('resize', handleResize);
+      window.addEventListener('scroll', handleResize);
+      window.addEventListener('pointerdown', handleOutside);
       return () => {
-        window.removeEventListener('resize', calculate);
-        window.removeEventListener('scroll', calculate);
+        window.removeEventListener('resize', handleResize);
+        window.removeEventListener('scroll', handleResize);
+        window.removeEventListener('pointerdown', handleOutside);
       };
     }
-  }, [updateMode, open]);
+  }, [trigger, shouldRender]);
 
-  useAnimationFrame(() => {
-    if (updateMode === 'always') {
-      calculate();
-    }
-  }, [updateMode]);
+  const preventAnimationRef = useRef(shouldRender);
+  const preventAnimation = preventAnimationRef.current;
+  useEffect(() => {
+    const raf = requestAnimationFrame(() => {
+      preventAnimationRef.current = false;
+    });
+    return () => cancelAnimationFrame(raf);
+  }, []);
 
   return (
     shouldRender &&
@@ -130,17 +138,10 @@ export const PopoverContent = (inProps: PopoverContentProps) => {
         data-open={open}
         hidden={!shouldRender}
         className={cn(
-          //'max-w-(--max-width)',
-          //'max-h-(--max-height)',
-          //'translate-x-(--x)',
-          //'translate-y-(--y)',
-          animate &&
-            [
-              //'[--exit-blur:40px]',
-              //'[--exit-scale:0]',
-              //'data-[open="true"]:animate-in',
-              //'data-[open="false"]:animate-out',
-            ],
+          !preventAnimation && [
+            'data-[open="true"]:animate-in',
+            'data-[open="false"]:animate-out',
+          ],
           className
         )}
         style={{

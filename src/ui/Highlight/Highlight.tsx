@@ -1,19 +1,15 @@
-import { useRef, useEffect, useCallback } from 'react';
-import { type PolyProps, Poly } from '../polymorphic';
+import { useEffect, useRef } from 'react';
 import { useMergedRefs } from '../hooks';
+import { Poly, type PolyProps } from '../polymorphic';
 import { cn } from '../utils';
 import { HighlightIndicator } from './HighlightIndicator';
 import { HighlightItem } from './HighlightItem';
-import { HighlightContext } from './highlightContext';
 import classes from './highlightClasses';
+import { HighlightContext } from './highlightContext';
 
-export type HighlightType = 'click' | 'focus' | 'hover';
-
-export type HighlightLeaveMode = 'parent' | 'items';
-
-export type HighlightProps = PolyProps<typeof Poly.div> & {
-  type?: HighlightType;
-  leaveMode?: HighlightLeaveMode;
+type HighlightProps = PolyProps<'div'> & {
+  type?: 'click' | 'focus' | 'hover';
+  leaveMode?: 'parent' | 'items';
   persistent?: boolean;
 };
 
@@ -28,32 +24,24 @@ export const Highlight = (inProps: HighlightProps) => {
     ...props
   } = inProps;
 
-  const ref = useRef<HTMLElement>(null);
-  const mergedRefs = useMergedRefs(refProp, ref);
-
   const currentRef = useRef<HTMLElement>(null);
 
-  const context = {
-    type,
-    leaveMode,
-    persistent,
-    rootRef: ref,
-    currentRef,
-  };
-
-  const handleDisable = useCallback(() => {
-    if (!persistent) {
-      currentRef.current = null;
-    }
-  }, [persistent]);
+  const ref = useRef<HTMLElement>(null);
+  const mergedRefs = useMergedRefs(refProp, ref);
 
   useEffect(() => {
     const node = ref.current;
     if (node && type === 'hover' && leaveMode === 'parent') {
+      function handleDisable() {
+        if (!persistent) {
+          currentRef.current = null;
+        }
+      }
+
       node.addEventListener('mouseleave', handleDisable);
       return () => node.removeEventListener('mouseleave', handleDisable);
     }
-  }, [type, leaveMode]);
+  }, [type, leaveMode, persistent]);
 
   return (
     <Poly.div
@@ -61,10 +49,22 @@ export const Highlight = (inProps: HighlightProps) => {
       className={cn(classes.root, className)}
       {...props}
     >
-      <HighlightContext value={context}>{children}</HighlightContext>
+      <HighlightContext
+        type={type}
+        leaveMode={leaveMode}
+        persistent={persistent}
+        rootRef={ref}
+        currentRef={currentRef}
+        onCurrentChange={(element) => {
+          currentRef.current = element;
+        }}
+      >
+        {children}
+      </HighlightContext>
     </Poly.div>
   );
 };
 
+Highlight.displayName = 'Highlight';
 Highlight.Item = HighlightItem;
 Highlight.Indicator = HighlightIndicator;

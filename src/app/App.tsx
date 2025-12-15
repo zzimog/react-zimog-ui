@@ -1,32 +1,35 @@
-import { type PolyProps, Poly, ThemeSwitcher, Title } from '@ui';
-import accordion from './__demo/accordion';
-import tabs from './__demo/tabs';
-import tree from './__demo/tree';
-import buttons from './__demo/buttons';
-import inputs from './__demo/inputs';
-import { CardDemo } from './__demo/CardDemo';
+import { ThemeSwitcher, Title } from '@ui';
+import Card from './demo/card';
+import Disclosure from './demo/disclosure';
+import Popover from './demo/popover';
+import Presence from './demo/presence';
+import ScrollArea from './demo/scrollarea';
 
-const Container = (props: PolyProps<typeof Poly.div>) => (
-  <div className="max-w-7xl mx-auto flex flex-wrap gap-4 py-4" {...props} />
+const demos = [Card, Disclosure, Popover, Presence, ScrollArea];
+
+export const Container = (props: any) => (
+  <div
+    className={[
+      'min-h-screen',
+      'transition-colors',
+      'text-foreground',
+      'bg-white',
+      'dark:text-background',
+      'dark:bg-black',
+    ].join(' ')}
+  >
+    <ThemeSwitcher className="fixed top-2 right-2" />
+    <div className="max-w-200 w-full flex flex-col items-center gap-10 mx-auto py-16">
+      {props.children}
+    </div>
+  </div>
 );
 
-const App = () => {
-  return (
-    <Container>
-      <div className="w-full flex justify-between items-center px-2">
-        <Title size={1}>UI Demo</Title>
-        <ThemeSwitcher />
-      </div>
-      <main className="flex flex-col gap-4">
-        <CardDemo />
-        {inputs}
-        {buttons}
-        {accordion}
-        {tabs}
-        {tree}
-      </main>
-    </Container>
-  );
-};
-
-export default App;
+export default () => (
+  <Container>
+    <Title className="text-4xl self-start">UI Demo</Title>
+    {demos.map((Demo, i) => (
+      <Demo key={i} />
+    ))}
+  </Container>
+);

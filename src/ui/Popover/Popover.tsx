@@ -1,23 +1,21 @@
-import { type PropsWithChildren, useId, useRef } from 'react';
+import { type PropsWithChildren, useId, useState } from 'react';
 import { useControllableState } from '../hooks';
 import { PopoverContent } from './PopoverContent';
 import { PopoverContext } from './popoverContext';
 import { PopoverTrigger } from './PopoverTrigger';
 
 type PopoverProps = PropsWithChildren<{
-  updateMode?: 'always' | 'optimized';
-  open?: boolean;
   defaultOpen?: boolean;
+  open?: boolean;
   onOpenChange?: (open: boolean) => void;
 }>;
 
 export const Popover = (inProps: PopoverProps) => {
   const {
-    updateMode = 'optimized',
     defaultOpen = false,
     open: openProp,
-    onOpenChange,
     children,
+    onOpenChange,
   } = inProps;
 
   const [open, setOpen] = useControllableState({
@@ -26,19 +24,17 @@ export const Popover = (inProps: PopoverProps) => {
     onChange: onOpenChange,
   });
 
-  const triggerRef = useRef<HTMLElement>(null);
+  const [trigger, setTrigger] = useState<HTMLElement | null>(null);
 
   const contentId = useId();
 
   return (
     <PopoverContext
-      value={{
-        updateMode,
-        triggerRef,
-        contentId,
-        open,
-        onOpenChange: setOpen,
-      }}
+      contentId={contentId}
+      trigger={trigger}
+      open={open}
+      setTrigger={setTrigger}
+      setOpen={setOpen}
     >
       {children}
     </PopoverContext>

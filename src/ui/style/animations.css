@@ -12,34 +12,34 @@
   @keyframes enter {
     from {
       opacity: var(--enter-opacity, 0);
-      filter: blur(var(--enter-blur, 0));
+      filter: blur(var(--enter-blur));
       transform:
         translate3d(
-          var(--enter-translate-x, 0),
-          var(--enter-translate-y, 0),
-          var(--enter-translate-z, 0))
+          var(--enter-translate-x),
+          var(--enter-translate-y),
+          var(--enter-translate-z))
         scale3d(
-          var(--enter-scale-x, var(--enter-scale, 1)),
-          var(--enter-scale-y, var(--enter-scale, 1)),
-          var(--enter-scale-z, var(--enter-scale, 1)))
-        rotate(var(--enter-rotate, 0));
+          var(--enter-scale-x, var(--enter-scale)),
+          var(--enter-scale-y, var(--enter-scale)),
+          var(--enter-scale-z, var(--enter-scale)))
+        rotate(var(--enter-rotate));
     }
   }
 
   @keyframes exit {
     to {
       opacity: var(--exit-opacity, 0);
-      filter: blur(var(--exit-blur, 0));
+      filter: blur(var(--exit-blur));
       transform:
         translate3d(
-          var(--exit-translate-x, 0),
-          var(--exit-translate-y, 0),
-          var(--exit-translate-z, 0))
+          var(--exit-translate-x),
+          var(--exit-translate-y),
+          var(--exit-translate-z))
         scale3d(
-          var(--exit-scale-x, var(--exit-scale, 1)),
-          var(--exit-scale-y, var(--exit-scale, 1)),
-          var(--exit-scale-z, var(--exit-scale, 1)))
-        rotate(var(--exit-rotate, 0));
+          var(--exit-scale-x, var(--exit-scale)),
+          var(--exit-scale-y, var(--exit-scale)),
+          var(--exit-scale-z, var(--exit-scale)))
+        rotate(var(--exit-rotate));
     }
   }
 
@@ -94,6 +94,15 @@
       width: 0;
     }
   }
+
+
+  --animate-btn-active: scale-down 10ms ease forwards;
+
+  @keyframes scale-down {
+    to {
+      scale: var(--scale, 0);
+    }
+  }
 }
 
 /* Duration & delay */
@@ -121,7 +130,7 @@
 }
 /* prettier-ignore */
 @utility fill-mode-* {
-  --animation-fill-mode: --value(--animation-fill-mode-*, "initial", [*]);
+  --animation-fill-mode: --value(--fill-mode-*, "initial", [*]);
   animation-fill-mode: var(--animation-fill-mode, normal);
 }
 

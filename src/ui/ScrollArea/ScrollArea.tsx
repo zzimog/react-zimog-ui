@@ -31,13 +31,11 @@ export const ScrollArea = (inProps: ScrollAreaProps) => {
       {...props}
     >
       <ScrollAreaContext
-        value={{
-          viewport,
-          useCorner,
-          setViewport,
-        }}
+        viewport={viewport}
+        useCorner={useCorner}
+        setViewport={setViewport}
       >
-        {children}
+        <ScrollAreaViewport>{children}</ScrollAreaViewport>
         <ScrollAreaScrollbar />
         <ScrollAreaScrollbar direction="horizontal" />
         {useCorner && (
@@ -49,4 +47,3 @@ export const ScrollArea = (inProps: ScrollAreaProps) => {
 };
 
 ScrollArea.displayName = DISPLAY_NAME;
-ScrollArea.Viewport = ScrollAreaViewport;

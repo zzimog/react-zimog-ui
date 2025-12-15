@@ -1,5 +1,5 @@
 import { Button, Card, Form, ThemeSwitcher, cn } from '@ui';
-import { Select } from './Select';
+import { Select } from '../Select';
 
 const App = () => {
   function handleSubmit(data: any) {

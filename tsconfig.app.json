@@ -29,5 +29,5 @@
       "@ui": ["./src/ui"]
     }
   },
-  "include": ["src/app", "src/ui/CodeBlock"]
+  "include": ["src/app", "src/ui/CodeBlock", "src/ui/Disclosure"]
 }

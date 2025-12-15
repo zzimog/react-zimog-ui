@@ -1,12 +1,11 @@
-import type { RefObject } from 'react';
 import { createScopedContext } from '../utils';
 
 type PopoverContextType = {
-  updateMode: 'always' | 'optimized';
-  triggerRef: RefObject<HTMLElement | null>;
   contentId: string;
+  trigger: HTMLElement | null;
   open: boolean;
-  onOpenChange(open: boolean): void;
+  setTrigger(node: HTMLElement): void;
+  setOpen(open: boolean): void;
 };
 
 const [PopoverContext, usePopoverContext] = createScopedContext<

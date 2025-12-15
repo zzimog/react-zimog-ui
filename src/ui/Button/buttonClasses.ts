@@ -11,7 +11,9 @@ const buttonClasses = cva(
     'transition',
     'disabled:opacity-50',
     'disabled:cursor-not-allowed',
-    'not-disabled:active:scale-95',
+    //'not-disabled:active:scale-95',
+    'not-disabled:active:animate-btn-active',
+    'not-disabled:active:[--scale:0.95]',
     // focus
     'focusable',
     'focus-visible:outline-(--base)/50',

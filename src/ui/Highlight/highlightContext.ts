@@ -1,14 +1,17 @@
-import { type RefObject, createContext } from 'react';
-import type { HighlightType, HighlightLeaveMode } from './Highlight';
+import { type RefObject } from 'react';
+import { createScopedContext } from '../utils';
 
-type HighlightContextType = {
-  type: HighlightType;
-  leaveMode: HighlightLeaveMode;
+type HighlightContextValue = {
+  type: 'click' | 'focus' | 'hover';
+  leaveMode: 'parent' | 'items';
   persistent: boolean;
   rootRef: RefObject<HTMLElement | null>;
   currentRef: RefObject<HTMLElement | null>;
+  onCurrentChange(element: HTMLElement | null): void;
 };
 
-export const HighlightContext = createContext<HighlightContextType | undefined>(
-  undefined
-);
+const [HighlightContext, useHighlightContext] = createScopedContext<
+  HighlightContextValue | undefined
+>('Highlight', undefined);
+
+export { HighlightContext, useHighlightContext };

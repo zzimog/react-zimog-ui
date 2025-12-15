@@ -11,21 +11,20 @@ export const PopoverTrigger = (inProps: PopoverTriggerProps) => {
   const { ref, onClick, ...props } = inProps;
 
   const context = usePopoverContext(DISPLAY_NAME);
-  const { triggerRef, contentId, open, onOpenChange } = context;
+  const { setTrigger, contentId, open, setOpen } = context;
 
-  const mergedRefs = useMergedRefs(ref, triggerRef);
+  const mergedRefs = useMergedRefs(ref, setTrigger);
 
   return (
     <Poly.button
       ref={mergedRefs}
       type="button"
-      role={inProps.as !== 'button' ? 'button' : undefined}
       data-open={open}
       aria-haspopup="dialog"
       aria-expanded={open}
       aria-controls={contentId}
       onClick={composeHandlers(onClick, () => {
-        onOpenChange(!open);
+        setOpen(!open);
       })}
       {...props}
     />

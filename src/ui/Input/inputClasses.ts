@@ -15,7 +15,7 @@ import { cva } from 'class-variance-authority';
 import { cn } from '../utils';
 
 const common = [
-  'h-10',
+  'h-8',
   'px-2',
   'text-sm',
   'rounded-shape',

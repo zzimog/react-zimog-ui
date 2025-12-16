@@ -1,4 +1,4 @@
-import { useCallback, useRef, type RefCallback } from 'react';
+import { useCallback, type RefCallback } from 'react';
 
 function getFocusables(container: HTMLElement) {
   const nodes: HTMLElement[] = [];
@@ -31,14 +31,14 @@ function getFocusableEdges(container: HTMLElement) {
 }
 
 export function useFocusScope<T extends HTMLElement>(): RefCallback<T> {
-  const prevFocusRef = useRef<HTMLElement>(null);
+  //const prevFocusRef = useRef<HTMLElement>(null);
 
   return useCallback((node: T) => {
     const [first] = getFocusableEdges(node);
     first?.focus();
 
+    /*
     function handleFocusIn(event: Event) {
-      /*
       const target = event.target as HTMLElement;
       if (node) {
         const [first, last] = getFocusableEdges(node);
@@ -58,8 +58,8 @@ export function useFocusScope<T extends HTMLElement>(): RefCallback<T> {
           prevFocusRef.current = target;
         }
       }
-      */
     }
+    */
 
     function handleKeydown(event: KeyboardEvent) {
       if (node) {
@@ -94,10 +94,10 @@ export function useFocusScope<T extends HTMLElement>(): RefCallback<T> {
       }
     }
 
-    window.addEventListener('focusin', handleFocusIn);
+    //window.addEventListener('focusin', handleFocusIn);
     window.addEventListener('keydown', handleKeydown);
     return () => {
-      window.removeEventListener('focusin', handleFocusIn);
+      //window.removeEventListener('focusin', handleFocusIn);
       window.removeEventListener('keydown', handleKeydown);
     };
   }, []);

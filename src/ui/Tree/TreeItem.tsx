@@ -1,7 +1,7 @@
 import { type HTMLAttributes, type MouseEvent, type ReactNode } from 'react';
 import { ChevronRight, Dot } from 'lucide-react';
 import { Highlight } from '../Highlight';
-import { Collapsible } from '../Collapsible';
+import { Collapsible } from '../Collapsible_old';
 import { useTreeContext } from './treeContext';
 import classes from './treeClasses';
 

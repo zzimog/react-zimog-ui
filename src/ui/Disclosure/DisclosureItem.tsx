@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import { type PolyProps, Poly } from '../polymorphic';
 import { DisclosureItemContext } from './disclosureItemContext';
 
@@ -9,7 +10,7 @@ export const DisclosureItem = (inProps: DisclosureItemProps) => {
   const { value, children, ...props } = inProps;
 
   return (
-    <Poly.div {...props}>
+    <Poly.div as={Fragment} {...props}>
       <DisclosureItemContext value={{ value }}>
         {children}
       </DisclosureItemContext>

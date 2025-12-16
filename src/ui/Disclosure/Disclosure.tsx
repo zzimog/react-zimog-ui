@@ -1,23 +1,25 @@
-import { type PropsWithChildren } from 'react';
+import { Fragment } from 'react';
 import { useControllableState } from '../hooks';
+import { type PolyProps, Poly } from '../polymorphic';
 import { DisclosureContent } from './DisclosureContent';
 import { DisclosureContext } from './disclosureContext';
 import { DisclosureItem } from './DisclosureItem';
 import { DisclosureTrigger } from './DisclosureTrigger';
 
-type DisclosureSingleProps = PropsWithChildren<{
+type DisclosureSingleProps = PolyProps<'div'> & {
   multiple?: false;
   value?: string;
   defaultValue?: string;
   onValueChange?(value: string): void;
-}>;
+};
 
 const DisclosureSingle = (inProps: DisclosureSingleProps) => {
   const {
     defaultValue = '',
     value: valueProp,
-    onValueChange,
     children,
+    onValueChange,
+    ...props
   } = inProps;
 
   const [value, setValue] = useControllableState({
@@ -27,22 +29,24 @@ const DisclosureSingle = (inProps: DisclosureSingleProps) => {
   });
 
   return (
-    <DisclosureContext
-      value={value ? [value] : []}
-      onItemOpen={setValue}
-      onItemClose={() => setValue('')}
-    >
-      {children}
-    </DisclosureContext>
+    <Poly.div as={Fragment} {...props}>
+      <DisclosureContext
+        value={value ? [value] : []}
+        onItemOpen={setValue}
+        onItemClose={() => setValue('')}
+      >
+        {children}
+      </DisclosureContext>
+    </Poly.div>
   );
 };
 
-type DisclosureMultipleProps = PropsWithChildren<{
+type DisclosureMultipleProps = PolyProps<'div'> & {
   multiple: true;
   value?: string[];
   defaultValue?: string[];
   onValueChange?(value: string[]): void;
-}>;
+};
 
 const DisclosureMultiple = (inProps: DisclosureMultipleProps) => {
   const {
@@ -50,6 +54,7 @@ const DisclosureMultiple = (inProps: DisclosureMultipleProps) => {
     value: valueProp,
     onValueChange,
     children,
+    ...props
   } = inProps;
 
   const [value, setValue] = useControllableState({
@@ -59,19 +64,21 @@ const DisclosureMultiple = (inProps: DisclosureMultipleProps) => {
   });
 
   return (
-    <DisclosureContext
-      value={value}
-      onItemOpen={(itemValue) => {
-        setValue((prevValue) => [...prevValue, itemValue]);
-      }}
-      onItemClose={(itemValue) => {
-        setValue((prevValue) =>
-          prevValue.filter((value) => value !== itemValue)
-        );
-      }}
-    >
-      {children}
-    </DisclosureContext>
+    <Poly.div as={Fragment} {...props}>
+      <DisclosureContext
+        value={value}
+        onItemOpen={(itemValue) => {
+          setValue((prevValue) => [...prevValue, itemValue]);
+        }}
+        onItemClose={(itemValue) => {
+          setValue((prevValue) =>
+            prevValue.filter((value) => value !== itemValue)
+          );
+        }}
+      >
+        {children}
+      </DisclosureContext>
+    </Poly.div>
   );
 };
 
@@ -79,13 +86,11 @@ type DisclosureProps = DisclosureMultipleProps | DisclosureSingleProps;
 
 export const Disclosure = (inProps: DisclosureProps) => {
   const { multiple, ...props } = inProps;
-  const multipleProps = props as DisclosureMultipleProps;
-  const singleProps = props as DisclosureSingleProps;
 
   return multiple ? (
-    <DisclosureMultiple {...multipleProps} />
+    <DisclosureMultiple {...(props as DisclosureMultipleProps)} />
   ) : (
-    <DisclosureSingle {...singleProps} />
+    <DisclosureSingle {...(props as DisclosureSingleProps)} />
   );
 };
 

@@ -32,7 +32,7 @@ export const Tree = (inProps: TreeProps) => {
       className={cn(classes.root, className)}
       {...props}
     >
-      <Highlight.Indicator bound="right" className={classes.highlight} />
+      <Highlight.Indicator className={classes.highlight} />
       <ul className={classes.list.root}>
         <TreeContext value={context}>
           {data.map((item, index) => (

@@ -1,4 +1,4 @@
-import { Popover, useControllableState, useFocusGuards, cn } from '@ui';
+import { Popover, useControllableState, cn } from '@ui';
 import { ChevronDown } from 'lucide-react';
 import {
   type ComponentPropsWithoutRef,
@@ -86,7 +86,7 @@ export const Select = (inProps: SelectProps) => {
 
   const prevFocusRef = useRef<HTMLElement>(null);
 
-  useFocusGuards(open);
+  //useFocusGuards(open);
 
   useEffect(() => {
     function handleFocusIn(event: Event) {

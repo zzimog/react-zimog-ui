@@ -6,6 +6,7 @@ export const Card = (inProps: PolyProps<'div'>) => {
 
   return (
     <Poly.div
+      {...props}
       className={cn(
         [
           'rounded-shape',
@@ -20,7 +21,6 @@ export const Card = (inProps: PolyProps<'div'>) => {
         ],
         className
       )}
-      {...props}
     />
   );
 };
@@ -34,6 +34,7 @@ const CardHeader = (inProps: PolyProps<'div'>) => {
 
   return (
     <Poly.div
+      {...props}
       className={cn(
         'flex',
         'flex-col',
@@ -43,7 +44,6 @@ const CardHeader = (inProps: PolyProps<'div'>) => {
         'border-border',
         className
       )}
-      {...props}
     />
   );
 };
@@ -57,8 +57,8 @@ const CardTitle = (inProps: PolyProps<'div'>) => {
 
   return (
     <Poly.div
-      className={cn('font-bold', 'text-lg/none', className)}
       {...props}
+      className={cn('font-bold', 'text-lg/none', className)}
     />
   );
 };
@@ -72,6 +72,7 @@ const CardDescription = (inProps: PolyProps<'div'>) => {
 
   return (
     <Poly.div
+      {...props}
       className={cn(
         'text-sm',
         'transition-colors',
@@ -79,7 +80,6 @@ const CardDescription = (inProps: PolyProps<'div'>) => {
         'dark:text-muted-background',
         className
       )}
-      {...props}
     />
   );
 };
@@ -91,7 +91,7 @@ CardDescription.displayName = 'CardDescription';
 const CardContent = (inProps: PolyProps<'div'>) => {
   const { className, ...props } = inProps;
 
-  return <Poly.div className={cn('p-6', className)} {...props} />;
+  return <Poly.div {...props} className={cn('p-6', className)} />;
 };
 
 CardContent.displayName = 'CardContent';
@@ -103,6 +103,7 @@ const CardFooter = (inProps: PolyProps<'div'>) => {
 
   return (
     <Poly.div
+      {...props}
       className={cn(
         'flex',
         'flex-col',
@@ -117,7 +118,6 @@ const CardFooter = (inProps: PolyProps<'div'>) => {
         'dark:text-muted-background',
         className
       )}
-      {...props}
     />
   );
 };

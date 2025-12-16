@@ -1,13 +1,14 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { useMergedRefs, usePresence } from '../hooks';
-import { type PolyProps, Poly } from '../polymorphic';
-import { cn } from '../utils';
+import { useMergedRefs } from '../hooks';
+import { type PolyProps } from '../polymorphic';
 import { usePopoverContext } from './popoverContext';
+import { Presence } from '../Presence';
 
 const DISPLAY_NAME = 'PopoverContent';
 
-type PopoverContentProps = PolyProps<'div'> & {
+type PresenceProps = Omit<PolyProps<typeof Presence>, 'present'>;
+type PopoverContentProps = PresenceProps & {
   avoidCollisions?: boolean;
   distance?: number;
   padding?: number;
@@ -25,7 +26,6 @@ export const PopoverContent = (inProps: PopoverContentProps) => {
     distance = 8,
     padding = 16,
     align = 'center',
-    className,
     style,
     ...props
   } = inProps;
@@ -34,10 +34,7 @@ export const PopoverContent = (inProps: PopoverContentProps) => {
   const { contentId, trigger, open, setOpen } = context;
 
   const ref = useRef<HTMLElement>(null);
-  const { ref: presenceRef, present } = usePresence(open);
-  const mergedRefs = useMergedRefs(refProp, ref, presenceRef);
-
-  const shouldRender = open || present;
+  const mergedRefs = useMergedRefs(refProp, ref);
 
   const handleResize = useCallback(() => {
     const content = ref.current;
@@ -93,20 +90,23 @@ export const PopoverContent = (inProps: PopoverContentProps) => {
     }
   }, [avoidCollisions, trigger]);
 
-  const handleOutside = useCallback((event: Event) => {
-    const content = ref.current;
-    for (const element of [trigger, content]) {
-      const target = event.target as HTMLElement;
-      if (element && element.contains(target)) {
-        return;
+  const handleOutside = useCallback(
+    (event: Event) => {
+      const content = ref.current;
+      for (const element of [trigger, content]) {
+        const target = event.target as HTMLElement;
+        if (element && element.contains(target)) {
+          return;
+        }
       }
-    }
 
-    setOpen(false);
-  }, [trigger]);
+      setOpen(false);
+    },
+    [trigger]
+  );
 
   useEffect(() => {
-    if (trigger && shouldRender) {
+    if (trigger && open) {
       handleResize();
       window.addEventListener('resize', handleResize);
       window.addEventListener('scroll', handleResize);
@@ -117,43 +117,23 @@ export const PopoverContent = (inProps: PopoverContentProps) => {
         window.removeEventListener('pointerdown', handleOutside);
       };
     }
-  }, [trigger, shouldRender]);
+  }, [trigger, open]);
 
-  const preventAnimationRef = useRef(shouldRender);
-  const preventAnimation = preventAnimationRef.current;
-  useEffect(() => {
-    const raf = requestAnimationFrame(() => {
-      preventAnimationRef.current = false;
-    });
-    return () => cancelAnimationFrame(raf);
-  }, []);
-
-  return (
-    shouldRender &&
-    createPortal(
-      <Poly.div
-        ref={mergedRefs}
-        role="dialog"
-        id={contentId}
-        data-open={open}
-        hidden={!shouldRender}
-        className={cn(
-          !preventAnimation && [
-            'data-[open="true"]:animate-in',
-            'data-[open="false"]:animate-out',
-          ],
-          className
-        )}
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          ...style,
-        }}
-        {...props}
-      />,
-      document.body
-    )
+  return createPortal(
+    <Presence
+      ref={mergedRefs}
+      present={open}
+      role="dialog"
+      id={contentId}
+      {...props}
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        ...style,
+      }}
+    />,
+    document.body
   );
 };
 

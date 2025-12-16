@@ -53,6 +53,13 @@ export const Presence = (inProps: PresenceProps) => {
   const shouldRender = present || mounted;
 
   useEffect(() => {
+    const rafId = requestAnimationFrame(() => {
+      preventAnimationRef.current = false;
+    });
+    return () => cancelAnimationFrame(rafId);
+  }, []);
+
+  useEffect(() => {
     const node = ref.current;
     if (node) {
       let timeoutId: number;
@@ -122,8 +129,6 @@ export const Presence = (inProps: PresenceProps) => {
         const { transitionDuration, animationDuration } = prevStylesRef.current;
         node.style.transitionDuration = transitionDuration;
         node.style.animationDuration = animationDuration;
-      } else {
-        preventAnimationRef.current = false;
       }
     }
   }, [present, onMeasure]);

@@ -10,7 +10,7 @@ export default () => (
       <Button>Toggle</Button>
     </Popover.Trigger>
     <Popover.Content asChild>
-      <Card className="w-80">
+      <Card className="w-80 data-[visible=true]:animate-in data-[visible=false]:animate-out">
         <Card.Content className="-my-1.5 text-justify">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla
           temporibus dolorum accusantium, praesentium dicta mollitia corporis
@@ -23,13 +23,13 @@ export default () => (
 );`;
 
 export default () => (
-  <DemoContainer title="Popover" code={code}>
+  <DemoContainer title="Popover" code={code} headless>
     <Popover>
       <Popover.Trigger asChild>
         <Button>Toggle</Button>
       </Popover.Trigger>
       <Popover.Content asChild>
-        <Card className="w-80">
+        <Card className="w-80 data-[visible=true]:animate-in data-[visible=false]:animate-out">
           <Card.Content className="-my-1.5 text-justify">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla
             temporibus dolorum accusantium, praesentium dicta mollitia corporis

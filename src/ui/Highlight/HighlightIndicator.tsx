@@ -1,13 +1,15 @@
 import { useRef, useState } from 'react';
 import { useAnimationFrame, useMergedRefs } from '../hooks';
-import { type PolyProps, Poly } from '../polymorphic';
+import { type PolyProps } from '../polymorphic';
 import { cn } from '../utils';
 import classes from './highlightClasses';
 import { useHighlightContext } from './highlightContext';
+import { Presence } from '../Presence';
 
 const DISPLAY_NAME = 'HighlightIndicator';
 
-type HighlightIndicatorProps = PolyProps<'div'>;
+type PresenceProps = Omit<PolyProps<typeof Presence>, 'present'>;
+type HighlightIndicatorProps = PresenceProps;
 
 export function rectEquals(rect1: DOMRect, rect2: DOMRect): boolean {
   return (
@@ -72,9 +74,9 @@ export const HighlightIndicator = (inProps: HighlightIndicatorProps) => {
   });
 
   return (
-    <Poly.div
+    <Presence
       ref={mergedRefs}
-      hidden={!visible}
+      present={visible}
       {...props}
       className={cn(classNames, className)}
       style={{

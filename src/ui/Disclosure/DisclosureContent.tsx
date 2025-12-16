@@ -1,19 +1,19 @@
-import { useContext, type ReactElement } from 'react';
-import { type PolyProps } from '../polymorphic';
+import { useContext } from 'react';
+import { Collapsible } from '../Collapsible';
+import type { PolyProps } from '../polymorphic';
+import { Presence } from '../Presence';
 import { useDisclosureContext } from './disclosureContext';
 import { DisclosureItemContext } from './disclosureItemContext';
-import { Presence } from '../Presence';
 
 const DISPLAY_NAME = 'DisclosureContent';
 
 type PresenceProps = Omit<PolyProps<typeof Presence>, 'present'>;
-type DisclosureContentProps = Omit<PresenceProps, 'children'> & {
+type DisclosureContentProps = PresenceProps & {
   value?: string;
-  children?: ReactElement | ((props: { open: boolean }) => ReactElement);
 };
 
 export const DisclosureContent = (inProps: DisclosureContentProps) => {
-  const { value: valueProp, children, ...props } = inProps;
+  const { value: valueProp, ...props } = inProps;
 
   const context = useDisclosureContext(DISPLAY_NAME);
   const itemContext = useContext(DisclosureItemContext);
@@ -21,15 +21,7 @@ export const DisclosureContent = (inProps: DisclosureContentProps) => {
   const value = valueProp || itemContext?.value;
   const open = !!value && context.value.includes(value);
 
-  if (typeof children === 'function') {
-    return children({ open });
-  }
-
-  return (
-    <Presence present={open} {...props}>
-      {children}
-    </Presence>
-  );
+  return <Collapsible open={open} {...props} />;
 };
 
 DisclosureContent.displayName = DISPLAY_NAME;

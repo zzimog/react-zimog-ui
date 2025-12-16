@@ -20,52 +20,52 @@ export const HighlightItem = (inProps: HighlightItemProps) => {
 
   const ref = useCallback(
     (node: HTMLElement) => {
-      if (context) {
-        const { type, leaveMode, persistent, onCurrentChange } = context;
+      const { type, leaveMode, persistent, onCurrentChange } = context;
 
-        if (disabled) {
-          return;
-        }
+      if (disabled) {
+        return;
+      }
 
-        function handleEnable() {
+      function handleEnable(event: Event) {
+        if (event.target === node) {
           onCurrentChange(node);
         }
+      }
 
-        function handleDisable() {
-          if (!persistent) {
-            onCurrentChange(null);
+      function handleDisable(event: Event) {
+        if (event.target === node && !persistent) {
+          onCurrentChange(null);
+        }
+      }
+
+      if (selected) {
+        onCurrentChange(node);
+      }
+
+      switch (type) {
+        case 'click':
+          node.addEventListener('click', handleEnable);
+          return () => node.removeEventListener('click', handleEnable);
+
+        case 'focus':
+          node.addEventListener('focus', handleEnable);
+          node.addEventListener('blur', handleDisable);
+          return () => {
+            node.removeEventListener('focus', handleEnable);
+            node.removeEventListener('blur', handleDisable);
+          };
+
+        case 'hover':
+          node.addEventListener('mouseover', handleEnable);
+          if (leaveMode === 'items') {
+            node.addEventListener('mouseleave', handleDisable);
           }
-        }
-
-        if (selected) {
-          handleEnable();
-        }
-
-        switch (type) {
-          case 'click':
-            node.addEventListener('click', handleEnable);
-            return () => node.removeEventListener('click', handleEnable);
-
-          case 'focus':
-            node.addEventListener('focus', handleEnable);
-            node.addEventListener('blur', handleDisable);
-            return () => {
-              node.removeEventListener('focus', handleEnable);
-              node.removeEventListener('blur', handleDisable);
-            };
-
-          case 'hover':
-            node.addEventListener('mouseover', handleEnable);
+          return () => {
+            node.removeEventListener('mouseover', handleEnable);
             if (leaveMode === 'items') {
-              node.addEventListener('mouseleave', handleDisable);
+              node.removeEventListener('mouseleave', handleDisable);
             }
-            return () => {
-              node.removeEventListener('mouseover', handleEnable);
-              if (leaveMode === 'items') {
-                node.removeEventListener('mouseleave', handleDisable);
-              }
-            };
-        }
+          };
       }
     },
     [context]

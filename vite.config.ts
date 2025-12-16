@@ -1,12 +1,12 @@
 import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
-//import dts from 'vite-plugin-dts';
+import dts from 'vite-plugin-dts';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 //import pkg from './package.json';
 
 export default defineConfig({
-  base: '/ui-wip',
+  base: '/react-zimog-ui',
   plugins: [
     react({
       babel: {
@@ -15,12 +15,10 @@ export default defineConfig({
     }),
     tsconfigPaths(),
     tailwindcss(),
-    /*
     dts({
       rollupTypes: true,
       tsconfigPath: './tsconfig.app.json',
     }),
-    */
   ],
   server: {
     host: true,

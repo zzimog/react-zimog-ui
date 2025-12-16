@@ -44,7 +44,7 @@ export default () => (
 );`;
 
 export default () => (
-  <DemoContainer title="Disclosure" code={code}>
+  <DemoContainer title="Disclosure" code={code} headless>
     <Disclosure defaultValue="1">
       <div className="w-80">
         <div className="flex gap-2">

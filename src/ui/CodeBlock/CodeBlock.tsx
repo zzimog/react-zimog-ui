@@ -5,7 +5,18 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { codeToHtml } from 'shiki';
+import { createHighlighterCore } from 'shiki/core';
+import { createOnigurumaEngine } from 'shiki/engine/oniguruma';
+import { ScrollArea } from '../ScrollArea';
+
+export const { codeToHtml } = await createHighlighterCore({
+  engine: createOnigurumaEngine(import('shiki/wasm')),
+  langs: [import('@shikijs/langs/tsx')],
+  themes: [
+    import('@shikijs/themes/github-dark'),
+    import('@shikijs/themes/github-light'),
+  ],
+});
 
 type CodeBlockProps = ComponentPropsWithRef<'figure'> & {
   title?: string;
@@ -95,14 +106,14 @@ export const CodeBlock = (inProps: CodeBlockProps) => {
   useEffect(() => {
     let isMounted = true;
 
-    async function fetchHtml() {
-      const html = await getHighlightedCode(code, language);
+    async function fetchHighlighted() {
+      const highlighted = await getHighlightedCode(code, language);
       if (isMounted) {
-        setHighlighted(html);
+        setHighlighted(highlighted);
       }
     }
 
-    fetchHtml();
+    fetchHighlighted();
     return () => {
       isMounted = false;
     };
@@ -115,11 +126,13 @@ export const CodeBlock = (inProps: CodeBlockProps) => {
           {title}
         </figcaption>
       )}
-      <div
-        data-codeblock=""
-        className="py-4"
-        dangerouslySetInnerHTML={{ __html: html }}
-      />
+      <ScrollArea>
+        <div
+          data-codeblock=""
+          className="w-fit py-4"
+          dangerouslySetInnerHTML={{ __html: html }}
+        />
+      </ScrollArea>
     </figure>
   );
 };

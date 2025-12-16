@@ -63,14 +63,21 @@ body {
 [data-codeblock] [data-line] {
   display: inline-block;
   width: 100%;
+  @apply pr-8;
 
   &::before {
-    @apply w-16 pr-4 text-sm;
+    @apply w-16 pr-2 text-sm transition-colors bg-background;
     content: attr(data-line);
     position: sticky;
     left: 0;
     display: inline-block;
     text-align: right;
+  }
+
+  @variant dark {
+    &::before {
+      @apply bg-foreground;
+    }
   }
 
   span {

@@ -1,6 +1,6 @@
 import { Button, Card, Presence } from '@ui';
 import { useState } from 'react';
-import { DemoContainer } from './DemoContainer';
+import { DemoContainer } from '../components/demo-container';
 
 const code = `//Example code
 import { Button, Card, Presence } from '@ui';
@@ -34,7 +34,7 @@ export default () => {
   );
 };`;
 
-export default () => {
+export const PresenceDemo = () => {
   const [present, setPresent] = useState(true);
 
   return (

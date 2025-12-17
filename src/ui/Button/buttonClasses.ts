@@ -6,7 +6,6 @@ const buttonClasses = cva(
     'place-content-center',
     'gap-2',
     'rounded-shape',
-    'border',
     'whitespace-nowrap',
     'transition',
     'disabled:opacity-50',
@@ -31,18 +30,18 @@ const buttonClasses = cva(
         lg: 'px-4 py-3 text-base/6 [&_svg]:size-6',
       },
       variant: {
-        solid: null,
-        outlined: null,
-        ghost: 'border-transparent!',
+        solid: 'border',
+        outlined: 'border',
+        ghost: null,
       },
       color: {
         default: [
           '[--base:var(--color-zinc-500)]',
-          'bg-zinc-300',
-          'border-zinc-300',
+          'bg-zinc-100',
+          'border-zinc-100',
           'text-foreground',
-          'dark:bg-zinc-700',
-          'dark:border-zinc-700',
+          'dark:bg-zinc-800',
+          'dark:border-zinc-800',
           'dark:text-background',
         ],
         primary: [

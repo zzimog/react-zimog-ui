@@ -1,5 +1,5 @@
 import { Button, Disclosure } from '@ui';
-import { DemoContainer } from './DemoContainer';
+import { DemoContainer } from '../components/demo-container';
 
 const code = `// Example code
 import { Button, Disclosure } from '@ui';
@@ -43,7 +43,7 @@ export default () => (
   </Disclosure>
 );`;
 
-export default () => (
+export const DisclosureDemo = () => (
   <DemoContainer title="Disclosure" code={code} headless>
     <Disclosure defaultValue="1">
       <div className="w-80">

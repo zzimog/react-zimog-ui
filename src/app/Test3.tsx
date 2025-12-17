@@ -1,5 +1,5 @@
 import { Disclosure } from '@ui';
-import { DemoContainer } from './demo/DemoContainer';
+import { DemoContainer } from './components/demo-container';
 import { ChevronDown } from 'lucide-react';
 
 const code = `// Headless component

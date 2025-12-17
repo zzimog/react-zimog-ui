@@ -1,6 +1,6 @@
 import { Card, ScrollArea } from '@ui';
 import { Fragment } from 'react';
-import { DemoContainer } from './DemoContainer';
+import { DemoContainer } from '../components/demo-container';
 
 const code = `// Example code
 import { ScrollArea } from '@ui';
@@ -24,7 +24,7 @@ export default () => (
   </ScrollArea>
 );`;
 
-export default () => (
+export const ScrollAreaDemo = () => (
   <DemoContainer title="Scroll Area" code={code}>
     <ScrollArea as={Card} className="size-60 p-4">
       <div className="flex flex-col gap-2">

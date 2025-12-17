@@ -1,6 +1,6 @@
 import { Button, Collapsible } from '@ui';
 import { useState } from 'react';
-import { DemoContainer } from './demo/DemoContainer';
+import { DemoContainer } from './components/demo-container';
 
 export default () => {
   const [open, setOpen] = useState(false);

@@ -1,5 +1,5 @@
 import { Button, Card, Popover } from '@ui';
-import { DemoContainer } from './DemoContainer';
+import { DemoContainer } from '../components/demo-container';
 
 const code = `// Example code
 import { Popover } from '@ui';
@@ -22,7 +22,7 @@ export default () => (
   </Popover>
 );`;
 
-export default () => (
+export const PopoverDemo = () => (
   <DemoContainer title="Popover" code={code} headless>
     <Popover>
       <Popover.Trigger asChild>

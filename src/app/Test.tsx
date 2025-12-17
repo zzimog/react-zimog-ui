@@ -1,5 +1,5 @@
 import { Card, Highlight } from '@ui';
-import { DemoContainer } from './demo/DemoContainer';
+import { DemoContainer } from './components/demo-container';
 
 export default () => (
   <DemoContainer title="Highlight" code="// Work in progress">

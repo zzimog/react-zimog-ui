@@ -1,5 +1,5 @@
 import { Button, Card, Input } from '@ui';
-import { DemoContainer } from './DemoContainer';
+import { DemoContainer } from '../components/demo-container';
 
 const code = `// Example code
 import { Card } from '@ui';
@@ -19,7 +19,7 @@ export default () => (
   </Card>
 );`;
 
-export default () => (
+export const CardDemo = () => (
   <DemoContainer title="Card" code={code}>
     <Card className="max-w-sm">
       <Card.Header>

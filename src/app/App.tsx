@@ -21,6 +21,16 @@ const components: Record<string, Record<string, any>> = {
   },
 };
 
+const all = (
+  <>
+    <DisclosureDemo />
+    <PopoverDemo />
+    <PresenceDemo />
+    <CardDemo />
+    <ScrollAreaDemo />
+  </>
+);
+
 export default () => (
   <div
     className={[
@@ -34,7 +44,7 @@ export default () => (
   >
     <ThemeSwitcher className="absolute top-2 right-2" />
     <div className="max-w-200 w-full flex flex-col gap-10 mx-auto px-4 py-16">
-      <h1 className="text-4xl font-semibold self-start">ui demo</h1>
+      <h1 className="text-4xl self-start">ui demo</h1>
 
       <BrowserRouter basename="react-zimog-ui">
         <MainMenu>
@@ -56,31 +66,15 @@ export default () => (
         </MainMenu>
 
         <Routes>
-          <Route
-            index
-            element={
-              <>
-                <DisclosureDemo />
-                <PopoverDemo />
-                <PresenceDemo />
-                <CardDemo />
-                <ScrollAreaDemo />
-              </>
-            }
-          />
+          <Route index element={all} />
 
-          <Route path="headless">
-            <Route path="disclosure" element={<DisclosureDemo />} />
-            <Route path="popover" element={<PopoverDemo />} />
-            <Route path="presence" element={<PresenceDemo />} />
-          </Route>
-
-          <Route path="styled">
-            <Route path="card" element={<CardDemo />} />
-            <Route path="scrollarea" element={<ScrollAreaDemo />} />
-          </Route>
-
-          <Route element={<b>peep</b>} />
+          {Object.keys(components).map((category, i) => (
+            <Route key={i} path={category}>
+              {Object.entries(components[category]).map(([name, Comp], i) => (
+                <Route key={i} path={name} element={<Comp />} />
+              ))}
+            </Route>
+          ))}
         </Routes>
       </BrowserRouter>
     </div>

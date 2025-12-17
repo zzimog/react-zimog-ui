@@ -1,19 +1,25 @@
-import { defineConfig } from 'vite';
-import tsconfigPaths from 'vite-tsconfig-paths';
-//import dts from 'vite-plugin-dts';
-import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
+import react from '@vitejs/plugin-react';
+import { resolve } from 'node:path';
+import { defineConfig } from 'vite';
+//import tsconfigPaths from 'vite-tsconfig-paths';
+//import dts from 'vite-plugin-dts';
 //import pkg from './package.json';
 
 export default defineConfig({
   base: '/react-zimog-ui',
+  resolve: {
+    alias: {
+      '@ui': resolve(__dirname, './src/ui'),
+    },
+  },
   plugins: [
     react({
       babel: {
         plugins: [['babel-plugin-react-compiler']],
       },
     }),
-    tsconfigPaths(),
+    //tsconfigPaths(),
     tailwindcss(),
     /*
     dts({

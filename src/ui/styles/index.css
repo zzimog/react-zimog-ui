@@ -4,8 +4,6 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --default-font-family: 'Manrope Variable';
-
   --color-foreground: var(--color-zinc-900);
   --color-background: var(--color-zinc-100);
 

@@ -8,7 +8,6 @@ import {
   PresenceDemo,
   ScrollAreaDemo,
 } from './examples';
-import '../ui/index.css';
 
 const components: Record<string, Record<string, any>> = {
   headless: {

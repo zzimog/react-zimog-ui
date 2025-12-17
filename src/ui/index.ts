@@ -1,6 +1,3 @@
-import '@fontsource-variable/manrope/index.css';
-import '../ui/index.css';
-
 export * from './hooks';
 export * from './polymorphic';
 export * from './utils';

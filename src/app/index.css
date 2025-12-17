@@ -1,0 +1,6 @@
+@import '@fontsource-variable/manrope/index.css';
+@import '@ui/styles/index.css';
+
+:root {
+  --default-font-family: 'Manrope Variable';
+}

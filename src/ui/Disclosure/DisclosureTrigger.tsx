@@ -1,12 +1,12 @@
 import { useContext } from 'react';
-import { type PolyProps, Poly } from '../polymorphic';
+import { type NativeProps, Native } from '../Native';
 import { composeHandlers } from '../utils';
 import { useDisclosureContext } from './disclosureContext';
 import { DisclosureItemContext } from './disclosureItemContext';
 
 const DISPLAY_NAME = 'DisclosureTrigger';
 
-type DisclosureTriggerProps = Omit<PolyProps<'button'>, 'value'> & {
+type DisclosureTriggerProps = Omit<NativeProps<'button'>, 'value'> & {
   value?: string;
 };
 
@@ -20,7 +20,7 @@ export const DisclosureTrigger = (inProps: DisclosureTriggerProps) => {
   const open = !!value && context.value.includes(value);
 
   return (
-    <Poly.button
+    <Native.button
       data-open={open}
       onClick={composeHandlers(onClick, () => {
         if (value) {

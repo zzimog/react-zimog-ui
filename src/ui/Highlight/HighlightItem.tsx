@@ -1,13 +1,13 @@
 import { useCallback } from 'react';
 import { useMergedRefs } from '../hooks';
-import { type PolyProps, Poly } from '../polymorphic';
+import { type NativeProps, Native } from '../Native';
 import { cn } from '../utils';
 import classes from './highlightClasses';
 import { useHighlightContext } from './highlightContext';
 
 const DISPLAY_NAME = 'HighlightItem';
 
-export type HighlightItemProps = PolyProps<typeof Poly.div> & {
+export type HighlightItemProps = NativeProps<typeof Native.div> & {
   selected?: boolean;
   disabled?: boolean;
 };
@@ -74,7 +74,7 @@ export const HighlightItem = (inProps: HighlightItemProps) => {
   const mergedRefs = useMergedRefs(refProp, ref);
 
   return (
-    <Poly.div
+    <Native.div
       ref={mergedRefs}
       className={cn(
         classes.item({

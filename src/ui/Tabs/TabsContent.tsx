@@ -1,9 +1,9 @@
-import { type PolyProps, Poly } from '../polymorphic';
+import { type NativeProps, Native } from '../Native';
 import { cn } from '../utils';
 import classes from './tabsClasses';
 import { useTabsContext } from './tabsContext';
 
-export type TabsContentProps = PolyProps<'div'> & {
+export type TabsContentProps = NativeProps<'div'> & {
   value: string;
 };
 
@@ -17,7 +17,7 @@ export const TabsContent = (inProps: TabsContentProps) => {
   const itemId = `${baseId}-item-${valueProp}`;
 
   return (
-    <Poly.div
+    <Native.div
       id={itemId}
       role="tabpanel"
       aria-labelledby={triggerId}
@@ -26,6 +26,6 @@ export const TabsContent = (inProps: TabsContentProps) => {
       {...props}
     >
       {isActive && children}
-    </Poly.div>
+    </Native.div>
   );
 };

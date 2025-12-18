@@ -1,5 +1,5 @@
 import { type ReactNode, useContext } from 'react';
-import { type PolyProps, Poly } from '../polymorphic';
+import { type NativeProps, Native } from '../Native';
 import { Spinner } from '../Spinner';
 import { cn } from '../utils';
 import classes from './buttonClasses';
@@ -12,7 +12,7 @@ export type ButtonVariant = 'solid' | 'outlined' | 'ghost';
 
 export type ButtonColor = 'default' | 'primary' | 'danger';
 
-type ButtonProps = PolyProps<'button'> & {
+type ButtonProps = NativeProps<'button'> & {
   size?: ButtonSize;
   variant?: ButtonVariant;
   color?: ButtonColor;
@@ -44,7 +44,7 @@ export const Button = (inProps: ButtonProps) => {
   const joinDirection = context?.column ? 'col' : 'row';
 
   return (
-    <Poly.button
+    <Native.button
       className={cn(
         classes.button({
           size: mergedSize,
@@ -60,7 +60,7 @@ export const Button = (inProps: ButtonProps) => {
     >
       {loading ? <Spinner /> : icon}
       {children}
-    </Poly.button>
+    </Native.button>
   );
 };
 

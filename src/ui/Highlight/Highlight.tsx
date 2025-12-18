@@ -1,13 +1,13 @@
 import { useEffect, useRef } from 'react';
 import { useMergedRefs } from '../hooks';
-import { Poly, type PolyProps } from '../polymorphic';
+import { Native, type NativeProps } from '../Native';
 import { cn } from '../utils';
 import { HighlightIndicator } from './HighlightIndicator';
 import { HighlightItem } from './HighlightItem';
 import classes from './highlightClasses';
 import { HighlightContext } from './highlightContext';
 
-type HighlightProps = PolyProps<'div'> & {
+type HighlightProps = NativeProps<'div'> & {
   type?: 'click' | 'focus' | 'hover';
   leaveMode?: 'parent' | 'items';
   persistent?: boolean;
@@ -44,7 +44,7 @@ export const Highlight = (inProps: HighlightProps) => {
   }, [type, leaveMode, persistent]);
 
   return (
-    <Poly.div
+    <Native.div
       ref={mergedRefs}
       className={cn(classes.root, className)}
       {...props}
@@ -61,7 +61,7 @@ export const Highlight = (inProps: HighlightProps) => {
       >
         {children}
       </HighlightContext>
-    </Poly.div>
+    </Native.div>
   );
 };
 

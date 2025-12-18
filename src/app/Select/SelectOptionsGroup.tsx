@@ -1,11 +1,11 @@
-import { cn, type PolyProps } from '@ui';
+import { cn, type NativeProps } from '@ui';
 import { createContext } from 'react';
 
 type SelectOptionsGroupContextValue = {
   disabled?: boolean;
 };
 
-type SelectOptionsGroupProps = PolyProps<'div'> & {
+type SelectOptionsGroupProps = NativeProps<'div'> & {
   label?: string;
   disabled?: boolean;
 };

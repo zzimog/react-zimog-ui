@@ -1,12 +1,12 @@
 import { Fragment } from 'react';
 import { useControllableState } from '../hooks';
-import { type PolyProps, Poly } from '../polymorphic';
+import { type NativeProps, Native } from '../Native';
 import { DisclosureContent } from './DisclosureContent';
 import { DisclosureContext } from './disclosureContext';
 import { DisclosureItem } from './DisclosureItem';
 import { DisclosureTrigger } from './DisclosureTrigger';
 
-type DisclosureSingleProps = PolyProps<'div'> & {
+type DisclosureSingleProps = NativeProps<'div'> & {
   multiple?: false;
   value?: string;
   defaultValue?: string;
@@ -29,7 +29,7 @@ const DisclosureSingle = (inProps: DisclosureSingleProps) => {
   });
 
   return (
-    <Poly.div as={Fragment} {...props}>
+    <Native.div as={Fragment} {...props}>
       <DisclosureContext
         value={value ? [value] : []}
         onItemOpen={setValue}
@@ -37,11 +37,11 @@ const DisclosureSingle = (inProps: DisclosureSingleProps) => {
       >
         {children}
       </DisclosureContext>
-    </Poly.div>
+    </Native.div>
   );
 };
 
-type DisclosureMultipleProps = PolyProps<'div'> & {
+type DisclosureMultipleProps = NativeProps<'div'> & {
   multiple: true;
   value?: string[];
   defaultValue?: string[];
@@ -64,7 +64,7 @@ const DisclosureMultiple = (inProps: DisclosureMultipleProps) => {
   });
 
   return (
-    <Poly.div as={Fragment} {...props}>
+    <Native.div as={Fragment} {...props}>
       <DisclosureContext
         value={value}
         onItemOpen={(itemValue) => {
@@ -78,7 +78,7 @@ const DisclosureMultiple = (inProps: DisclosureMultipleProps) => {
       >
         {children}
       </DisclosureContext>
-    </Poly.div>
+    </Native.div>
   );
 };
 

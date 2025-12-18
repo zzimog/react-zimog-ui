@@ -7,9 +7,9 @@ import { useRef, useEffect, useLayoutEffect, useState } from 'react';
 import { usePresence, useMergedRefs } from '../hooks';
 import classes from './collapsibleClasses';
 import { cn } from '../utils';
-import { type PolyProps, Poly } from '../polymorphic';
+import { type NativeProps, Native } from '../Native';
 
-export type CollapsibleProps = PolyProps<'div'> & {
+export type CollapsibleProps = NativeProps<'div'> & {
   open?: boolean;
   dir?: 'vertical' | 'horizontal';
 };
@@ -73,7 +73,7 @@ export const Collapsible = (inProps: CollapsibleProps) => {
   }, [open, present]);
 
   return (
-    <Poly.div
+    <Native.div
       ref={mergedRefs}
       data-open={open}
       className={cn(classes({ dir }), className)}
@@ -86,6 +86,6 @@ export const Collapsible = (inProps: CollapsibleProps) => {
       {...props}
     >
       {shouldRender && children}
-    </Poly.div>
+    </Native.div>
   );
 };

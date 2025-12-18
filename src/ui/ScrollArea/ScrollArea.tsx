@@ -1,5 +1,5 @@
 import { useLayoutEffect, useState } from 'react';
-import { type PolyProps, Poly } from '../polymorphic';
+import { type NativeProps, Native } from '../Native';
 import classes from './scrollAreaClasses';
 import { ScrollAreaContext } from './scrollAreaContext';
 import { ScrollAreaScrollbar } from './ScrollAreaScrollbar';
@@ -7,7 +7,7 @@ import { ScrollAreaViewport } from './ScrollAreaViewport';
 
 const DISPLAY_NAME = 'ScrollArea';
 
-type ScrollAreaProps = PolyProps<'div'>;
+type ScrollAreaProps = NativeProps<'div'>;
 
 export const ScrollArea = (inProps: ScrollAreaProps) => {
   const { children, style, ...props } = inProps;
@@ -26,7 +26,7 @@ export const ScrollArea = (inProps: ScrollAreaProps) => {
   }, [viewport]);
 
   return (
-    <Poly.div
+    <Native.div
       data-scrollarea="root"
       {...props}
       style={{
@@ -48,7 +48,7 @@ export const ScrollArea = (inProps: ScrollAreaProps) => {
           <div data-scrollarea="corner" className={classes.corner} />
         )}
       </ScrollAreaContext>
-    </Poly.div>
+    </Native.div>
   );
 };
 

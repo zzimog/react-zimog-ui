@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { useMergedRefs } from '../hooks';
-import { type PolyProps } from '../polymorphic';
+import { type NativeProps } from '../Native';
 import { usePopoverContext } from './popoverContext';
 import { Presence } from '../Presence';
 
 const DISPLAY_NAME = 'PopoverContent';
 
-type PresenceProps = Omit<PolyProps<typeof Presence>, 'present'>;
+type PresenceProps = Omit<NativeProps<typeof Presence>, 'present'>;
 type PopoverContentProps = PresenceProps & {
   avoidCollisions?: boolean;
   distance?: number;

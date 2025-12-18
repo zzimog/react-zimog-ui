@@ -1,9 +1,9 @@
-import { type PolyProps, Poly } from '@ui';
+import { type NativeProps, Native } from '@ui';
 import { useHighlightContext } from './highlightContext';
 
 const DISPLAY_NAME = 'HighlightIndicator';
 
-type HighlightIndicatorProps = PolyProps<'div'>;
+type HighlightIndicatorProps = NativeProps<'div'>;
 
 export const HighlightIndicator = (inProps: HighlightIndicatorProps) => {
   const { style, ...props } = inProps;
@@ -14,7 +14,7 @@ export const HighlightIndicator = (inProps: HighlightIndicatorProps) => {
   const transform = x && y ? `translate3d(${x}px, ${y}px, 0)` : undefined;
 
   return (
-    <Poly.div
+    <Native.div
       {...props}
       style={{
         position: 'absolute',

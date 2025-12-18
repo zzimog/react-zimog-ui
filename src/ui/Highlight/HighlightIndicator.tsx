@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { useAnimationFrame, useMergedRefs } from '../hooks';
-import { type PolyProps } from '../polymorphic';
+import { type NativeProps } from '../Native';
 import { cn } from '../utils';
 import classes from './highlightClasses';
 import { useHighlightContext } from './highlightContext';
@@ -8,7 +8,7 @@ import { Presence } from '../Presence';
 
 const DISPLAY_NAME = 'HighlightIndicator';
 
-type PresenceProps = Omit<PolyProps<typeof Presence>, 'present'>;
+type PresenceProps = Omit<NativeProps<typeof Presence>, 'present'>;
 type HighlightIndicatorProps = PresenceProps;
 
 export function rectEquals(rect1: DOMRect, rect2: DOMRect): boolean {

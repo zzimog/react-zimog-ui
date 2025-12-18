@@ -1,10 +1,10 @@
-import { type PolyProps, Poly, useMergedRefs } from '@ui';
+import { type NativeProps, Native, useMergedRefs } from '@ui';
 import { HighlightIndicator } from './HighlightIndicator';
 import { HighlightItem } from './HighlightItem';
 import { useRef, useState } from 'react';
 import { HighlightContext } from './highlightContext';
 
-type HighlightProps = PolyProps<'div'>;
+type HighlightProps = NativeProps<'div'>;
 
 export const Highlight = (inProps: HighlightProps) => {
   const { ref: refProp, style, children, ...props } = inProps;
@@ -15,7 +15,7 @@ export const Highlight = (inProps: HighlightProps) => {
   const mergedRef = useMergedRefs(refProp, ref);
 
   return (
-    <Poly.div
+    <Native.div
       ref={mergedRef}
       {...props}
       style={{
@@ -26,7 +26,7 @@ export const Highlight = (inProps: HighlightProps) => {
       <HighlightContext rootRef={ref} rect={rect} onRectChange={setRect}>
         {children}
       </HighlightContext>
-    </Poly.div>
+    </Native.div>
   );
 };
 

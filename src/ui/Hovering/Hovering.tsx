@@ -1,9 +1,9 @@
 import { useCallback } from 'react';
 import { useMergedRefs } from '../hooks';
-import { type PolyProps, Poly } from '../polymorphic';
+import { type NativeProps, Native } from '../Native';
 import { cn } from '../utils';
 
-type HoveringProps = PolyProps<'div'>;
+type HoveringProps = NativeProps<'div'>;
 
 export const Hovering = (inProps: HoveringProps) => {
   const { ref, className, ...props } = inProps;
@@ -28,7 +28,7 @@ export const Hovering = (inProps: HoveringProps) => {
   );
 
   return (
-    <Poly.div
+    <Native.div
       ref={mergedRefs}
       className={cn('absolute', 'inset-0', 'hover-effect', className)}
       {...props}

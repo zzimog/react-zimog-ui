@@ -1,12 +1,12 @@
 import { useCallback } from 'react';
 import { Highlight } from '../Highlight';
 import { useMergedRefs } from '../hooks';
-import { type PolyProps, Poly } from '../polymorphic';
+import { type NativeProps, Native } from '../Native';
 import { cn } from '../utils';
 import classes from './tabsClasses';
 import { useTabsContext } from './tabsContext';
 
-export type TabsTriggerProps = PolyProps<'button'> & {
+export type TabsTriggerProps = NativeProps<'button'> & {
   value: string;
 };
 
@@ -44,7 +44,7 @@ export const TabsTrigger = (inProps: TabsTriggerProps) => {
 
   return (
     <Highlight.Item selected={isActive} disabled={disabled} asChild>
-      <Poly.button
+      <Native.button
         ref={mergedRefs}
         id={triggerId}
         role="tab"

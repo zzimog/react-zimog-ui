@@ -1,7 +1,7 @@
-import type { PolyProps } from '../polymorphic';
+import type { NativeProps } from '../Native';
 import { Presence } from '../Presence';
 
-type CollapsibleProps = PolyProps<'div'> & {
+type CollapsibleProps = NativeProps<'div'> & {
   open?: boolean;
   forceMount?: boolean;
 };

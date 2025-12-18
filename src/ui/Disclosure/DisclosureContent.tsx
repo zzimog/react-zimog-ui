@@ -1,13 +1,13 @@
 import { useContext } from 'react';
 import { Collapsible } from '../Collapsible';
-import type { PolyProps } from '../polymorphic';
+import type { NativeProps } from '../Native';
 import { Presence } from '../Presence';
 import { useDisclosureContext } from './disclosureContext';
 import { DisclosureItemContext } from './disclosureItemContext';
 
 const DISPLAY_NAME = 'DisclosureContent';
 
-type PresenceProps = Omit<PolyProps<typeof Presence>, 'present'>;
+type PresenceProps = Omit<NativeProps<typeof Presence>, 'present'>;
 type DisclosureContentProps = PresenceProps & {
   value?: string;
 };

@@ -1,11 +1,11 @@
 import { useMergedRefs } from '../hooks';
-import { type PolyProps, Poly } from '../polymorphic';
+import { type NativeProps, Native } from '../Native';
 import { usePopoverContext } from './popoverContext';
 import { composeHandlers } from '../utils';
 
 const DISPLAY_NAME = 'PopoverTrigger';
 
-type PopoverTriggerProps = PolyProps<'button'>;
+type PopoverTriggerProps = NativeProps<'button'>;
 
 export const PopoverTrigger = (inProps: PopoverTriggerProps) => {
   const { ref, onClick, ...props } = inProps;
@@ -16,7 +16,7 @@ export const PopoverTrigger = (inProps: PopoverTriggerProps) => {
   const mergedRefs = useMergedRefs(ref, setTrigger);
 
   return (
-    <Poly.button
+    <Native.button
       ref={mergedRefs}
       type="button"
       data-open={open}

@@ -1,10 +1,10 @@
 import { ChevronDown } from 'lucide-react';
-import { type PolyProps, Poly } from '../polymorphic';
+import { type NativeProps, Native } from '../Native';
 import { cn, composeHandlers } from '../utils';
 import classes from './accordionClasses';
 import { useAccordionItemContext } from './accordionItemContext';
 
-export type AccordionTriggerProps = PolyProps<'button'>;
+export type AccordionTriggerProps = NativeProps<'button'>;
 
 export const AccordionTrigger = (inProps: AccordionTriggerProps) => {
   const { className, onClick, children, ...props } = inProps;
@@ -17,7 +17,7 @@ export const AccordionTrigger = (inProps: AccordionTriggerProps) => {
   }
 
   return (
-    <Poly.button
+    <Native.button
       id={triggerId}
       aria-controls={contentId}
       aria-expanded={open}
@@ -31,6 +31,6 @@ export const AccordionTrigger = (inProps: AccordionTriggerProps) => {
     >
       {children}
       <ChevronDown className={classes.arrow} />
-    </Poly.button>
+    </Native.button>
   );
 };

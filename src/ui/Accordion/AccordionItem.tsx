@@ -1,11 +1,11 @@
 import { useId } from 'react';
-import { type PolyProps, Poly } from '../polymorphic';
+import { type NativeProps, Native } from '../Native';
 import { cn } from '../utils';
 import classes from './accordionClasses';
 import { useAccordionContext } from './accordionContext';
 import { AccordionItemContext } from './accordionItemContext';
 
-export type AccordionItemProps = PolyProps<'div'> & {
+export type AccordionItemProps = NativeProps<'div'> & {
   value: string;
   disabled?: boolean;
 };
@@ -37,10 +37,10 @@ export const AccordionItem = (inProps: AccordionItemProps) => {
   };
 
   return (
-    <Poly.div className={cn(classes.item, className)} {...props}>
+    <Native.div className={cn(classes.item, className)} {...props}>
       <AccordionItemContext value={itemContext}>
         {children}
       </AccordionItemContext>
-    </Poly.div>
+    </Native.div>
   );
 };

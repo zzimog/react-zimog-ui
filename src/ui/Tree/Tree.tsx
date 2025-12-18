@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { type PolyProps, Poly } from '../polymorphic';
+import { type NativeProps, Native } from '../Native';
 import { cn } from '../utils';
 import { Highlight } from '../Highlight';
 import { type TreeItemData, TreeItem } from './TreeItem';
 import { TreeContext } from './treeContext';
 import classes from './treeClasses';
 
-export type TreeProps = PolyProps<typeof Poly.div> & {
+export type TreeProps = NativeProps<typeof Native.div> & {
   data?: TreeItemData[];
 };
 

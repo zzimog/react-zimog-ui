@@ -1,10 +1,10 @@
-import { type PolyProps, composeHandlers, Poly, useMergedRefs } from '@ui';
+import { type NativeProps, composeHandlers, Native, useMergedRefs } from '@ui';
 import { useHighlightContext } from './highlightContext';
 import { useCallback, useEffect, useRef } from 'react';
 
 const DISPLAY_NAME = 'HighlightItem';
 
-type HighlightItemProps = PolyProps<'div'> & {
+type HighlightItemProps = NativeProps<'div'> & {
   selected?: boolean;
 };
 
@@ -41,7 +41,7 @@ export const HighlightItem = (inProps: HighlightItemProps) => {
   }, [selected]);
 
   return (
-    <Poly.div
+    <Native.div
       ref={mergedRef}
       onClick={composeHandlers(onClick, handleSelect)}
       {...props}

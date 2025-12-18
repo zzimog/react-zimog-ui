@@ -1,12 +1,12 @@
 import { useMergedRefs } from '../hooks';
-import { type PolyProps, Poly } from '../polymorphic';
+import { type NativeProps, Native } from '../Native';
 import { cn } from '../utils';
 import classes from './scrollAreaClasses';
 import { useScrollAreaContext } from './scrollAreaContext';
 
 const DISPLAY_NAME = 'ScrollAreaViewport';
 
-export const ScrollAreaViewport = (inProps: PolyProps<'div'>) => {
+export const ScrollAreaViewport = (inProps: NativeProps<'div'>) => {
   const { ref: refProp, className, children, ...props } = inProps;
 
   const { onViewportChange, onContentChange } =
@@ -15,7 +15,7 @@ export const ScrollAreaViewport = (inProps: PolyProps<'div'>) => {
   const ref = useMergedRefs(refProp, onViewportChange);
 
   return (
-    <Poly.div
+    <Native.div
       ref={ref}
       data-scrollarea="viewport"
       className={cn(classes.viewport, className)}
@@ -30,7 +30,7 @@ export const ScrollAreaViewport = (inProps: PolyProps<'div'>) => {
       >
         {children}
       </div>
-    </Poly.div>
+    </Native.div>
   );
 };
 

@@ -1,6 +1,6 @@
 import { useId } from 'react';
 import { useControllableState } from '../hooks';
-import { Poly, type PolyProps } from '../polymorphic';
+import { Native, type NativeProps } from '../Native';
 import { cn } from '../utils';
 import classes from './accordionClasses';
 import { AccordionContent } from './AccordionContent';
@@ -8,7 +8,7 @@ import { AccordionContext } from './accordionContext';
 import { AccordionItem } from './AccordionItem';
 import { AccordionTrigger } from './AccordionTrigger';
 
-export type AccordionProps = PolyProps<'div'> & {
+export type AccordionProps = NativeProps<'div'> & {
   collapse?: boolean;
   value?: string;
   defaultValue?: string;
@@ -49,9 +49,9 @@ export const Accordion = (inProps: AccordionProps) => {
   };
 
   return (
-    <Poly.div className={cn(classes.root, className)} {...props}>
+    <Native.div className={cn(classes.root, className)} {...props}>
       <AccordionContext value={context}>{children}</AccordionContext>
-    </Poly.div>
+    </Native.div>
   );
 };
 

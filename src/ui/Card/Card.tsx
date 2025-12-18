@@ -1,11 +1,11 @@
-import { type PolyProps, Poly } from '../polymorphic';
+import { type NativeProps, Native } from '../Native';
 import { cn } from '../utils';
 
-export const Card = (inProps: PolyProps<'div'>) => {
+export const Card = (inProps: NativeProps<'div'>) => {
   const { className, ...props } = inProps;
 
   return (
-    <Poly.div
+    <Native.div
       {...props}
       className={cn(
         [
@@ -29,11 +29,11 @@ Card.displayName = 'Card';
 
 /*---------------------------------------------------------------------------*/
 
-const CardHeader = (inProps: PolyProps<'div'>) => {
+const CardHeader = (inProps: NativeProps<'div'>) => {
   const { className, ...props } = inProps;
 
   return (
-    <Poly.div
+    <Native.div
       {...props}
       className={cn(
         'flex',
@@ -52,11 +52,11 @@ CardHeader.displayName = 'CardHeader';
 
 /*---------------------------------------------------------------------------*/
 
-const CardTitle = (inProps: PolyProps<'div'>) => {
+const CardTitle = (inProps: NativeProps<'div'>) => {
   const { className, ...props } = inProps;
 
   return (
-    <Poly.div
+    <Native.div
       {...props}
       className={cn('font-bold', 'text-lg/none', className)}
     />
@@ -67,11 +67,11 @@ CardTitle.displayName = 'CardTitle';
 
 /*---------------------------------------------------------------------------*/
 
-const CardDescription = (inProps: PolyProps<'div'>) => {
+const CardDescription = (inProps: NativeProps<'div'>) => {
   const { className, ...props } = inProps;
 
   return (
-    <Poly.div
+    <Native.div
       {...props}
       className={cn(
         'text-sm',
@@ -88,21 +88,21 @@ CardDescription.displayName = 'CardDescription';
 
 /*---------------------------------------------------------------------------*/
 
-const CardContent = (inProps: PolyProps<'div'>) => {
+const CardContent = (inProps: NativeProps<'div'>) => {
   const { className, ...props } = inProps;
 
-  return <Poly.div {...props} className={cn('p-6', className)} />;
+  return <Native.div {...props} className={cn('p-6', className)} />;
 };
 
 CardContent.displayName = 'CardContent';
 
 /*---------------------------------------------------------------------------*/
 
-const CardFooter = (inProps: PolyProps<'div'>) => {
+const CardFooter = (inProps: NativeProps<'div'>) => {
   const { className, ...props } = inProps;
 
   return (
-    <Poly.div
+    <Native.div
       {...props}
       className={cn(
         'flex',

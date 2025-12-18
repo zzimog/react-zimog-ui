@@ -1,8 +1,8 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useMergedRefs } from '../hooks';
-import { type PolyProps, Poly } from '../polymorphic';
+import { type NativeProps, Native } from '../Native';
 
-type PresenceProps = PolyProps<'div'> & {
+type PresenceProps = NativeProps<'div'> & {
   present?: boolean;
   forceMount?: boolean;
   onMeasure?(node: HTMLElement): void;
@@ -155,7 +155,7 @@ export const Presence = (inProps: PresenceProps) => {
 
   return (
     (forceMount || shouldRender) && (
-      <Poly.div
+      <Native.div
         ref={mergedRef}
         data-visible={present}
         hidden={!shouldRender}

@@ -1,10 +1,10 @@
-import { type PolyProps, Poly } from '../polymorphic';
+import { type NativeProps, Native } from '../Native';
 import { cn } from '../utils';
 import type { ButtonColor, ButtonSize, ButtonVariant } from './Button';
 import classes from './buttonClasses';
 import { ButtonGroupContext } from './buttonGroupContext';
 
-type ButtonGroupProps = PolyProps<'div'> & {
+type ButtonGroupProps = NativeProps<'div'> & {
   column?: boolean;
   joined?: boolean;
   size?: ButtonSize;
@@ -38,9 +38,9 @@ export const ButtonGroup = (inProps: ButtonGroupProps) => {
   const classNames = classes.group({ column, joined });
 
   return (
-    <Poly.div role="group" className={cn(classNames, className)} {...props}>
+    <Native.div role="group" className={cn(classNames, className)} {...props}>
       <ButtonGroupContext value={context}>{children}</ButtonGroupContext>
-    </Poly.div>
+    </Native.div>
   );
 };
 

@@ -1,9 +1,9 @@
 import { Highlight } from '../Highlight';
-import { type PolyProps } from '../polymorphic';
+import { type NativeProps } from '../Native';
 import { cn } from '../utils';
 import classes from './tabsClasses';
 
-export const TabsList = (inProps: PolyProps<'div'>) => {
+export const TabsList = (inProps: NativeProps<'div'>) => {
   const { className, children, ...props } = inProps;
 
   return (

@@ -1,6 +1,6 @@
 import { useId } from 'react';
 import { useControllableState } from '../hooks';
-import { type PolyProps, Poly } from '../polymorphic';
+import { type NativeProps, Native } from '../Native';
 import { cn } from '../utils';
 import classes from './tabsClasses';
 import { TabsContent } from './TabsContent';
@@ -8,7 +8,7 @@ import { TabsContext } from './tabsContext';
 import { TabsList } from './TabsList';
 import { TabsTrigger } from './TabsTrigger';
 
-export type TabsProps = PolyProps<'div'> & {
+export type TabsProps = NativeProps<'div'> & {
   value?: string;
   defaultValue?: string;
   onValueChange?: (value: string) => void;
@@ -43,9 +43,9 @@ export const Tabs = (inProps: TabsProps) => {
   };
 
   return (
-    <Poly.div className={cn(classes.root, className)} {...props}>
+    <Native.div className={cn(classes.root, className)} {...props}>
       <TabsContext value={context}>{children}</TabsContext>
-    </Poly.div>
+    </Native.div>
   );
 };
 

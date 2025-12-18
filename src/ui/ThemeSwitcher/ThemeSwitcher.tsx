@@ -1,9 +1,9 @@
 import { Moon, Sun } from 'lucide-react';
 import { Button } from '../Button';
 import { useTheme } from '../hooks';
-import type { PolyProps } from '../polymorphic';
+import type { NativeProps } from '../Native';
 
-type ThemeSwitcherProps = PolyProps<typeof Button>;
+type ThemeSwitcherProps = NativeProps<typeof Button>;
 
 export const ThemeSwitcher = (inProps: ThemeSwitcherProps) => {
   const [scheme, setScheme] = useTheme();

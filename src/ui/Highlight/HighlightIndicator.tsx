@@ -33,6 +33,7 @@ export const HighlightIndicator = (inProps: HighlightIndicatorProps) => {
   const [visible, setVisible] = useState(false);
 
   const prevRectRef = useRef<DOMRect>(null);
+  const prevRect = prevRectRef.current;
 
   const ref = useRef<HTMLElement>(null);
   const mergedRefs = useMergedRefs(refProp, ref);
@@ -61,11 +62,10 @@ export const HighlightIndicator = (inProps: HighlightIndicatorProps) => {
         node.style.setProperty('--height', `${rect.height}px`);
 
         prevRectRef.current = rect;
-        setVisible(true);
       }
-    } else {
-      setVisible(false);
     }
+
+    setVisible(!!current);
   }, []);
 
   const classNames = classes.indicator({
@@ -77,6 +77,7 @@ export const HighlightIndicator = (inProps: HighlightIndicatorProps) => {
     <Presence
       ref={mergedRefs}
       present={visible}
+      data-highlight="indicator"
       {...props}
       className={cn(classNames, className)}
       style={{
@@ -84,6 +85,10 @@ export const HighlightIndicator = (inProps: HighlightIndicatorProps) => {
         top: 0,
         left: 0,
         zIndex: 0,
+        ['--x' as any]: prevRect ? `${prevRect.x}px` : undefined,
+        ['--y' as any]: prevRect ? `${prevRect.y}px` : undefined,
+        ['--width' as any]: prevRect ? `${prevRect.width}px` : undefined,
+        ['--height' as any]: prevRect ? `${prevRect.height}px` : undefined,
         ...style,
       }}
     />

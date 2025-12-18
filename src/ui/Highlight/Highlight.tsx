@@ -45,9 +45,10 @@ export const Highlight = (inProps: HighlightProps) => {
 
   return (
     <Native.div
-      ref={mergedRefs}
-      className={cn(classes.root, className)}
       {...props}
+      ref={mergedRefs}
+      data-highlight="root"
+      className={cn(classes.root, className)}
     >
       <HighlightContext
         type={type}

@@ -5,12 +5,12 @@ const scrollbarCommon = [
   'bg-border',
   'transition',
   'outline-0',
-  'opacity-25',
-  'group-hover:opacity-75',
+  'opacity-0',
+  'data-[visible=true]:opacity-25',
+  'data-[visible=true]:hover:opacity-75',
 ];
 
 const classes = {
-  root: 'group relative',
   viewport: [
     'size-full',
     'outline-0',

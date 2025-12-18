@@ -4,9 +4,10 @@ import { DemoContainer } from './components/demo-container';
 
 export default () => {
   const [open, setOpen] = useState(false);
+
   return (
     <DemoContainer title="Collapsible" code="// Work in progress">
-      <div className="w-80 h-50">
+      <div className="w-80">
         <Button onClick={() => setOpen(!open)}>Toggle</Button>
         <Collapsible open={open}>
           <p className="p-2">

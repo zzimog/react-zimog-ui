@@ -7,10 +7,12 @@ import { useScrollAreaContext } from './scrollAreaContext';
 const DISPLAY_NAME = 'ScrollAreaViewport';
 
 export const ScrollAreaViewport = (inProps: PolyProps<'div'>) => {
-  const { ref: refProp, className, ...props } = inProps;
+  const { ref: refProp, className, children, ...props } = inProps;
 
-  const { setViewport } = useScrollAreaContext(DISPLAY_NAME);
-  const ref = useMergedRefs(refProp, setViewport);
+  const { onViewportChange, onContentChange } =
+    useScrollAreaContext(DISPLAY_NAME);
+
+  const ref = useMergedRefs(refProp, onViewportChange);
 
   return (
     <Poly.div
@@ -18,7 +20,17 @@ export const ScrollAreaViewport = (inProps: PolyProps<'div'>) => {
       data-scrollarea="viewport"
       className={cn(classes.viewport, className)}
       {...props}
-    />
+    >
+      <div
+        ref={onContentChange}
+        style={{
+          minWidth: '100%',
+          display: 'table',
+        }}
+      >
+        {children}
+      </div>
+    </Poly.div>
   );
 };
 

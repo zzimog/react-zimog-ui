@@ -18,7 +18,7 @@ export default () => (
   <DemoContainer title="Disclosure" code={code} headless>
     <Disclosure
       as="div"
-      className="w-80 h-50 text-sm text-white"
+      className="w-80 text-sm text-white"
       defaultValue="0"
     >
       <Disclosure.Item value="0">

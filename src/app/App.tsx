@@ -1,5 +1,6 @@
-import { ThemeSwitcher } from '@ui';
+import { ScrollArea, ThemeSwitcher } from '@ui';
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router';
+import './App.css';
 import { MainMenu } from './components/main-menu';
 import {
   CardDemo,
@@ -8,6 +9,7 @@ import {
   PresenceDemo,
   ScrollAreaDemo,
 } from './examples';
+import Test from './Test3';
 
 const components: Record<string, Record<string, any>> = {
   headless: {
@@ -21,30 +23,23 @@ const components: Record<string, Record<string, any>> = {
   },
 };
 
-const all = (
-  <>
-    <DisclosureDemo />
-    <PopoverDemo />
-    <PresenceDemo />
-    <CardDemo />
-    <ScrollAreaDemo />
-  </>
-);
-
 export default () => (
-  <div
+  <ScrollArea
     className={[
-      'min-h-screen',
+      'h-screen',
       'transition-colors',
       'text-foreground',
       'bg-white',
       'dark:text-background',
       'dark:bg-black',
+      'overflow-hidden',
     ].join(' ')}
   >
-    <ThemeSwitcher className="absolute top-2 right-2" />
     <div className="max-w-200 w-full flex flex-col gap-10 mx-auto px-4 py-16">
-      <h1 className="text-4xl self-start">ui demo</h1>
+      <header className="flex justify-between items-center gap-2">
+        <h1 className="text-4xl self-start">ui demo</h1>
+        <ThemeSwitcher size="sm" />
+      </header>
 
       <BrowserRouter basename="react-zimog-ui">
         <MainMenu>
@@ -55,28 +50,42 @@ export default () => (
           {Object.keys(components).map((category, i) => (
             <MainMenu.Submenu key={i} title={category}>
               {Object.keys(components[category]).map((name, i) => (
-                <MainMenu.Entry>
-                  <NavLink key={i} to={`/${category}/${name}`}>
-                    {name}
-                  </NavLink>
+                <MainMenu.Entry key={i}>
+                  <NavLink to={`/${category}/${name}`}>{name}</NavLink>
                 </MainMenu.Entry>
               ))}
             </MainMenu.Submenu>
           ))}
+
+          <MainMenu.Entry>
+            <NavLink to="/test">[test]</NavLink>
+          </MainMenu.Entry>
         </MainMenu>
 
         <Routes>
-          <Route index element={all} />
+          <Route
+            index
+            element={Object.values(components).flatMap((category, i) =>
+              Object.values(category).map((Comp, j) => (
+                <Comp key={`${i}-${j}`} />
+              ))
+            )}
+          />
 
-          {Object.keys(components).map((category, i) => (
-            <Route key={i} path={category}>
-              {Object.entries(components[category]).map(([name, Comp], i) => (
-                <Route key={i} path={name} element={<Comp />} />
-              ))}
-            </Route>
-          ))}
+          {Object.keys(components).map((category) =>
+            Object.entries(components[category]).map(([name, Comp]) => (
+              <Route
+                key={`${category}-${name}`}
+                path={`${category}/${name}`}
+                element={<Comp />}
+              />
+            ))
+          )}
+
+          <Route path="test" element={<Test />} />
+          <Route path="*" element={<h2>404</h2>} />
         </Routes>
       </BrowserRouter>
     </div>
-  </div>
+  </ScrollArea>
 );

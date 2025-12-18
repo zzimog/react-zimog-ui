@@ -1,26 +1,65 @@
 @import 'tailwindcss';
 @import './animations.css';
 
-@custom-variant dark (&:where(.dark, .dark *));
+@custom-variant dark (&:is(.dark *));
 
-@theme {
-  --color-foreground: var(--color-zinc-900);
-  --color-background: var(--color-zinc-100);
+:root {
+  --shape: var(--radius-md);
+  --foreground: var(--color-zinc-900);
+  --background: var(--color-zinc-50);
+  --muted: var(--color-zinc-400);
+  --muted-background: var(--color-zinc-100);
+  --primary: var(--color-violet-500);
+  --primary-contrast: var(--color-white);
+  --danger: var(--color-red-700);
+  --danger-contrast: var(--color-white);
+  --border: --alpha(var(--color-zinc-500) / 25%);
+  --highlight: --alpha(var(--color-primary) / 15%);
+  --outline: --alpha(var(--color-primary) / 50%);
+}
 
-  --color-primary: var(--color-violet-500);
-  --color-primary-contrast: var(--color-white);
+.dark:root {
+  --muted-background: var(--color-zinc-800);
+}
 
-  --color-danger: var(--color-red-700);
-  --color-danger-contrast: var(--color-white);
+@theme inline {
+  --radius-shape: var(--shape);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted);
+  --color-muted-background: var(--muted-background);
+  --color-primary: var(--primary);
+  --color-primary-contrast: var(--primary-contrast);
+  --color-danger: var(--danger);
+  --color-danger-contrast: var(--danger-contrast);
+  --color-border: var(--border);
+  --color-highlight: var(--highlight);
+  --color-outline: var(--outline);
+}
 
-  --color-border: --alpha(var(--color-zinc-500) / 25%);
-  --color-highlight: --alpha(var(--color-primary) / 15%);
-  --color-outline: --alpha(var(--color-primary) / 50%);
+@layer base {
+  * {
+    @apply border-border;
+  }
 
-  --color-muted-foreground: --alpha(var(--color-foreground) / 60%);
-  --color-muted-background: --alpha(var(--color-background) / 60%);
+  body {
+    min-height: 100vh;
+    background-color: var(--color-white);
+    @apply text-foreground;
 
-  --radius-shape: calc(var(--spacing) * 2);
+    @variant dark {
+      background-color: var(--color-black);
+      @apply text-background;
+    }
+  }
+
+  :checked {
+    background-image: url('data:image/svg+xml,<svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 16"><path stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M1 7.917 5.724 12.5 15 3.5"/></svg>');
+    background-repeat: no-repeat;
+    background-position: 50%;
+    background-size: 0.5rem;
+  }
 }
 
 @utility focusable {
@@ -40,49 +79,33 @@
   @apply transition-opacity duration-200;
 }
 
-body {
-  min-height: 100vh;
-  background-color: var(--color-white);
-  @apply text-foreground;
-
-  @variant dark {
-    background-color: var(--color-black);
-    @apply text-background;
-  }
-}
-
-:checked {
-  background-image: url('data:image/svg+xml,<svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 16"><path stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M1 7.917 5.724 12.5 15 3.5"/></svg>');
-  background-repeat: no-repeat;
-  background-position: 50%;
-  background-size: 0.5rem;
-}
-
-[data-codeblock] [data-line] {
-  display: inline-block;
-  width: 100%;
-  @apply pr-8;
-
-  &::before {
-    @apply w-16 pr-2 text-sm transition-colors bg-background;
-    content: attr(data-line);
-    position: sticky;
-    left: 0;
+@layer components {
+  [data-codeblock] [data-line] {
     display: inline-block;
-    text-align: right;
-  }
+    width: 100%;
+    @apply pr-8;
 
-  @variant dark {
     &::before {
-      @apply bg-foreground;
+      @apply w-16 pr-2 text-sm transition-colors bg-background;
+      content: attr(data-line);
+      position: sticky;
+      left: 0;
+      display: inline-block;
+      text-align: right;
     }
-  }
-
-  span {
-    @apply transition-colors;
 
     @variant dark {
-      color: var(--shiki-dark) !important;
+      &::before {
+        @apply bg-foreground;
+      }
+    }
+
+    span {
+      @apply transition-colors;
+
+      @variant dark {
+        color: var(--shiki-dark) !important;
+      }
     }
   }
 }

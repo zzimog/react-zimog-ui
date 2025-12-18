@@ -11,7 +11,7 @@ const MainMenuSubmenu = ({
 }: ComponentProps<'span'>) => (
   <span {...props} aria-label={title}>
     {title && (
-      <span className="inline-block text-2xl/none text-muted-foreground dark:text-muted-background transition-colors pl-2 mr-2 border-l border-muted-foreground/50 dark:border-muted-background/50">
+      <span className="inline-block text-2xl/none text-muted transition-colors mr-2 pl-2 border-l border-muted/50">
         {title}
       </span>
     )}
@@ -23,7 +23,7 @@ const MainMenuEntry = (props: ComponentProps<'span'>) => (
   <span
     role="link"
     {...props}
-    className="mr-2 cursor-pointer underline-offset-4 hover:underline"
+    className="mr-2 cursor-pointer underline-offset-4 hover:underline has-aria-[current=page]:underline"
   />
 );
 

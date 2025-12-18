@@ -3,6 +3,7 @@ import {
   useCallback,
   useEffect,
   useRef,
+  useState,
 } from 'react';
 import { useMergedRefs, useResizeObserver } from '../hooks';
 import { cn } from '../utils';
@@ -24,15 +25,36 @@ export const ScrollAreaScrollbar = (inProps: ScrollAreaScrollbarProps) => {
     ref: refProp,
     direction = 'vertical',
     className,
+    style,
     children,
     ...props
   } = inProps;
 
-  const { viewport, useCorner } = useScrollAreaContext(DISPLAY_NAME);
+  const { viewport, content, useCorner } = useScrollAreaContext(DISPLAY_NAME);
+
+  const [visible, setVisible] = useState(true);
 
   const scrollbarRef = useRef<HTMLDivElement>(null);
   const thumbRef = useRef<HTMLDivElement>(null);
   const ref = useMergedRefs(refProp, scrollbarRef);
+
+  const onResize = useCallback(() => {
+    const scrollbar = scrollbarRef.current;
+    if (viewport && scrollbar) {
+      const { ratioY, sizeY, ratioX, sizeX } = getThumbSize(
+        viewport,
+        scrollbar
+      );
+
+      if (direction === 'vertical') {
+        scrollbar.style.setProperty('--thumb-size', `${sizeY}px`);
+        setVisible(ratioY < 1);
+      } else {
+        scrollbar.style.setProperty('--thumb-size', `${sizeX}px`);
+        setVisible(ratioX < 1);
+      }
+    }
+  }, [viewport, direction]);
 
   useEffect(() => {
     const isVertical = direction === 'vertical';
@@ -145,35 +167,22 @@ export const ScrollAreaScrollbar = (inProps: ScrollAreaScrollbarProps) => {
     }
   }, [viewport, direction]);
 
-  useResizeObserver(
-    viewport,
-    useCallback(() => {
-      const scrollbar = scrollbarRef.current;
-      if (viewport && scrollbar) {
-        const { ratioX, sizeX, ratioY, sizeY } = getThumbSize(
-          viewport,
-          scrollbar
-        );
-
-        if (direction === 'vertical') {
-          scrollbar.hidden = ratioY >= 1;
-          scrollbar.style.setProperty('--thumb-size', `${sizeY}px`);
-        } else {
-          scrollbar.hidden = ratioX >= 1;
-          scrollbar.style.setProperty('--thumb-size', `${sizeX}px`);
-        }
-      }
-    }, [viewport, direction])
-  );
+  useResizeObserver(viewport, onResize);
+  useResizeObserver(content, onResize);
 
   return (
     <div
-      {...props}
       ref={ref}
       data-scrollarea="scrollbar"
       data-scrollbar="root"
       data-direction={direction}
+      data-visible={visible}
+      {...props}
       className={cn(classes.scrollbar({ direction, useCorner }), className)}
+      style={{
+        position: 'absolute',
+        ...style,
+      }}
     >
       <div
         ref={thumbRef}

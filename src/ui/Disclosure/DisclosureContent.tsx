@@ -1,5 +1,4 @@
 import { useContext } from 'react';
-import { Collapsible } from '../Collapsible';
 import type { NativeProps } from '../Native';
 import { Presence } from '../Presence';
 import { useDisclosureContext } from './disclosureContext';
@@ -12,6 +11,12 @@ type DisclosureContentProps = PresenceProps & {
   value?: string;
 };
 
+function handleMeasure(node: HTMLElement) {
+  const { width, height } = node.getBoundingClientRect();
+  node.style.setProperty('--width', `${width}px`);
+  node.style.setProperty('--height', `${height}px`);
+}
+
 export const DisclosureContent = (inProps: DisclosureContentProps) => {
   const { value: valueProp, ...props } = inProps;
 
@@ -21,7 +26,7 @@ export const DisclosureContent = (inProps: DisclosureContentProps) => {
   const value = valueProp || itemContext?.value;
   const open = !!value && context.value.includes(value);
 
-  return <Collapsible open={open} {...props} />;
+  return <Presence present={open} onMeasure={handleMeasure} {...props} />;
 };
 
 DisclosureContent.displayName = DISPLAY_NAME;

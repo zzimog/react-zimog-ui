@@ -24,7 +24,7 @@ export * from './ThemeSwitcher';
  * @todo To be refactored...
  */
 export * from './Accordion';
-export * from './Collapsible_old';
+export * from './Collapsible';
 export * from './Form';
 export * from './Highlight';
 export * from './Hovering';

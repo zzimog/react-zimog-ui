@@ -9,7 +9,7 @@ import { createHighlighterCore } from 'shiki/core';
 import { createOnigurumaEngine } from 'shiki/engine/oniguruma';
 import { ScrollArea } from '../ScrollArea';
 
-export const { codeToHtml } = await createHighlighterCore({
+const { codeToHtml } = await createHighlighterCore({
   engine: createOnigurumaEngine(import('shiki/wasm')),
   langs: [import('@shikijs/langs/tsx')],
   themes: [
@@ -64,7 +64,7 @@ function getPlaceholderCode(code: string) {
 }
 
 async function getHighlightedCode(code: string, lang: string) {
-  const html = await codeToHtml(code, {
+  return codeToHtml(code, {
     lang,
     rootStyle: false,
     themes: {
@@ -90,8 +90,6 @@ async function getHighlightedCode(code: string, lang: string) {
       },
     ],
   });
-
-  return html;
 }
 
 export const CodeBlock = (inProps: CodeBlockProps) => {

@@ -6,7 +6,7 @@
 :root {
   --shape: var(--radius-md);
   --foreground: var(--color-zinc-900);
-  --background: var(--color-zinc-50);
+  --background: var(--color-white);
   --muted: var(--color-zinc-400);
   --muted-background: var(--color-zinc-100);
   --primary: var(--color-violet-500);
@@ -19,6 +19,8 @@
 }
 
 .dark:root {
+  --foreground: var(--color-zinc-50);
+  --background: var(--color-zinc-900);
   --muted-background: var(--color-zinc-800);
 }
 
@@ -92,12 +94,6 @@
       left: 0;
       display: inline-block;
       text-align: right;
-    }
-
-    @variant dark {
-      &::before {
-        @apply bg-foreground;
-      }
     }
 
     span {

@@ -50,7 +50,6 @@ const classes = {
       'opacity-50',
       'hover:opacity-100',
       'bg-foreground',
-      'dark:bg-background',
     ],
     {
       variants: {

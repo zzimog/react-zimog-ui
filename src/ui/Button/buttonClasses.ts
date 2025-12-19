@@ -39,10 +39,10 @@ const buttonClasses = cva(
           '[--base:var(--color-zinc-500)]',
           'bg-zinc-100',
           'border-zinc-100',
-          'text-foreground',
+          'text-zinc-800',
           'dark:bg-zinc-800',
           'dark:border-zinc-800',
-          'dark:text-background',
+          'dark:text-zinc-100',
         ],
         primary: [
           '[--base:var(--color-primary)]',
@@ -70,9 +70,7 @@ const buttonClasses = cva(
         variant: ['outlined', 'ghost'],
         className: [
           'text-foreground',
-          'dark:text-background',
-          'bg-transparent',
-          'dark:bg-transparent',
+          'bg-transparent!',
           'hover:bg-(--base)/10',
           'not-disabled:active:bg-(--base)/10',
           'dark:hover:bg-(--base)/30',

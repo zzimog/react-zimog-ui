@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import type { PropsWithChildren } from 'react';
 import { useControllableState } from '../hooks';
 import { type NativeProps, Native } from '../Native';
 import { DisclosureContent } from './DisclosureContent';
@@ -6,12 +6,12 @@ import { DisclosureContext } from './disclosureContext';
 import { DisclosureItem } from './DisclosureItem';
 import { DisclosureTrigger } from './DisclosureTrigger';
 
-type DisclosureSingleProps = NativeProps<'div'> & {
+type DisclosureSingleProps = PropsWithChildren<{
   multiple?: false;
   value?: string;
   defaultValue?: string;
   onValueChange?(value: string): void;
-};
+}>;
 
 const DisclosureSingle = (inProps: DisclosureSingleProps) => {
   const {
@@ -19,7 +19,6 @@ const DisclosureSingle = (inProps: DisclosureSingleProps) => {
     value: valueProp,
     children,
     onValueChange,
-    ...props
   } = inProps;
 
   const [value, setValue] = useControllableState({
@@ -29,24 +28,22 @@ const DisclosureSingle = (inProps: DisclosureSingleProps) => {
   });
 
   return (
-    <Native.div as={Fragment} {...props}>
-      <DisclosureContext
-        value={value ? [value] : []}
-        onItemOpen={setValue}
-        onItemClose={() => setValue('')}
-      >
-        {children}
-      </DisclosureContext>
-    </Native.div>
+    <DisclosureContext
+      value={value ? [value] : []}
+      onItemOpen={setValue}
+      onItemClose={() => setValue('')}
+    >
+      {children}
+    </DisclosureContext>
   );
 };
 
-type DisclosureMultipleProps = NativeProps<'div'> & {
+type DisclosureMultipleProps = PropsWithChildren<{
   multiple: true;
   value?: string[];
   defaultValue?: string[];
   onValueChange?(value: string[]): void;
-};
+}>;
 
 const DisclosureMultiple = (inProps: DisclosureMultipleProps) => {
   const {
@@ -54,7 +51,6 @@ const DisclosureMultiple = (inProps: DisclosureMultipleProps) => {
     value: valueProp,
     onValueChange,
     children,
-    ...props
   } = inProps;
 
   const [value, setValue] = useControllableState({
@@ -64,33 +60,45 @@ const DisclosureMultiple = (inProps: DisclosureMultipleProps) => {
   });
 
   return (
-    <Native.div as={Fragment} {...props}>
-      <DisclosureContext
-        value={value}
-        onItemOpen={(itemValue) => {
-          setValue((prevValue) => [...prevValue, itemValue]);
-        }}
-        onItemClose={(itemValue) => {
-          setValue((prevValue) =>
-            prevValue.filter((value) => value !== itemValue)
-          );
-        }}
-      >
-        {children}
-      </DisclosureContext>
-    </Native.div>
+    <DisclosureContext
+      value={value}
+      onItemOpen={(itemValue) => {
+        setValue((prevValue) => [...prevValue, itemValue]);
+      }}
+      onItemClose={(itemValue) => {
+        setValue((prevValue) =>
+          prevValue.filter((value) => value !== itemValue)
+        );
+      }}
+    >
+      {children}
+    </DisclosureContext>
   );
 };
 
-type DisclosureProps = DisclosureMultipleProps | DisclosureSingleProps;
+type DisclosureProps = NativeProps<'div'> &
+  (DisclosureMultipleProps | DisclosureSingleProps);
 
 export const Disclosure = (inProps: DisclosureProps) => {
-  const { multiple, ...props } = inProps;
+  const { multiple, value, defaultValue, children, onValueChange, ...props } =
+    inProps;
 
-  return multiple ? (
-    <DisclosureMultiple {...(props as DisclosureMultipleProps)} />
-  ) : (
-    <DisclosureSingle {...(props as DisclosureSingleProps)} />
+  const disclosureProps = {
+    multiple,
+    value,
+    defaultValue,
+    children,
+    onValueChange,
+  };
+
+  return (
+    <Native.div {...props}>
+      {multiple ? (
+        <DisclosureMultiple {...(disclosureProps as DisclosureMultipleProps)} />
+      ) : (
+        <DisclosureSingle {...(disclosureProps as DisclosureSingleProps)} />
+      )}
+    </Native.div>
   );
 };
 

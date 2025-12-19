@@ -1,60 +1,39 @@
-import { useId } from 'react';
-import { useControllableState } from '../hooks';
-import { Native, type NativeProps } from '../Native';
+import { ChevronDown } from 'lucide-react';
+import { type ComponentPropsWithRef, type ReactNode } from 'react';
+import { Disclosure } from '../Disclosure';
 import { cn } from '../utils';
 import classes from './accordionClasses';
-import { AccordionContent } from './AccordionContent';
-import { AccordionContext } from './accordionContext';
-import { AccordionItem } from './AccordionItem';
-import { AccordionTrigger } from './AccordionTrigger';
 
-export type AccordionProps = NativeProps<'div'> & {
-  collapse?: boolean;
-  value?: string;
-  defaultValue?: string;
-  onValueChange?: (value: string) => void;
-};
+type AccordionProps = ComponentPropsWithRef<typeof Disclosure>;
 
 export const Accordion = (inProps: AccordionProps) => {
-  const {
-    collapse = true,
-    value: valueProp,
-    defaultValue = '',
-    className,
-    children,
-    onValueChange,
-    ...props
-  } = inProps;
+  const { className, ...props } = inProps;
 
-  const [value, setValue] = useControllableState({
-    prop: valueProp,
-    defaultValue,
-    onChange: onValueChange,
-  });
+  return <Disclosure {...props} className={cn(classes.root, className)} />;
+};
 
-  const baseId = useId();
+/*---------------------------------------------------------------------------*/
 
-  const context = {
-    baseId,
-    collapse,
-    value,
-    onItemOpen(newValue: string) {
-      setValue(newValue);
-    },
-    onItemClose() {
-      if (collapse) {
-        setValue('');
-      }
-    },
-  };
+type AccordionItemProps = ComponentPropsWithRef<typeof Disclosure.Item> & {
+  title?: ReactNode;
+};
+
+export const AccordionItem = (inProps: AccordionItemProps) => {
+  const { title, className, children, ...props } = inProps;
 
   return (
-    <Native.div className={cn(classes.root, className)} {...props}>
-      <AccordionContext value={context}>{children}</AccordionContext>
-    </Native.div>
+    <Disclosure.Item {...props} className={cn(classes.item, className)}>
+      <Disclosure.Trigger className={cn(classes.trigger, className)}>
+        {title}
+        <ChevronDown />
+      </Disclosure.Trigger>
+      <Disclosure.Content className={cn(classes.collapsible, className)}>
+        <div className={classes.content}>{children}</div>
+      </Disclosure.Content>
+    </Disclosure.Item>
   );
 };
 
 Accordion.Item = AccordionItem;
-Accordion.Trigger = AccordionTrigger;
-Accordion.Content = AccordionContent;
+Accordion.displayName = 'Accordion';
+AccordionItem.displayName = 'AccordionItem';

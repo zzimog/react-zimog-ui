@@ -1,57 +1,53 @@
-import { Disclosure } from '@ui';
+import { Accordion, Collapsible } from '@ui';
 import { DemoContainer } from './components/demo-container';
-import { ChevronDown } from 'lucide-react';
 
 const code = `// Headless component
 import { Disclosure } from '@ui';
 
 export default () => (
-  <Disclosure>
-    <Disclosure.Item>
-      <Disclosure.Trigger />
-      <Disclosure.Content />
-    </Disclosure.Item>
-  </Disclosure>
+  <Accordion multiple>
+    <Accordion.Item value title />
+  </Accordion>
 );`;
 
 export default () => (
-  <DemoContainer title="Disclosure" code={code} headless>
-    <Disclosure
-      as="div"
-      className="w-80 text-sm text-white"
-      defaultValue="0"
-    >
-      <Disclosure.Item value="0">
-        <Disclosure.Trigger
-          className={[
-            'w-full',
-            'flex',
-            'justify-between',
-            'items-center',
-            'py-4',
-            'font-semibold',
-            'hover:underline',
-            'data-[open=true]:[&_svg]:-rotate-180',
-          ].join(' ')}
-        >
-          Toggle
-          <ChevronDown className="size-4 transition-transform" />
-        </Disclosure.Trigger>
-        <Disclosure.Content
-          className={[
-            'overflow-hidden',
-            'data-[visible=true]:animate-height-grow',
-            'data-[visible=false]:animate-height-shrink',
-          ].join(' ')}
-        >
+  <DemoContainer title="Accordion" code={code}>
+    <div className="flex flex-col gap-8">
+      <Accordion className="w-80 text-white">
+        <Accordion.Item value="1" title="Lorem ipsum" className="border-white">
           <p className="text-justify">
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nesciunt
             molestiae sit dignissimos autem voluptates, aliquid sunt explicabo
             repudiandae optio praesentium id provident dolore quis ipsa? Quidem
             minus saepe odit consequatur!
           </p>
-        </Disclosure.Content>
-      </Disclosure.Item>
-    </Disclosure>
+        </Accordion.Item>
+        <Accordion.Item value="2" title="Dolor sit" className="border-white">
+          <p className="text-justify">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nesciunt
+            molestiae sit dignissimos autem voluptates, aliquid sunt explicabo
+            repudiandae optio praesentium id provident dolore quis ipsa? Quidem
+            minus saepe odit consequatur!
+          </p>
+        </Accordion.Item>
+        <Accordion.Item value="3" title="Consectetur" className="border-white">
+          <p className="text-justify">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nesciunt
+            molestiae sit dignissimos autem voluptates, aliquid sunt explicabo
+            repudiandae optio praesentium id provident dolore quis ipsa? Quidem
+            minus saepe odit consequatur!
+          </p>
+        </Accordion.Item>
+      </Accordion>
+
+      <Collapsible title="Lorem collapsum" className="w-80">
+        <p className="text-justify">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nesciunt
+          molestiae sit dignissimos autem voluptates, aliquid sunt explicabo
+          repudiandae optio praesentium id provident dolore quis ipsa? Quidem
+          minus saepe odit consequatur!
+        </p>
+      </Collapsible>
+    </div>
   </DemoContainer>
 );

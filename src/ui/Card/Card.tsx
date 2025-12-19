@@ -16,8 +16,6 @@ export const Card = (inProps: NativeProps<'div'>) => {
           'border-border',
           'text-foreground',
           'bg-background',
-          'dark:text-background',
-          'dark:bg-foreground',
         ],
         className
       )}

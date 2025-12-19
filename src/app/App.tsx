@@ -30,9 +30,7 @@ export default () => (
       'transition-colors',
       'text-foreground',
       'bg-white',
-      'dark:text-background',
       'dark:bg-black',
-      'overflow-hidden',
     ].join(' ')}
   >
     <div className="max-w-200 w-full flex flex-col gap-10 mx-auto px-4 py-16">

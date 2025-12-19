@@ -1,4 +1,3 @@
-import { Fragment } from 'react';
 import { type NativeProps, Native } from '../Native';
 import { DisclosureItemContext } from './disclosureItemContext';
 
@@ -10,7 +9,7 @@ export const DisclosureItem = (inProps: DisclosureItemProps) => {
   const { value, children, ...props } = inProps;
 
   return (
-    <Native.div as={Fragment} {...props}>
+    <Native.div {...props}>
       <DisclosureItemContext value={{ value }}>
         {children}
       </DisclosureItemContext>

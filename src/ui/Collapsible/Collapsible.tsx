@@ -1,19 +1,46 @@
-import type { NativeProps } from '../Native';
-import { Presence } from '../Presence';
+import { type ComponentPropsWithRef, type ReactNode } from 'react';
+import { Accordion } from '../Accordion';
+import { useControllableState } from '../hooks';
 
-type CollapsibleProps = NativeProps<'div'> & {
+type BaseCollapsibleProps = Omit<
+  ComponentPropsWithRef<typeof Accordion.Item>,
+  'value'
+>;
+
+type CollapsibleProps = BaseCollapsibleProps & {
+  title?: ReactNode;
+  defaultOpen?: boolean;
   open?: boolean;
-  forceMount?: boolean;
+  onOpenChange?(open: boolean): void;
 };
-
-function handleMeasure(node: HTMLElement) {
-  const { width, height } = node.getBoundingClientRect();
-  node.style.setProperty('--width', `${width}px`);
-  node.style.setProperty('--height', `${height}px`);
-}
 
 export const Collapsible = (inProps: CollapsibleProps) => {
-  const { open, ...props } = inProps;
+  const {
+    defaultOpen = false,
+    open: openProp,
+    onOpenChange,
+    ...props
+  } = inProps;
 
-  return <Presence present={open} onMeasure={handleMeasure} {...props} />;
+  const [open, setOpen] = useControllableState({
+    defaultValue: defaultOpen,
+    prop: openProp,
+    onChange: onOpenChange,
+  });
+
+  function handleValueChange(value: string) {
+    setOpen(value === String(open));
+  }
+
+  return (
+    <Accordion
+      asChild
+      defaultValue={String(open)}
+      onValueChange={handleValueChange}
+    >
+      <Accordion.Item value="true" {...props} />
+    </Accordion>
+  );
 };
+
+Collapsible.displayName = 'Collapsible';

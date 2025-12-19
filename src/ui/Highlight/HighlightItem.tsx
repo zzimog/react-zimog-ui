@@ -76,13 +76,14 @@ export const HighlightItem = (inProps: HighlightItemProps) => {
   return (
     <Native.div
       ref={mergedRefs}
+      data-highlight="item"
+      {...props}
       className={cn(
         classes.item({
           hover: isHover,
         }),
         className
       )}
-      {...props}
     />
   );
 };

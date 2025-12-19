@@ -5,23 +5,27 @@
 
 :root {
   --shape: var(--radius-md);
+  --background: var(--color-zinc-50);
   --foreground: var(--color-zinc-900);
   --background: var(--color-white);
   --muted: var(--color-zinc-400);
-  --muted-background: var(--color-zinc-100);
+  --muted-contrast: var(--color-zinc-100);
   --primary: var(--color-violet-500);
-  --primary-contrast: var(--color-white);
+  --primary-contrast: var(--background);
   --danger: var(--color-red-700);
-  --danger-contrast: var(--color-white);
+  --danger-contrast: var(--foreground);
+  --highlight: var(--color-violet-200);
+  --highlight-contrast: var(--foreground);
   --border: --alpha(var(--color-zinc-500) / 25%);
-  --highlight: --alpha(var(--color-primary) / 15%);
   --outline: --alpha(var(--color-primary) / 50%);
 }
 
 .dark:root {
   --foreground: var(--color-zinc-50);
   --background: var(--color-zinc-900);
-  --muted-background: var(--color-zinc-800);
+  --muted-contrast: var(--color-zinc-800);
+  --highlight: var(--color-violet-900);
+  --highlight-contrast: var(--background);
 }
 
 @theme inline {
@@ -29,20 +33,32 @@
   --color-foreground: var(--foreground);
   --color-background: var(--background);
   --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted);
-  --color-muted-background: var(--muted-background);
+  --color-muted-contrast: var(--muted-contrast);
   --color-primary: var(--primary);
   --color-primary-contrast: var(--primary-contrast);
   --color-danger: var(--danger);
   --color-danger-contrast: var(--danger-contrast);
-  --color-border: var(--border);
   --color-highlight: var(--highlight);
+  --color-highlight-contrast: var(--highlight-contrast);
+  --color-border: var(--border);
   --color-outline: var(--outline);
+  /* Deprecated */
+  --color-muted-foreground: var(--muted);
+  --color-muted-background: var(--muted-background);
 }
 
 @layer base {
   * {
     @apply border-border;
+  }
+
+  ::selection {
+    @apply bg-highlight text-highlight-contrast;
+  }
+
+  html {
+    overscroll-behavior-y: none;
+    scroll-behavior: smooth;
   }
 
   body {

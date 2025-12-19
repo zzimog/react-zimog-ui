@@ -8,10 +8,9 @@ const highlightClasses = {
       'h-(--height)',
       'translate-x-(--x)',
       'translate-y-(--y)',
-      'rounded-shape',
-      'bg-highlight',
+      //'bg-highlight',
       'transition-all',
-      'ease-linear',
+      //'ease-linear',
     ],
     {
       variants: {
@@ -33,7 +32,7 @@ const highlightClasses = {
       },
     }
   ),
-  item: cva(['relative', 'z-1', 'rounded-shape'], {
+  item: cva(null, {
     variants: {
       hover: {
         true: [

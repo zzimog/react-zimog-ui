@@ -7,15 +7,11 @@ import { Card } from '@ui';
 export default () => (
   <Card>
     <Card.Header>
-      <Card.Title>Card title</Card.Title>
-      <Card.Description>Card description</Card.Description>
+      <Card.Title />
+      <Card.Description />
     </Card.Header>
-    <Card.Content>
-      <p>Card content</p>
-    </Card.Content>
-    <Card.Footer>
-      <p>Card.Footer</p>
-    </Card.Footer>
+    <Card.Content />
+    <Card.Footer />
   </Card>
 );`;
 

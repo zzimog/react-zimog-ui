@@ -11,9 +11,9 @@
   --muted: var(--color-zinc-400);
   --muted-contrast: var(--color-zinc-100);
   --primary: var(--color-violet-500);
-  --primary-contrast: var(--background);
+  --primary-contrast: var(--color-zinc-50);
   --danger: var(--color-red-700);
-  --danger-contrast: var(--foreground);
+  --danger-contrast: var(--color-zinc-900);
   --highlight: var(--color-violet-200);
   --highlight-contrast: var(--foreground);
   --border: --alpha(var(--color-zinc-500) / 25%);
@@ -25,7 +25,7 @@
   --background: var(--color-zinc-900);
   --muted-contrast: var(--color-zinc-800);
   --highlight: var(--color-violet-900);
-  --highlight-contrast: var(--background);
+  --highlight-contrast: var(--foreground);
 }
 
 @theme inline {
@@ -42,6 +42,7 @@
   --color-highlight-contrast: var(--highlight-contrast);
   --color-border: var(--border);
   --color-outline: var(--outline);
+
   /* Deprecated */
   --color-muted-foreground: var(--muted);
   --color-muted-background: var(--muted-background);
@@ -88,11 +89,11 @@
 
 @utility halo {
   --color: oklch(71.4% 0.203 305.504 / 8%); /* purple-400 */
-  --pos-x: calc(var(--x) - (var(--halo-size) / 2));
-  --pos-y: calc(var(--y) - (var(--halo-size) / 2));
+  --halo-x: calc(var(--x) - (var(--halo-size) / 2));
+  --halo-y: calc(var(--y) - (var(--halo-size) / 2));
   background-image: radial-gradient(var(--color) 0, transparent 50%);
   background-repeat: no-repeat;
-  background-position: var(--pos-x) var(--pos-y);
+  background-position: var(--halo-x) var(--halo-y);
   background-size: var(--halo-size) var(--halo-size);
   @apply transition-opacity duration-200;
 }
@@ -104,7 +105,7 @@
     @apply pr-8;
 
     &::before {
-      @apply w-16 pr-2 text-sm transition-colors bg-background;
+      @apply bg-background w-16 pr-2 text-sm transition-colors;
       content: attr(data-line);
       position: sticky;
       left: 0;

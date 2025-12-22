@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
-import { useMergedRefs } from '../hooks';
-import { type NativeProps, Native } from '../Native';
-import { cn } from '../utils';
+import { Native, type NativeProps } from '@ui/headless';
+import { useMergedRefs } from '@ui/hooks';
+import { cn } from '@ui/utils';
 
 type HoveringProps = NativeProps<'div'>;
 
@@ -30,7 +30,7 @@ export const Hovering = (inProps: HoveringProps) => {
   return (
     <Native.div
       ref={mergedRefs}
-      className={cn('absolute', 'inset-0', 'hover-effect', className)}
+      className={cn('absolute', 'inset-0', 'halo', className)}
       {...props}
     />
   );

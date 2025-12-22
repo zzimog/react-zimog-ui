@@ -1,15 +1,15 @@
-import { MessageCircleWarning } from 'lucide-react';
 import {
-  type ComponentPropsWithRef,
   createContext,
-  type ReactNode,
   useCallback,
   useContext,
   useId,
   useState,
+  type ComponentPropsWithRef,
+  type ReactNode,
 } from 'react';
-import { Input } from '../Input';
-import { cn } from '../utils';
+import { MessageCircleWarning } from 'lucide-react';
+import { Input } from '@ui/styled';
+import { cn } from '@ui/utils';
 import { useFormContext } from './formContext';
 
 type FormFieldState = 'valid' | 'invalid';
@@ -119,7 +119,7 @@ const FormFieldInvalid = (inProps: ComponentPropsWithRef<'p'>) => {
         className={cn('pl-5', 'text-sm/5', 'text-danger', className)}
         {...props}
       >
-        <MessageCircleWarning className="float-left size-4 my-0.5 -ml-5" />
+        <MessageCircleWarning className="float-left my-0.5 -ml-5 size-4" />
         {children}
       </p>
     )

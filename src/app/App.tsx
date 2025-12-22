@@ -1,23 +1,29 @@
-import { ScrollArea, ThemeSwitcher } from '@ui';
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router';
+import { ScrollArea, ThemeSwitcher } from '@ui';
 import './App.css';
 import { MainMenu } from './components/main-menu';
 import {
+  AccordionDemo,
   CardDemo,
+  CollapsibleDemo,
   DisclosureDemo,
+  HighlightDemo,
   PopoverDemo,
   PresenceDemo,
   ScrollAreaDemo,
 } from './examples';
-import Test from './Test3';
+import { TestPage as Test } from './Test';
 
 const components: Record<string, Record<string, any>> = {
   headless: {
+    collapsible: CollapsibleDemo,
     disclosure: DisclosureDemo,
+    highlight: HighlightDemo,
     popover: PopoverDemo,
     presence: PresenceDemo,
   },
   styled: {
+    accordion: AccordionDemo,
     card: CardDemo,
     scrollarea: ScrollAreaDemo,
   },
@@ -33,9 +39,9 @@ export default () => (
       'dark:bg-black',
     ].join(' ')}
   >
-    <div className="max-w-200 w-full flex flex-col gap-10 mx-auto px-4 py-16">
-      <header className="flex justify-between items-center gap-2">
-        <h1 className="text-4xl self-start">ui demo</h1>
+    <div className="mx-auto flex w-full max-w-200 flex-col gap-10 px-4 py-16">
+      <header className="flex items-center justify-between gap-2">
+        <h1 className="self-start text-4xl">ui demo</h1>
         <ThemeSwitcher size="sm" />
       </header>
 

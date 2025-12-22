@@ -4,11 +4,11 @@
  */
 
 import {
-  useState,
-  useRef,
   useCallback,
   useEffect,
   useLayoutEffect,
+  useRef,
+  useState,
 } from 'react';
 
 type PresenceState = 'mounted' | 'unmounting' | 'unmounted';

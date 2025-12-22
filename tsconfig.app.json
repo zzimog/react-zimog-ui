@@ -27,6 +27,8 @@
     /* Aliases */
     "paths": {
       "@ui": ["./src/ui"],
+      "@ui/headless": ["./src/ui/headless"],
+      "@ui/styled": ["./src/ui/styled"],
       "@ui/hooks": ["./src/ui/hooks"],
       "@ui/utils": ["./src/ui/utils"]
     }

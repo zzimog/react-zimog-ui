@@ -11,7 +11,7 @@ const MainMenuSubmenu = ({
 }: ComponentProps<'span'>) => (
   <span {...props} aria-label={title}>
     {title && (
-      <span className="inline-block text-2xl/none text-muted transition-colors mr-2 pl-2 border-l border-muted/50">
+      <span className="text-muted border-muted/50 mr-2 inline-block border-l pl-2 text-2xl/none transition-colors">
         {title}
       </span>
     )}

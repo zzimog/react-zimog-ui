@@ -6,19 +6,8 @@ import { Popover } from '@ui';
 
 export default () => (
   <Popover>
-    <Popover.Trigger asChild>
-      <Button>Toggle</Button>
-    </Popover.Trigger>
-    <Popover.Content asChild>
-      <Card className="w-80 data-[visible=true]:animate-in data-[visible=false]:animate-out">
-        <Card.Content className="-my-1.5 text-justify">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla
-          temporibus dolorum accusantium, praesentium dicta mollitia corporis
-          voluptatem non ex eius reiciendis totam culpa voluptate tempora
-          deleniti quo? Eum, inventore architecto?
-        </Card.Content>
-      </Card>
-    </Popover.Content>
+    <Popover.Trigger />
+    <Popover.Content />
   </Popover>
 );`;
 
@@ -29,8 +18,8 @@ export const PopoverDemo = () => (
         <Button>Toggle</Button>
       </Popover.Trigger>
       <Popover.Content asChild avoidCollisions>
-        <Card className="w-80 data-[visible=true]:animate-in data-[visible=false]:animate-out">
-          <Card.Content className="-my-1.5 text-justify">
+        <Card className="w-80">
+          <Card.Content className="-my-1.5">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla
             temporibus dolorum accusantium, praesentium dicta mollitia corporis
             voluptatem non ex eius reiciendis totam culpa voluptate tempora

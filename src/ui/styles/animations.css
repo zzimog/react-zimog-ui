@@ -1,11 +1,8 @@
-/* prettier-ignore */
 @theme inline {
-  --animate-in: enter
-    var(--animation-duration, var(--tw-duration, 150ms))
+  --animate-in: enter var(--animation-duration, var(--tw-duration, 150ms))
     var(--animation-ease, var(--tw-ease, ease))
     var(--animation-fill-mode, forwards);
-  --animate-out: exit
-    var(--animation-duration, var(--tw-duration, 150ms))
+  --animate-out: exit var(--animation-duration, var(--tw-duration, 150ms))
     var(--animation-ease, var(--tw-ease, ease))
     var(--animation-fill-mode, forwards);
 
@@ -13,15 +10,16 @@
     from {
       opacity: var(--enter-opacity, 0);
       filter: blur(var(--enter-blur));
-      transform:
-        translate3d(
+      transform: translate3d(
           var(--enter-translate-x),
           var(--enter-translate-y),
-          var(--enter-translate-z))
+          var(--enter-translate-z)
+        )
         scale3d(
           var(--enter-scale-x, var(--enter-scale)),
           var(--enter-scale-y, var(--enter-scale)),
-          var(--enter-scale-z, var(--enter-scale)))
+          var(--enter-scale-z, var(--enter-scale))
+        )
         rotate(var(--enter-rotate));
     }
   }
@@ -30,15 +28,16 @@
     to {
       opacity: var(--exit-opacity, 0);
       filter: blur(var(--exit-blur));
-      transform:
-        translate3d(
+      transform: translate3d(
           var(--exit-translate-x),
           var(--exit-translate-y),
-          var(--exit-translate-z))
+          var(--exit-translate-z)
+        )
         scale3d(
           var(--exit-scale-x, var(--exit-scale)),
           var(--exit-scale-y, var(--exit-scale)),
-          var(--exit-scale-z, var(--exit-scale)))
+          var(--exit-scale-z, var(--exit-scale))
+        )
         rotate(var(--exit-rotate));
     }
   }
@@ -95,7 +94,6 @@
     }
   }
 
-
   --animate-btn-active: scale-down 10ms ease forwards;
 
   @keyframes scale-down {
@@ -107,16 +105,20 @@
 
 /* Duration & delay */
 
-/* prettier-ignore */
 @utility animation-duration-* {
   --animation-duration: calc(--value(number) * 1ms);
-  --animation-duration: --value(--animation-duration-*, [duration], "initial", [*]);
+  --animation-duration: --value(
+    --animation-duration-*,
+    [duration],
+    'initial',
+    [*]
+  );
   animation-duration: var(--animation-duration, 150ms);
 }
-/* prettier-ignore */
+
 @utility animation-delay-* {
   --animation-delay: calc(--value(number) * 1ms);
-  --animation-delay: --value(--animation-delay-*, [duration], "initial", [*]);
+  --animation-delay: --value(--animation-delay-*, [duration], 'initial', [*]);
   animation-delay: var(--animation-delay, 0s);
 }
 
@@ -128,9 +130,9 @@
   --fill-mode-alternate: alternate;
   --fill-mode-alternate-reverse: alternate-reverse;
 }
-/* prettier-ignore */
+
 @utility fill-mode-* {
-  --animation-fill-mode: --value(--fill-mode-*, "initial", [*]);
+  --animation-fill-mode: --value(--fill-mode-*, 'initial', [*]);
   animation-fill-mode: var(--animation-fill-mode, normal);
 }
 
@@ -140,7 +142,7 @@
   --play-state-running: running;
   --play-state-paused: paused;
 }
-/* prettier-ignore */
+
 @utility play-state-* {
   --animation-play-state: --value(--play-state-*, 'initial', [*]);
   animation-play-state: var(--animation-play-state, running);

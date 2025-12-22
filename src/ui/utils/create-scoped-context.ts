@@ -1,24 +1,27 @@
 import {
-  type PropsWithChildren,
   createContext,
   createElement,
   useContext,
   useMemo,
+  type PropsWithChildren,
 } from 'react';
 
-export function createScopedContext<T>(scopeName: string, defaultContext: T) {
+export function createScopedContext<T extends object | undefined>(
+  scopeName: string,
+  defaultContext: T
+) {
   const Context = createContext<T>(defaultContext);
-  const name = `${scopeName}Context`;
-
   const Provider = (inProps: PropsWithChildren<T>) => {
     const { children, ...props } = inProps;
+    const value = useMemo(() => props, Object.values(props)) as T;
 
-    const value = useMemo(() => props as T, Object.values(props));
-
-    return createElement(Context, { value, children });
+    return createElement(Context.Provider, { value, children });
   };
 
-  function useContextHook(componentName: string) {
+  Context.displayName = scopeName + 'Context';
+  Provider.displayName = scopeName + 'Provider';
+
+  function useContextHook(consumerName: string) {
     const context = useContext(Context);
 
     if (context) {
@@ -27,11 +30,8 @@ export function createScopedContext<T>(scopeName: string, defaultContext: T) {
       return defaultContext;
     }
 
-    throw new Error(`${componentName} must be used within ${scopeName}`);
+    throw new Error(`\`${consumerName}\` must be used within \`${scopeName}\``);
   }
-
-  Context.displayName = name;
-  Provider.displayName = name;
 
   return [Provider, useContextHook] as const;
 }

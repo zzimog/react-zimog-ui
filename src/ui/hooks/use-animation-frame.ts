@@ -1,8 +1,6 @@
 import { useEffect, type DependencyList } from 'react';
 
-type FrameCallback = (timestamp: number) => void;
-
-const callbacks = new Set<FrameCallback>();
+const callbacks = new Set<FrameRequestCallback>();
 let rafId: number;
 
 function loop(timestamp: number) {
@@ -18,7 +16,7 @@ function loop(timestamp: number) {
 }
 
 export function useAnimationFrame(
-  callback: FrameCallback,
+  callback: FrameRequestCallback,
   deps?: DependencyList
 ) {
   useEffect(() => {

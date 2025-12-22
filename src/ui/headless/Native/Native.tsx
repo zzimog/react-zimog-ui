@@ -11,6 +11,7 @@ import {
   type ComponentPropsWithRef,
   type ElementType,
   type JSX,
+  type ReactNode,
 } from 'react';
 import { useMergedRefs } from '@ui/hooks';
 import { cn } from '@ui/utils';
@@ -29,6 +30,13 @@ type NativeTags = {
 export type NativeProps<E extends ElementType> = ComponentPropsWithRef<E> & {
   as?: ElementType;
   asChild?: boolean;
+};
+
+export type NativePropsWithRender<E extends ElementType, P extends {}> = Omit<
+  NativeProps<E>,
+  'children'
+> & {
+  children?: ReactNode | ((props: P) => ReactNode);
 };
 
 /**

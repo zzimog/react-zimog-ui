@@ -1,5 +1,5 @@
 import type { ComponentProps } from 'react';
-import { Disclosure, Native, type NativeProps } from '@ui/headless';
+import { Disclosure, Highlight, type NativeProps } from '@ui/headless';
 import { cn } from '@ui/utils';
 import classes from './classes';
 
@@ -18,9 +18,14 @@ Tabs.displayName = 'Tabs';
 type TabsListProps = NativeProps<'div'>;
 
 const TabsList = (inProps: TabsListProps) => {
-  const { className, ...props } = inProps;
+  const { className, children, ...props } = inProps;
 
-  return <Native.div className={cn(classes.list, className)} {...props} />;
+  return (
+    <Highlight className={cn(classes.list, className)} {...props}>
+      <Highlight.Indicator className={classes.highlight} />
+      {children}
+    </Highlight>
+  );
 };
 
 TabsList.displayName = 'TabsList';
@@ -28,20 +33,25 @@ Tabs.List = TabsList;
 
 /*---------------------------------------------------------------------------*/
 
-type BaseTriggerProps = ComponentProps<typeof Disclosure.Trigger>;
-type TabsTriggerProps = BaseTriggerProps & {
+type TriggerBaseProps = NativeProps<'button'>;
+type TabsTriggerProps = TriggerBaseProps & {
   value: string;
 };
 
 const TabsTrigger = (inProps: TabsTriggerProps) => {
-  const { value, className, ...props } = inProps;
+  const { value, className, children, ...props } = inProps;
 
   return (
     <Disclosure.Trigger
+      asChild
       value={value}
       className={cn(classes.trigger, className)}
       {...props}
-    />
+    >
+      {({ open }) => (
+        <Highlight.Item selected={open}>{children}</Highlight.Item>
+      )}
+    </Disclosure.Trigger>
   );
 };
 
@@ -50,8 +60,8 @@ Tabs.Trigger = TabsTrigger;
 
 /*---------------------------------------------------------------------------*/
 
-type BaseProps = ComponentProps<typeof Disclosure.Content>;
-type TabsContentProps = BaseProps & {
+type ContentBaseProps = ComponentProps<typeof Disclosure.Content>;
+type TabsContentProps = ContentBaseProps & {
   value: string;
 };
 

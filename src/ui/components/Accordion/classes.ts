@@ -1,5 +1,4 @@
 const classes = {
-  root: 'text-foreground',
   item: 'transition-colors not-last:border-b',
   trigger: [
     'w-full',

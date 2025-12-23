@@ -11,6 +11,7 @@ import {
   PopoverDemo,
   PresenceDemo,
   ScrollAreaDemo,
+  TabsDemo,
 } from './examples';
 import { TestPage as Test } from './Test';
 
@@ -26,6 +27,7 @@ const components: Record<string, Record<string, any>> = {
     accordion: AccordionDemo,
     card: CardDemo,
     scrollarea: ScrollAreaDemo,
+    tabs: TabsDemo,
   },
 };
 

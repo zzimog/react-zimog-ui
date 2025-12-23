@@ -1,7 +1,8 @@
+import { resolve } from 'node:path';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
-import { resolve } from 'node:path';
+
 //import pkg from './package.json';
 
 export default defineConfig({
@@ -9,8 +10,6 @@ export default defineConfig({
   resolve: {
     alias: {
       '@ui': resolve(__dirname, './src/ui'),
-      '@ui/hooks': resolve(__dirname, './src/ui/hooks'),
-      '@ui/utils': resolve(__dirname, './src/ui/utils'),
     },
   },
   plugins: [

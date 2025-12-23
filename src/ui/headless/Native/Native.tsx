@@ -2,7 +2,6 @@
  * Based on Radix UI Primitive component
  * Ref: https://github.com/radix-ui/primitives/blob/main/packages/react/primitive/src/primitive.tsx
  */
-
 import {
   Children,
   cloneElement,
@@ -14,29 +13,28 @@ import {
   type ReactNode,
 } from 'react';
 import { useMergedRefs } from '@ui/hooks';
-import { cn } from '@ui/utils';
+import { mergeProps } from './merge-props';
 import { tags } from './tags';
 
-const DISPLAY_NAME = 'Native';
-
-type Props = Record<string, any>;
-
-type NativeTags = {
-  [Tag in keyof JSX.IntrinsicElements]: (
-    props: NativeProps<Tag>
-  ) => JSX.Element;
-};
-
-export type NativeProps<E extends ElementType> = ComponentPropsWithRef<E> & {
+type NativeBaseProps = {
   as?: ElementType;
   asChild?: boolean;
 };
+
+export type NativeProps<E extends ElementType> = ComponentPropsWithRef<E> &
+  NativeBaseProps;
 
 export type NativePropsWithRender<E extends ElementType, P extends {}> = Omit<
   NativeProps<E>,
   'children'
 > & {
   children?: ReactNode | ((props: P) => ReactNode);
+};
+
+type NativeTags = {
+  [Tag in keyof JSX.IntrinsicElements]: (
+    props: NativeProps<Tag>
+  ) => JSX.Element;
 };
 
 /**
@@ -53,7 +51,7 @@ export type NativePropsWithRender<E extends ElementType, P extends {}> = Omit<
  * };
  */
 export const Native = tags.reduce((native, tag) => {
-  const NativeElement = (inProps: NativeProps<typeof tag>) => {
+  const Element = (inProps: NativeProps<typeof tag>) => {
     const { as, asChild, ...nativeProps } = inProps;
     const Comp: any = as || tag;
 
@@ -80,46 +78,10 @@ export const Native = tags.reduce((native, tag) => {
     return <Comp {...nativeProps} />;
   };
 
-  NativeElement.displayName = `${DISPLAY_NAME}.${tag}`;
+  Element.displayName = `Native.${tag}`;
 
   return {
     ...native,
-    [tag]: NativeElement,
+    [tag]: Element,
   };
 }, {} as NativeTags);
-
-function mergeProps(nativeProps: Props, childProps: Props) {
-  const props = { ...childProps };
-
-  for (const prop in childProps) {
-    const nativePropValue = nativeProps[prop];
-    const childPropValue = childProps[prop];
-
-    // is an effect handler
-    if (/^on[A-Z]/.test(prop)) {
-      // merge if exists on both
-      if (nativePropValue && childPropValue) {
-        props[prop] = (...args: unknown[]) => {
-          const result = childPropValue(...args);
-          nativePropValue(...args);
-
-          return result;
-        };
-      } else if (nativePropValue) {
-        props[prop] = nativePropValue;
-      }
-    }
-
-    // merge styles
-    if (prop === 'style') {
-      props[prop] = { ...nativePropValue, ...childPropValue };
-    }
-
-    // merge class names
-    if (prop === 'className') {
-      props[prop] = cn(nativePropValue, childPropValue);
-    }
-  }
-
-  return { ...nativeProps, ...props };
-}

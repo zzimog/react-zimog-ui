@@ -16,7 +16,7 @@
   --danger-contrast: var(--color-zinc-900);
   --highlight: var(--color-violet-200);
   --highlight-contrast: var(--foreground);
-  --border: --alpha(var(--color-zinc-500) / 25%);
+  --border: var(--color-zinc-300);
   --outline: --alpha(var(--color-primary) / 50%);
 }
 
@@ -26,6 +26,7 @@
   --muted-contrast: var(--color-zinc-800);
   --highlight: var(--color-violet-900);
   --highlight-contrast: var(--foreground);
+  --border: var(--color-zinc-700);
 }
 
 @theme inline {
@@ -46,6 +47,27 @@
   /* Deprecated */
   --color-muted-foreground: var(--muted);
   --color-muted-background: var(--muted-background);
+}
+
+@utility focusable {
+  @apply outline-3;
+  @apply outline-offset-1;
+  @apply outline-transparent;
+}
+
+@utility rounded-shape-* {
+  border-radius: calc(var(--shape) + (var(--spacing) * --value(number)));
+}
+
+@utility halo {
+  --color: oklch(71.4% 0.203 305.504 / 8%); /* purple-400 */
+  --halo-x: calc(var(--x) - (var(--halo-size) / 2));
+  --halo-y: calc(var(--y) - (var(--halo-size) / 2));
+  background-image: radial-gradient(var(--color) 0, transparent 50%);
+  background-repeat: no-repeat;
+  background-position: var(--halo-x) var(--halo-y);
+  background-size: var(--halo-size) var(--halo-size);
+  @apply transition-opacity duration-200;
 }
 
 @layer base {
@@ -79,23 +101,6 @@
     background-position: 50%;
     background-size: 0.5rem;
   }
-}
-
-@utility focusable {
-  @apply outline-3;
-  @apply outline-offset-1;
-  @apply outline-transparent;
-}
-
-@utility halo {
-  --color: oklch(71.4% 0.203 305.504 / 8%); /* purple-400 */
-  --halo-x: calc(var(--x) - (var(--halo-size) / 2));
-  --halo-y: calc(var(--y) - (var(--halo-size) / 2));
-  background-image: radial-gradient(var(--color) 0, transparent 50%);
-  background-repeat: no-repeat;
-  background-position: var(--halo-x) var(--halo-y);
-  background-size: var(--halo-size) var(--halo-size);
-  @apply transition-opacity duration-200;
 }
 
 @layer components {

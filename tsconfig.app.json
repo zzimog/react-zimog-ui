@@ -28,7 +28,7 @@
     "paths": {
       "@ui": ["./src/ui"],
       "@ui/headless": ["./src/ui/headless"],
-      "@ui/styled": ["./src/ui/styled"],
+      "@ui/components": ["./src/ui/components"],
       "@ui/hooks": ["./src/ui/hooks"],
       "@ui/utils": ["./src/ui/utils"]
     }

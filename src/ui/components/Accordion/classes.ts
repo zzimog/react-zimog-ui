@@ -1,6 +1,6 @@
 const classes = {
   root: 'text-foreground',
-  item: 'not-last:border-b',
+  item: 'transition-colors not-last:border-b',
   trigger: [
     'w-full',
     'flex',

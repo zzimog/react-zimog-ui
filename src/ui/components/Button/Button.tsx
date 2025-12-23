@@ -1,6 +1,6 @@
 import { useContext, type ReactNode } from 'react';
 import { Native, type NativeProps } from '@ui/headless';
-import { Spinner } from '@ui/styled';
+import { Spinner } from '@ui/components';
 import { cn } from '@ui/utils';
 import { ButtonGroup } from './ButtonGroup';
 import { ButtonGroupContext } from './context';

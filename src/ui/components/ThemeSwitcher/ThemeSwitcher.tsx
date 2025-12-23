@@ -1,6 +1,6 @@
 import type { ComponentPropsWithRef } from 'react';
 import { Moon, Sun } from 'lucide-react';
-import { Button } from '@ui/styled';
+import { Button } from '@ui/components';
 import { useTheme } from '@ui/hooks';
 
 type ThemeSwitcherProps = Omit<

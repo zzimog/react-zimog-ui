@@ -7,7 +7,7 @@ import {
 } from 'react';
 import { createHighlighterCore } from 'shiki/core';
 import { createOnigurumaEngine } from 'shiki/engine/oniguruma';
-import { ScrollArea } from '@ui/styled';
+import { ScrollArea } from '@ui/components';
 
 const { codeToHtml } = await createHighlighterCore({
   engine: createOnigurumaEngine(import('shiki/wasm')),

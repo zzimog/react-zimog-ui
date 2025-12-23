@@ -6,3 +6,4 @@ export * from './popover';
 export * from './presence';
 export * from './scroll-area';
 export * from './accordion';
+export * from './tabs';

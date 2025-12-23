@@ -38,7 +38,7 @@ const AccordionTrigger = (inProps: AccordionTriggerProps) => {
 
   return (
     <Disclosure.Trigger {...props} className={cn(classes.trigger, className)}>
-      {children}
+      {children as any}
       <ChevronDown className={classes.arrow} />
     </Disclosure.Trigger>
   );

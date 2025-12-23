@@ -1,7 +1,7 @@
 export * from './utils';
 export * from './hooks';
 export * from './headless';
-export * from './styled';
+export * from './components';
 
 /**
  * @todo To be refactored...

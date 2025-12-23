@@ -8,7 +8,7 @@ import {
   type ReactNode,
 } from 'react';
 import { MessageCircleWarning } from 'lucide-react';
-import { Input } from '@ui/styled';
+import { Input } from '@ui/components';
 import { cn } from '@ui/utils';
 import { useFormContext } from './formContext';
 

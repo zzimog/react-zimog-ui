@@ -4,11 +4,11 @@ import classes from './classes';
 
 const DISPLAY_NAME = 'TabsList';
 
-type TabsListContextValue = {};
-
 const [TabsListContext, useTabsListContext] = createScopedContext<
-  TabsListContextValue | undefined
+  {} | undefined
 >(DISPLAY_NAME, undefined);
+
+/*---------------------------------------------------------------------------*/
 
 type TabsListProps = NativeProps<'div'>;
 

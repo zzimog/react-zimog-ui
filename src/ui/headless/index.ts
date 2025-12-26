@@ -1,5 +1,3 @@
-export * from './Collapsible';
-export * from './Disclosure';
 export * from './Highlight';
 export * from './Native';
 export * from './Popover';

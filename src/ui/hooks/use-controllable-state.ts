@@ -8,7 +8,7 @@ import {
 type SetState<T> = Dispatch<SetStateAction<T>>;
 
 type ControllableStateParams<T> = {
-  defaultValue: T;
+  defaultProp: T;
   prop?: T;
   onChange?: (state: T) => void;
 };
@@ -20,9 +20,9 @@ function isFunction(value: unknown) {
 export function useControllableState<T>(
   inParams: ControllableStateParams<T>
 ): [T, SetState<T>] {
-  const { prop, defaultValue, onChange } = inParams;
+  const { prop, defaultProp, onChange } = inParams;
 
-  const [uncontrolled, setUncontrolled] = useState(defaultValue);
+  const [uncontrolled, setUncontrolled] = useState(defaultProp);
 
   const isControlled = prop !== undefined;
   const value = isControlled ? prop : uncontrolled;
@@ -31,11 +31,11 @@ export function useControllableState<T>(
     (next) => {
       const nextValue = isFunction(next) ? next(value) : next;
 
+      onChange?.(nextValue);
+
       if (!isControlled) {
         setUncontrolled(nextValue);
       }
-
-      onChange?.(nextValue);
     },
     [isControlled, value, onChange]
   );

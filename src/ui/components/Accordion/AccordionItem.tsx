@@ -1,14 +1,47 @@
-import type { ComponentProps } from 'react';
-import { Disclosure } from '@ui/headless';
-import { cn } from '@ui/utils';
-import classes from './classes';
+import { Native, type NativeProps } from '@ui/headless';
+import { createScopedContext } from '@ui/utils';
+import { Accordion } from './Accordion';
 
-type AccordionItemProps = ComponentProps<typeof Disclosure.Item>;
+const DISPLAY_NAME = 'AccordionItem';
 
-export const AccordionItem = (inProps: AccordionItemProps) => {
-  const { className, ...props } = inProps;
-
-  return <Disclosure.Item {...props} className={cn(classes.item, className)} />;
+type AccordionItemContextValue = {
+  open: boolean;
+  onOpenChange(open: boolean): void;
 };
 
-AccordionItem.displayName = 'AccordionItem';
+const [AccordionItemContext, useAccordionItemContext] = createScopedContext<
+  AccordionItemContextValue | undefined
+>(DISPLAY_NAME, undefined);
+
+/*---------------------------------------------------------------------------*/
+
+type AccordionItemProps = NativeProps<'div'> & {
+  value: string;
+};
+
+export const AccordionItem = (inProps: AccordionItemProps) => {
+  const { value, children, ...props } = inProps;
+
+  const context = Accordion.useContext(DISPLAY_NAME);
+  const open = context.value.includes(value);
+
+  return (
+    <Native.div data-open={open} {...props}>
+      <AccordionItemContext
+        open={open}
+        onOpenChange={(open) => {
+          if (open) {
+            context.onItemOpen(value);
+          } else {
+            context.onItemClose(value);
+          }
+        }}
+      >
+        {children}
+      </AccordionItemContext>
+    </Native.div>
+  );
+};
+
+AccordionItem.displayName = DISPLAY_NAME;
+AccordionItem.useContext = useAccordionItemContext;

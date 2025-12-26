@@ -1,4 +1,4 @@
-const classes = {
+export default {
   item: 'transition-colors not-last:border-b',
   trigger: [
     'w-full',
@@ -19,5 +19,3 @@ const classes = {
   ].join(' '),
   content: 'pt-0 pb-4',
 };
-
-export default classes;

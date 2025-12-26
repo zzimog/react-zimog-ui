@@ -6,7 +6,6 @@ import {
   AccordionDemo,
   CardDemo,
   CollapsibleDemo,
-  DisclosureDemo,
   HighlightDemo,
   PopoverDemo,
   PresenceDemo,
@@ -18,7 +17,6 @@ import { TestPage as Test } from './Test';
 const components: Record<string, Record<string, any>> = {
   headless: {
     collapsible: CollapsibleDemo,
-    disclosure: DisclosureDemo,
     highlight: HighlightDemo,
     popover: PopoverDemo,
     presence: PresenceDemo,

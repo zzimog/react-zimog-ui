@@ -1,23 +1,33 @@
-import type { ComponentProps } from 'react';
 import { ChevronDown } from 'lucide-react';
-import { Disclosure } from '@ui/headless';
-import { cn } from '@ui/utils';
+import { Native, type NativeProps } from '@ui/headless';
+import { cn, composeHandlers } from '@ui/utils';
+import { AccordionItem } from './AccordionItem';
 import classes from './classes';
 
-type AccordionTriggerProps = Omit<
-  ComponentProps<typeof Disclosure.Trigger>,
-  'value'
->;
+const DISPLAY_NAME = 'AccordionTrigger';
+
+type AccordionTriggerProps = NativeProps<'button'> & {
+  value?: string;
+};
 
 export const AccordionTrigger = (inProps: AccordionTriggerProps) => {
-  const { className, children, ...props } = inProps;
+  const { value: valueProp, className, children, onClick, ...props } = inProps;
+
+  const { open, onOpenChange } = AccordionItem.useContext(DISPLAY_NAME);
 
   return (
-    <Disclosure.Trigger {...props} className={cn(classes.trigger, className)}>
-      {children as any}
+    <Native.button
+      data-open={open}
+      {...props}
+      className={cn(classes.trigger, className)}
+      onClick={composeHandlers(onClick, () => {
+        onOpenChange(!open);
+      })}
+    >
+      {children}
       <ChevronDown className={classes.arrow} />
-    </Disclosure.Trigger>
+    </Native.button>
   );
 };
 
-AccordionTrigger.displayName = 'AccordionTrigger';
+AccordionTrigger.displayName = DISPLAY_NAME;

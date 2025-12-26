@@ -1,21 +1,18 @@
-import type { ComponentProps } from 'react';
-import { Disclosure, Native } from '@ui/headless';
-import { cn } from '@ui/utils';
+import { type NativeProps } from '@ui/headless';
+import { Collapsible } from '@ui/components';
+import { AccordionItem } from './AccordionItem';
 import classes from './classes';
 
-type AccordionContentProps = Omit<
-  ComponentProps<typeof Disclosure.Content>,
-  'value'
->;
+const DISPLAY_NAME = 'AccordionContent';
+
+type AccordionContentProps = NativeProps<'div'>;
 
 export const AccordionContent = (inProps: AccordionContentProps) => {
-  const { className, ...props } = inProps;
+  const { ...props } = inProps;
 
-  return (
-    <Disclosure.Content className={classes.collapsible}>
-      <Native.div {...props} className={cn(classes.content, className)} />
-    </Disclosure.Content>
-  );
+  const { open } = AccordionItem.useContext(DISPLAY_NAME);
+
+  return <Collapsible open={open} {...props} className={classes.collapsible} />;
 };
 
-AccordionContent.displayName = 'AccordionContent';
+AccordionContent.displayName = DISPLAY_NAME;

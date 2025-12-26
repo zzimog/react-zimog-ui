@@ -1,17 +1,12 @@
-import { useCallback, useLayoutEffect, useRef, useState } from 'react';
+import { useCallback, useLayoutEffect, useRef } from 'react';
 import { Native, type NativeProps } from '@ui/headless';
 import { useMergedRefs } from '@ui/hooks';
+import { useMountedState } from './use-mounted-state';
 
 type PresenceProps = NativeProps<'div'> & {
   present?: boolean;
   forceMount?: boolean;
 };
-
-function useForcedState() {
-  const [, force] = useState(0);
-  const renderRef = useRef(() => force((p) => p + 1));
-  return renderRef.current;
-}
 
 function getAnimationName(styles: CSSStyleDeclaration | null) {
   return styles?.animationName || 'none';
@@ -20,21 +15,7 @@ function getAnimationName(styles: CSSStyleDeclaration | null) {
 export const Presence = (inProps: PresenceProps) => {
   const { ref: refProp, present = true, forceMount, ...props } = inProps;
 
-  /**
-   * Using useState directly for mounted state would cause an extra render on
-   * both enter and exit animation, we can avoid this with a "forced" state for
-   * rendering and ref to keep the current state value
-   *
-   * Expected renders:
-   * - initial mount: 1 (mounted)
-   * - enter animation: 1 (mount)
-   * - exit animation: 2 (animating + unmount)
-   */
-  const render = useForcedState();
-  const mountedRef = useRef(present);
-  const mounted = mountedRef.current;
-
-  const shouldRender = present || mounted;
+  const [mounted, setMounted] = useMountedState(present);
 
   const prevPresentRef = useRef(present);
   const prevAnimationRef = useRef('none');
@@ -48,8 +29,8 @@ export const Presence = (inProps: PresenceProps) => {
 
       const handleAnimationStart = (event: AnimationEvent) => {
         if (node === event.target) {
-          const current = getAnimationName(stylesRef.current);
-          prevAnimationRef.current = current;
+          const currentAnimation = getAnimationName(stylesRef.current);
+          prevAnimationRef.current = currentAnimation;
         }
       };
 
@@ -68,8 +49,7 @@ export const Presence = (inProps: PresenceProps) => {
                 }
               });
 
-              mountedRef.current = false;
-              render();
+              setMounted(false);
             }
           }
         }
@@ -90,21 +70,14 @@ export const Presence = (inProps: PresenceProps) => {
   useLayoutEffect(() => {
     const current = getAnimationName(stylesRef.current);
     const hasAnimation = current !== 'none';
-    prevAnimationRef.current = present ? current : 'none';
-
-    if (present) {
-      mountedRef.current = true;
-    } else if (!hasAnimation) {
-      mountedRef.current = false;
-      render();
-    }
 
     prevPresentRef.current = present;
+    prevAnimationRef.current = present ? current : 'none';
+
+    setMounted(present || hasAnimation);
   }, [present]);
 
-  return (
-    (forceMount || shouldRender) && (
-      <Native.div ref={mergedRef} hidden={!shouldRender} {...props} />
-    )
-  );
+  return forceMount || mounted ? (
+    <Native.div ref={mergedRef} hidden={!mounted} {...props} />
+  ) : null;
 };

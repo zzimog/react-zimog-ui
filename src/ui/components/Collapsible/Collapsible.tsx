@@ -1,15 +1,14 @@
-import { useEffect, useLayoutEffect, useRef, type ComponentProps } from 'react';
-import { Presence } from '@ui/headless';
+import { useEffect, useLayoutEffect, useRef } from 'react';
+import { Presence, type NativeProps } from '@ui/headless';
 import { useMergedRefs } from '@ui/hooks';
 
-const DISPLAY_NAME = 'CollapsibleElement';
+const DISPLAY_NAME = 'Collapsible';
 
-type PresenceProps = Omit<ComponentProps<typeof Presence>, 'present'>;
-type CollapsibleElementProps = PresenceProps & {
+type CollapsibleProps = NativeProps<'div'> & {
   open?: boolean;
 };
 
-export const CollapsibleElement = (inProps: CollapsibleElementProps) => {
+export const Collapsible = (inProps: CollapsibleProps) => {
   const { ref: refProp, open, ...props } = inProps;
 
   const ref = useRef<HTMLElement>(null);
@@ -49,8 +48,8 @@ export const CollapsibleElement = (inProps: CollapsibleElementProps) => {
   }, [open]);
 
   return (
-    <Presence ref={mergedRefs} present={open} data-open={open} {...props} />
+    <Presence present={open} data-open={open} ref={mergedRefs} {...props} />
   );
 };
 
-CollapsibleElement.displayName = DISPLAY_NAME;
+Collapsible.displayName = DISPLAY_NAME;

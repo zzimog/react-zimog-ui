@@ -19,7 +19,7 @@ export const Popover = (inProps: PopoverProps) => {
   } = inProps;
 
   const [open, setOpen] = useControllableState({
-    defaultValue: defaultOpen,
+    defaultProp: defaultOpen,
     prop: openProp,
     onChange: onOpenChange,
   });

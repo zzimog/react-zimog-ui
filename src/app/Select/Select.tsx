@@ -1,16 +1,16 @@
-import { Popover, useControllableState, cn } from '@ui';
-import { ChevronDown } from 'lucide-react';
 import {
-  type ComponentPropsWithoutRef,
   useEffect,
   useLayoutEffect,
   useRef,
   useState,
+  type ComponentPropsWithoutRef,
 } from 'react';
+import { ChevronDown } from 'lucide-react';
+import { cn, Popover, useControllableState } from '@ui';
+import classes from './selectClasses';
 import { SelectContext } from './selectContext';
 import { SelectOption } from './SelectOption';
 import { SelectOptionsGroup } from './SelectOptionsGroup';
-import classes from './selectClasses';
 
 type SelectProps = ComponentPropsWithoutRef<'button'> & {
   defaultValue?: string;
@@ -59,7 +59,7 @@ export const Select = (inProps: SelectProps) => {
   } = inProps;
 
   const [value, setValue] = useControllableState({
-    defaultValue,
+    defaultProp: defaultValue,
     prop: valueProp,
     onChange: onValueChange,
   });

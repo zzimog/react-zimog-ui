@@ -16,6 +16,8 @@ const [TabsContext, useTabsContext] = createScopedContext<
   TabsContextValue | undefined
 >(DISPLAY_NAME, undefined);
 
+/*---------------------------------------------------------------------------*/
+
 type TabsProps = NativeProps<'div'> & {
   defaultValue?: string;
   value?: string;
@@ -32,7 +34,7 @@ export const Tabs = (inProps: TabsProps) => {
   } = inProps;
 
   const [value, setValue] = useControllableState({
-    defaultValue,
+    defaultProp: defaultValue,
     prop: valueProp,
     onChange: onValueChange,
   });

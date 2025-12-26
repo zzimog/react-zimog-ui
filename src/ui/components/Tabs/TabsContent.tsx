@@ -13,7 +13,7 @@ export const TabsContent = (inProps: TabsContentProps) => {
   const context = Tabs.useContext(DISPLAY_NAME);
   const selected = value === context.value;
 
-  return selected && <Native.div data-selected={selected} {...props} />;
+  return selected && <Native.div {...props} />;
 };
 
 TabsContent.displayName = DISPLAY_NAME;

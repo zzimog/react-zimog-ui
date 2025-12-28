@@ -1,4 +1,5 @@
 export default {
+  root: 'w-full',
   item: 'transition-colors not-last:border-b',
   trigger: [
     'w-full',
@@ -7,15 +8,14 @@ export default {
     'items-center',
     'gap-2',
     'py-4',
-    'font-semibold',
+    'text-sm',
+    'rounded-shape',
+    'transition-colors',
     'hover:underline',
+    'focusable',
+    'focus-visible:outline-outline',
     '[&[data-open=true]>svg]:-rotate-180',
   ].join(' '),
   arrow: 'size-4 transition-transform shrink-0',
-  collapsible: [
-    'overflow-hidden',
-    'data-[open=true]:animate-height-grow',
-    'data-[open=false]:animate-height-shrink',
-  ].join(' '),
   content: 'pt-0 pb-4',
 };

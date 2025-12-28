@@ -1,7 +1,7 @@
 import { Button, Card, Input } from '@ui';
 import { DemoContainer } from '../components/demo-container';
 
-const code = `// Example code
+const code = `
 import { Card } from '@ui';
 
 export default () => (

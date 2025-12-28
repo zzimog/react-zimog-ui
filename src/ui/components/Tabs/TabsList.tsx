@@ -16,7 +16,7 @@ export const TabsList = (inProps: TabsListProps) => {
   const { className, children, ...props } = inProps;
 
   return (
-    <Highlight {...props} className={cn(classes.list, className)}>
+    <Highlight type="click" {...props} className={cn(classes.list, className)}>
       <Highlight.Indicator className={classes.highlight} />
       <TabsListContext>{children}</TabsListContext>
     </Highlight>

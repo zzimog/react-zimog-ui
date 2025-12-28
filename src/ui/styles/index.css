@@ -44,9 +44,9 @@
   --color-border: var(--border);
   --color-outline: var(--outline);
 
-  /* Deprecated */
-  --color-muted-foreground: var(--muted);
-  --color-muted-background: var(--muted-background);
+  /* *** */
+  --color-muted-foreground: var(--muted) /* Deprecated */;
+  --color-muted-background: var(--muted-background) /* Deprecated */;
 }
 
 @utility focusable {

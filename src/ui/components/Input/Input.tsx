@@ -1,4 +1,4 @@
-import { type ComponentPropsWithRef } from 'react';
+import { Native, type NativeProps } from '@ui/headless';
 import { useMergedRefs } from '@ui/hooks';
 import { cn } from '@ui/utils';
 import { InputAddon } from './InputAddon';
@@ -8,7 +8,9 @@ import classes from './classes';
 
 const DISPLAY_NAME = 'Input';
 
-export const Input = (inProps: ComponentPropsWithRef<'input'>) => {
+type InputProps = NativeProps<'input'>;
+
+export const Input = (inProps: InputProps) => {
   const { ref, type, className, ...props } = inProps;
 
   const { onInputElementChange } = useInputGroup(DISPLAY_NAME);
@@ -21,9 +23,10 @@ export const Input = (inProps: ComponentPropsWithRef<'input'>) => {
   const isCheckable = type === 'checkbox' || isRadio;
 
   return (
-    <input
+    <Native.input
       ref={mergedRefs}
       type={type}
+      {...props}
       className={cn(
         classes.input({
           check: isCheckable,
@@ -31,7 +34,6 @@ export const Input = (inProps: ComponentPropsWithRef<'input'>) => {
         }),
         className
       )}
-      {...props}
     />
   );
 };

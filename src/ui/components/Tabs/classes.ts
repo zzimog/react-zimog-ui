@@ -26,6 +26,7 @@ const classes = {
     'py-1',
     'rounded-shape',
     'transition-colors',
+    'outline-2',
     'focusable',
     'focus-visible:outline-outline',
   ].join(' '),

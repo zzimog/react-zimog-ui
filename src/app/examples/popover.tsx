@@ -1,7 +1,7 @@
 import { Button, Card, Popover } from '@ui';
 import { DemoContainer } from '../components/demo-container';
 
-const code = `// Example code
+const code = `
 import { Popover } from '@ui';
 
 export default () => (

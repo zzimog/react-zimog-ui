@@ -1,5 +1,5 @@
 import { Native, type NativeProps } from '@ui/headless';
-import { cn, composeHandlers } from '@ui/utils';
+import { cn } from '@ui/utils';
 import { useInputGroup } from './context';
 import classes from './classes';
 
@@ -16,9 +16,7 @@ export const InputAddon = (inProps: InputAddonProps) => {
     <Native.div
       {...props}
       className={cn(classes.addon, className)}
-      onClick={composeHandlers(onClick, () => {
-        inputElement?.focus();
-      })}
+      onClick={onClick || (() => inputElement?.focus())}
     />
   );
 };

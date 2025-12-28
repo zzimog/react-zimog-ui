@@ -1,6 +1,8 @@
 import { useEffect, useLayoutEffect, useRef } from 'react';
 import { Presence, type NativeProps } from '@ui/headless';
 import { useMergedRefs } from '@ui/hooks';
+import { cn } from '@ui/utils';
+import classes from './classes';
 
 const DISPLAY_NAME = 'Collapsible';
 
@@ -9,7 +11,7 @@ type CollapsibleProps = NativeProps<'div'> & {
 };
 
 export const Collapsible = (inProps: CollapsibleProps) => {
-  const { ref: refProp, open, ...props } = inProps;
+  const { ref: refProp, open, className, ...props } = inProps;
 
   const ref = useRef<HTMLElement>(null);
   const mergedRefs = useMergedRefs(refProp, ref);
@@ -48,7 +50,13 @@ export const Collapsible = (inProps: CollapsibleProps) => {
   }, [open]);
 
   return (
-    <Presence present={open} data-open={open} ref={mergedRefs} {...props} />
+    <Presence
+      ref={mergedRefs}
+      present={open}
+      data-open={open}
+      {...props}
+      className={cn(classes.root, className)}
+    />
   );
 };
 

@@ -1,7 +1,7 @@
 import { Card, Tabs } from '@ui';
 import { DemoContainer } from '../components/demo-container';
 
-const code = `// Example code
+const code = `
 import { Tabs } from '@ui';
 
 export default () => (
@@ -17,7 +17,7 @@ export const TabsDemo = () => (
   <DemoContainer title="tabs" code={code}>
     <Card asChild className="w-120">
       <Card.Content>
-        <Tabs defaultValue="1">
+        <Tabs defaultValue="2">
           <Tabs.List>
             <Tabs.Trigger value="1">Lorem ipsum</Tabs.Trigger>
             <Tabs.Trigger value="2">Dolor</Tabs.Trigger>

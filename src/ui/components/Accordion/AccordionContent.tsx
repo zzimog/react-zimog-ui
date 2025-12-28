@@ -8,11 +8,15 @@ const DISPLAY_NAME = 'AccordionContent';
 type AccordionContentProps = NativeProps<'div'>;
 
 export const AccordionContent = (inProps: AccordionContentProps) => {
-  const { ...props } = inProps;
+  const { children, ...props } = inProps;
 
   const { open } = AccordionItem.useContext(DISPLAY_NAME);
 
-  return <Collapsible open={open} {...props} className={classes.collapsible} />;
+  return (
+    <Collapsible open={open} {...props}>
+      <div className={classes.content}>{children}</div>
+    </Collapsible>
+  );
 };
 
 AccordionContent.displayName = DISPLAY_NAME;

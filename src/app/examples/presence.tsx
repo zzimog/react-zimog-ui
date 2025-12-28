@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button, Card, Presence } from '@ui';
 import { DemoContainer } from '../components/demo-container';
 
-const code = `//Example code
+const code = `
 import { Presence } from '@ui';
 
 export default () => (

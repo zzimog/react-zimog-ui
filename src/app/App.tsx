@@ -16,7 +16,6 @@ import { TestPage as Test } from './Test';
 
 const components: Record<string, Record<string, any>> = {
   headless: {
-    collapsible: CollapsibleDemo,
     highlight: HighlightDemo,
     popover: PopoverDemo,
     presence: PresenceDemo,
@@ -24,6 +23,7 @@ const components: Record<string, Record<string, any>> = {
   styled: {
     accordion: AccordionDemo,
     card: CardDemo,
+    collapsible: CollapsibleDemo,
     scrollarea: ScrollAreaDemo,
     tabs: TabsDemo,
   },

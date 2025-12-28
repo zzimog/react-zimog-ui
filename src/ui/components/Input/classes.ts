@@ -18,7 +18,7 @@ import { cn } from '@ui/utils';
 const common = [
   'h-8',
   'px-2',
-  'text-sm',
+  'text-sm/7.5',
   'rounded-shape',
   'border',
   'border-border',
@@ -56,8 +56,8 @@ const classes = {
       'dark:bg-zinc-800',
       // basic states
       'focusable',
-      'focus:outline-outline',
-      'focus:border-primary',
+      'focus-visible:outline-outline',
+      'focus-visible:border-primary',
       'not-disabled:hover:border-primary',
       // disabled
       'disabled:text-border',
@@ -83,10 +83,8 @@ const classes = {
             'appearance-none',
             'size-5',
             'p-0',
+            'shrink-0',
             'rounded-sm!',
-            'checked:bg-primary',
-            'checked:border-primary',
-            'disabled:checked:opacity-50',
           ],
         },
         radio: {

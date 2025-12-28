@@ -1,7 +1,7 @@
 import { Accordion, Card } from '@ui';
 import { DemoContainer } from '../components/demo-container';
 
-const code = `// Example code
+const code = `
 import { Accordion } from '@ui';
 
 export default () => (

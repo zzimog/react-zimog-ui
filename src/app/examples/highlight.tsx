@@ -25,7 +25,7 @@ const classes = {
   ],
 };
 
-const code = `// Example code
+const code = `
 import { Highlight } from '@ui';
 
 export default () => (
@@ -39,7 +39,7 @@ export const HighlightDemo = () => (
   <DemoContainer title="Highlight" code={code} headless>
     <Card asChild>
       <Card.Content className="w-80">
-        <Highlight type="hover" leaveMode="parent">
+        <Highlight type="click">
           <Highlight.Indicator className={cn(classes.highlight)} />
           <div className={cn(classes.viewport)}>
             <Highlight.Item className={cn(classes.item, 'mr-auto')}>

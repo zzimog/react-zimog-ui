@@ -1,6 +1,7 @@
 import { Native, type NativeProps } from '@ui/headless';
-import { createScopedContext } from '@ui/utils';
+import { cn, createScopedContext } from '@ui/utils';
 import { Accordion } from './Accordion';
+import classes from './classes';
 
 const DISPLAY_NAME = 'AccordionItem';
 
@@ -20,13 +21,17 @@ type AccordionItemProps = NativeProps<'div'> & {
 };
 
 export const AccordionItem = (inProps: AccordionItemProps) => {
-  const { value, children, ...props } = inProps;
+  const { value, className, children, ...props } = inProps;
 
   const context = Accordion.useContext(DISPLAY_NAME);
   const open = context.value.includes(value);
 
   return (
-    <Native.div data-open={open} {...props}>
+    <Native.div
+      data-open={open}
+      {...props}
+      className={cn(classes.item, className)}
+    >
       <AccordionItemContext
         open={open}
         onOpenChange={(open) => {

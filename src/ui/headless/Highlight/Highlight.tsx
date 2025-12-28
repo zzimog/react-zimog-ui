@@ -14,7 +14,7 @@ type HighlightProps = NativeProps<'div'> & {
 export const Highlight = (inProps: HighlightProps) => {
   const {
     ref: refProp,
-    type = 'click',
+    type = 'none',
     leaveMode = 'none',
     children,
     style,

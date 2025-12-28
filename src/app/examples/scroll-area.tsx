@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import { Card, ScrollArea } from '@ui';
 import { DemoContainer } from '../components/demo-container';
 
-const code = `// Example code
+const code = `
 import { ScrollArea } from '@ui';
 
 export default () => (

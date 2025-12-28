@@ -1,10 +1,11 @@
 import type { PropsWithChildren } from 'react';
 import { Native, type NativeProps } from '@ui/headless';
 import { useControllableState } from '@ui/hooks';
-import { createScopedContext } from '@ui/utils';
+import { cn, createScopedContext } from '@ui/utils';
 import { AccordionContent } from './AccordionContent';
 import { AccordionItem } from './AccordionItem';
 import { AccordionTrigger } from './AccordionTrigger';
+import classes from './classes';
 
 const DISPLAY_NAME = 'Accordion';
 
@@ -98,8 +99,15 @@ type AccordionProps = NativeProps<'div'> &
   (AccordionMultipleProps | AccordionSingleProps);
 
 export const Accordion = (inProps: AccordionProps) => {
-  const { multiple, value, defaultValue, children, onValueChange, ...props } =
-    inProps;
+  const {
+    multiple,
+    value,
+    defaultValue,
+    className,
+    children,
+    onValueChange,
+    ...props
+  } = inProps;
 
   const AccordionProps = {
     multiple,
@@ -110,7 +118,7 @@ export const Accordion = (inProps: AccordionProps) => {
   };
 
   return (
-    <Native.div {...props}>
+    <Native.div {...props} className={cn(classes.root, className)}>
       {multiple ? (
         <AccordionMultiple {...(AccordionProps as AccordionMultipleProps)} />
       ) : (

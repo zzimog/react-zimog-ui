@@ -2,8 +2,25 @@ import { useId } from 'react';
 import { Card, Input } from '@ui';
 import { FormField } from './Form';
 import { Password } from './Password';
+import { Select } from './Select';
 
 export const TestPage = () => {
+  return (
+    <Select>
+      <Select.Content>
+        <Select.Item value="1">Test 1</Select.Item>
+        <Select.Item value="2">Test 2</Select.Item>
+        <Select.Item value="3">Test 3</Select.Item>
+        <Select.Item value="4" disabled>
+          Test 4
+        </Select.Item>
+        <Select.Item value="5">Test 5</Select.Item>
+      </Select.Content>
+    </Select>
+  );
+};
+
+export const __TestPage = () => {
   return (
     <Card className="mx-auto w-80">
       <Card.Content className="flex flex-col gap-8">

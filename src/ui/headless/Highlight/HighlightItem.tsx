@@ -31,10 +31,8 @@ export const HighlightItem = (inProps: HighlightItemProps) => {
       }
     }
 
-    if (selected) {
-      if (leaveMode === 'none') {
-        handleEnable();
-      }
+    if (selected && leaveMode === 'none') {
+      handleEnable();
     }
 
     switch (type) {

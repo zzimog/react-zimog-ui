@@ -30,7 +30,9 @@ export function createScopedContext<T extends object | undefined>(
       return defaultContext;
     }
 
-    throw new Error(`\`${consumerName}\` must be used within \`${scopeName}\``);
+    throw new Error(
+      `\`${consumerName}\` must be used within \`${scopeName}\` component.`
+    );
   }
 
   return [Provider, useContextHook] as const;

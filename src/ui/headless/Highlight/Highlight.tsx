@@ -54,7 +54,7 @@ export const Highlight = (inProps: HighlightProps) => {
           return () => node.removeEventListener('mouseleave', handleLeave);
 
         case 'focus':
-          node.addEventListener('foucsout', handleLeave);
+          node.addEventListener('focusout', handleLeave);
           return node.removeEventListener('focusout', handleLeave);
       }
     }

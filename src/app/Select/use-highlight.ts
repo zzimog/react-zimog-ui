@@ -1,10 +1,10 @@
-import { useRef } from 'react';
+import { useCallback, useRef } from 'react';
 
 export function useHighlight() {
   const rootRef = useRef<HTMLElement>(null);
   const highlightRef = useRef<HTMLElement>(null);
 
-  function handleItemChange(element: HTMLElement | null) {
+  const handleItemChange = useCallback((element: HTMLElement | null) => {
     const root = rootRef.current;
     const highlight = highlightRef.current;
     if (root && highlight) {
@@ -22,7 +22,7 @@ export function useHighlight() {
 
       highlight.hidden = element === null;
     }
-  }
+  }, []);
 
   return [rootRef, highlightRef, handleItemChange] as const;
 }

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Check } from 'lucide-react';
+import { useMergedRefs } from '@ui';
 import { Native, type NativeProps } from '@ui/headless';
 import { cn, composeHandlers } from '@ui/utils';
 import { Select } from './Select';
@@ -15,6 +16,7 @@ type SelectItemProps = NativeProps<'div'> & {
 
 export const SelectItem = (inProps: SelectItemProps) => {
   const {
+    ref,
     value,
     disabled,
     className,
@@ -34,6 +36,13 @@ export const SelectItem = (inProps: SelectItemProps) => {
   const isSelected = context.value === value;
   const [isFocused, setIsFocused] = useState(false);
 
+  const mergedRef = useMergedRefs(ref, (node: Element) => {
+    if (!disabled) {
+      contentContext.onItemAdd(node);
+      return () => contentContext.onItemRemove(node);
+    }
+  });
+
   function handleSelect() {
     if (!disabled) {
       context.onValueChange(value);
@@ -49,6 +58,7 @@ export const SelectItem = (inProps: SelectItemProps) => {
 
   return (
     <Native.div
+      ref={mergedRef}
       role="option"
       aria-selected={isSelected}
       aria-disabled={disabled || undefined}

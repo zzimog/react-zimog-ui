@@ -1,5 +1,7 @@
 import { useRef } from 'react';
 
+export type CollectionCallback = (item: HTMLElement) => void;
+
 function sortByDocumentPosition(a: HTMLElement, b: HTMLElement) {
   if (a === b) return 0;
   return b.compareDocumentPosition(a) & Node.DOCUMENT_POSITION_PRECEDING
@@ -7,7 +9,11 @@ function sortByDocumentPosition(a: HTMLElement, b: HTMLElement) {
     : 1;
 }
 
-export function useCollection() {
+export function useCollection(): {
+  getItems: () => HTMLElement[];
+  addItem: CollectionCallback;
+  removeItem: CollectionCallback;
+} {
   const itemsRef = useRef(new Set<HTMLElement>());
 
   return useRef({

@@ -18,7 +18,6 @@ export const Presence = (inProps: PresenceProps) => {
   const [mounted, setMounted] = useMountedState(present);
 
   const prevPresentRef = useRef(present);
-  const prevAnimationRef = useRef('none');
   const stylesRef = useRef<CSSStyleDeclaration>(null);
 
   const mergedRef = useMergedRefs(
@@ -26,13 +25,6 @@ export const Presence = (inProps: PresenceProps) => {
     useCallback((node: HTMLElement) => {
       let timeoutId: number;
       stylesRef.current = getComputedStyle(node);
-
-      const handleAnimationStart = (event: AnimationEvent) => {
-        if (node === event.target) {
-          const currentAnimation = getAnimationName(stylesRef.current);
-          prevAnimationRef.current = currentAnimation;
-        }
-      };
 
       const handleAnimationEnd = (event: AnimationEvent) => {
         if (node === event.target) {
@@ -55,12 +47,10 @@ export const Presence = (inProps: PresenceProps) => {
         }
       };
 
-      node.addEventListener('animationstart', handleAnimationStart);
       node.addEventListener('animationcancel', handleAnimationEnd);
       node.addEventListener('animationend', handleAnimationEnd);
       return () => {
         clearTimeout(timeoutId);
-        node.removeEventListener('animationstart', handleAnimationStart);
         node.removeEventListener('animationcancel', handleAnimationEnd);
         node.removeEventListener('animationend', handleAnimationEnd);
       };
@@ -72,8 +62,6 @@ export const Presence = (inProps: PresenceProps) => {
     const hasAnimation = current !== 'none';
 
     prevPresentRef.current = present;
-    prevAnimationRef.current = present ? current : 'none';
-
     setMounted(present || hasAnimation);
   }, [present]);
 

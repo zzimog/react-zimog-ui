@@ -36,7 +36,7 @@ export const SelectItem = (inProps: SelectItemProps) => {
   const isSelected = context.value === value;
   const [isFocused, setIsFocused] = useState(false);
 
-  const mergedRef = useMergedRefs(ref, (node: Element) => {
+  const mergedRef = useMergedRefs(ref, (node: HTMLElement) => {
     if (!disabled) {
       contentContext.onItemAdd(node);
       return () => contentContext.onItemRemove(node);

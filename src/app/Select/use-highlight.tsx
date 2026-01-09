@@ -1,10 +1,15 @@
 import { useCallback, useRef } from 'react';
 
-export function useHighlight() {
-  const rootRef = useRef<HTMLElement>(null);
-  const highlightRef = useRef<HTMLElement>(null);
+export type HighlightCallback = (element: Element | null) => void;
 
-  const handleItemChange = useCallback((element: HTMLElement | null) => {
+export function useHighlight<
+  R extends HTMLElement = HTMLDivElement,
+  H extends HTMLElement = HTMLDivElement,
+>() {
+  const rootRef = useRef<R>(null);
+  const highlightRef = useRef<H>(null);
+
+  const handleItemChange: HighlightCallback = useCallback((element) => {
     const root = rootRef.current;
     const highlight = highlightRef.current;
     if (root && highlight) {

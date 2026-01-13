@@ -23,9 +23,10 @@ export function useHighlight<
         highlight.style.setProperty('--y', `${y}px`);
         highlight.style.setProperty('--width', `${elementRect.width}px`);
         highlight.style.setProperty('--height', `${elementRect.height}px`);
+        highlight.hidden = false;
       }
 
-      highlight.hidden = element === null;
+      highlight.style.opacity = element === null ? '0' : '1';
     }
   }, []);
 

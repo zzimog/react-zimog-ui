@@ -6,17 +6,26 @@ import { Select } from './Select';
 
 export const TestPage = () => {
   return (
-    <Select>
-      <Select.Content>
-        <Select.Item value="1">Test 1</Select.Item>
-        <Select.Item value="2">Test 2</Select.Item>
-        <Select.Item value="3">Test 3</Select.Item>
-        <Select.Item value="4" disabled>
-          Test 4
-        </Select.Item>
-        <Select.Item value="5">Test 5</Select.Item>
-      </Select.Content>
-    </Select>
+    <>
+      <Select>
+        <Select.Content>
+          <Select.Item value="1">Test 1</Select.Item>
+          <Select.Item value="2">Test 2</Select.Item>
+          <Select.Item value="3">Test 3</Select.Item>
+          <Select.Item value="4" disabled>
+            Test 4
+          </Select.Item>
+          <Select.Item value="5">Test 5</Select.Item>
+        </Select.Content>
+      </Select>
+      <Select>
+        <Select.Content>
+          <Select.Item value="a">Lorem a</Select.Item>
+          <Select.Item value="b">Lorem b</Select.Item>
+          <Select.Item value="c">Lorem c</Select.Item>
+        </Select.Content>
+      </Select>
+    </>
   );
 };
 

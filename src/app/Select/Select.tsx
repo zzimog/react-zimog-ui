@@ -1,3 +1,4 @@
+import { useLayoutEffect, useState } from 'react';
 import { Native, type NativeProps } from '@ui/headless';
 import { useControllableState } from '@ui/hooks';
 import { createScopedContext } from '@ui/utils';
@@ -8,7 +9,9 @@ const DISPLAY_NAME = 'Select';
 
 type SelectContextValue = {
   value: string;
+  onOpenChange(open: boolean): void;
   onValueChange(value: string): void;
+  onTextValueChange(text?: string): void;
 };
 
 const [SelectContext, useSelectContext] = createScopedContext<
@@ -20,16 +23,20 @@ const [SelectContext, useSelectContext] = createScopedContext<
 type SelectProps = NativeProps<'div'> & {
   value?: string;
   defaultValue?: string;
-  onValueChange?(value: string): void;
+  onValueChange?(value?: string): void;
 };
 
 export const Select = (inProps: SelectProps) => {
   const {
     defaultValue = '',
     value: valueProp,
+    children,
     onValueChange,
     ...props
   } = inProps;
+
+  const [open, setOpen] = useState(true);
+  const [textValue, setTextValue] = useState<string | undefined>();
 
   const [value, setValue] = useControllableState({
     defaultProp: defaultValue,
@@ -37,10 +44,26 @@ export const Select = (inProps: SelectProps) => {
     onChange: onValueChange,
   });
 
+  useLayoutEffect(() => {
+    /**
+     * Required to properly load all select options.
+     */
+    setOpen(false);
+  }, []);
+
   return (
-    <SelectContext value={value} onValueChange={setValue}>
-      Current value: {value}
-      <Native.div {...props} />
+    <SelectContext
+      value={value}
+      onOpenChange={setOpen}
+      onValueChange={setValue}
+      onTextValueChange={setTextValue}
+    >
+      <Native.div {...props}>
+        <div onClick={() => setOpen(!open)}>
+          {textValue || 'Select a value...'} ({value})
+        </div>
+        {open && children}
+      </Native.div>
     </SelectContext>
   );
 };

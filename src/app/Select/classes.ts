@@ -5,7 +5,7 @@ const classes = {
     'flex-col',
     'gap-2',
     'p-2',
-    //'outline-none',
+    'outline-none',
   ].join(' '),
   highlight: '',
   item: [
@@ -14,7 +14,7 @@ const classes = {
     'gap-2',
     'p-2',
     'border',
-    //'outline-none',
+    'outline-none',
     'aria-[disabled=false]:cursor-pointer',
     'aria-[disabled=true]:opacity-50',
     'aria-[disabled=true]:cursor-not-allowed',

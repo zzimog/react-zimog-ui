@@ -49,7 +49,7 @@ export const SelectContent = (inProps: SelectContentProps) => {
       onItemFocus={handleItemFocus}
     >
       <div className="h-50 overflow-auto">
-        <div ref={rootRef} className="relative">
+        <div ref={rootRef} className="relative overflow-visible">
           <div
             ref={highlightRef}
             hidden
@@ -59,7 +59,7 @@ export const SelectContent = (inProps: SelectContentProps) => {
               'w-(--width)',
               'h-(--height)',
               'bg-red-500',
-              'transition-transform',
+              'transition-all',
             ].join(' ')}
           />
           <FocusTrap

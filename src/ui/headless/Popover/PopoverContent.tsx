@@ -3,7 +3,8 @@ import { createPortal } from 'react-dom';
 import { type NativeProps } from '@ui/headless';
 import { useMergedRefs } from '@ui/hooks';
 import { Presence } from '../Presence';
-import { usePopoverContext } from './context';
+import { placeContent } from './place-content';
+import { Popover } from './Popover';
 
 const DISPLAY_NAME = 'PopoverContent';
 
@@ -12,12 +13,9 @@ type PopoverContentProps = PresenceProps & {
   avoidCollisions?: boolean;
   distance?: number;
   padding?: number;
+  side?: 'top' | 'bottom' | 'left' | 'right';
   align?: 'start' | 'center' | 'end';
 };
-
-function clamp(value: number, min: number, max: number) {
-  return Math.min(Math.max(value, min), max);
-}
 
 export const PopoverContent = (inProps: PopoverContentProps) => {
   const {
@@ -25,101 +23,58 @@ export const PopoverContent = (inProps: PopoverContentProps) => {
     avoidCollisions = false,
     distance = 8,
     padding = 16,
-    align = 'center',
+    side,
+    align,
     style,
     ...props
   } = inProps;
 
-  const context = usePopoverContext(DISPLAY_NAME);
-  const { contentId, trigger, open, setOpen } = context;
+  const context = Popover.useContext(DISPLAY_NAME);
+  const { contentId, trigger, open, onOpenChange } = context;
 
   const ref = useRef<HTMLElement>(null);
   const mergedRefs = useMergedRefs(refProp, ref);
 
-  const handleOutside = useCallback(
-    (event: Event) => {
-      const content = ref.current;
-      for (const element of [trigger, content]) {
-        const target = event.target as HTMLElement;
-        if (element && element.contains(target)) {
-          return;
+  useEffect(() => {
+    if (open) {
+      function handleResize() {
+        const content = ref.current;
+        if (trigger && content) {
+          placeContent({
+            anchor: trigger,
+            content,
+            distance,
+            padding,
+            side,
+            align,
+            avoidCollisions,
+          });
         }
       }
 
-      setOpen(false);
-    },
-    [trigger]
-  );
+      function handleOutside(event: Event) {
+        const content = ref.current;
+        for (const element of [trigger, content]) {
+          const target = event.target as HTMLElement;
+          if (element && element.contains(target)) {
+            return;
+          }
+        }
 
-  const handleResize = useCallback(() => {
-    const content = ref.current;
-    if (trigger && content) {
-      const { innerWidth, innerHeight } = window;
-      const triggerRect = trigger.getBoundingClientRect();
-      const contentRect = content.getBoundingClientRect();
-
-      const triggerCenterX = triggerRect.left + triggerRect.width / 2;
-      //const triggerCenterY = triggerRect.height / 2;
-
-      let posX = triggerCenterX - contentRect.width / 2;
-
-      if (align === 'start') {
-        posX = triggerRect.left;
-      } else if (align === 'end') {
-        posX = triggerRect.right - contentRect.width;
+        onOpenChange(false);
       }
 
-      const pos = {
-        x: clamp(
-          posX,
-          padding,
-          Math.max(innerWidth - contentRect.width - padding, padding)
-        ),
-        y: triggerRect.bottom + distance,
-      };
-
-      const origin = {
-        x: clamp(triggerCenterX - pos.x, 0, contentRect.width),
-        y: clamp(0, 0, contentRect.height),
-      };
-
-      if (
-        avoidCollisions &&
-        pos.y + contentRect.height > innerHeight - padding &&
-        contentRect.height <= triggerRect.top - distance - padding
-      ) {
-        pos.y = triggerRect.top - distance - contentRect.height;
-        origin.y = contentRect.height;
-      }
-
-      const maxWidth = innerWidth - pos.x - padding;
-      const maxHeight = innerHeight - pos.y - padding;
-
-      const x = Math.floor(pos.x);
-      const y = Math.floor(pos.y);
-
-      content.style.translate = `${x}px ${y}px`;
-      content.style.transformOrigin = `${origin.x}px ${origin.y}px`;
-      content.style.setProperty('--trigger-width', `${triggerRect.width}px`);
-      content.style.setProperty('--trigger-height', `${triggerRect.height}px`);
-      content.style.setProperty('--available-width', `${maxWidth}px`);
-      content.style.setProperty('--available-height', `${maxHeight}px`);
-    }
-  }, [avoidCollisions, trigger]);
-
-  useEffect(() => {
-    if (trigger && open) {
       handleResize();
-      window.addEventListener('pointerdown', handleOutside);
       window.addEventListener('resize', handleResize);
       window.addEventListener('scroll', handleResize, true);
+      window.addEventListener('pointerdown', handleOutside);
       return () => {
-        window.removeEventListener('pointerdown', handleOutside);
         window.removeEventListener('resize', handleResize);
         window.removeEventListener('scroll', handleResize);
+        window.removeEventListener('pointerdown', handleOutside);
       };
     }
-  }, [trigger, open]);
+  }, [open, trigger, distance, padding, side, align, avoidCollisions]);
 
   return createPortal(
     <Presence
@@ -127,6 +82,7 @@ export const PopoverContent = (inProps: PopoverContentProps) => {
       present={open}
       role="dialog"
       id={contentId}
+      data-open={open}
       {...props}
       style={{
         position: 'fixed',

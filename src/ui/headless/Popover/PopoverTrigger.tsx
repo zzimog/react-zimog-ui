@@ -1,30 +1,29 @@
 import { Native, type NativeProps } from '@ui/headless';
 import { useMergedRefs } from '@ui/hooks';
 import { composeHandlers } from '@ui/utils';
-import { usePopoverContext } from './context';
+import { Popover } from './Popover';
 
 const DISPLAY_NAME = 'PopoverTrigger';
 
 type PopoverTriggerProps = NativeProps<'button'>;
 
 export const PopoverTrigger = (inProps: PopoverTriggerProps) => {
-  const { ref, onClick, ...props } = inProps;
+  const { ref: refProp, onClick, ...props } = inProps;
 
-  const context = usePopoverContext(DISPLAY_NAME);
-  const { setTrigger, contentId, open, setOpen } = context;
+  const context = Popover.useContext(DISPLAY_NAME);
 
-  const mergedRefs = useMergedRefs(ref, setTrigger);
+  const ref = useMergedRefs(refProp, context.onTriggerChange);
 
   return (
     <Native.button
-      ref={mergedRefs}
+      ref={ref}
       type="button"
-      data-open={open}
+      data-open={context.open}
       aria-haspopup="dialog"
-      aria-expanded={open}
-      aria-controls={contentId}
+      aria-expanded={context.open}
+      aria-controls={context.contentId}
       onClick={composeHandlers(onClick, () => {
-        setOpen(!open);
+        context.onOpenChange(!context.open);
       })}
       {...props}
     />

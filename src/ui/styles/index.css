@@ -5,9 +5,8 @@
 
 :root {
   --shape: var(--radius-md);
-  --background: var(--color-zinc-50);
   --foreground: var(--color-zinc-900);
-  --background: var(--color-white);
+  --background: var(--color-zinc-50);
   --muted: var(--color-zinc-400);
   --muted-contrast: var(--color-zinc-100);
   --primary: var(--color-violet-500);
@@ -57,6 +56,9 @@
 
 @utility rounded-shape-* {
   border-radius: calc(var(--shape) + (var(--spacing) * --value(number)));
+}
+@utility -rounded-shape-* {
+  border-radius: calc(var(--shape) - (var(--spacing) * --value(number)));
 }
 
 @utility halo {

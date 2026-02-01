@@ -44,10 +44,12 @@
 
   --animate-height-grow: height-grow
     var(--animation-duration, var(--tw-duration, 150ms))
-    var(--animation-ease, var(--tw-ease, ease));
+    var(--animation-ease, var(--tw-ease, ease))
+    var(--animation-fill-mode, forwards);
   --animate-height-shrink: height-shrink
     var(--animation-duration, var(--tw-duration, 150ms))
-    var(--animation-ease, var(--tw-ease, ease));
+    var(--animation-ease, var(--tw-ease, ease))
+    var(--animation-fill-mode, forwards);
 
   @keyframes height-grow {
     from {

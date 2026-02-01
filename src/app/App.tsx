@@ -1,5 +1,5 @@
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router';
-import { ScrollArea, ThemeSwitcher } from '@ui';
+import { ThemeSwitcher } from '@ui';
 import './App.css';
 import { MainMenu } from './components/main-menu';
 import {
@@ -30,7 +30,7 @@ const components: Record<string, Record<string, any>> = {
 };
 
 export default () => (
-  <ScrollArea
+  <div
     className={[
       'h-screen',
       'transition-colors',
@@ -91,5 +91,5 @@ export default () => (
         </Routes>
       </BrowserRouter>
     </div>
-  </ScrollArea>
+  </div>
 );

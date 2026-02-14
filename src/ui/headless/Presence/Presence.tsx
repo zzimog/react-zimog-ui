@@ -65,7 +65,9 @@ export const Presence = (inProps: PresenceProps) => {
     setMounted(present || hasAnimation);
   }, [present]);
 
-  return forceMount || mounted ? (
-    <Native.div ref={mergedRef} hidden={!mounted} {...props} />
-  ) : null;
+  if (!forceMount && !mounted) {
+    return null;
+  }
+
+  return <Native.div ref={mergedRef} hidden={!mounted} {...props} />;
 };

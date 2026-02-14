@@ -13,9 +13,9 @@ export const SelectTrigger = (inProps: SelectTriggerProps) => {
   const { ref: refProp, className, ...props } = inProps;
 
   const context = Select.useContext(DISPLAY_NAME);
-  const { placeholder, currentNode, onTriggerChange } = context;
+  const { triggerRef, placeholder, currentNode } = context;
 
-  const ref = useMergedRefs(refProp, onTriggerChange);
+  const mergedRef = useMergedRefs(refProp, triggerRef);
 
   const selectedId = currentNode?.id || undefined;
   const textValue = currentNode?.textContent || placeholder;
@@ -23,7 +23,7 @@ export const SelectTrigger = (inProps: SelectTriggerProps) => {
   return (
     <Popover.Trigger asChild>
       <Native.button
-        ref={ref}
+        ref={mergedRef}
         type="button"
         role="combobox"
         aria-haspopup="listbox"

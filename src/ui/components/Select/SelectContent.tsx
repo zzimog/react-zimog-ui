@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
-import { useMergedRefs } from '@ui';
-import { FocusTrap, Native, Popover, type NativeProps } from '@ui/headless';
+import { FocusTrap, Popover, type NativeProps } from '@ui/headless';
+import { ScrollArea } from '@ui/components';
+import { useMergedRefs } from '@ui/hooks';
 import { cn, composeHandlers, createScopedContext } from '@ui/utils';
 import { Select } from './Select';
 import classes from './classes';
@@ -20,7 +21,13 @@ const [SelectContentContext, useSelectContentContext] = createScopedContext<
 type SelectContentProps = NativeProps<'div'>;
 
 export const SelectContent = (inProps: SelectContentProps) => {
-  const { ref: refProp, className, onKeyDown, ...props } = inProps;
+  const {
+    ref: refProp,
+    className,
+    onContextMenu,
+    onKeyDown,
+    ...props
+  } = inProps;
 
   const ref = useRef<HTMLElement>(null);
   const mergedRef = useMergedRefs(refProp, ref);
@@ -28,30 +35,24 @@ export const SelectContent = (inProps: SelectContentProps) => {
   const { open } = Select.useContext(DISPLAY_NAME);
   const { getItems } = Select.useCollection();
 
-  function handleOptionLeave() {
-    //ref.current?.focus();
-  }
-
-  useEffect(() => {
-    if (open) {
-      const [first] = getItems().filter((item) => !item.disabled);
-      first.node?.focus({ preventScroll: true });
-    }
-  }, [open]);
-
   return (
     <SelectContentContext onOptionLeave={handleOptionLeave}>
       <Popover.Content
+        asChild
         align="start"
         avoidCollisions
         className={cn(classes.dialog)}
       >
-        <FocusTrap trapped={open} asChild>
-          <Native.div
+        <ScrollArea>
+          <FocusTrap
+            trapped={open}
             ref={mergedRef}
             role="listbox"
             {...props}
             className={cn(classes.content, className)}
+            onContextMenu={composeHandlers(onContextMenu, (event) => {
+              event.preventDefault();
+            })}
             onKeyDown={composeHandlers(onKeyDown, (event) => {
               if (event.key === 'Tab') {
                 event.preventDefault();
@@ -79,7 +80,7 @@ export const SelectContent = (inProps: SelectContentProps) => {
               }
             })}
           />
-        </FocusTrap>
+        </ScrollArea>
       </Popover.Content>
     </SelectContentContext>
   );

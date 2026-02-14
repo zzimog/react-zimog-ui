@@ -1,4 +1,9 @@
-import { useState, type PropsWithChildren } from 'react';
+import {
+  useRef,
+  useState,
+  type PropsWithChildren,
+  type RefObject,
+} from 'react';
 import { Popover } from '@ui/headless';
 import { useControllableState } from '@ui/hooks';
 import { createCollection, createScopedContext } from '@ui/utils';
@@ -11,6 +16,7 @@ import { SelectTrigger } from './SelectTrigger';
 const DISPLAY_NAME = 'Select';
 
 type SelectContextValue = {
+  triggerRef: RefObject<HTMLElement | null>;
   placeholder: string;
   open: boolean;
   value: string;
@@ -18,7 +24,6 @@ type SelectContextValue = {
   onOpenChange(open: boolean): void;
   onValueChange(value: string): void;
   onCurrentNodeChange(node: HTMLElement): void;
-  onTriggerChange(node: HTMLElement): void;
 };
 
 const [SelectContext, useSelectContext] = createScopedContext<
@@ -76,29 +81,25 @@ export const Select = (inProps: SelectProps) => {
     onChange: onValueChange,
   });
 
-  const [trigger, setTrigger] = useState<HTMLElement | null>(null);
   const [currentNode, setCurrentNode] = useState<HTMLElement | null>(null);
 
-  function handleOpenChange(open: boolean) {
-    setOpen(open);
-    setTimeout(() => trigger?.focus());
-  }
+  const triggerRef = useRef<HTMLElement>(null);
 
   function handleValueChange(value: string) {
     setValue(value);
-    handleOpenChange(false);
+    setOpen(false);
   }
 
   return (
     <SelectContext
+      triggerRef={triggerRef}
       placeholder={placeholder}
       open={open}
       value={value}
       currentNode={currentNode}
-      onOpenChange={handleOpenChange}
+      onOpenChange={setOpen}
       onValueChange={handleValueChange}
       onCurrentNodeChange={setCurrentNode}
-      onTriggerChange={setTrigger}
     >
       <SelectCollection>
         <Popover open={open} onOpenChange={setOpen}>

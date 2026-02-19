@@ -79,7 +79,7 @@ export const SelectOption = (inProps: SelectOptionProps) => {
         handleSelect();
       })}
       onPointerLeave={composeHandlers(onPointerLeave, () => {
-        contentContext.onOptionLeave();
+        //contentContext.onOptionLeave();
       })}
       onKeyDown={composeHandlers(onKeyDown, (event) => {
         if (event.key === ' ') event.preventDefault();

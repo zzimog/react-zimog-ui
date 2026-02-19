@@ -8,9 +8,7 @@ import classes from './classes';
 
 const DISPLAY_NAME = 'SelectContent';
 
-type SelectContentContextValue = {
-  onOptionLeave(): void;
-};
+type SelectContentContextValue = {};
 
 const [SelectContentContext, useSelectContentContext] = createScopedContext<
   SelectContentContextValue | undefined
@@ -35,8 +33,46 @@ export const SelectContent = (inProps: SelectContentProps) => {
   const { open } = Select.useContext(DISPLAY_NAME);
   const { getItems } = Select.useCollection();
 
+  /**
+   * @todo Need to use a ref to the ScrollArea Viewport
+   */
+  /*
+  useEffect(() => {
+    function handleFocusIn(event: FocusEvent) {
+      const node = ref.current;
+      if (node) {
+        const items = getItems()
+          .filter((item) => !item.disabled)
+          .map((item) => item.node);
+
+        const [first] = items;
+        const [last] = items.reverse();
+
+        if (event.target === first) {
+          node.scrollTop = 0;
+        } else if (event.target === last) {
+          node.scrollTop = node.scrollHeight;
+        }
+      }
+    }
+
+    document.addEventListener('focusin', handleFocusIn);
+    return () => document.removeEventListener('focusin', handleFocusIn);
+  }, []);
+  */
+
+  useEffect(() => {
+    if (open) {
+      const nodes = getItems()
+        .filter((item) => !item.disabled)
+        .map((item) => item.node);
+
+      nodes[0].focus({ preventScroll: true });
+    }
+  }, [open]);
+
   return (
-    <SelectContentContext onOptionLeave={handleOptionLeave}>
+    <SelectContentContext>
       <Popover.Content
         asChild
         align="start"

@@ -7,18 +7,15 @@ import classes from './classes';
 
 const DISPLAY_NAME = 'SelectTrigger';
 
-type SelectTriggerProps = NativeProps<'button'>;
+type SelectTriggerProps = NativeProps<'button'> & {
+  placeholder?: string;
+};
 
 export const SelectTrigger = (inProps: SelectTriggerProps) => {
-  const { ref: refProp, className, ...props } = inProps;
+  const { ref: refProp, placeholder, className, ...props } = inProps;
 
-  const context = Select.useContext(DISPLAY_NAME);
-  const { triggerRef, placeholder, currentNode } = context;
-
+  const { triggerRef, currentNode } = Select.useContext(DISPLAY_NAME);
   const mergedRef = useMergedRefs(refProp, triggerRef);
-
-  const selectedId = currentNode?.id || undefined;
-  const textValue = currentNode?.textContent || placeholder;
 
   return (
     <Popover.Trigger asChild>
@@ -27,11 +24,11 @@ export const SelectTrigger = (inProps: SelectTriggerProps) => {
         type="button"
         role="combobox"
         aria-haspopup="listbox"
-        aria-activedescendant={selectedId}
+        aria-activedescendant={currentNode?.id || undefined}
         {...props}
         className={cn(classes.trigger, className)}
       >
-        {textValue}
+        {currentNode?.textContent || placeholder || '-'}
         <ChevronDown />
       </Native.button>
     </Popover.Trigger>

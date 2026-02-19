@@ -1,4 +1,5 @@
 import {
+  useEffect,
   useRef,
   useState,
   type PropsWithChildren,
@@ -17,7 +18,6 @@ const DISPLAY_NAME = 'Select';
 
 type SelectContextValue = {
   triggerRef: RefObject<HTMLElement | null>;
-  placeholder: string;
   open: boolean;
   value: string;
   currentNode: HTMLElement | null;
@@ -48,7 +48,6 @@ const [SelectCollection, useSelectCollection] = createCollection<
 
 type SelectProps = PropsWithChildren<{
   id?: string;
-  placeholder?: string;
   open?: boolean;
   defaultOpen?: boolean;
   onOpenChange?(open: boolean): void;
@@ -59,7 +58,6 @@ type SelectProps = PropsWithChildren<{
 
 export const Select = (inProps: SelectProps) => {
   const {
-    placeholder = '-',
     defaultOpen = false,
     open: openProp,
     onOpenChange,
@@ -84,16 +82,29 @@ export const Select = (inProps: SelectProps) => {
   const [currentNode, setCurrentNode] = useState<HTMLElement | null>(null);
 
   const triggerRef = useRef<HTMLElement>(null);
+  const prevOpenRef = useRef<boolean | null>(null);
 
   function handleValueChange(value: string) {
     setValue(value);
     setOpen(false);
   }
 
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      const prevOpen = prevOpenRef.current;
+      if (prevOpen) {
+        triggerRef.current?.focus();
+      }
+
+      prevOpenRef.current = open;
+    });
+
+    return () => clearTimeout(timeout);
+  }, [open]);
+
   return (
     <SelectContext
       triggerRef={triggerRef}
-      placeholder={placeholder}
       open={open}
       value={value}
       currentNode={currentNode}

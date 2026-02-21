@@ -34,7 +34,7 @@ export function createCollection<
 
     const items = useRef(new Map());
 
-    const props = {
+    const props = useRef({
       getItems() {
         const keys = Array.from(items.current.keys());
         const ordered = keys.sort(sortByDocumentPosition);
@@ -47,9 +47,9 @@ export function createCollection<
       onItemRemove(item: E) {
         items.current.delete(item);
       },
-    };
+    }).current;
 
-    return createElement(CollectionContext, { ...props, children });
+    return createElement(CollectionContext, props, children);
   };
 
   Collection.displayName = COLLECTION_NAME;

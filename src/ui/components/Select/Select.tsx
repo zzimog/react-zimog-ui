@@ -35,7 +35,7 @@ const [SelectContext, useSelectContext] = createScopedContext<
 type SelectOptionData = {
   node: HTMLElement;
   value: string;
-  textContent: string;
+  text: string;
   disabled: boolean;
 };
 
@@ -90,16 +90,14 @@ export const Select = (inProps: SelectProps) => {
   }
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      const prevOpen = prevOpenRef.current;
-      if (prevOpen) {
-        triggerRef.current?.focus();
-      }
+    if (prevOpenRef.current) {
+      setTimeout(() => {
+        const trigger = triggerRef.current;
+        trigger?.focus({ preventScroll: true });
+      });
+    }
 
-      prevOpenRef.current = open;
-    });
-
-    return () => clearTimeout(timeout);
+    prevOpenRef.current = open;
   }, [open]);
 
   return (

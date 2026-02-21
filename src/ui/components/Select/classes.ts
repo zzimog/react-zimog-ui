@@ -30,18 +30,20 @@ const classes = {
     'data-[open=true]:animate-height-grow',
     'data-[open=false]:animate-height-shrink',
   ],
-  content: ['h-full', 'p-1', 'text-sm', 'outline-0', 'overflow-auto'],
-  group: ['group', 'mt-1', 'pt-1', 'border-t', '[&_[role=option]]:pl-4'],
+  content: ['h-full', 'text-sm', 'outline-0', 'overflow-auto'],
+  group: ['group', 'mt-1', 'pt-1', 'border-t'],
   legend: [
-    'p-2 pt-1',
+    'px-2 mb-1',
     'text-muted',
     'text-xs',
     'font-semibold',
     'group-aria-disabled:opacity-25',
+    'cursor-default',
   ],
   option: [
-    'px-2',
-    'py-1',
+    'relative',
+    'px-2 py-1 pl-6',
+    'mx-1 first:mt-1 last:mb-1',
     'outline-0',
     'rounded-shape',
     'select-none',
@@ -50,6 +52,7 @@ const classes = {
     'data-highlighted:bg-highlight',
     'data-highlighted:text-highlight-contrast',
   ],
+  check: ['absolute', 'top-1/2', 'left-2', 'size-3', '-translate-y-1/2'],
 };
 
 export default classes;

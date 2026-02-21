@@ -1,4 +1,5 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { Check, ChevronRight } from 'lucide-react';
 import { useMergedRefs } from '@ui';
 import { Native, type NativeProps } from '@ui/headless';
 import { cn, composeHandlers } from '@ui/utils';
@@ -20,11 +21,11 @@ export const SelectOption = (inProps: SelectOptionProps) => {
     disabled: disabledProp,
     value,
     className,
+    children,
     onFocus,
     onBlur,
     onPointerMove,
     onPointerUp,
-    onPointerLeave,
     onKeyDown,
     ...props
   } = inProps;
@@ -36,16 +37,16 @@ export const SelectOption = (inProps: SelectOptionProps) => {
   const contentContext = SelectContent.useContext(DISPLAY_NAME);
   const groupContext = SelectGroup.useContext(DISPLAY_NAME);
 
+  const selected = value === context.value;
   const disabled = groupContext.disabled || disabledProp || false;
 
   const ref = useRef<HTMLElement>(null);
   const mergedRef = useMergedRefs(refProp, ref, (node: HTMLElement) => {
-    const textContent = node.textContent;
     collection.onItemAdd(node, {
       node,
       value,
-      textContent,
       disabled,
+      text: node.textContent,
     });
 
     return () => collection.onItemRemove(node);
@@ -58,12 +59,20 @@ export const SelectOption = (inProps: SelectOptionProps) => {
     }
   }
 
+  useEffect(() => {
+    if (selected) {
+      setTimeout(() => {
+        ref.current?.focus({ preventScroll: true });
+      });
+    }
+  }, [selected]);
+
   return (
     <Native.div
       ref={mergedRef}
       role="option"
       aria-disabled={disabled}
-      aria-selected={value === context.value}
+      aria-selected={selected || highlighted}
       data-highlighted={highlighted ? '' : undefined}
       tabIndex={0}
       {...props}
@@ -78,14 +87,14 @@ export const SelectOption = (inProps: SelectOptionProps) => {
       onPointerUp={composeHandlers(onPointerUp, () => {
         handleSelect();
       })}
-      onPointerLeave={composeHandlers(onPointerLeave, () => {
-        //contentContext.onOptionLeave();
-      })}
       onKeyDown={composeHandlers(onKeyDown, (event) => {
         if (event.key === ' ') event.preventDefault();
         if (event.key === 'Enter') handleSelect();
       })}
-    />
+    >
+      {selected && <ChevronRight className={cn(classes.check)} />}
+      {children}
+    </Native.div>
   );
 };
 

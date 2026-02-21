@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
 import { FocusTrap, Popover, type NativeProps } from '@ui/headless';
-import { ScrollArea } from '@ui/components';
 import { useMergedRefs } from '@ui/hooks';
 import { cn, composeHandlers, createScopedContext } from '@ui/utils';
 import { Select } from './Select';
@@ -23,6 +22,7 @@ export const SelectContent = (inProps: SelectContentProps) => {
     ref: refProp,
     className,
     onContextMenu,
+    onFocus,
     onKeyDown,
     ...props
   } = inProps;
@@ -32,34 +32,6 @@ export const SelectContent = (inProps: SelectContentProps) => {
 
   const { open } = Select.useContext(DISPLAY_NAME);
   const { getItems } = Select.useCollection();
-
-  /**
-   * @todo Need to use a ref to the ScrollArea Viewport
-   */
-  /*
-  useEffect(() => {
-    function handleFocusIn(event: FocusEvent) {
-      const node = ref.current;
-      if (node) {
-        const items = getItems()
-          .filter((item) => !item.disabled)
-          .map((item) => item.node);
-
-        const [first] = items;
-        const [last] = items.reverse();
-
-        if (event.target === first) {
-          node.scrollTop = 0;
-        } else if (event.target === last) {
-          node.scrollTop = node.scrollHeight;
-        }
-      }
-    }
-
-    document.addEventListener('focusin', handleFocusIn);
-    return () => document.removeEventListener('focusin', handleFocusIn);
-  }, []);
-  */
 
   useEffect(() => {
     if (open) {
@@ -74,49 +46,57 @@ export const SelectContent = (inProps: SelectContentProps) => {
   return (
     <SelectContentContext>
       <Popover.Content
-        asChild
         align="start"
         avoidCollisions
         className={cn(classes.dialog)}
       >
-        <ScrollArea>
-          <FocusTrap
-            trapped={open}
-            ref={mergedRef}
-            role="listbox"
-            {...props}
-            className={cn(classes.content, className)}
-            onContextMenu={composeHandlers(onContextMenu, (event) => {
+        <FocusTrap
+          trapped={open}
+          ref={mergedRef}
+          role="listbox"
+          {...props}
+          className={cn(classes.content, className)}
+          onContextMenu={composeHandlers(onContextMenu, (event) => {
+            event.preventDefault();
+          })}
+          onFocus={composeHandlers(onFocus, (event) => {
+            const node = event.currentTarget;
+            const [first, ...nodes] = getItems();
+            const [last] = nodes.reverse();
+
+            if (event.target === first.node) {
+              node.scrollTop = 0;
+            } else if (event.target === last.node) {
+              node.scrollTop = node.scrollHeight;
+            }
+          })}
+          onKeyDown={composeHandlers(onKeyDown, (event) => {
+            if (event.key === 'Tab') {
               event.preventDefault();
-            })}
-            onKeyDown={composeHandlers(onKeyDown, (event) => {
-              if (event.key === 'Tab') {
-                event.preventDefault();
+            }
+
+            if (['Home', 'End', 'ArrowUp', 'ArrowDown'].includes(event.key)) {
+              const nodes = getItems()
+                .filter((item) => !item.disabled)
+                .map((item) => item.node);
+
+              let [nextNode] = nodes;
+
+              if (['ArrowUp', 'End'].includes(event.key)) {
+                [nextNode] = nodes.reverse();
               }
 
-              if (['Home', 'End', 'ArrowUp', 'ArrowDown'].includes(event.key)) {
-                const nodes = getItems()
-                  .filter((item) => !item.disabled)
-                  .map((item) => item.node);
-
-                let [nextNode] = nodes;
-
-                if (['ArrowUp', 'End'].includes(event.key)) {
-                  [nextNode] = nodes.reverse();
-                }
-
-                if (['ArrowUp', 'ArrowDown'].includes(event.key)) {
-                  const currentActive = event.target as HTMLElement;
-                  const currentIndex = nodes.indexOf(currentActive);
-                  [nextNode] = nodes.slice(currentIndex + 1);
-                }
-
-                nextNode?.focus();
-                event.preventDefault();
+              if (['ArrowUp', 'ArrowDown'].includes(event.key)) {
+                const currentActive = event.target as HTMLElement;
+                const currentIndex = nodes.indexOf(currentActive);
+                [nextNode] = nodes.slice(currentIndex + 1);
               }
-            })}
-          />
-        </ScrollArea>
+
+              nextNode?.focus();
+              event.preventDefault();
+            }
+          })}
+        />
       </Popover.Content>
     </SelectContentContext>
   );

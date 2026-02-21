@@ -31,7 +31,7 @@ export const SelectGroup = (inProps: SelectGroupProps) => {
     <SelectGroupContext disabled={disabled} onLegendIdChange={setLegendId}>
       <Native.div
         role="group"
-        aria-disabled={disabled}
+        aria-disabled={disabled || undefined}
         aria-labelledby={legendId}
         {...props}
         className={cn(classes.group, className)}

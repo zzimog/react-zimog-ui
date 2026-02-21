@@ -17,9 +17,6 @@
   --highlight-contrast: var(--foreground);
   --border: var(--color-zinc-300);
   --outline: --alpha(var(--color-primary) / 50%);
-
-  --tw-duration: 750ms;
-  --animation-duration: var(--tw-duration);
 }
 
 .dark:root {

@@ -56,6 +56,9 @@ export const Collapsible = (inProps: CollapsibleProps) => {
       data-open={open}
       {...props}
       className={cn(classes.root, className)}
+      style={{
+        animationFillMode: 'none',
+      }}
     />
   );
 };

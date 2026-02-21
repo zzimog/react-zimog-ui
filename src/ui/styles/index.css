@@ -17,6 +17,8 @@
   --highlight-contrast: var(--foreground);
   --border: var(--color-zinc-300);
   --outline: --alpha(var(--color-primary) / 50%);
+
+  --animation-duration: 2000ms;
 }
 
 .dark:root {
@@ -74,6 +76,13 @@
 @layer base {
   * {
     @apply border-border;
+  }
+
+  ::-webkit-scrollbar {
+    @apply bg-border size-2;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-foreground rounded-full;
   }
 
   ::selection {

@@ -18,14 +18,14 @@ export const ScrollAreaViewport = (inProps: NativeProps<'div'>) => {
     <Native.div
       ref={ref}
       data-scrollarea="viewport"
-      className={cn(classes.viewport, className)}
       {...props}
+      className={cn(classes.viewport, className)}
     >
       <div
         ref={onContentChange}
         style={{
-          minWidth: '100%',
           display: 'table',
+          minWidth: '100%',
         }}
       >
         {children}

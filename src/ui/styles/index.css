@@ -16,9 +16,8 @@
   --highlight: var(--color-violet-200);
   --highlight-contrast: var(--foreground);
   --border: var(--color-zinc-300);
+  --input: var(--color-white);
   --outline: --alpha(var(--color-primary) / 50%);
-
-  --animation-duration: 2000ms;
 }
 
 .dark:root {
@@ -28,6 +27,7 @@
   --highlight: var(--color-violet-900);
   --highlight-contrast: var(--foreground);
   --border: var(--color-zinc-700);
+  --input: var(--color-zinc-800);
 }
 
 @theme inline {
@@ -43,11 +43,8 @@
   --color-highlight: var(--highlight);
   --color-highlight-contrast: var(--highlight-contrast);
   --color-border: var(--border);
+  --color-input: var(--input);
   --color-outline: var(--outline);
-
-  /* *** */
-  --color-muted-foreground: var(--muted) /* Deprecated */;
-  --color-muted-background: var(--muted-background) /* Deprecated */;
 }
 
 @utility focusable {
@@ -104,12 +101,11 @@
       @apply text-background;
     }
   }
-
   :checked {
-    background-image: url('data:image/svg+xml,<svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 16"><path stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M1 7.917 5.724 12.5 15 3.5"/></svg>');
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="pippo"><path d="M20 6 9 17l-5-5"/></svg>');
     background-repeat: no-repeat;
     background-position: 50%;
-    background-size: 0.5rem;
+    background-size: 0.75rem;
   }
 }
 

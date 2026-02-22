@@ -3,14 +3,15 @@ import { cva } from 'class-variance-authority';
 const scrollbarCommon = [
   'absolute',
   'bg-border',
-  'transition',
   'outline-0',
-  'opacity-0',
-  'data-[visible=true]:opacity-25',
-  'data-[visible=true]:hover:opacity-75',
+  'opacity-25',
+  'transition-opacity',
+  'group-hover/scrollarea:opacity-75',
+  'data-[visible=false]:hidden',
 ];
 
 const classes = {
+  root: ['group/scrollarea', 'relative'],
   viewport: [
     'size-full',
     'outline-0',
@@ -19,8 +20,8 @@ const classes = {
     '[-ms-overflow-style:none]',
     '[-webkit-overflow-scrolling:touch]',
     '[&::-webkit-scrollbar]:hidden',
-  ].join(' '),
-  scrollbar: cva(scrollbarCommon, {
+  ],
+  scrollbar: cva(['group/scrollbar', ...scrollbarCommon], {
     variants: {
       useCorner: {
         true: null,
@@ -46,10 +47,11 @@ const classes = {
   thumb: cva(
     [
       'rounded-full',
-      'transition-opacity',
-      'opacity-50',
-      'hover:opacity-100',
       'bg-foreground',
+      'opacity-50',
+      'transition-opacity',
+      'hover:opacity-100',
+      'group-hover/scrollbar:opacity-100',
     ],
     {
       variants: {
@@ -60,7 +62,7 @@ const classes = {
       },
     }
   ),
-  corner: [...scrollbarCommon, 'right-0', 'bottom-0', 'size-2'].join(' '),
+  corner: [...scrollbarCommon, 'right-0', 'bottom-0', 'size-2'],
 };
 
 export default classes;

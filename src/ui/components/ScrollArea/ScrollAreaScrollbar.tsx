@@ -25,7 +25,6 @@ export const ScrollAreaScrollbar = (inProps: ScrollAreaScrollbarProps) => {
     ref: refProp,
     direction = 'vertical',
     className,
-    style,
     children,
     ...props
   } = inProps;
@@ -179,10 +178,6 @@ export const ScrollAreaScrollbar = (inProps: ScrollAreaScrollbarProps) => {
       data-visible={visible}
       {...props}
       className={cn(classes.scrollbar({ direction, useCorner }), className)}
-      style={{
-        position: 'absolute',
-        ...style,
-      }}
     >
       <div
         ref={thumbRef}

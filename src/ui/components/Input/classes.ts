@@ -1,10 +1,9 @@
 import { cva } from 'class-variance-authority';
-import { cn } from '@ui/utils';
 
 /**
  * @todo Refactor
- *
-
+ */
+/*
 'file:text-foreground',
 'file:inline-flex',
 'file:h-7',
@@ -12,79 +11,71 @@ import { cn } from '@ui/utils';
 'file:bg-transparent',
 'file:text-sm',
 'file:font-medium',
-
- */
+*/
 
 const common = [
   'h-8',
-  'px-2',
-  'text-sm/7.5',
-  'rounded-shape',
+  'px-3',
+  'text-sm',
   'border',
   'border-border',
+  'rounded-shape',
   'transition-colors',
 ];
 
 const classes = {
-  group: cn([
-    'group',
+  group: [
+    'group/input',
     'flex',
     'w-full',
-    'has-disabled:text-gray-500',
-    'has-disabled:cursor-not-allowed',
+    'data-disabled:text-gray-500',
+    'data-disabled:cursor-not-allowed',
     '*:not-first:rounded-l-none',
     '*:not-last:rounded-r-none',
-    '*:has-[~input]:border-r-0',
-    '*:[input~&]:border-l-0',
-  ]),
-  addon: cn([
+    '*:not-last:border-r-0',
+    '[&_svg]:size-4',
+  ],
+  addon: [
     ...common,
     'flex',
     'items-center',
+    'bg-input',
     'whitespace-nowrap',
-    'bg-white/5',
-    'dark:bg-white/10',
-    'group-has-[input:read-only]:border-dashed',
-  ]),
+    'group-data-readonly/input:border-dashed',
+    'group-data-invalid/input:border-danger',
+  ],
   input: cva(
     [
       ...common,
       'block',
       'w-full',
       'min-w-0',
-      'bg-white',
-      'dark:bg-zinc-800',
-      // basic states
+      'bg-input',
       'focusable',
-      'focus-visible:outline-outline',
       'focus-visible:border-primary',
-      'not-disabled:hover:border-primary',
-      // disabled
-      'disabled:text-border',
-      'disabled:bg-transparent',
-      'disabled:border-dashed',
+      'focus-visible:outline-outline',
+      'hover:not-disabled:border-primary',
+      'disabled:opacity-75',
       'disabled:cursor-not-allowed',
-      // read only
       'read-only:cursor-default',
-      // placeholder
+      'placeholder:text-muted',
       'placeholder:transition-colors',
-      'placeholder:text-muted-foreground',
-      'dark:placeholder:text-muted-background',
-      // selection
       'selection:bg-primary/50',
       'selection:text-primary-contrast',
-      // invalid
-      'data-[state="invalid"]:border-danger!',
+      'aria-invalid:border-danger',
+      'aria-invalid:focus-visible:outline-danger/25',
     ],
     {
       variants: {
-        check: {
+        checkable: {
           true: [
             'appearance-none',
             'size-5',
             'p-0',
             'shrink-0',
             'rounded-sm!',
+            'checked:border-primary',
+            'checked:bg-primary',
           ],
         },
         radio: {

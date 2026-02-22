@@ -1,35 +1,31 @@
-import { Native, type NativeProps } from '@ui/headless';
+import type { ComponentPropsWithRef } from 'react';
 import { useMergedRefs } from '@ui/hooks';
 import { cn } from '@ui/utils';
 import { InputAddon } from './InputAddon';
 import { InputGroup } from './InputGroup';
-import { useInputGroup } from './context';
 import classes from './classes';
 
 const DISPLAY_NAME = 'Input';
 
-type InputProps = NativeProps<'input'>;
+type InputProps = ComponentPropsWithRef<'input'>;
 
 export const Input = (inProps: InputProps) => {
-  const { ref, type, className, ...props } = inProps;
+  const { ref: refProp, type, className, ...props } = inProps;
 
-  const { onInputElementChange } = useInputGroup(DISPLAY_NAME);
-
-  const mergedRefs = useMergedRefs(ref, (node: HTMLInputElement) =>
-    onInputElementChange?.(node)
-  );
+  const { onInputElementChange } = InputGroup.useContext(DISPLAY_NAME);
+  const mergedRef = useMergedRefs(refProp, onInputElementChange);
 
   const isRadio = type === 'radio';
   const isCheckable = type === 'checkbox' || isRadio;
 
   return (
-    <Native.input
-      ref={mergedRefs}
+    <input
+      ref={mergedRef}
       type={type}
       {...props}
       className={cn(
         classes.input({
-          check: isCheckable,
+          checkable: isCheckable,
           radio: isRadio,
         }),
         className

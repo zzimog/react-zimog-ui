@@ -1,5 +1,6 @@
 import { useLayoutEffect, useState } from 'react';
 import { Native, type NativeProps } from '@ui/headless';
+import { cn } from '@ui/utils';
 import { ScrollAreaScrollbar } from './ScrollAreaScrollbar';
 import { ScrollAreaViewport } from './ScrollAreaViewport';
 import { ScrollAreaContext } from './context';
@@ -10,7 +11,7 @@ const DISPLAY_NAME = 'ScrollArea';
 type ScrollAreaProps = NativeProps<'div'>;
 
 export const ScrollArea = (inProps: ScrollAreaProps) => {
-  const { children, style, ...props } = inProps;
+  const { children, style, className, ...props } = inProps;
 
   const [viewport, setViewport] = useState<HTMLElement | null>(null);
   const [content, setContent] = useState<HTMLElement | null>(null);
@@ -29,10 +30,7 @@ export const ScrollArea = (inProps: ScrollAreaProps) => {
     <Native.div
       data-scrollarea="root"
       {...props}
-      style={{
-        position: 'relative',
-        ...style,
-      }}
+      className={cn(classes.root, className)}
     >
       <ScrollAreaContext
         useCorner={useCorner}
@@ -45,7 +43,7 @@ export const ScrollArea = (inProps: ScrollAreaProps) => {
         <ScrollAreaScrollbar />
         <ScrollAreaScrollbar direction="horizontal" />
         {useCorner && (
-          <div data-scrollarea="corner" className={classes.corner} />
+          <div data-scrollarea="corner" className={cn(classes.corner)} />
         )}
       </ScrollAreaContext>
     </Native.div>

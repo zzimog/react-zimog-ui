@@ -39,7 +39,7 @@ export const FocusTrap = (inProps: FocusTrapProps) => {
 
           function handleFocusOut(event: FocusEvent) {
             const relatedTarget = event.relatedTarget as HTMLElement;
-            if (!node.contains(relatedTarget)) {
+            if (relatedTarget && !node.contains(relatedTarget)) {
               focus(lastFocusedRef.current);
             }
           }

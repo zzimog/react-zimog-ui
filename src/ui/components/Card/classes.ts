@@ -17,14 +17,10 @@ const classes = {
     'p-6',
     'border-b',
     'border-border',
+    'not-first:border-t',
   ].join(' '),
   title: 'font-bold text-lg/none',
-  description: [
-    'text-sm',
-    'transition-colors',
-    'text-muted-foreground',
-    'dark:text-muted-background',
-  ].join(' '),
+  description: ['text-sm', 'transition-colors', 'text-muted'].join(' '),
   content: 'p-6',
   footer: [
     'flex',
@@ -36,8 +32,7 @@ const classes = {
     'text-sm',
     'transition-colors',
     'border-border',
-    'text-muted-foreground',
-    'dark:text-muted-background',
+    'text-muted',
   ].join(' '),
 };
 

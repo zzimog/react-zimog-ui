@@ -10,8 +10,8 @@ const DISPLAY_NAME = 'FormField';
 
 type FormFieldContextValue = {
   baseId: string;
-  descriptionId: string | null;
-  onDescriptionIdChange(id: string | null): void;
+  descriptionId?: string;
+  onDescriptionIdChange(id?: string): void;
 };
 
 const [FormFieldContext, useFormFieldContext] = createScopedContext<
@@ -26,7 +26,9 @@ export const FormField = (inProps: FormFieldProps) => {
   const { className, children, ...props } = inProps;
 
   const baseId = useId();
-  const [descriptionId, setDescriptionId] = useState<string | null>(null);
+  const [descriptionId, setDescriptionId] = useState<string | undefined>(
+    undefined
+  );
 
   return (
     <Native.div {...props} className={cn(classes.root, className)}>

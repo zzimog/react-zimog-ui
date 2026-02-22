@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Check, ChevronRight } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import { useMergedRefs } from '@ui';
 import { Native, type NativeProps } from '@ui/headless';
 import { cn, composeHandlers } from '@ui/utils';
@@ -34,7 +34,7 @@ export const SelectOption = (inProps: SelectOptionProps) => {
 
   const context = Select.useContext(DISPLAY_NAME);
   const collection = Select.useCollection();
-  const contentContext = SelectContent.useContext(DISPLAY_NAME);
+  /*const contentContext =*/ SelectContent.useContext(DISPLAY_NAME);
   const groupContext = SelectGroup.useContext(DISPLAY_NAME);
 
   const selected = value === context.value;

@@ -34,8 +34,8 @@ export function placeContent({
   padding = 8,
   side = 'bottom',
   align = 'center',
-  minSize = 0,
-  maxSize,
+  //minSize = 0,
+  //maxSize,
   avoidCollisions,
 }: PlaceContentOptions) {
   const anchorRect = anchor.getBoundingClientRect();

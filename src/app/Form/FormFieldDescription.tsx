@@ -15,7 +15,7 @@ export const FormFieldDescription = (inProps: FormFieldDescriptionProps) => {
 
   useLayoutEffect(() => {
     onDescriptionIdChange(id);
-    return () => onDescriptionIdChange(null);
+    return () => onDescriptionIdChange(undefined);
   }, [id]);
 
   return (

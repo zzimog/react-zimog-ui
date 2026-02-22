@@ -2,58 +2,6 @@ import { useId } from 'react';
 import { Card, Input } from '@ui';
 import { FormField } from './Form';
 import { Password } from './Password';
-import { Select } from './Select_v1';
-
-export const TestPage = () => {
-  return (
-    <>
-      <Select>
-        <Select.Content>
-          <Select.Item value="1">Test 1</Select.Item>
-          <Select.Item value="2">Test 2</Select.Item>
-          <Select.Item value="3">Test 3</Select.Item>
-          <Select.Item value="4" disabled>
-            Test 4
-          </Select.Item>
-          <Select.Item value="5">Test 5</Select.Item>
-        </Select.Content>
-      </Select>
-      <Select>
-        <Select.Content>
-          <Select.Item value="a">Lorem a</Select.Item>
-          <Select.Item value="b">Lorem b</Select.Item>
-          <Select.Item value="c">Lorem c</Select.Item>
-        </Select.Content>
-      </Select>
-    </>
-  );
-};
-
-export const __TestPage = () => {
-  return (
-    <Card className="mx-auto w-80">
-      <Card.Content className="flex flex-col gap-8">
-        <FormField>
-          <FormField.Label>Password</FormField.Label>
-          <FormField.Input asChild>
-            <div />
-          </FormField.Input>
-          <FormField.Description>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cum, eum{' '}
-            <a href="#">voluptatem</a> quis inventore ipsa.
-          </FormField.Description>
-        </FormField>
-
-        <FormField className="flex-row">
-          <FormField.Input type="checkbox" />
-          <div className="flex flex-col gap-2">
-            <FormField.Label>Lorem</FormField.Label>
-          </div>
-        </FormField>
-      </Card.Content>
-    </Card>
-  );
-};
 
 export const _TestPage = () => {
   const id = useId();

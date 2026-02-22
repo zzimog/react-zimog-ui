@@ -15,7 +15,7 @@ import { cva } from 'class-variance-authority';
 
 const common = [
   'h-8',
-  'px-3',
+  'px-2',
   'text-sm',
   'border',
   'border-border',
@@ -49,7 +49,6 @@ const classes = {
       ...common,
       'block',
       'w-full',
-      'min-w-0',
       'bg-input',
       'focusable',
       'focus-visible:border-primary',

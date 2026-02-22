@@ -8,7 +8,7 @@ const classes = {
     'transition-colors',
     'overflow-hidden',
     'text-foreground',
-    'bg-background',
+    'bg-background/10',
   ].join(' '),
   header: [
     'flex',

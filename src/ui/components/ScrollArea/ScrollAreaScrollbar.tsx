@@ -6,7 +6,7 @@ import {
   type ComponentPropsWithRef,
 } from 'react';
 import { useMergedRefs, useResizeObserver } from '@ui/hooks';
-import { cn } from '@ui/utils';
+import { clamp, cn } from '@ui/utils';
 import { useScrollAreaContext } from './context';
 import classes from './classes';
 
@@ -15,10 +15,6 @@ const DISPLAY_NAME = 'ScrollAreaScrollbar';
 type ScrollAreaScrollbarProps = ComponentPropsWithRef<'div'> & {
   direction?: 'vertical' | 'horizontal';
 };
-
-function clamp(value: number, min: number, max: number) {
-  return Math.min(Math.max(value, min), max);
-}
 
 export const ScrollAreaScrollbar = (inProps: ScrollAreaScrollbarProps) => {
   const {

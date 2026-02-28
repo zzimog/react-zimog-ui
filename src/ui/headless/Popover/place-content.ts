@@ -21,12 +21,6 @@ const OPPOSITES = {
   right: 'left',
 } as const;
 
-/*
-function clamp(value: number, min: number, max: number) {
-  return Math.min(Math.max(value, min), max);
-}
-*/
-
 export function placeContent({
   anchor,
   content,

@@ -1,3 +1,4 @@
+export * from './BubbleInput';
 export * from './FocusTrap';
 export * from './Highlight';
 export * from './Native';

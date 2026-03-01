@@ -6,6 +6,7 @@ export * from './Collapsible';
 export * from './Input';
 export * from './ScrollArea';
 export * from './Select';
+export * from './Slider';
 export * from './Spinner';
 export * from './Tabs';
 export * from './Text';

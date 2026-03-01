@@ -1,12 +1,73 @@
+import { useState } from 'react';
 import { Lock, User } from 'lucide-react';
-import { Card, Input, Select, Title } from '@ui';
+import { Card, CodeBlock, Input, Select, Slider, Title } from '@ui';
+
+const CODE_INPUT = `
+import { Input } from '@ui';
+
+export default () => (
+  <Input />
+);`;
+
+const CODE_SELECT = `
+import { Select } from '@ui';
+
+export default () => (
+  <Select>
+    <Select.Option />
+    <Select.Group>
+      <Select.Legend />
+      <Select.Option />
+    </Select.Group>
+  </Select>
+);`;
+
+const CODE_SLIDER = `
+import { Slider } from '@ui';
+
+export default () => (
+  <Slider>
+    <Slider.Track>
+      <Slider.Steps />
+      <Slider.Range />
+    </Slider.Track>
+    <Slider.Thumb />
+  </Slider>
+);`;
 
 export const TestPage = () => {
+  const [sliderValue, setSliderValue] = useState(15);
+
   return (
     <>
-      <Title>Input</Title>
+      <header>
+        <Title>Form Elements</Title>
+        <ol className="list-decimal p-4">
+          <li>
+            <a href="#input" className="hover:underline">
+              Input
+            </a>
+          </li>
+          <li>
+            <a href="#select" className="hover:underline">
+              Select
+            </a>
+          </li>
+          <li>
+            <a href="#slider" className="hover:underline">
+              Slider
+            </a>
+          </li>
+        </ol>
+      </header>
 
+      <Title id="input" size={2}>
+        Input
+      </Title>
       <Card>
+        <Card.Header asChild>
+          <Card.Title as="h3">Standard</Card.Title>
+        </Card.Header>
         <Card.Content className="flex flex-col gap-4">
           <Input.Group>
             <Input.Addon>
@@ -22,37 +83,39 @@ export const TestPage = () => {
             <Input type="password" placeholder="Password" />
           </Input.Group>
         </Card.Content>
+
+        <Card.Header asChild>
+          <Card.Title as="h3">Checkbox</Card.Title>
+        </Card.Header>
+        <Card.Content className="flex justify-center gap-4">
+          <Input type="checkbox" />
+          <Input type="checkbox" defaultChecked />
+          <Input type="checkbox" disabled />
+          <Input type="checkbox" disabled defaultChecked />
+        </Card.Content>
+
+        <Card.Header asChild>
+          <Card.Title as="h3">Radio</Card.Title>
+        </Card.Header>
+        <Card.Content className="flex justify-center gap-4">
+          <Input name="_demo_radio" type="radio" />
+          <Input name="_demo_radio" type="radio" defaultChecked />
+          <Input type="radio" disabled />
+          <Input type="radio" disabled defaultChecked />
+        </Card.Content>
+
+        <Card.Header asChild>
+          <Card.Title as="h3">Code</Card.Title>
+        </Card.Header>
+        <Card.Content className="p-0">
+          <CodeBlock>{CODE_INPUT.trim()}</CodeBlock>
+        </Card.Content>
       </Card>
 
+      <Title id="select" size={2}>
+        Select
+      </Title>
       <Card>
-        <Card.Header asChild>
-          <Card.Title as="h2">Checkbox</Card.Title>
-        </Card.Header>
-        <Card.Content>
-          <div className="flex justify-center gap-4 p-4">
-            <Input type="checkbox" />
-            <Input type="checkbox" defaultChecked />
-            <Input type="checkbox" disabled />
-            <Input type="checkbox" disabled defaultChecked />
-          </div>
-        </Card.Content>
-        <Card.Header asChild>
-          <Card.Title as="h2">Radio</Card.Title>
-        </Card.Header>
-        <Card.Content>
-          <div className="flex justify-center gap-4 p-4">
-            <Input name="_demo_radio" type="radio" />
-            <Input name="_demo_radio" type="radio" defaultChecked />
-            <Input type="radio" disabled />
-            <Input type="radio" disabled defaultChecked />
-          </div>
-        </Card.Content>
-      </Card>
-
-      <Card>
-        <Card.Header asChild>
-          <Card.Title as="h2">Select</Card.Title>
-        </Card.Header>
         <Card.Content>
           <Select>
             <Select.Option value="apple">Apple</Select.Option>
@@ -78,6 +141,66 @@ export const TestPage = () => {
               <Select.Option value="pork">Pork</Select.Option>
             </Select.Group>
           </Select>
+        </Card.Content>
+
+        <Card.Header asChild>
+          <Card.Title as="h3">Code</Card.Title>
+        </Card.Header>
+        <Card.Content className="p-0">
+          <CodeBlock>{CODE_SELECT.trim()}</CodeBlock>
+        </Card.Content>
+      </Card>
+
+      <Title id="slider" size={2}>
+        Slider
+      </Title>
+      <Card>
+        <Card.Content className="mx-auto flex items-center justify-center gap-8">
+          <Slider
+            min={10}
+            max={20}
+            step={1}
+            value={sliderValue}
+            className="w-full max-w-60"
+            onValueChange={setSliderValue}
+            onChange={(event) => {
+              const target = event.target as HTMLInputElement;
+              console.log('[Change] Value:', target.value);
+            }}
+          >
+            <Slider.Track>
+              <Slider.Steps />
+              <Slider.Range />
+            </Slider.Track>
+            <Slider.Thumb />
+          </Slider>
+
+          <Slider
+            min={10}
+            max={20}
+            step={1}
+            direction="vertical"
+            value={sliderValue}
+            className="min-h-40"
+            onValueChange={setSliderValue}
+            onChange={(event) => {
+              const target = event.target as HTMLInputElement;
+              console.log('[Change] Value:', target.value);
+            }}
+          >
+            <Slider.Track>
+              <Slider.Steps />
+              <Slider.Range />
+            </Slider.Track>
+            <Slider.Thumb />
+          </Slider>
+        </Card.Content>
+
+        <Card.Header asChild>
+          <Card.Title as="h3">Code</Card.Title>
+        </Card.Header>
+        <Card.Content className="p-0">
+          <CodeBlock>{CODE_SLIDER.trim()}</CodeBlock>
         </Card.Content>
       </Card>
     </>

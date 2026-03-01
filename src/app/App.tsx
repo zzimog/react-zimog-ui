@@ -32,7 +32,7 @@ const components: Record<string, Record<string, any>> = {
 export default () => (
   <div
     className={[
-      'h-screen',
+      'min-h-screen',
       'transition-colors',
       'text-foreground',
       'bg-white',

@@ -51,10 +51,10 @@ const classes = {
       'w-full',
       'bg-input',
       'focusable',
-      'focus-visible:border-primary',
-      'focus-visible:outline-outline',
+      'focus:border-primary',
+      'focus:outline-outline',
       'hover:not-disabled:border-primary',
-      'disabled:opacity-75',
+      'disabled:opacity-50',
       'disabled:cursor-not-allowed',
       'read-only:cursor-default',
       'placeholder:text-muted',
@@ -62,7 +62,7 @@ const classes = {
       'selection:bg-primary/50',
       'selection:text-primary-contrast',
       'aria-invalid:border-danger',
-      'aria-invalid:focus-visible:outline-danger/25',
+      'aria-invalid:focus:outline-danger/25',
     ],
     {
       variants: {

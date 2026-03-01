@@ -6,7 +6,7 @@ const classes = {
     'gap-2',
     'w-full',
     'h-8',
-    'px-3',
+    'px-2',
     'text-sm',
     'border',
     'bg-input',
@@ -15,16 +15,19 @@ const classes = {
     '[&_svg]:size-4',
     '[&_svg]:transition-transform',
     // hover
-    'hover:border-primary',
+    'not-disabled:hover:border-primary',
     // focus
     'focusable',
-    'focus-visible:border-primary',
-    'focus-visible:outline-outline',
+    'focus:border-primary',
+    'focus:outline-outline',
+    // disabled
+    'disabled:opacity-50',
+    'disabled:cursor-not-allowed',
     // expanded
     'aria-expanded:[&_svg]:rotate-180',
     // invalid
     'aria-invalid:border-danger',
-    'aria-invalid:focus-visible:outline-danger/25',
+    'aria-invalid:focus:outline-danger/25',
   ],
   dialog: [
     'w-(--anchor-width)',
@@ -37,9 +40,9 @@ const classes = {
     'transition-colors',
   ],
   content: ['h-full', 'outline-0', 'overflow-auto'],
-  group: ['group', 'mt-1', 'pt-1', 'border-t'],
+  group: ['group', 'mt-2', 'pt-1', 'border-t'],
   legend: [
-    'px-2 mb-1',
+    'px-2 mb-2',
     'text-muted',
     'text-xs',
     'font-semibold',

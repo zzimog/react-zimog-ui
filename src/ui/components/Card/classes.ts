@@ -1,27 +1,16 @@
 const classes = {
   root: [
-    'flex',
-    'flex-col',
-    'gap-2',
-    'rounded-shape',
     'border',
-    'transition-colors',
-    'overflow-hidden',
+    'rounded-shape',
     'text-foreground',
     'bg-background',
-  ].join(' '),
-  header: [
-    'flex',
-    'flex-col',
-    'gap-2',
-    'p-6',
-    'border-b',
-    'border-border',
-    'not-first:border-t',
-  ].join(' '),
+    'transition-colors',
+    'overflow-hidden',
+  ],
+  header: 'flex flex-col gap-2 p-6 border-b transition-colors',
   title: 'font-bold text-lg/none',
-  description: ['text-sm', 'transition-colors', 'text-muted'].join(' '),
-  content: 'p-6',
+  description: 'text-sm transition-colors text-muted',
+  content: 'p-6 transition-colors not-last:border-b',
   footer: [
     'flex',
     'flex-col',
@@ -30,10 +19,9 @@ const classes = {
     'p-6',
     'border-t',
     'text-sm',
-    'transition-colors',
-    'border-border',
     'text-muted',
-  ].join(' '),
+    'transition-colors',
+  ],
 };
 
 export default classes;

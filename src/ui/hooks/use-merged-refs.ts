@@ -1,6 +1,6 @@
 import { useCallback, type Ref } from 'react';
 
-function setRef<V>(ref: Ref<V> | undefined, value: V) {
+function setRef<T>(ref: Ref<T> | undefined, value: T) {
   if (typeof ref === 'function') {
     return ref(value);
   } else if (ref) {
@@ -8,8 +8,8 @@ function setRef<V>(ref: Ref<V> | undefined, value: V) {
   }
 }
 
-export function useMergedRefs<V>(...refs: (Ref<V> | undefined)[]) {
-  return useCallback((value: V | null) => {
+export function useMergedRefs<T>(...refs: (Ref<T> | undefined)[]) {
+  return useCallback((value: T | null) => {
     const cleanups = refs.map((ref) => {
       const cleanup = setRef(ref, value);
       const hasCleanup = typeof cleanup === 'function';

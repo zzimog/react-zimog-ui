@@ -14,7 +14,6 @@ type KeyboardHandler = NativeProps<'div'> & {
   onHomeKey?(event: KeyEvent): void;
   onEndKey?(event: KeyEvent): void;
   onEscapeKey?(event: KeyEvent): void;
-  onHomeKey?(event: KeyEvent): void;
   onSlideStart?(event: SlideEvent): void;
   onSlideMove?(event: SlideEvent): void;
   onSlideEnd?(event: SlideEvent): void;

@@ -15,7 +15,7 @@ import { cva } from 'class-variance-authority';
 
 const common = [
   'h-8',
-  'px-2',
+  'px-2.5',
   'text-sm',
   'border',
   'border-border',

@@ -7,7 +7,7 @@ const buttonClasses = cva(
     'gap-2',
     'rounded-shape',
     'whitespace-nowrap',
-    'transition',
+    'transition-colors',
     'disabled:opacity-50',
     'disabled:cursor-not-allowed',
     //'not-disabled:active:scale-95',

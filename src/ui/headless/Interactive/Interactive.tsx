@@ -8,9 +8,10 @@ const PAGE_KEYS = ['PageUp', 'PageDown'];
 type KeyEvent = KeyboardEvent<HTMLDivElement>;
 type SlideEvent = PointerEvent<HTMLDivElement>;
 
-type KeyboardHandler = NativeProps<'div'> & {
+type InteractiveProps = NativeProps<'div'> & {
   onArrowKey?(event: KeyEvent): void;
   onPageKey?(event: KeyEvent): void;
+  onStepKey?(event: KeyEvent): void;
   onHomeKey?(event: KeyEvent): void;
   onEndKey?(event: KeyEvent): void;
   onEscapeKey?(event: KeyEvent): void;
@@ -19,10 +20,11 @@ type KeyboardHandler = NativeProps<'div'> & {
   onSlideEnd?(event: SlideEvent): void;
 };
 
-export const KeyboardHandler = (inProps: KeyboardHandler) => {
+export const Interactive = (inProps: InteractiveProps) => {
   const {
     onArrowKey,
     onPageKey,
+    onStepKey,
     onHomeKey,
     onEndKey,
     onEscapeKey,
@@ -47,6 +49,7 @@ export const KeyboardHandler = (inProps: KeyboardHandler) => {
             onPageKey?.(event);
           }
 
+          onStepKey?.(event);
           event.preventDefault();
         } else if (event.key === 'Home') {
           onHomeKey?.(event);
@@ -54,6 +57,8 @@ export const KeyboardHandler = (inProps: KeyboardHandler) => {
         } else if (event.key === 'End') {
           onEndKey?.(event);
           event.preventDefault();
+        } else if (event.key === 'Escape') {
+          onEscapeKey?.(event);
         }
       })}
       onPointerDown={composeHandlers(onPointerDown, (event) => {

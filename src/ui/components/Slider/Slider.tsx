@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState, type PointerEvent } from 'react';
-import { KeyboardHandler, type NativeProps } from '@ui/headless';
+import { Interactive, type NativeProps } from '@ui/headless';
 import { useControllableState, useMergedRefs } from '@ui/hooks';
 import { clamp, cn, composeHandlers, createScopedContext } from '@ui/utils';
 import { SliderRange } from './SliderRange';
@@ -126,7 +126,7 @@ export const Slider = (inProps: SliderProps) => {
       direction={direction}
       onThumbChange={setThumb}
     >
-      <KeyboardHandler
+      <Interactive
         ref={mergedRef}
         data-slider="root"
         data-direction={direction}

@@ -1,7 +1,6 @@
 import {
   Children,
   cloneElement,
-  createElement,
   Fragment,
   isValidElement,
   type ComponentPropsWithRef,
@@ -14,14 +13,14 @@ import { tags } from './tags';
 
 type BaseProps<T extends ElementType> = Omit<ComponentPropsWithRef<T>, 'as'>;
 export type NativeProps<T extends ElementType> = BaseProps<T> & {
-  as?: T;
+  as?: ElementType;
   asChild?: boolean;
 };
 
 function createNativeElement<T extends ElementType>(tag: T) {
   const Native = <E extends ElementType = T>(inProps: NativeProps<E>) => {
     const { as, asChild, ...props } = inProps;
-    const Comp = as || tag;
+    const Comp: any = as || tag;
 
     if (asChild) {
       const { ref, children, ...parentProps } = props;
@@ -42,17 +41,15 @@ function createNativeElement<T extends ElementType>(tag: T) {
 
       throw new Error('`asChild` attribute requires a single child element');
     }
-
-    return createElement(Comp, props);
+    return <Comp {...props} />;
   };
 
   Native.displayName = `Native.${tag}`;
   return Native;
 }
 
-type Tags = (typeof tags)[number];
 type NativeFactory = {
-  [Tag in Tags]: <T extends ElementType = Tag>(
+  [Tag in (typeof tags)[number]]: <T extends ElementType = Tag>(
     props: NativeProps<T>
   ) => JSX.Element;
 };

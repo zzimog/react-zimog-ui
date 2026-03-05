@@ -35,7 +35,7 @@ const [SelectContext, useSelectContext] = createScopedContext<
 type SelectOptionData = {
   node: HTMLElement;
   value: string;
-  text: string;
+  selected: boolean;
   disabled: boolean;
 };
 

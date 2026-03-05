@@ -6,7 +6,7 @@ const classes = {
     'gap-2',
     'w-full',
     'h-8',
-    'px-2',
+    'px-2.5',
     'text-sm',
     'border',
     'bg-input',
@@ -51,7 +51,7 @@ const classes = {
   ],
   option: [
     'relative',
-    'px-2 py-1 pl-6',
+    'p-1 pl-7',
     'mx-1 first:mt-1 last:mb-1',
     'outline-0',
     'rounded-shape',
@@ -59,10 +59,10 @@ const classes = {
     'select-none',
     'aria-disabled:opacity-25',
     'group-aria-disabled:opacity-25',
-    'data-highlighted:bg-highlight',
-    'data-highlighted:text-highlight-contrast',
+    'data-[highlighted]:bg-highlight',
+    'data-[highlighted]:text-highlight-contrast',
   ],
-  check: ['absolute', 'top-1/2', 'left-2', 'size-3', '-translate-y-1/2'],
+  check: 'absolute left-2 top-1/2 -translate-y-1/2 size-3',
 };
 
 export default classes;

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 import { FocusTrap, Popover, type NativeProps } from '@ui/headless';
 import { useMergedRefs } from '@ui/hooks';
 import { cn, composeHandlers, createScopedContext } from '@ui/utils';
@@ -18,28 +18,23 @@ const [SelectContentContext, useSelectContentContext] = createScopedContext<
 type SelectContentProps = NativeProps<'div'>;
 
 export const SelectContent = (inProps: SelectContentProps) => {
-  const {
-    ref: refProp,
-    className,
-    onContextMenu,
-    onFocus,
-    onKeyDown,
-    ...props
-  } = inProps;
+  const { ref: refProp, className, onFocus, onKeyDown, ...props } = inProps;
 
   const ref = useRef<HTMLElement>(null);
   const mergedRef = useMergedRefs(refProp, ref);
 
-  const { open } = Select.useContext(DISPLAY_NAME);
+  const { open, onOpenChange } = Select.useContext(DISPLAY_NAME);
   const { getItems } = Select.useCollection();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (open) {
-      const nodes = getItems()
-        .filter((item) => !item.disabled)
-        .map((item) => item.node);
+      const items = getItems().filter((item) => !item.disabled);
+      const current = items.reduce((first, item) => {
+        const { node, selected } = item;
+        return selected ? node : first;
+      }, items[0].node);
 
-      nodes[0].focus({ preventScroll: true });
+      current?.focus();
     }
   }, [open]);
 
@@ -51,14 +46,11 @@ export const SelectContent = (inProps: SelectContentProps) => {
         className={cn(classes.dialog)}
       >
         <FocusTrap
-          trapped={open}
           ref={mergedRef}
+          trapped={open}
           role="listbox"
           {...props}
           className={cn(classes.content, className)}
-          onContextMenu={composeHandlers(onContextMenu, (event) => {
-            event.preventDefault();
-          })}
           onFocus={composeHandlers(onFocus, (event) => {
             const node = event.currentTarget;
             const [first, ...nodes] = getItems();
@@ -73,6 +65,8 @@ export const SelectContent = (inProps: SelectContentProps) => {
           onKeyDown={composeHandlers(onKeyDown, (event) => {
             if (event.key === 'Tab') {
               event.preventDefault();
+            } else if (event.key === 'Escape') {
+              onOpenChange(false);
             }
 
             if (['Home', 'End', 'ArrowUp', 'ArrowDown'].includes(event.key)) {

@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { ChevronRight } from 'lucide-react';
+import { useRef, useState } from 'react';
+import { Check } from 'lucide-react';
 import { useMergedRefs } from '@ui';
 import { Native, type NativeProps } from '@ui/headless';
 import { cn, composeHandlers } from '@ui/utils';
@@ -34,8 +34,8 @@ export const SelectOption = (inProps: SelectOptionProps) => {
 
   const context = Select.useContext(DISPLAY_NAME);
   const collection = Select.useCollection();
-  /*const contentContext =*/ SelectContent.useContext(DISPLAY_NAME);
   const groupContext = SelectGroup.useContext(DISPLAY_NAME);
+  SelectContent.useContext(DISPLAY_NAME);
 
   const selected = value === context.value;
   const disabled = groupContext.disabled || disabledProp || false;
@@ -45,8 +45,8 @@ export const SelectOption = (inProps: SelectOptionProps) => {
     collection.onItemAdd(node, {
       node,
       value,
+      selected,
       disabled,
-      text: node.textContent,
     });
 
     return () => collection.onItemRemove(node);
@@ -59,24 +59,16 @@ export const SelectOption = (inProps: SelectOptionProps) => {
     }
   }
 
-  useEffect(() => {
-    if (selected) {
-      setTimeout(() => {
-        ref.current?.focus({ preventScroll: true });
-      });
-    }
-  }, [selected]);
-
   return (
     <Native.div
       ref={mergedRef}
       role="option"
-      aria-disabled={disabled}
       aria-selected={selected || highlighted}
+      aria-disabled={disabled}
       data-highlighted={highlighted ? '' : undefined}
       tabIndex={0}
       {...props}
-      className={cn(classes.option, className)}
+      className={cn('flex items-center', classes.option, className)}
       onFocus={composeHandlers(onFocus, () => setHighlighted(true))}
       onBlur={composeHandlers(onBlur, () => setHighlighted(false))}
       onPointerMove={composeHandlers(onPointerMove, (event) => {
@@ -92,7 +84,7 @@ export const SelectOption = (inProps: SelectOptionProps) => {
         if (event.key === 'Enter') handleSelect();
       })}
     >
-      {selected && <ChevronRight className={cn(classes.check)} />}
+      {selected && <Check className={cn(classes.check)} />}
       {children}
     </Native.div>
   );

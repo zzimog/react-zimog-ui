@@ -1,40 +1,45 @@
 import { cn } from '@ui/utils';
 
 export function mergeProps(
-  nativeProps: Record<string, any>,
+  parentProps: Record<string, any>,
   childProps: Record<string, any>
 ) {
-  const props = { ...childProps };
+  const overrideProps = { ...childProps };
 
   for (const prop in childProps) {
-    const nativePropValue = nativeProps[prop];
+    const parentPropValue = parentProps[prop];
     const childPropValue = childProps[prop];
 
-    // is an effect handler
-    if (/^on[A-Z]/.test(prop)) {
-      // merge if exists on both
-      if (nativePropValue && childPropValue) {
-        props[prop] = (...args: unknown[]) => {
-          const result = childPropValue(...args);
-          nativePropValue(...args);
-
-          return result;
-        };
-      } else if (nativePropValue) {
-        props[prop] = nativePropValue;
-      }
+    // merge data-slot values
+    if (prop === 'data-slot') {
+      overrideProps[prop] = `${parentPropValue} ${childPropValue}`;
     }
 
     // merge class names
     if (prop === 'className') {
-      props[prop] = cn(nativePropValue, childPropValue);
+      overrideProps[prop] = cn(parentPropValue, childPropValue);
     }
 
     // merge styles
     if (prop === 'style') {
-      props[prop] = { ...nativePropValue, ...childPropValue };
+      overrideProps[prop] = { ...parentPropValue, ...childPropValue };
+    }
+
+    // is an effect handler
+    if (/^on[A-Z]/.test(prop)) {
+      // merge if exists on both
+      if (parentPropValue && childPropValue) {
+        overrideProps[prop] = (...args: unknown[]) => {
+          const result = childPropValue(...args);
+          parentPropValue(...args);
+
+          return result;
+        };
+      } else if (parentPropValue) {
+        overrideProps[prop] = parentPropValue;
+      }
     }
   }
 
-  return { ...nativeProps, ...props };
+  return { ...parentProps, ...overrideProps };
 }

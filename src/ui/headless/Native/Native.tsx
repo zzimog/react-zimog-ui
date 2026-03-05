@@ -1,10 +1,7 @@
-/**
- * Based on Radix UI Primitive component
- * Ref: https://github.com/radix-ui/primitives/blob/main/packages/react/primitive/src/primitive.tsx
- */
 import {
   Children,
   cloneElement,
+  createElement,
   Fragment,
   isValidElement,
   type ComponentPropsWithRef,
@@ -15,62 +12,55 @@ import { useMergedRefs } from '@ui/hooks';
 import { mergeProps } from './merge-props';
 import { tags } from './tags';
 
-export type NativeProps<E extends ElementType> = ComponentPropsWithRef<E> & {
-  as?: ElementType;
+type BaseProps<T extends ElementType> = Omit<ComponentPropsWithRef<T>, 'as'>;
+export type NativeProps<T extends ElementType> = BaseProps<T> & {
+  as?: T;
   asChild?: boolean;
 };
 
-type NativeTags = {
-  [Tag in keyof JSX.IntrinsicElements]: (
-    props: NativeProps<Tag>
-  ) => JSX.Element;
-};
-
-/**
- * @example
- *
- * type ComponentProps = NativeProps<'button'> & {
- *   prop?: any;
- * };
- *
- * const Component = (inProps: ComponentProps) => {
- *   const { prop, ...props } = inProps;
- *
- *   return <Native.button {...props} />;
- * };
- */
-export const Native = tags.reduce((native, tag) => {
-  const Element = (inProps: NativeProps<typeof tag>) => {
-    const { as, asChild, ...nativeProps } = inProps;
-    const Comp: any = as || tag;
+function createNativeElement<T extends ElementType>(tag: T) {
+  const Native = <E extends ElementType = T>(inProps: NativeProps<E>) => {
+    const { as, asChild, ...props } = inProps;
+    const Comp = as || tag;
 
     if (asChild) {
-      const { ref, children } = inProps;
+      const { ref, children, ...parentProps } = props;
 
       if (isValidElement(children)) {
         const child = Children.only(children);
         const childProps = child.props as Record<string, any>;
-        const merged = mergeProps(nativeProps, childProps);
+        const mergedProps = mergeProps(parentProps, childProps);
 
         if (children.type !== Fragment) {
-          merged.ref = ref
-            ? useMergedRefs(ref as any, childProps.ref)
+          mergedProps.ref = ref
+            ? useMergedRefs(ref, childProps.ref)
             : childProps.ref;
         }
 
-        return cloneElement(child, merged);
+        return cloneElement(child, mergedProps);
       }
 
-      return null;
+      throw new Error('`asChild` attribute requires a single child element');
     }
 
-    return <Comp {...nativeProps} />;
+    return createElement(Comp, props);
   };
 
-  Element.displayName = `Native.${tag}`;
+  Native.displayName = `Native.${tag}`;
+  return Native;
+}
 
-  return {
-    ...native,
-    [tag]: Element,
-  };
-}, {} as NativeTags);
+type Tags = (typeof tags)[number];
+type NativeFactory = {
+  [Tag in Tags]: <T extends ElementType = Tag>(
+    props: NativeProps<T>
+  ) => JSX.Element;
+};
+
+export const Native = tags.reduce(
+  (tags, tag) => ({
+    ...tags,
+    [tag]: createNativeElement(tag),
+  }),
+  {} as NativeFactory
+);

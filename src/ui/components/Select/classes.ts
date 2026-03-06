@@ -42,7 +42,7 @@ const classes = {
   content: ['h-full', 'outline-0', 'overflow-auto'],
   group: ['group', 'mt-2', 'pt-1', 'border-t'],
   legend: [
-    'px-2 mb-2',
+    'px-4 mb-2',
     'text-muted',
     'text-xs',
     'font-semibold',

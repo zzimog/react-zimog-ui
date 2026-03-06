@@ -69,10 +69,9 @@ const classes = {
         checkable: {
           true: [
             'appearance-none',
-            'size-5',
+            'size-6',
             'p-0',
             'shrink-0',
-            'rounded-sm!',
             'checked:border-primary',
             'checked:bg-primary',
           ],

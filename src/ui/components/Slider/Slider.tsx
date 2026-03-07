@@ -75,18 +75,21 @@ export const Slider = (inProps: SliderProps) => {
     [min, max]
   );
 
-  const getSteppedRatio = useCallback(
-    (ratio: number) => {
-      const steps = (max - min) / step;
-      const current = Math.round(ratio * steps);
-      const steppedRatio = clamp(current / steps, 0, 1);
-      return parseFloat(steppedRatio.toFixed(10));
-    },
-    [min, max, step]
-  );
-
   const getValueFromRatio = useCallback(
-    (ratio: number) => min + Math.round((ratio * (max - min)) / step) * step,
+    (ratio: number) => {
+      const getSteppedRatio = (ratio: number) => {
+        const steps = (max - min) / step;
+        const current = Math.round(ratio * steps);
+        const steppedRatio = clamp(current / steps, 0, 1);
+        return parseFloat(steppedRatio.toFixed(10));
+      };
+
+      const steppedRatio = getSteppedRatio(ratio);
+      const value =
+        min + Math.round((steppedRatio * (max - min)) / step) * step;
+
+      return value;
+    },
     [min, max, step]
   );
 
@@ -95,23 +98,23 @@ export const Slider = (inProps: SliderProps) => {
       const node = ref.current;
       if (node && thumb) {
         const rect = node.getBoundingClientRect();
+        let value: number;
 
         if (direction === 'horizontal') {
           const { left, right, width } = rect;
-          const leftDelta = clamp(event.clientX, left, right) - left;
-          const leftRatio = getSteppedRatio(leftDelta / width);
-
-          updateValue(getValueFromRatio(leftRatio));
+          const delta = clamp(event.clientX, left, right) - left;
+          value = getValueFromRatio(delta / width);
         } else {
           const { top, bottom, height } = rect;
-          const topDelta = bottom - clamp(event.clientY, top, bottom);
-          const topRatio = getSteppedRatio(topDelta / height);
-
-          updateValue(getValueFromRatio(topRatio));
+          const delta = bottom - clamp(event.clientY, top, bottom);
+          value = getValueFromRatio(delta / height);
         }
 
+        updateValue(value);
         thumb.focus();
       }
+
+      event.preventDefault();
     },
     [direction, thumb]
   );

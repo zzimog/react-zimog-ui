@@ -62,7 +62,7 @@ export const SliderThumb = (inProps: SliderThumbProps) => {
         target.focus();
       }}
     >
-      <BubbleInput value={value} style={{ display: 'none' }} />
+      <BubbleInput value={value} />
     </Native.span>
   );
 };

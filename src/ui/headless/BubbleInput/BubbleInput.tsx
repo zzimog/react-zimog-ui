@@ -6,32 +6,48 @@ const DISPLAY_NAME = 'BubbleInput';
 type BubbleInputProps = ComponentPropsWithRef<'input'>;
 
 export const BubbleInput = (inProps: BubbleInputProps) => {
-  const { ref: refProp, value, ...props } = inProps;
+  const { ref: refProp, type, value, checked, style, ...props } = inProps;
 
   const ref = useRef<HTMLElement>(null);
   const mergedRef = useMergedRefs(refProp, ref);
 
-  const prevRef = useRef(value);
+  const isCheckable = type === 'checkbox' || type === 'radio';
+  const propName = isCheckable ? 'checked' : 'value';
+  const propValue = isCheckable ? checked : value;
+
+  const prevRef = useRef(propValue);
   const prev = prevRef.current;
 
   useEffect(() => {
-    prevRef.current = prev;
-  }, [value]);
+    prevRef.current = propValue;
+  }, [propValue]);
 
   useEffect(() => {
     const node = ref.current;
-    if (node && value !== prev) {
-      const Input = Object.getOwnPropertyDescriptor(
+    if (node && propValue !== prev) {
+      const Property = Object.getOwnPropertyDescriptor(
         HTMLInputElement.prototype,
-        'value'
+        propName
       ) as PropertyDescriptor;
 
-      Input.set?.call(node, value);
+      Property.set?.call(node, propValue);
       node.dispatchEvent(new Event('input', { bubbles: true }));
     }
-  }, [value, prev]);
+  }, [propName, propValue, prev]);
 
-  return <input ref={mergedRef} defaultValue={value} {...props} />;
+  return (
+    <input
+      ref={mergedRef}
+      type={type}
+      defaultValue={propValue as string}
+      defaultChecked={propValue as boolean}
+      {...props}
+      style={{
+        display: 'none',
+        ...style,
+      }}
+    />
+  );
 };
 
 BubbleInput.displayName = DISPLAY_NAME;

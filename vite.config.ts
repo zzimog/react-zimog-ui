@@ -9,6 +9,7 @@ export default defineConfig({
   base: '/react-zimog-ui',
   resolve: {
     alias: {
+      '@app': resolve(__dirname, './src/app'),
       '@ui': resolve(__dirname, './src/ui'),
     },
   },

@@ -64,6 +64,7 @@
       "^@ui/components(.*)$",
       "^@ui/hooks(.*)$",
       "^@ui/utils(.*)$",
+      "^@app/(.*)$",
       "^\\.\\./(.*)$",
       "^\\./(?!context|classes)(.*)$",
       "^\\./context$",

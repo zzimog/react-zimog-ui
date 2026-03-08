@@ -18,7 +18,6 @@ const common = [
   'px-2.5',
   'text-sm',
   'border',
-  'border-border',
   'rounded-shape',
   'transition-colors',
 ];

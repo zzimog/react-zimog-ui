@@ -1,39 +1,49 @@
 import { useEffect, useRef, type ComponentPropsWithRef } from 'react';
 import { useMergedRefs } from '@ui/hooks';
+import { usePrevious } from '../../hooks/use-previous';
 
 const DISPLAY_NAME = 'BubbleInput';
 
-type BubbleInputProps = ComponentPropsWithRef<'input'>;
+type BubbleInputProps = ComponentPropsWithRef<'input'> & {
+  bubbles?: boolean;
+};
 
 export const BubbleInput = (inProps: BubbleInputProps) => {
-  const { ref: refProp, type, value, checked, style, ...props } = inProps;
+  const {
+    ref: refProp,
+    bubbles = true,
+    type,
+    value,
+    checked,
+    style,
+    ...props
+  } = inProps;
+
+  const isCheckable = type === 'checkbox' || type === 'radio';
+  const event = isCheckable ? 'click' : 'input';
+  const propName = isCheckable ? 'checked' : 'value';
+  const propValue = isCheckable ? checked : value;
+
+  const prevValue = usePrevious(propValue);
 
   const ref = useRef<HTMLElement>(null);
   const mergedRef = useMergedRefs(refProp, ref);
 
-  const isCheckable = type === 'checkbox' || type === 'radio';
-  const propName = isCheckable ? 'checked' : 'value';
-  const propValue = isCheckable ? checked : value;
-
-  const prevRef = useRef(propValue);
-  const prev = prevRef.current;
-
-  useEffect(() => {
-    prevRef.current = propValue;
-  }, [propValue]);
-
   useEffect(() => {
     const node = ref.current;
-    if (node && propValue !== prev) {
+    if (node) {
       const Property = Object.getOwnPropertyDescriptor(
         HTMLInputElement.prototype,
         propName
       ) as PropertyDescriptor;
+      const SetProperty = Property.set;
 
-      Property.set?.call(node, propValue);
-      node.dispatchEvent(new Event('input', { bubbles: true }));
+      if (propValue !== prevValue && SetProperty) {
+        SetProperty.call(node, propValue);
+        node.dispatchEvent(new Event(event, { bubbles }));
+      }
     }
-  }, [propName, propValue, prev]);
+  }, [propName, propValue, prevValue, event, bubbles]);
 
   return (
     <input

@@ -1,6 +1,8 @@
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router';
 import { ThemeSwitcher } from '@ui';
 import './App.css';
+import PageCheckbox from '@app/examples/checkbox';
+import PageInput from '@app/examples/input';
 import { MainMenu } from './components/main-menu';
 import {
   AccordionDemo,
@@ -26,6 +28,8 @@ const components: Record<string, Record<string, any>> = {
     collapsible: CollapsibleDemo,
     scrollarea: ScrollAreaDemo,
     tabs: TabsDemo,
+    checkbox: PageCheckbox,
+    input: PageInput,
   },
 };
 

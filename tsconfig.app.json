@@ -26,6 +26,7 @@
 
     /* Aliases */
     "paths": {
+      "@app/*": ["./src/app/*"],
       "@ui": ["./src/ui"],
       "@ui/headless": ["./src/ui/headless"],
       "@ui/components": ["./src/ui/components"],

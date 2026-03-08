@@ -1,13 +1,5 @@
 import { useState } from 'react';
-import { Lock, User } from 'lucide-react';
-import { Card, CodeBlock, Input, Select, Slider, Title } from '@ui';
-
-const CODE_INPUT = `
-import { Input } from '@ui';
-
-export default () => (
-  <Input />
-);`;
+import { Card, CodeBlock, Input, Select, Slider, Switch, Title } from '@ui';
 
 const CODE_SELECT = `
 import { Select } from '@ui';
@@ -61,39 +53,7 @@ export const TestPage = () => {
         </ol>
       </header>
 
-      <Title id="input" size={2}>
-        Input
-      </Title>
       <Card>
-        <Card.Header asChild>
-          <Card.Title as="h3">Standard</Card.Title>
-        </Card.Header>
-        <Card.Content className="flex flex-col gap-4">
-          <Input.Group>
-            <Input.Addon>
-              <User />
-            </Input.Addon>
-            <Input type="text" placeholder="Username" />
-          </Input.Group>
-
-          <Input.Group>
-            <Input.Addon>
-              <Lock />
-            </Input.Addon>
-            <Input type="password" placeholder="Password" />
-          </Input.Group>
-        </Card.Content>
-
-        <Card.Header asChild>
-          <Card.Title as="h3">Checkbox</Card.Title>
-        </Card.Header>
-        <Card.Content className="flex justify-center gap-4">
-          <Input type="checkbox" />
-          <Input type="checkbox" defaultChecked />
-          <Input type="checkbox" disabled />
-          <Input type="checkbox" disabled defaultChecked />
-        </Card.Content>
-
         <Card.Header asChild>
           <Card.Title as="h3">Radio</Card.Title>
         </Card.Header>
@@ -103,12 +63,25 @@ export const TestPage = () => {
           <Input type="radio" disabled />
           <Input type="radio" disabled defaultChecked />
         </Card.Content>
-
         <Card.Header asChild>
-          <Card.Title as="h3">Code</Card.Title>
+          <Card.Title as="h3">Switch</Card.Title>
         </Card.Header>
-        <Card.Content className="p-0">
-          <CodeBlock>{CODE_INPUT.trim()}</CodeBlock>
+        <Card.Content className="flex justify-center gap-2">
+          <Switch
+            onChange={(event) => {
+              const target = event.target as HTMLInputElement;
+              console.log('[Change] Checked:', target.checked);
+            }}
+          />
+          <Switch
+            defaultChecked
+            onChange={(event) => {
+              const target = event.target as HTMLInputElement;
+              console.log('[Change] Checked:', target.checked);
+            }}
+          />
+          <Switch disabled />
+          <Switch disabled defaultChecked />
         </Card.Content>
       </Card>
 
@@ -155,7 +128,7 @@ export const TestPage = () => {
         Slider
       </Title>
       <Card>
-        <Card.Content className="mx-auto flex items-center justify-center gap-8">
+        <Card.Content className="flex items-center justify-center gap-8">
           <Slider
             min={10}
             max={20}

@@ -4,7 +4,10 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  --white: #fff;
+  --black: var(--color-zinc-950);
   --shape: var(--radius-md);
+
   --foreground: var(--color-zinc-900);
   --background: var(--color-zinc-50);
   --muted: var(--color-zinc-400);
@@ -31,6 +34,8 @@
 }
 
 @theme inline {
+  --color-white: var(--white);
+  --color-black: var(--black);
   --radius-shape: var(--shape);
   --color-foreground: var(--foreground);
   --color-background: var(--background);
@@ -112,25 +117,29 @@
 }
 
 @layer components {
-  [data-codeblock] [data-line] {
-    display: inline-block;
-    width: 100%;
-    @apply pr-8;
+  [data-codeblock] {
+    @apply bg-white dark:bg-black;
+    @apply transition-colors;
 
-    &::before {
-      @apply bg-background w-16 pr-2 text-sm transition-colors;
-      content: attr(data-line);
-      position: sticky;
-      left: 0;
-      display: inline-block;
-      text-align: right;
-    }
+    [data-line] {
+      @apply pr-8 leading-6;
+      @apply before:bg-white dark:before:bg-black;
+      @apply before:content-[attr(data-line)];
+      display: inline-flex;
+      width: 100%;
 
-    span {
-      @apply transition-colors;
+      &::before {
+        @apply mr-4 w-16 pr-2 text-sm/6;
+        @apply transition-colors;
+        position: sticky;
+        left: 0;
+        display: inline-block;
+        text-align: right;
+      }
 
-      @variant dark {
-        color: var(--shiki-dark) !important;
+      span {
+        @apply text-(--color) dark:text-(--color-dark);
+        @apply transition-colors;
       }
     }
   }

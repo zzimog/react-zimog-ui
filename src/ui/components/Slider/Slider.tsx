@@ -139,6 +139,7 @@ export const Slider = (inProps: SliderProps) => {
             'relative',
             'flex',
             'items-center',
+            'shrink-0',
             'data-[direction=horizontal]:w-full',
             'data-[direction=horizontal]:min-h-4',
             'data-[direction=vertical]:flex-col',

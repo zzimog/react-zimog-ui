@@ -1,12 +1,12 @@
-import { useCallback, useLayoutEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Native, type NativeProps } from '@ui/headless';
 import { useMergedRefs } from '@ui/hooks';
-import { useMountedState } from './use-mounted-state';
 
-type PresenceProps = NativeProps<'div'> & {
+type BaseProps = NativeProps<'div'>;
+interface PresenceProps extends BaseProps {
   present?: boolean;
   forceMount?: boolean;
-};
+}
 
 function getAnimationName(styles: CSSStyleDeclaration | null) {
   return styles?.animationName || 'none';
@@ -15,7 +15,8 @@ function getAnimationName(styles: CSSStyleDeclaration | null) {
 export const Presence = (inProps: PresenceProps) => {
   const { ref: refProp, present = true, forceMount, ...props } = inProps;
 
-  const [mounted, setMounted] = useMountedState(present);
+  const [mounted, setMounted] = useState(present);
+  const shouldRender = present || mounted;
 
   const prevPresentRef = useRef(present);
   const stylesRef = useRef<CSSStyleDeclaration>(null);
@@ -29,20 +30,20 @@ export const Presence = (inProps: PresenceProps) => {
       const handleAnimationEnd = (event: AnimationEvent) => {
         if (node === event.target) {
           const currentAnimation = getAnimationName(stylesRef.current);
+          const escapedAnimationName = CSS.escape(event.animationName);
+          const isCurrent = currentAnimation.includes(escapedAnimationName);
 
-          if (event.animationName === currentAnimation) {
-            if (!prevPresentRef.current) {
-              const currentFill = node.style.animationFillMode;
-              node.style.animationFillMode = 'forwards';
+          if (isCurrent && !prevPresentRef.current) {
+            const currentFill = node.style.animationFillMode;
+            node.style.animationFillMode = 'forwards';
 
-              timeoutId = setTimeout(() => {
-                if (node.style.animationFillMode === 'forwards') {
-                  node.style.animationFillMode = currentFill;
-                }
-              });
+            timeoutId = setTimeout(() => {
+              if (node.style.animationFillMode === 'forwards') {
+                node.style.animationFillMode = currentFill;
+              }
+            });
 
-              setMounted(false);
-            }
+            setMounted(false);
           }
         }
       };
@@ -57,17 +58,28 @@ export const Presence = (inProps: PresenceProps) => {
     }, [])
   );
 
-  useLayoutEffect(() => {
-    const current = getAnimationName(stylesRef.current);
-    const hasAnimation = current !== 'none';
+  useEffect(() => {
+    const prevPresent = prevPresentRef.current;
+    if (present !== prevPresent) {
+      if (present) {
+        setMounted(true);
+      } else {
+        const currentAnimationName = getAnimationName(stylesRef.current);
+        const hasAnimation = currentAnimationName !== 'none';
+        const isHidden = stylesRef.current?.display === 'none';
 
-    prevPresentRef.current = present;
-    setMounted(present || hasAnimation);
+        if (!hasAnimation || isHidden) {
+          setMounted(false);
+        }
+      }
+
+      prevPresentRef.current = present;
+    }
   }, [present]);
 
-  if (!forceMount && !mounted) {
+  if (!forceMount && !shouldRender) {
     return null;
   }
 
-  return <Native.div ref={mergedRef} hidden={!mounted} {...props} />;
+  return <Native.div ref={mergedRef} hidden={!shouldRender} {...props} />;
 };

@@ -12,8 +12,8 @@ export const Page = (inProps: PageProps) => {
   const { title, className, children, ...props } = inProps;
 
   return (
-    <main {...props} className={cn('flex flex-col gap-12', className)}>
-      <h2 className="text-3xl font-semibold">{title}</h2>
+    <main {...props} className={cn('relative flex flex-col gap-12', className)}>
+      <h1 className="text-3xl font-semibold">{title}</h1>
       {children}
     </main>
   );

@@ -1,12 +1,12 @@
 import { useId, type ComponentProps } from 'react';
-import { Checkbox, Field, Text } from '@ui';
+import { Checkbox, Code, Field } from '@ui';
 import { Page } from '@app/components/Page';
 
 const DemoField = (props: ComponentProps<typeof Checkbox>) => {
   const id = useId();
 
   return (
-    <Field direction="horizontal">
+    <Field direction="horizontal" className="mx-auto max-w-md">
       <Checkbox id={id} {...props} />
       <Field.Content>
         <Field.Label htmlFor={id}>Lorem ipsum dolor sit</Field.Label>
@@ -21,18 +21,21 @@ const DemoField = (props: ComponentProps<typeof Checkbox>) => {
 export default () => (
   <Page title="Checkbox">
     <Page.Nav>
-      <Page.Nav.Item href="#checkbox-default" label="Default" />
+      <Page.Nav.Item href="#checkbox-overview" label="Overview" />
+      <Page.Nav.Item href="#checkbox-checked" label="Checked" />
       <Page.Nav.Item href="#checkbox-disabled" label="Disabled" />
       <Page.Nav.Item href="#checkbox-invalid" label="Invalid" />
       <Page.Nav.Item href="#checkbox-props" label="Props" />
     </Page.Nav>
 
     <Page.Article
-      id="checkbox-default"
-      title="Default"
+      id="checkbox-overview"
+      title="Overview"
       description={
         <>
-          Standard <Text.Code>{`<Checkbox />`}</Text.Code> component.
+          The <Code>{`<Checkbox />`}</Code> component is a form control which
+          represents a binary choice, user can toggle between checked or
+          unchecked state.
         </>
       }
       code={`
@@ -48,37 +51,59 @@ export default () => (
           </Field.Content>
         </Field>
       `}
-    >
-      <DemoField />
-    </Page.Article>
+      children={<DemoField />}
+    />
+
+    <Page.Article
+      id="checkbox-checked"
+      title="Checked"
+      description={
+        <>
+          Use <Code>checked</Code> and <Code>onCheckedChange</Code> to actively
+          control the checkbox state, or <Code>defaultChecked</Code> for
+          uncontrolled state.
+        </>
+      }
+      code={`
+        export default () => {
+          const [checked, setChecked] = useState(true);
+
+          return (
+            <>
+              <Checkbox defaultChecked />
+              <Checkbox checked={checked} onCheckedChange={setChecked} />
+            </>
+          );
+        }
+      `}
+      children={<DemoField defaultChecked />}
+    />
 
     <Page.Article
       id="checkbox-disabled"
       title="Disabled"
       description={
         <>
-          Use <Text.Code>disabled</Text.Code> prop to disable the{' '}
-          <Text.Code>{`<Checkbox />`}</Text.Code> component.
+          Use <Code>disabled</Code> prop to disable the{' '}
+          <Code>{`<Checkbox />`}</Code> component.
         </>
       }
       code={`<Checkbox disabled />`}
-    >
-      <DemoField disabled />
-    </Page.Article>
+      children={<DemoField disabled />}
+    />
 
     <Page.Article
       id="checkbox-invalid"
       title="Invalid"
       description={
         <>
-          Use <Text.Code>aria-invalid</Text.Code> attribute to set{' '}
-          <Text.Code>{`<Checkbox />`}</Text.Code> as invalid.
+          Use <Code>aria-invalid</Code> attribute to set{' '}
+          <Code>{`<Checkbox />`}</Code> as invalid.
         </>
       }
       code={`<Checkbox aria-invalid />`}
-    >
-      <DemoField aria-invalid />
-    </Page.Article>
+      children={<DemoField aria-invalid />}
+    />
 
     <Page.Article id="checkbox-props" title="Props">
       <i>coming soon</i>

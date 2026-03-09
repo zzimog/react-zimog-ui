@@ -1,22 +1,36 @@
+import { useId, type ComponentProps } from 'react';
 import { User } from 'lucide-react';
-import { Field, Input, Text } from '@ui';
+import { Code, Field, Input } from '@ui';
 import { Page } from '@app/components/Page';
+
+const DemoField = (props: ComponentProps<typeof Input>) => {
+  const id = useId();
+
+  return (
+    <Field className="mx-auto max-w-md">
+      <Field.Label htmlFor={id}>Lorem ipsum dolor sit</Field.Label>
+      <Input id={id} {...props} />
+      <Field.Description>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+      </Field.Description>
+    </Field>
+  );
+};
 
 export default () => (
   <Page id="input" title="Input">
     <Page.Nav>
-      <Page.Nav.Item href="#input-default" label="Default" />
+      <Page.Nav.Item href="#input-overview" label="Overview" />
       <Page.Nav.Item href="#input-group-addons" label="Group & Addons" />
       <Page.Nav.Item href="#input-props" label="Props" />
     </Page.Nav>
 
     <Page.Article
-      id="input-default"
-      title="Default"
+      id="input-overview"
+      title="Overview"
       description={
         <>
-          Standard <Text.Code children={`<Input />`} /> component inside a{' '}
-          <Text.Code children={`<Field />`} /> element.
+          Basic <Code>{`<Input />`}</Code> component to input data.
         </>
       }
       code={`
@@ -29,16 +43,7 @@ export default () => (
           </Field.Description>
         </Field>
       `}
-      children={
-        <Field>
-          <Field.Label>First Name</Field.Label>
-          <Input placeholder="First Name" />
-          <Field.Description>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio
-            quaerat deserunt sunt incidunt atque quos amet ex dicta.
-          </Field.Description>
-        </Field>
-      }
+      children={<DemoField placeholder="Lorem ipsum" />}
     />
 
     <Page.Article
@@ -46,9 +51,9 @@ export default () => (
       title="Group & Addons"
       description={
         <>
-          Wrap your <Text.Code children={`<Input />`} /> in a{' '}
-          <Text.Code children={`<Input.Group />`} /> component and add{' '}
-          <Text.Code children={`<Input.Addon />`} /> to show icons or others
+          Wrap your <Code>{`<Input />`}</Code> in a{' '}
+          <Code children={`<Input.Group />`} /> component and add{' '}
+          <Code children={`<Input.Addon />`} /> to show icons or others
           decorative elements in your field.
         </>
       }
@@ -61,12 +66,23 @@ export default () => (
         </Input.Group>
       `}
       children={
-        <Input.Group>
-          <Input.Addon>
-            <User />
-          </Input.Addon>
-          <Input placeholder="Username" />
-        </Input.Group>
+        <div className="mx-auto flex max-w-md flex-col gap-4">
+          <Input.Group>
+            <Input.Addon>
+              <User />
+            </Input.Addon>
+            <Input placeholder="Username" />
+          </Input.Group>
+          <Input.Group>
+            <Input.Addon>http://</Input.Addon>
+            <Input placeholder="your-subdomain" />
+            <Input.Addon>.example.com</Input.Addon>
+          </Input.Group>
+          <Input.Group>
+            <Input placeholder="name.surname" className="text-right" />
+            <Input.Addon>@example.com</Input.Addon>
+          </Input.Group>
+        </div>
       }
     />
 

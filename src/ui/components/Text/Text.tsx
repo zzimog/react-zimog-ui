@@ -6,7 +6,7 @@ Text.displayName = 'Text';
 
 /*---------------------------------------------------------------------------*/
 
-export const TextCode = ({ className, ...props }: NativeProps<'span'>) => (
+export const Code = ({ className, ...props }: NativeProps<'span'>) => (
   <Native.span
     {...props}
     className={cn(
@@ -24,5 +24,28 @@ export const TextCode = ({ className, ...props }: NativeProps<'span'>) => (
   />
 );
 
-TextCode.displayName = 'TextCode';
-Text.Code = TextCode;
+Code.displayName = 'Code';
+Text.Code = Code;
+
+/*---------------------------------------------------------------------------*/
+
+export const Badge = ({ className, ...props }: NativeProps<'span'>) => (
+  <Native.span
+    {...props}
+    className={cn(
+      'inline-flex',
+      'items-center',
+      'px-2 py-1',
+      'rounded-full',
+      'bg-primary',
+      'uppercase',
+      'text-xs/none',
+      'text-primary-contrast',
+      'shrink-0',
+      className
+    )}
+  />
+);
+
+Badge.displayName = 'Badge';
+Text.Badge = Badge;

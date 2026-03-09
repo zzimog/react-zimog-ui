@@ -2,6 +2,6 @@
 @import '@ui/styles/index.css';
 
 :root {
-  --font-sans: 'Manrope Variable';
-  --font-serif: 'Georgia';
+  --font-sans: 'Manrope Variable', sans-serif;
+  --font-serif: serif;
 }

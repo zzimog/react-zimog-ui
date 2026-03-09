@@ -1,10 +1,8 @@
 @theme inline {
   --animate-in: enter var(--animation-duration, 150ms)
-    var(--animation-ease, var(--tw-ease, ease))
-    var(--animation-fill-mode, forwards);
+    var(--animation-ease, var(--tw-ease, ease));
   --animate-out: exit var(--animation-duration, 150ms)
-    var(--animation-ease, var(--tw-ease, ease))
-    var(--animation-fill-mode, forwards);
+    var(--animation-ease, var(--tw-ease, ease));
 
   @keyframes enter {
     from {
@@ -42,14 +40,10 @@
     }
   }
 
-  --animate-height-grow: height-grow
-    var(--animation-duration, 150ms)
-    var(--animation-ease, ease)
-    var(--animation-fill-mode, forwards);
-  --animate-height-shrink: height-shrink
-    var(--animation-duration, 150ms)
-    var(--animation-ease, ease)
-    var(--animation-fill-mode, forwards);
+  --animate-height-grow: height-grow var(--animation-duration, 150ms)
+    var(--animation-ease, ease);
+  --animate-height-shrink: height-shrink var(--animation-duration, 150ms)
+    var(--animation-ease, ease);
 
   @keyframes height-grow {
     from {
@@ -69,14 +63,10 @@
     }
   }
 
-  --animate-width-grow: width-grow
-    var(--animation-duration, 150ms)
-    var(--animation-ease, ease)
-    var(--animation-fill-mode, forwards);
-  --animate-width-shrink: width-shrink
-    var(--animation-duration, 150ms)
-    var(--animation-ease, ease)
-    var(--animation-fill-mode, forwards);
+  --animate-width-grow: width-grow var(--animation-duration, 150ms)
+    var(--animation-ease, ease);
+  --animate-width-shrink: width-shrink var(--animation-duration, 150ms)
+    var(--animation-ease, ease);
 
   @keyframes width-grow {
     from {

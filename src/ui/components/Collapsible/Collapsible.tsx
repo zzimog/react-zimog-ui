@@ -31,20 +31,20 @@ export const Collapsible = (inProps: CollapsibleProps) => {
     if (node) {
       prevStylesRef.current = prevStylesRef.current || {
         transitionDuration: node.style.transitionDuration,
-        animationDuration: node.style.animationDuration,
+        animationName: node.style.animationName,
       };
 
       node.style.transitionDuration = '0s';
-      node.style.animationDuration = '0s';
+      node.style.animationName = 'none';
 
       const { width, height } = node.getBoundingClientRect();
       node.style.setProperty('--width', `${width}px`);
       node.style.setProperty('--height', `${height}px`);
 
       if (!preventAnimationRef.current) {
-        const { transitionDuration, animationDuration } = prevStylesRef.current;
+        const { transitionDuration, animationName } = prevStylesRef.current;
         node.style.transitionDuration = transitionDuration;
-        node.style.animationDuration = animationDuration;
+        node.style.animationName = animationName;
       }
     }
   }, [open]);
@@ -56,9 +56,6 @@ export const Collapsible = (inProps: CollapsibleProps) => {
       data-open={open}
       {...props}
       className={cn(classes.root, className)}
-      style={{
-        animationFillMode: 'none',
-      }}
     />
   );
 };

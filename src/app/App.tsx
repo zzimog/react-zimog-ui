@@ -1,13 +1,15 @@
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router';
 import { ThemeSwitcher } from '@ui';
 import './App.css';
+//
 import PageCheckbox from '@app/examples/checkbox';
+import PageCollapsible from '@app/examples/collapsible';
 import PageInput from '@app/examples/input';
+//
 import { MainMenu } from './components/main-menu';
 import {
   AccordionDemo,
   CardDemo,
-  CollapsibleDemo,
   HighlightDemo,
   PopoverDemo,
   PresenceDemo,
@@ -25,7 +27,7 @@ const components: Record<string, Record<string, any>> = {
   styled: {
     accordion: AccordionDemo,
     card: CardDemo,
-    collapsible: CollapsibleDemo,
+    collapsible: PageCollapsible,
     scrollarea: ScrollAreaDemo,
     tabs: TabsDemo,
     checkbox: PageCheckbox,
@@ -44,31 +46,30 @@ export default () => (
     ].join(' ')}
   >
     <div className="mx-auto flex w-full max-w-200 flex-col gap-10 px-4 py-16">
-      <header className="flex items-center justify-between gap-2">
-        <h1 className="self-start text-4xl">ui demo</h1>
-        <ThemeSwitcher size="sm" />
-      </header>
-
       <BrowserRouter basename="react-zimog-ui">
-        <MainMenu>
-          <MainMenu.Entry>
-            <NavLink to="/">all</NavLink>
-          </MainMenu.Entry>
+        <header className="flex items-start gap-4">
+          <MainMenu>
+            <MainMenu.Entry>
+              <NavLink to="/">all</NavLink>
+            </MainMenu.Entry>
 
-          {Object.keys(components).map((category, i) => (
-            <MainMenu.Submenu key={i} title={category}>
-              {Object.keys(components[category]).map((name, i) => (
-                <MainMenu.Entry key={i}>
-                  <NavLink to={`/${category}/${name}`}>{name}</NavLink>
-                </MainMenu.Entry>
-              ))}
-            </MainMenu.Submenu>
-          ))}
+            {Object.keys(components).map((category, i) => (
+              <MainMenu.Submenu key={i} title={category}>
+                {Object.keys(components[category]).map((name, i) => (
+                  <MainMenu.Entry key={i}>
+                    <NavLink to={`/${category}/${name}`}>{name}</NavLink>
+                  </MainMenu.Entry>
+                ))}
+              </MainMenu.Submenu>
+            ))}
 
-          <MainMenu.Entry>
-            <NavLink to="/test">[test]</NavLink>
-          </MainMenu.Entry>
-        </MainMenu>
+            <MainMenu.Entry>
+              <NavLink to="/test">[test]</NavLink>
+            </MainMenu.Entry>
+          </MainMenu>
+
+          <ThemeSwitcher size="sm" />
+        </header>
 
         <Routes>
           <Route

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Card, Code, Collapsible } from '@ui';
+import { Button, Card, Collapsible } from '@ui';
 import { Page } from '@app/components/Page';
 import { DemoContainer } from '../components/demo-container';
 

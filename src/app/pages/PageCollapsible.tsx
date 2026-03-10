@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button, Collapsible } from '@ui';
 import { Page } from '@app/components';
 
-export default () => {
+export const PageCollapsible = () => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -15,8 +15,7 @@ export default () => {
       }}
     >
       <Page.Article
-        id="collapsible-overview"
-        title="Overview"
+        id="overview"
         description="Animated component which expands to reveal content and collapses to hide it."
         code={`
           export default () => {
@@ -56,7 +55,7 @@ export default () => {
         }
       />
 
-      <Page.Article id="collapsible-props" title="Props">
+      <Page.Article id="props">
         <i>coming soon</i>
       </Page.Article>
     </Page>

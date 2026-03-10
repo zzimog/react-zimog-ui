@@ -9,30 +9,26 @@ import { cn } from '@ui';
 type NavBaseProps = ComponentProps<'nav'>;
 interface NavProps extends NavBaseProps {}
 
-export const Nav = ({ children, ...props }: NavProps) => (
-  <nav {...props}>
-    <NavMenu>{children}</NavMenu>
-  </nav>
-);
+export const Nav = (props: NavProps) => <nav {...props} />;
 
 Nav.displayName = 'Nav';
 
 /*---------------------------------------------------------------------------*/
-// NavMenu
+// NavList
 /*---------------------------------------------------------------------------*/
 
-type MenuBaseProps = ComponentProps<'ol'>;
-interface NavMenuProps extends MenuBaseProps {}
+type ListBaseProps = ComponentProps<'ul'>;
+interface NavListProps extends ListBaseProps {}
 
-export const NavMenu = ({ className, ...props }: NavMenuProps) => (
-  <ol
+export const NavList = ({ className, ...props }: NavListProps) => (
+  <ul
     {...props}
-    className={cn('text-muted text-sm font-semibold transition', className)}
+    className={cn('text-muted text-sm/6 font-semibold transition', className)}
   />
 );
 
-NavMenu.displayName = 'NavMenu';
-Nav.Menu = NavMenu;
+NavList.displayName = 'NavList';
+Nav.List = NavList;
 
 /*---------------------------------------------------------------------------*/
 // NavItem
@@ -42,7 +38,7 @@ type ItemBaseProps = ComponentProps<'li'>;
 interface NavItemProps extends ItemBaseProps {}
 
 const NavItem = ({ className, ...props }: NavItemProps) => (
-  <li {...props} className={cn('py-1', className)} />
+  <li {...props} className={cn('py-0.5', className)} />
 );
 
 NavItem.displayName = 'NavItem';
@@ -57,6 +53,7 @@ type RouterLinkProps = Omit<
   ComponentProps<typeof RouterLink>,
   'to' | keyof AnchorProps
 >;
+
 interface NavLinkProps extends RouterLinkProps, AnchorProps {}
 
 export const NavLink = (inProps: NavLinkProps) => {
@@ -85,6 +82,7 @@ export const NavLink = (inProps: NavLinkProps) => {
   }, [href]);
 
   const classes = cn(
+    'inline-block',
     'transition',
     'hover:underline',
     'hover:text-foreground',
@@ -92,10 +90,14 @@ export const NavLink = (inProps: NavLinkProps) => {
     className
   );
 
-  if (!href || isAnchor) {
+  if (!href) {
+    return <span {...props} />;
+  }
+
+  if (isAnchor) {
     return (
       <a
-        data-highlight={isVisible ? '' : undefined}
+        data-highlight={isAnchor && isVisible ? '' : undefined}
         href={href}
         {...props}
         className={classes}

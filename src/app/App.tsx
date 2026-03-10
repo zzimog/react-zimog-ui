@@ -2,43 +2,43 @@ import { BrowserRouter, Route, Routes } from 'react-router';
 import { cn, ThemeSwitcher } from '@ui';
 import {
   // need refactor
-  AccordionDemo,
   CardDemo,
   HighlightDemo,
   PopoverDemo,
-  PresenceDemo,
   ScrollAreaDemo,
   TabsDemo,
   // need refactor
-} from '@app/examples';
-import { Nav } from './components';
+} from '@app/pages';
 import {
+  PageAccordion,
   PageCheckbox,
   PageCollapsible,
   PageInput,
+  PagePresence,
   PageSelect,
-} from './examples';
+} from './pages';
 import { TestPage as Test } from './Test';
 import './App.css';
-import { Home } from 'lucide-react';
+import { AppMenu, type MenuEntry } from './AppMenu';
+import { MainLayout } from './MainLayout';
 
-const components: Record<string, Record<string, any>> = {
+const mainMenu: MenuEntry = {
   headless: {
-    highlight: HighlightDemo,
-    popover: PopoverDemo,
-    presence: PresenceDemo,
+    presence: PagePresence,
   },
   styled: {
-    accordion: AccordionDemo,
-    card: CardDemo,
-    scrollarea: ScrollAreaDemo,
-    tabs: TabsDemo,
-  },
-  refactored: {
+    accordion: PageAccordion,
     checkbox: PageCheckbox,
     collapsible: PageCollapsible,
     input: PageInput,
     select: PageSelect,
+  },
+  old: {
+    card: CardDemo,
+    highlight: HighlightDemo,
+    popover: PopoverDemo,
+    scrollarea: ScrollAreaDemo,
+    tabs: TabsDemo,
   },
 };
 
@@ -51,47 +51,12 @@ export default () => (
       'transition-colors'
     )}
   >
+    <MainLayout />
+
     <div className="mx-auto w-full max-w-3xl px-4 py-16">
       <BrowserRouter basename="react-zimog-ui">
         <header className="sticky top-16 flex items-start gap-4">
-          <Nav
-            className={cn(
-              'absolute',
-              'right-full',
-              'mr-8',
-              'border-r',
-              'pr-8',
-              'text-right',
-              'capitalize'
-            )}
-          >
-            <Nav.Item>
-              <Nav.Link aria-label="Home" title="Home" href="/">
-                <Home className="inline" />
-              </Nav.Link>
-            </Nav.Item>
-
-            {Object.keys(components).map((category, i) => (
-              <Nav.Menu key={i} className="my-4">
-                <span className="text-foreground block pb-1 text-xl font-semibold">
-                  {category}
-                </span>
-
-                {Object.keys(components[category]).map((name, i) => (
-                  <Nav.Item key={i}>
-                    <Nav.Link href={`/${category}/${name}`}>{name}</Nav.Link>
-                  </Nav.Item>
-                ))}
-              </Nav.Menu>
-            ))}
-
-            <Nav.Item>
-              <Nav.Link href="/test" className="mt-4 font-mono lowercase">
-                [test]
-              </Nav.Link>
-            </Nav.Item>
-          </Nav>
-
+          <AppMenu data={mainMenu} />
           <ThemeSwitcher size="sm" className="absolute left-full ml-4" />
         </header>
 
@@ -108,8 +73,8 @@ export default () => (
             }
           />
 
-          {Object.keys(components).map((category) =>
-            Object.entries(components[category]).map(([name, Comp]) => (
+          {Object.keys(mainMenu).map((category) =>
+            Object.entries(mainMenu[category]).map(([name, Comp]) => (
               <Route
                 key={`${category}-${name}`}
                 path={`${category}/${name}`}

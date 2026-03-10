@@ -18,7 +18,7 @@ const DemoField = (props: ComponentProps<typeof Checkbox>) => {
   );
 };
 
-export default () => (
+export const PageCheckbox = () => (
   <Page
     id="checkbox"
     title="Checkbox"
@@ -31,8 +31,8 @@ export default () => (
     }}
   >
     <Page.Article
-      id="checkbox-overview"
-      title="Overview"
+      id="overview"
+      title={false}
       description={
         <>
           The <Code>{`<Checkbox />`}</Code> component is a form control which
@@ -57,8 +57,7 @@ export default () => (
     />
 
     <Page.Article
-      id="checkbox-checked"
-      title="Checked"
+      id="checked"
       description={
         <>
           Use <Code>checked</Code> and <Code>onCheckedChange</Code> to actively
@@ -82,8 +81,7 @@ export default () => (
     />
 
     <Page.Article
-      id="checkbox-disabled"
-      title="Disabled"
+      id="disabled"
       description={
         <>
           Use <Code>disabled</Code> prop to disable the{' '}
@@ -95,8 +93,7 @@ export default () => (
     />
 
     <Page.Article
-      id="checkbox-invalid"
-      title="Invalid"
+      id="invalid"
       description={
         <>
           Use <Code>aria-invalid</Code> attribute to set{' '}
@@ -107,7 +104,7 @@ export default () => (
       children={<DemoField aria-invalid />}
     />
 
-    <Page.Article id="checkbox-props" title="Props">
+    <Page.Article id="props">
       <i>coming soon</i>
     </Page.Article>
   </Page>

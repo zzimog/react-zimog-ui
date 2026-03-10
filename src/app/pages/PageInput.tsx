@@ -17,7 +17,7 @@ const DemoField = (props: ComponentProps<typeof Input>) => {
   );
 };
 
-export default () => (
+export const PageInput = () => (
   <Page
     id="input"
     title="Input"
@@ -28,8 +28,7 @@ export default () => (
     }}
   >
     <Page.Article
-      id="input-overview"
-      title="Overview"
+      id="overview"
       description={
         <>
           Basic <Code>{`<Input />`}</Code> component to input data.
@@ -49,8 +48,7 @@ export default () => (
     />
 
     <Page.Article
-      id="input-groupaddons"
-      title="Group & Addons"
+      id="groupaddons"
       description={
         <>
           Wrap your <Code>{`<Input />`}</Code> in a{' '}
@@ -88,7 +86,7 @@ export default () => (
       }
     />
 
-    <Page.Article id="input-props" title="Props">
+    <Page.Article id="props">
       <i>coming soon</i>
     </Page.Article>
   </Page>

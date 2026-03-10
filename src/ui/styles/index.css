@@ -128,14 +128,14 @@
     @apply transition-colors;
 
     [data-line] {
-      @apply pr-8 leading-6;
+      @apply pr-8 text-sm/6;
       @apply before:bg-white dark:before:bg-black;
       @apply before:content-[attr(data-line)];
       display: inline-flex;
       width: 100%;
 
       &::before {
-        @apply mr-4 w-16 pr-2 text-sm/6;
+        @apply mr-4 w-16 pr-2;
         @apply transition-colors;
         position: sticky;
         left: 0;

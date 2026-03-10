@@ -1,7 +1,8 @@
 @import '@fontsource-variable/manrope/index.css';
+@import '@fontsource-variable/jetbrains-mono/index.css';
 @import '@ui/styles/index.css';
 
 :root {
-  --font-sans: 'Manrope Variable', sans-serif;
-  --font-serif: serif;
+  --font-sans: 'Manrope Variable';
+  --font-mono: 'JetBrains Mono Variable';
 }

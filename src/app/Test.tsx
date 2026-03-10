@@ -1,18 +1,5 @@
 import { useState } from 'react';
-import { Card, CodeBlock, Input, Select, Slider, Switch, Title } from '@ui';
-
-const CODE_SELECT = `
-import { Select } from '@ui';
-
-export default () => (
-  <Select>
-    <Select.Option />
-    <Select.Group>
-      <Select.Legend />
-      <Select.Option />
-    </Select.Group>
-  </Select>
-);`;
+import { Card, CodeBlock, Input, Slider, Switch, Title } from '@ui';
 
 const CODE_SLIDER = `
 import { Slider } from '@ui';
@@ -31,27 +18,8 @@ export const TestPage = () => {
   const [sliderValue, setSliderValue] = useState(15);
 
   return (
-    <>
-      <header>
-        <Title>Form Elements</Title>
-        <ol className="list-decimal p-4">
-          <li>
-            <a href="#input" className="hover:underline">
-              Input
-            </a>
-          </li>
-          <li>
-            <a href="#select" className="hover:underline">
-              Select
-            </a>
-          </li>
-          <li>
-            <a href="#slider" className="hover:underline">
-              Slider
-            </a>
-          </li>
-        </ol>
-      </header>
+    <div className="flex flex-col gap-8">
+      <Title>Form Elements</Title>
 
       <Card>
         <Card.Header asChild>
@@ -85,50 +53,11 @@ export const TestPage = () => {
         </Card.Content>
       </Card>
 
-      <Title id="select" size={2}>
-        Select
-      </Title>
-      <Card>
-        <Card.Content>
-          <Select>
-            <Select.Option value="apple">Apple</Select.Option>
-            <Select.Option value="banana">Banana</Select.Option>
-            <Select.Option value="blueberry">Blueberry</Select.Option>
-            <Select.Option value="grapes">Grapes</Select.Option>
-            <Select.Option value="pineapple">Pineapple</Select.Option>
-            <Select.Group>
-              <Select.Legend>Vegetables</Select.Legend>
-              <Select.Option value="aubergine">Aubergine</Select.Option>
-              <Select.Option value="broccoli">Broccoli</Select.Option>
-              <Select.Option value="carrot">Carrot</Select.Option>
-              <Select.Option value="courgette">Courgette</Select.Option>
-              <Select.Option value="leek" disabled>
-                Leek
-              </Select.Option>
-            </Select.Group>
-            <Select.Group disabled>
-              <Select.Legend>Meat</Select.Legend>
-              <Select.Option value="beef">Beef</Select.Option>
-              <Select.Option value="chicken">Chicken</Select.Option>
-              <Select.Option value="lamb">Lamb</Select.Option>
-              <Select.Option value="pork">Pork</Select.Option>
-            </Select.Group>
-          </Select>
-        </Card.Content>
-
-        <Card.Header asChild>
-          <Card.Title as="h3">Code</Card.Title>
-        </Card.Header>
-        <Card.Content className="p-0">
-          <CodeBlock>{CODE_SELECT.trim()}</CodeBlock>
-        </Card.Content>
-      </Card>
-
       <Title id="slider" size={2}>
         Slider
       </Title>
       <Card>
-        <Card.Content className="flex items-center justify-center gap-8">
+        <Card.Content className="flex items-center justify-center gap-8 border-b">
           <Slider
             min={10}
             max={20}
@@ -169,13 +98,8 @@ export const TestPage = () => {
           </Slider>
         </Card.Content>
 
-        <Card.Header asChild>
-          <Card.Title as="h3">Code</Card.Title>
-        </Card.Header>
-        <Card.Content className="p-0">
-          <CodeBlock>{CODE_SLIDER.trim()}</CodeBlock>
-        </Card.Content>
+        <CodeBlock className="-my-6">{CODE_SLIDER.trim()}</CodeBlock>
       </Card>
-    </>
+    </div>
   );
 };

@@ -1,7 +1,7 @@
 import { useId, type ComponentProps } from 'react';
 import { User } from 'lucide-react';
 import { Code, Field, Input } from '@ui';
-import { Page } from '@app/components/Page';
+import { Page } from '@app/components';
 
 const DemoField = (props: ComponentProps<typeof Input>) => {
   const id = useId();
@@ -18,13 +18,15 @@ const DemoField = (props: ComponentProps<typeof Input>) => {
 };
 
 export default () => (
-  <Page id="input" title="Input">
-    <Page.Nav>
-      <Page.Nav.Item href="#input-overview" label="Overview" />
-      <Page.Nav.Item href="#input-group-addons" label="Group & Addons" />
-      <Page.Nav.Item href="#input-props" label="Props" />
-    </Page.Nav>
-
+  <Page
+    id="input"
+    title="Input"
+    menu={{
+      overview: 'Overview',
+      groupaddons: 'Group & Addons',
+      props: 'Props',
+    }}
+  >
     <Page.Article
       id="input-overview"
       title="Overview"
@@ -47,7 +49,7 @@ export default () => (
     />
 
     <Page.Article
-      id="input-group-addons"
+      id="input-groupaddons"
       title="Group & Addons"
       description={
         <>

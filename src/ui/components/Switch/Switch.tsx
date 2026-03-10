@@ -18,7 +18,7 @@ export const Switch = (inProps: SwitchProps) => {
         'items-center',
         'w-12',
         'h-6',
-        'p-0.5',
+        'p-0.75',
         'border',
         'bg-background',
         'rounded-full',
@@ -58,7 +58,7 @@ export const Switch = (inProps: SwitchProps) => {
         </span>
         <span
           className={[
-            'size-4.5',
+            'size-4',
             'bg-muted',
             'rounded-full',
             'transition-colors',

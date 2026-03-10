@@ -1,6 +1,6 @@
 import { useId, type ComponentProps } from 'react';
 import { Checkbox, Code, Field } from '@ui';
-import { Page } from '@app/components/Page';
+import { Page } from '@app/components';
 
 const DemoField = (props: ComponentProps<typeof Checkbox>) => {
   const id = useId();
@@ -19,15 +19,17 @@ const DemoField = (props: ComponentProps<typeof Checkbox>) => {
 };
 
 export default () => (
-  <Page title="Checkbox">
-    <Page.Nav>
-      <Page.Nav.Item href="#checkbox-overview" label="Overview" />
-      <Page.Nav.Item href="#checkbox-checked" label="Checked" />
-      <Page.Nav.Item href="#checkbox-disabled" label="Disabled" />
-      <Page.Nav.Item href="#checkbox-invalid" label="Invalid" />
-      <Page.Nav.Item href="#checkbox-props" label="Props" />
-    </Page.Nav>
-
+  <Page
+    id="checkbox"
+    title="Checkbox"
+    menu={{
+      overview: 'Overview',
+      checked: 'Checked',
+      disabled: 'Disabled',
+      invalid: 'Invalid',
+      props: 'Props',
+    }}
+  >
     <Page.Article
       id="checkbox-overview"
       title="Overview"

@@ -1,13 +1,7 @@
-import { BrowserRouter, NavLink, Route, Routes } from 'react-router';
-import { ThemeSwitcher } from '@ui';
-import './App.css';
-//
-import PageCheckbox from '@app/examples/checkbox';
-import PageCollapsible from '@app/examples/collapsible';
-import PageInput from '@app/examples/input';
-//
-import { MainMenu } from './components/main-menu';
+import { BrowserRouter, Route, Routes } from 'react-router';
+import { cn, ThemeSwitcher } from '@ui';
 import {
+  // need refactor
   AccordionDemo,
   CardDemo,
   HighlightDemo,
@@ -15,8 +9,18 @@ import {
   PresenceDemo,
   ScrollAreaDemo,
   TabsDemo,
+  // need refactor
+} from '@app/examples';
+import { Nav } from './components';
+import {
+  PageCheckbox,
+  PageCollapsible,
+  PageInput,
+  PageSelect,
 } from './examples';
 import { TestPage as Test } from './Test';
+import './App.css';
+import { Home } from 'lucide-react';
 
 const components: Record<string, Record<string, any>> = {
   headless: {
@@ -27,58 +31,81 @@ const components: Record<string, Record<string, any>> = {
   styled: {
     accordion: AccordionDemo,
     card: CardDemo,
-    collapsible: PageCollapsible,
     scrollarea: ScrollAreaDemo,
     tabs: TabsDemo,
+  },
+  refactored: {
     checkbox: PageCheckbox,
+    collapsible: PageCollapsible,
     input: PageInput,
+    select: PageSelect,
   },
 };
 
 export default () => (
   <div
-    className={[
+    className={cn(
       'min-h-screen',
-      'transition-colors',
       'text-foreground',
-      'bg-white',
-      'dark:bg-black',
-    ].join(' ')}
+      'bg-background',
+      'transition-colors'
+    )}
   >
-    <div className="mx-auto flex w-full max-w-200 flex-col gap-10 px-4 py-16">
+    <div className="mx-auto w-full max-w-3xl px-4 py-16">
       <BrowserRouter basename="react-zimog-ui">
-        <header className="flex items-start gap-4">
-          <MainMenu>
-            <MainMenu.Entry>
-              <NavLink to="/">all</NavLink>
-            </MainMenu.Entry>
+        <header className="sticky top-16 flex items-start gap-4">
+          <Nav
+            className={cn(
+              'absolute',
+              'right-full',
+              'mr-8',
+              'border-r',
+              'pr-8',
+              'text-right',
+              'capitalize'
+            )}
+          >
+            <Nav.Item>
+              <Nav.Link aria-label="Home" title="Home" href="/">
+                <Home className="inline" />
+              </Nav.Link>
+            </Nav.Item>
 
             {Object.keys(components).map((category, i) => (
-              <MainMenu.Submenu key={i} title={category}>
+              <Nav.Menu key={i} className="my-4">
+                <span className="text-foreground block pb-1 text-xl font-semibold">
+                  {category}
+                </span>
+
                 {Object.keys(components[category]).map((name, i) => (
-                  <MainMenu.Entry key={i}>
-                    <NavLink to={`/${category}/${name}`}>{name}</NavLink>
-                  </MainMenu.Entry>
+                  <Nav.Item key={i}>
+                    <Nav.Link href={`/${category}/${name}`}>{name}</Nav.Link>
+                  </Nav.Item>
                 ))}
-              </MainMenu.Submenu>
+              </Nav.Menu>
             ))}
 
-            <MainMenu.Entry>
-              <NavLink to="/test">[test]</NavLink>
-            </MainMenu.Entry>
-          </MainMenu>
+            <Nav.Item>
+              <Nav.Link href="/test" className="mt-4 font-mono lowercase">
+                [test]
+              </Nav.Link>
+            </Nav.Item>
+          </Nav>
 
-          <ThemeSwitcher size="sm" />
+          <ThemeSwitcher size="sm" className="absolute left-full ml-4" />
         </header>
 
         <Routes>
           <Route
             index
-            element={Object.values(components).flatMap((category, i) =>
-              Object.values(category).map((Comp, j) => (
-                <Comp key={`${i}-${j}`} />
-              ))
-            )}
+            element={
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Provident, aperiam. Dolore a, quis porro soluta repellat numquam
+                eius voluptatum sapiente similique atque, vitae aspernatur ipsum
+                quibusdam doloribus modi cupiditate. Voluptate!
+              </p>
+            }
           />
 
           {Object.keys(components).map((category) =>

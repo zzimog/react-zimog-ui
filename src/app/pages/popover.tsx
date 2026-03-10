@@ -17,7 +17,7 @@ export const PopoverDemo = () => (
       <Popover.Trigger asChild>
         <Button>Toggle</Button>
       </Popover.Trigger>
-      <Popover.Content asChild avoidCollisions>
+      <Popover.Content avoidCollisions>
         <Card className="w-80">
           <Card.Content className="-my-1.5">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla

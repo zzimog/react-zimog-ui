@@ -1,28 +1,24 @@
 import { BrowserRouter, Route, Routes } from 'react-router';
 import { cn, ThemeSwitcher } from '@ui';
+import { Logo } from '@app/components';
 import {
-  // need refactor
   CardDemo,
   HighlightDemo,
-  PopoverDemo,
-  ScrollAreaDemo,
-  TabsDemo,
-  // need refactor
-} from '@app/pages';
-import {
   PageAccordion,
   PageCheckbox,
   PageCollapsible,
   PageInput,
   PagePresence,
   PageSelect,
-} from './pages';
+  PopoverDemo,
+  ScrollAreaDemo,
+  TabsDemo,
+} from '@app/pages';
+import { AppMenu, type MenuEntry } from './AppMenu';
 import { TestPage as Test } from './Test';
 import './App.css';
-import { AppMenu, type MenuEntry } from './AppMenu';
-import { MainLayout } from './MainLayout';
 
-const mainMenu: MenuEntry = {
+const pages: MenuEntry = {
   headless: {
     presence: PagePresence,
   },
@@ -51,30 +47,31 @@ export default () => (
       'transition-colors'
     )}
   >
-    <MainLayout />
-
-    <div className="mx-auto w-full max-w-3xl px-4 py-16">
+    <div className="mx-auto w-full max-w-3xl p-4">
       <BrowserRouter basename="react-zimog-ui">
-        <header className="sticky top-16 flex items-start gap-4">
-          <AppMenu data={mainMenu} />
-          <ThemeSwitcher size="sm" className="absolute left-full ml-4" />
+        <header className="mb-16 flex h-16 items-center justify-between gap-2">
+          <AppMenu data={pages} />
+
+          <a aria-label="UI" title="UI Homepage" href="/">
+            <Logo className="size-16" />
+          </a>
+
+          <ThemeSwitcher size="sm" />
         </header>
 
         <Routes>
           <Route
             index
             element={
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Provident, aperiam. Dolore a, quis porro soluta repellat numquam
-                eius voluptatum sapiente similique atque, vitae aspernatur ipsum
-                quibusdam doloribus modi cupiditate. Voluptate!
-              </p>
+              <>
+                <h1>Welcome!</h1>
+                <p>This is the UI project homepage.</p>
+              </>
             }
           />
 
-          {Object.keys(mainMenu).map((category) =>
-            Object.entries(mainMenu[category]).map(([name, Comp]) => (
+          {Object.keys(pages).map((category) =>
+            Object.entries(pages[category]).map(([name, Comp]) => (
               <Route
                 key={`${category}-${name}`}
                 path={`${category}/${name}`}

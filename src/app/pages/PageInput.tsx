@@ -29,6 +29,7 @@ export const PageInput = () => (
   >
     <Page.Article
       id="overview"
+      title={false}
       description={
         <>
           Basic <Code>{`<Input />`}</Code> component to input data.

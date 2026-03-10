@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Button, Card, Presence } from '@ui';
 import { Page } from '@app/components';
-import { DemoContainer } from '../components/demo-container';
 
 const code = `
 import { Presence } from '@ui';
@@ -39,6 +38,7 @@ export const PagePresence = () => {
     >
       <Page.Article
         id="overview"
+        title={false}
         description="Dynamic utility component which awaits possible CSS animation before unmounting."
         code={code}
       >

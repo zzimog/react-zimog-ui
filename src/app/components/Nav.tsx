@@ -37,9 +37,7 @@ Nav.List = NavList;
 type ItemBaseProps = ComponentProps<'li'>;
 interface NavItemProps extends ItemBaseProps {}
 
-const NavItem = ({ className, ...props }: NavItemProps) => (
-  <li {...props} className={cn('py-0.5', className)} />
-);
+const NavItem = (props: NavItemProps) => <li {...props} />;
 
 NavItem.displayName = 'NavItem';
 Nav.Item = NavItem;

@@ -12,6 +12,7 @@ export const PageSelect = () => (
   >
     <Page.Article
       id="overview"
+      title={false}
       description="Animated component which expands to reveal content and collapses to hide it."
       code={`
           <Select>

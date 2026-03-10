@@ -16,6 +16,7 @@ export const PageCollapsible = () => {
     >
       <Page.Article
         id="overview"
+        title={false}
         description="Animated component which expands to reveal content and collapses to hide it."
         code={`
           export default () => {

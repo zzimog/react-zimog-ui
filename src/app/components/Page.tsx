@@ -37,11 +37,11 @@ export const Page = (inProps: PageProps) => {
 
   return (
     <main {...props}>
-      <div className="sticky top-16">
+      <div className="sticky top-16 hidden xl:block">
         <Nav
           aria-label={`${title} contents`}
           hidden={hasItems}
-          className="absolute left-full ml-4 border-l pl-4"
+          className="absolute left-full ml-4 border-l px-4 transition"
         >
           <Nav.List>
             {items.map(({ href, label }, i) => (
@@ -93,11 +93,7 @@ export const PageArticle = (inProps: PageArticleProps) => {
   const sectionTitle = sections[id];
 
   return (
-    <article
-      id={composedId}
-      {...props}
-      className={cn('not-last:mb-12', className)}
-    >
+    <article id={composedId} {...props} className={cn('mb-16', className)}>
       <header className="mb-8 flex flex-col gap-4">
         {title && <h2 className="text-xl/none">{sectionTitle}</h2>}
         {description && <p className="text-muted">{description}</p>}

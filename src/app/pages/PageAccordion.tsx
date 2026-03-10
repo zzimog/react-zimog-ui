@@ -1,18 +1,6 @@
 import { Accordion, Code } from '@ui';
 import { Page } from '@app/components';
 
-const code = `
-import { Accordion } from '@ui';
-
-export default () => (
-  <Accordion>
-    <Accordion.Item>
-      <Accordion.Trigger />
-      <Accordion.Content />
-    </Accordion.Item>
-  </Accordion>
-);`;
-
 export const PageAccordion = () => (
   <Page
     id="accordion"
@@ -24,6 +12,7 @@ export const PageAccordion = () => (
   >
     <Page.Article
       id="overview"
+      title={false}
       description={
         <>
           The <Code>{'<Accordion />'}</Code> component let user expand and

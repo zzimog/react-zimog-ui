@@ -4,12 +4,12 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --white: #fff;
+  --white: #fffeff;
   --black: var(--color-zinc-950);
   --shape: var(--radius-md);
 
   --foreground: var(--black);
-  --background: var(--color-zinc-50);
+  --background: var(--white);
   --muted: var(--color-zinc-400);
   --muted-contrast: var(--color-zinc-100);
   --primary: var(--color-violet-500);
@@ -67,20 +67,6 @@
 @utility rounded-shape-* {
   border-radius: calc(var(--shape) + (var(--spacing) * --value(number)));
 }
-@utility -rounded-shape-* {
-  border-radius: calc(var(--shape) - (var(--spacing) * --value(number)));
-}
-
-@utility halo {
-  --color: oklch(71.4% 0.203 305.504 / 8%); /* purple-400 */
-  --halo-x: calc(var(--x) - (var(--halo-size) / 2));
-  --halo-y: calc(var(--y) - (var(--halo-size) / 2));
-  background-image: radial-gradient(var(--color) 0, transparent 50%);
-  background-repeat: no-repeat;
-  background-position: var(--halo-x) var(--halo-y);
-  background-size: var(--halo-size) var(--halo-size);
-  @apply transition-opacity duration-200;
-}
 
 @layer base {
   * {
@@ -101,17 +87,6 @@
   html {
     overscroll-behavior-y: none;
     scroll-behavior: smooth;
-  }
-
-  body {
-    min-height: 100vh;
-    background-color: var(--color-white);
-    @apply text-foreground;
-
-    @variant dark {
-      background-color: var(--color-black);
-      @apply text-background;
-    }
   }
 
   :checked {

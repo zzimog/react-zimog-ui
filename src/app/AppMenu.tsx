@@ -1,24 +1,35 @@
-import { Home } from 'lucide-react';
-import { cn } from '@ui';
+import { useCallback, useEffect, useState } from 'react';
+import { Hamburger, Home, X } from 'lucide-react';
+import { Button, cn, Presence } from '@ui';
 import { Nav } from './components';
 
 export type MenuEntry = {
   [key: string]: MenuEntry | Function;
 };
 
-function Items(props: { data: MenuEntry; context?: string }) {
-  const { data = {}, context = '' } = props;
-  const entries = Object.entries(data);
-  return (
-    <>
-      {entries.map(([label, data]) => {
+export const AppMenu = (props: { data?: MenuEntry }) => {
+  const { data = {} } = props;
+  const [open, setOpen] = useState(false);
+
+  const handleClose = useCallback(() => {
+    /**
+     * @todo Temp fix, wait "page load"
+     */
+    setTimeout(() => {
+      setOpen(false);
+    }, 100);
+  }, []);
+
+  const getItems = useCallback(
+    (data: MenuEntry = {}, context = '') =>
+      Object.entries(data).map(([label, data]) => {
         const href = `${context}/${label}`.toLowerCase();
         const isFunc = typeof data === 'function';
 
         return (
           <Nav.Item key={href}>
             {isFunc ? (
-              <Nav.Link title={label} href={href}>
+              <Nav.Link title={label} href={href} onClick={handleClose}>
                 {label}
               </Nav.Link>
             ) : (
@@ -27,45 +38,73 @@ function Items(props: { data: MenuEntry; context?: string }) {
                   {label}
                 </span>
 
-                <Nav.List>
-                  <Items data={data} context={href} />
-                </Nav.List>
+                <Nav.List>{getItems(data, href)}</Nav.List>
               </>
             )}
           </Nav.Item>
         );
-      })}
+      }),
+    [data]
+  );
+
+  useEffect(() => {
+    const overflow: any = open ? 'hidden' : null;
+    document.body.style.overflow = overflow;
+  }, [open]);
+
+  return (
+    <>
+      <Button onClick={() => setOpen(!open)}>
+        <Hamburger className="size-4" />
+      </Button>
+
+      <Presence
+        data-open={open}
+        present={open}
+        className={cn(
+          'fixed',
+          'inset-0',
+          'flex',
+          'flex-col',
+          'justify-start',
+          'items-center',
+          'gap-16',
+          'p-8',
+          'bg-background',
+          'overflow-auto',
+          'z-999',
+          'data-[open=true]:animate-in',
+          'data-[open=false]:animate-out',
+          'not-md:**:text-2xl/11'
+        )}
+      >
+        <Button onClick={handleClose}>
+          <X />
+        </Button>
+
+        <Nav className="mx-auto text-center">
+          <Nav.List className="capitalize">
+            <Nav.Item className="mb-4">
+              <Nav.Link title="Home" href="/">
+                <span className="sr-only">Home</span>
+                <Home className="inline not-md:size-11" />
+              </Nav.Link>
+            </Nav.Item>
+
+            {getItems(data)}
+
+            <Nav.Item>
+              <Nav.Link
+                href="/test"
+                className="mt-4 font-mono lowercase"
+                onClick={handleClose}
+              >
+                [test]
+              </Nav.Link>
+            </Nav.Item>
+          </Nav.List>
+        </Nav>
+      </Presence>
     </>
   );
-}
-
-export const AppMenu = ({ data = {} }: { data?: MenuEntry }) => (
-  <Nav
-    className={cn(
-      'absolute',
-      'right-full',
-      'mr-4',
-      'pr-4',
-      'border-r',
-      'text-right',
-      'capitalize',
-    )}
-  >
-    <Nav.List>
-      <Nav.Item>
-        <Nav.Link title="Home" href="/">
-          <span className="sr-only">Home</span>
-          <Home className="inline" />
-        </Nav.Link>
-      </Nav.Item>
-
-      <Items data={data} />
-
-      <Nav.Item>
-        <Nav.Link href="/test" className="mt-4 font-mono lowercase">
-          [test]
-        </Nav.Link>
-      </Nav.Item>
-    </Nav.List>
-  </Nav>
-);
+};

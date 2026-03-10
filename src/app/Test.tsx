@@ -1,29 +1,50 @@
 import { useState } from 'react';
-import { Card, CodeBlock, Input, Slider, Switch, Title } from '@ui';
-
-const CODE_SLIDER = `
-import { Slider } from '@ui';
-
-export default () => (
-  <Slider>
-    <Slider.Track>
-      <Slider.Steps />
-      <Slider.Range />
-    </Slider.Track>
-    <Slider.Thumb />
-  </Slider>
-);`;
+import { Card, Field, Input, Password, Slider, Switch, Title } from '@ui';
 
 export const TestPage = () => {
   const [sliderValue, setSliderValue] = useState(15);
 
   return (
     <div className="flex flex-col gap-8">
-      <Title>Form Elements</Title>
+      <Title>Test page</Title>
 
       <Card>
-        <Card.Header asChild>
-          <Card.Title as="h3">Radio</Card.Title>
+        <Card.Header>
+          <Card.Title as="h2">Password</Card.Title>
+        </Card.Header>
+        <Card.Content>
+          <div className="flex flex-col gap-2">
+            <Field.Label htmlFor="demo-password">Password</Field.Label>
+            <p className="text-muted [&_a]:text-foreground text-sm [&_a]:underline">
+              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cum, eum{' '}
+              <a href="#">voluptatem</a> quis inventore ipsa.
+            </p>
+
+            <Password>
+              <Input.Group>
+                <Password.Input id="demo-password" />
+                <Password.Toggle as={Input.Addon} />
+              </Input.Group>
+              <Password.Requirement pattern={/[a-z]/}>
+                One lowercase character
+              </Password.Requirement>
+              <Password.Requirement pattern={/[A-Z]/}>
+                One uppercase character
+              </Password.Requirement>
+              <Password.Requirement pattern={/[0-9]/}>
+                One number
+              </Password.Requirement>
+              <Password.Requirement pattern={/[!?@#]/}>
+                One special character (!?@#)
+              </Password.Requirement>
+            </Password>
+          </div>
+        </Card.Content>
+      </Card>
+
+      <Card>
+        <Card.Header>
+          <Card.Title as="h2">Radio</Card.Title>
         </Card.Header>
         <Card.Content className="flex justify-center gap-4">
           <Input name="_demo_radio" type="radio" />
@@ -31,8 +52,9 @@ export const TestPage = () => {
           <Input type="radio" disabled />
           <Input type="radio" disabled defaultChecked />
         </Card.Content>
-        <Card.Header asChild>
-          <Card.Title as="h3">Switch</Card.Title>
+
+        <Card.Header>
+          <Card.Title as="h2">Switch</Card.Title>
         </Card.Header>
         <Card.Content className="flex justify-center gap-2">
           <Switch
@@ -53,11 +75,11 @@ export const TestPage = () => {
         </Card.Content>
       </Card>
 
-      <Title id="slider" size={2}>
-        Slider
-      </Title>
       <Card>
-        <Card.Content className="flex items-center justify-center gap-8 border-b">
+        <Card.Header>
+          <Card.Title as="h2">Slider</Card.Title>
+        </Card.Header>
+        <Card.Content className="flex items-center justify-center gap-8">
           <Slider
             min={10}
             max={20}
@@ -97,8 +119,6 @@ export const TestPage = () => {
             <Slider.Thumb />
           </Slider>
         </Card.Content>
-
-        <CodeBlock className="-my-6">{CODE_SLIDER.trim()}</CodeBlock>
       </Card>
     </div>
   );

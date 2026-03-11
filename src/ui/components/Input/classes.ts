@@ -31,8 +31,9 @@ const classes = {
     'data-disabled:cursor-not-allowed',
     '*:not-first:rounded-l-none',
     '*:not-last:rounded-r-none',
-    '*:not-last:border-r-0',
-    '[&_svg]:size-4',
+    '[&_input]:relative',
+    '[&_input~*]:border-l-0',
+    '[&_:has(~input)]:border-r-0',
   ],
   addon: [
     ...common,
@@ -42,6 +43,7 @@ const classes = {
     'whitespace-nowrap',
     'group-data-readonly/input:border-dashed',
     'group-data-invalid/input:border-danger',
+    '[&_svg]:size-4',
   ],
   input: cva(
     [

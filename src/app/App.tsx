@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router';
-import { cn, ThemeSwitcher } from '@ui';
-import { Logo } from '@app/components';
+import { Card, cn, ThemeSwitcher } from '@ui';
+import { Logo, MDXLoader } from '@app/components';
 import {
   CardDemo,
   HighlightDemo,
@@ -15,6 +15,7 @@ import {
   TabsDemo,
 } from '@app/pages';
 import { AppMenu, type MenuEntry } from './AppMenu';
+import HomePage from './mdx/home.mdx';
 import { TestPage as Test } from './Test';
 import './App.css';
 
@@ -63,10 +64,27 @@ export default () => (
           <Route
             index
             element={
-              <>
-                <h1>Welcome!</h1>
-                <p>This is the UI project homepage.</p>
-              </>
+              <MDXLoader
+                mdx={HomePage}
+                components={{
+                  Article: ({ className, ...props }) => (
+                    <article {...props} className={cn('mb-16', className)} />
+                  ),
+                  Card: ({ className, ...props }) => (
+                    <Card {...props} className={cn('border-b', className)} />
+                  ),
+                  Content: ({ className, ...props }) => (
+                    <Card.Content
+                      {...props}
+                      className={cn(
+                        'not-last:pb-6',
+                        'not-last:border-b',
+                        className
+                      )}
+                    />
+                  ),
+                }}
+              />
             }
           />
 

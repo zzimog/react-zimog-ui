@@ -1,0 +1,84 @@
+import { User } from 'lucide-react';
+import { Field, Input } from '@ui';
+
+# Input
+
+<Article>
+  ## ~Overview
+  ### Basic `<Input />` component to input data.
+
+  <Card>
+    <Content>
+      <Field className="mx-auto max-w-md">
+        <Field.Label htmlFor="demo-input">Lorem ipsum dolor sit</Field.Label>
+        <Input id="demo-input" />
+        <Field.Description>Lorem ipsum dolor sit amet consectetur adipisicing elit.</Field.Description>
+      </Field>
+    </Content>
+
+```tsx
+<Field className="mx-auto max-w-md">
+  <Field.Label>Lorem ipsum dolor sit</Field.Label>
+  <Input />
+  <Field.Description>
+    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+  </Field.Description>
+</Field>
+```
+
+  </Card>
+</Article>
+
+<Article>
+  ## Group & Addons
+  ### Wrap your `<Input />` in a `<Input.Group />` component and add `<Input.Addon />` to show icons or others decorative elements in your field.
+
+  <Card>
+  <Content>
+    <div className="mx-auto flex max-w-md flex-col gap-4">
+      <Input.Group>
+        <Input.Addon>
+          <User />
+        </Input.Addon>
+        <Input id="demo-input-1" placeholder="Username" />
+      </Input.Group>
+      <Input.Group>
+        <Input.Addon>http://</Input.Addon>
+        <Input id="demo-input-2" placeholder="your-subdomain" />
+        <Input.Addon>.example.com</Input.Addon>
+      </Input.Group>
+      <Input.Group>
+        <Input id="demo-input-3" placeholder="name.surname" className="text-right" />
+        <Input.Addon>@example.com</Input.Addon>
+      </Input.Group>
+    </div>
+  </Content>
+
+```tsx
+<Input.Group>
+  <Input.Addon>
+    <User />
+  </Input.Addon>
+  <Input placeholder="Username" />
+</Input.Group>
+
+<Input.Group>
+  <Input.Addon>http://</Input.Addon>
+  <Input placeholder="your-subdomain" />
+  <Input.Addon>.example.com</Input.Addon>
+</Input.Group>
+```
+
+  </Card>
+</Article>
+
+<Article>
+  ## Props
+
+  <Card>
+    <Content>
+      <i>coming soon</i>
+    </Content>
+
+  </Card>
+</Article>

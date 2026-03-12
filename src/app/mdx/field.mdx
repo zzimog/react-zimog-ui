@@ -1,0 +1,100 @@
+# Field
+
+Use `<Field />` component to compose form fields or grouped inputs, with labels, descriptions, and help texts.
+
+<Demo>
+  <div className="mx-auto flex max-w-lg flex-col gap-4">
+    <Field>
+      <Field.Label children="Name" />
+      <Input placeholder="Your name" />
+    </Field>
+
+    <Field>
+      <Field.Label children="Surname" />
+      <Input placeholder="Your surname" />
+    </Field>
+
+    <fieldset className="border p-4 -mx-4 rounded-shape transition">
+      <Field.Label as="legend" children="Birthday" />
+      <div className="grid grid-cols-3 gap-4">
+        <Field>
+          <Field.Label children="Day" />
+          <Select>
+            <Select.Option value="1" children="One" />
+            <Select.Option value="2" children="Two" />
+            <Select.Option value="3" children="Three" />
+          </Select>
+        </Field>
+
+        <Field>
+          <Field.Label children="Month" />
+          <Select>
+            <Select.Option value="1" children="One" />
+            <Select.Option value="2" children="Two" />
+            <Select.Option value="3" children="Three" />
+          </Select>
+        </Field>
+
+        <Field>
+          <Field.Label children="Year" />
+          <Select>
+            <Select.Option value="1" children="One" />
+            <Select.Option value="2" children="Two" />
+            <Select.Option value="3" children="Three" />
+          </Select>
+        </Field>
+      </div>
+    </fieldset>
+
+    <Field>
+      <Field.Label children="Password" />
+      <Password>
+        <Input.Group>
+          <Password.Input id="demo-password" />
+          <Password.Toggle as={Input.Addon} />
+        </Input.Group>
+        <Password.Requirement
+          pattern={/[a-z]/}
+          children="One lowercase character"
+        />
+        <Password.Requirement
+          pattern={/[A-Z]/}
+          children="One uppercase character"
+        />
+        <Password.Requirement pattern={/[0-9]/} children="One number" />
+        <Password.Requirement
+          pattern={/[!?@#]/}
+          children="One special character (!?@#)"
+        />
+      </Password>
+    </Field>
+
+    <Field direction="horizontal" className="pt-4">
+      <Input type="checkbox" id="privacy" />
+      <Field.Content>
+        <Field.Label htmlFor="privacy" children="Accept our Privacy Policy" />
+        <Field.Description
+          children={
+            <>
+              I have read and acccept the <a href="#!">Privacy Policy</a>.
+            </>
+          }
+        />
+      </Field.Content>
+    </Field>
+
+    <div className="mt-4 flex gap-2">
+      <Button color="primary">Submit</Button>
+      <Button>Cancel</Button>
+    </div>
+
+  </div>
+</Demo>
+
+```tsx
+<Field>
+  <Field.Label />
+  <Input />
+  <Field.Description />
+</Field>
+```

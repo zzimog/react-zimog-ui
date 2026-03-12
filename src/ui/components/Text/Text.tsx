@@ -10,7 +10,7 @@ export const Code = ({ className, ...props }: NativeProps<'span'>) => (
   <Native.span
     {...props}
     className={cn(
-      'p-0.5',
+      'p-[0.1rem_0.3rem]',
       'font-mono',
       'text-[0.8em]/none',
       'text-foreground',

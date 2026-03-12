@@ -17,9 +17,8 @@ export const Field = (inProps: FieldProps) => {
         'group/field',
         'flex',
         'flex-col',
-        'gap-3',
-        'has-disabled:opacity-75',
-        'has-disabled:cursor-not-allowed',
+        'gap-x-3',
+        'gap-y-1',
         'data-[direction=horizontal]:flex-row',
         className
       )}
@@ -49,7 +48,7 @@ const FieldLabel = ({ className, ...props }: NativeProps<'label'>) => (
     className={cn(
       'text-sm/6',
       'font-semibold',
-      'group-has-disabled/field:text-muted',
+      'group-has-disabled/field:opacity-50',
       'group-has-disabled/field:cursor-not-allowed',
       'group-has-aria-invalid/field:text-danger',
       className
@@ -63,7 +62,16 @@ Field.Label = FieldLabel;
 /*---------------------------------------------------------------------------*/
 
 const FieldDescription = ({ className, ...props }: NativeProps<'p'>) => (
-  <Native.p {...props} className={cn('text-muted text-sm', className)} />
+  <Native.p
+    {...props}
+    className={cn(
+      'text-sm',
+      'text-muted',
+      '[&_a]:text-foreground',
+      '[&_a]:underline',
+      className
+    )}
+  />
 );
 
 FieldDescription.displayName = 'FieldDescription';

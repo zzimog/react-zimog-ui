@@ -55,15 +55,15 @@ const classes = {
       'focus:border-primary',
       'focus:outline-outline',
       'hover:not-disabled:border-primary',
-      'disabled:opacity-50',
+      'disabled:opacity-75',
       'disabled:cursor-not-allowed',
       'read-only:cursor-default',
       'placeholder:text-muted',
       'placeholder:transition-colors',
       'selection:bg-primary/50',
       'selection:text-primary-contrast',
-      'aria-invalid:border-danger',
-      'aria-invalid:focus:outline-danger/25',
+      'aria-invalid:border-danger!',
+      'aria-invalid:focus:outline-danger/50',
     ],
     {
       variants: {

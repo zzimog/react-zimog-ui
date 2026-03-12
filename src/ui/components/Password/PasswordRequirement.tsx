@@ -6,27 +6,24 @@ import classes from './classes';
 
 const DISPLAY_NAME = 'PasswordRequirement';
 
-type PasswordRequirementProps = NativeProps<'div'> & {
+type BaseProps = NativeProps<'div'>;
+interface PasswordRequirementProps extends BaseProps {
   pattern: RegExp;
-};
-
-function getState(match: boolean) {
-  return match ? 'valid' : 'invalid';
 }
 
 export const PasswordRequirement = (inProps: PasswordRequirementProps) => {
   const { pattern, className, children, ...props } = inProps;
 
   const { value } = Password.useContext(DISPLAY_NAME);
-  const match = pattern.test(value);
+  const valid = pattern.test(value);
 
   return (
     <Native.div
-      data-state={getState(match)}
+      data-valid={valid}
       {...props}
       className={cn(classes.requirement, className)}
     >
-      {match ? <Check /> : <X />}
+      {valid ? <Check /> : <X />}
       {children}
     </Native.div>
   );

@@ -73,7 +73,6 @@ export const AppMenu = (props: { data?: MenuEntry }) => {
           'bg-background',
           'overflow-auto',
           'z-999',
-          'data-[open=true]:animate-in',
           'data-[open=false]:animate-out',
           'not-md:**:text-2xl/11'
         )}

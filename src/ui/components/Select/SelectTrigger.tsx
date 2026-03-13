@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { Native, Popover, type NativeProps } from '@ui/headless';
 import { useMergedRefs } from '@ui/hooks';
@@ -22,6 +23,16 @@ export const SelectTrigger = (inProps: SelectTriggerProps) => {
 
   const { triggerRef, open, currentNode } = Select.useContext(DISPLAY_NAME);
   const mergedRef = useMergedRefs(refProp, triggerRef);
+
+  const prevOpenRef = useRef(open);
+  useEffect(() => {
+    if (prevOpenRef.current && !open) {
+      const trigger = triggerRef.current;
+      trigger?.focus();
+    }
+
+    prevOpenRef.current = open;
+  }, [open]);
 
   return (
     <Popover.Trigger asChild>

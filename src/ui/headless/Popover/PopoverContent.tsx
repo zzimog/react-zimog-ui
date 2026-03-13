@@ -78,10 +78,9 @@ export const PopoverContent = (inProps: PopoverContentProps) => {
 
   return createPortal(
     <Presence
+      id={contentId}
       ref={mergedRefs}
       present={open}
-      role="dialog"
-      id={contentId}
       data-open={open}
       {...props}
       style={{

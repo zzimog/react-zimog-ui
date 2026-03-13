@@ -6,12 +6,12 @@ Use `<Field />` component to compose form fields or grouped inputs, with labels,
   <div className="mx-auto flex max-w-lg flex-col gap-4">
     <Field>
       <Field.Label children="Name" />
-      <Input placeholder="Your name" />
+      <Field.Control placeholder="Your name" />
     </Field>
 
     <Field>
       <Field.Label children="Surname" />
-      <Input placeholder="Your surname" />
+      <Field.Control placeholder="Your surname" />
     </Field>
 
     <fieldset className="border p-4 -mx-4 rounded-shape transition">
@@ -50,7 +50,7 @@ Use `<Field />` component to compose form fields or grouped inputs, with labels,
       <Field.Label children="Password" />
       <Password>
         <Input.Group>
-          <Password.Input id="demo-password" />
+          <Password.Input />
           <Password.Toggle as={Input.Addon} />
         </Input.Group>
         <Password.Requirement
@@ -66,6 +66,16 @@ Use `<Field />` component to compose form fields or grouped inputs, with labels,
           pattern={/[!?@#]/}
           children="One special character (!?@#)"
         />
+      </Password>
+    </Field>
+
+    <Field>
+      <Field.Label children="Repeat Password" />
+      <Password>
+        <Input.Group>
+          <Password.Input />
+          <Password.Toggle as={Input.Addon} />
+        </Input.Group>
       </Password>
     </Field>
 

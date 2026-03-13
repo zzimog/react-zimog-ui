@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { Native, type NativeProps } from '@ui/headless';
 import { useMergedRefs } from '@ui/hooks';
 import { composeHandlers } from '@ui/utils';
@@ -7,10 +7,13 @@ import { useFocusGuards } from './use-focus-guards';
 
 const DISPLAY_NAME = 'FocusTrap';
 
-type FocusTrapProps = NativeProps<'div'> & {
+type BaseProps = NativeProps<'div'>;
+interface FocusTrapProps extends BaseProps {
   loop?: boolean;
   trapped?: boolean;
-};
+  onMount?(): void;
+  onUnmount?(): void;
+}
 
 function focus(element: HTMLElement | null) {
   if (element && element.focus) {
@@ -19,7 +22,15 @@ function focus(element: HTMLElement | null) {
 }
 
 export const FocusTrap = (inProps: FocusTrapProps) => {
-  const { ref: refProp, loop, trapped = true, onKeyDown, ...props } = inProps;
+  const {
+    ref: refProp,
+    loop,
+    trapped = true,
+    onMount,
+    onUnmount,
+    onKeyDown,
+    ...props
+  } = inProps;
 
   const lastFocusedRef = useRef<HTMLElement>(null);
 
@@ -69,6 +80,11 @@ export const FocusTrap = (inProps: FocusTrapProps) => {
       [trapped]
     )
   );
+
+  useEffect(() => {
+    onMount?.();
+    return () => onUnmount?.();
+  }, [onMount, onUnmount]);
 
   useFocusGuards();
 

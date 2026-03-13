@@ -7,36 +7,12 @@
   @keyframes enter {
     from {
       opacity: var(--enter-opacity, 0);
-      filter: blur(var(--enter-blur));
-      transform: translate3d(
-          var(--enter-translate-x),
-          var(--enter-translate-y),
-          var(--enter-translate-z)
-        )
-        scale3d(
-          var(--enter-scale-x, var(--enter-scale)),
-          var(--enter-scale-y, var(--enter-scale)),
-          var(--enter-scale-z, var(--enter-scale))
-        )
-        rotate(var(--enter-rotate));
     }
   }
 
   @keyframes exit {
     to {
       opacity: var(--exit-opacity, 0);
-      filter: blur(var(--exit-blur));
-      transform: translate3d(
-          var(--exit-translate-x),
-          var(--exit-translate-y),
-          var(--exit-translate-z)
-        )
-        scale3d(
-          var(--exit-scale-x, var(--exit-scale)),
-          var(--exit-scale-y, var(--exit-scale)),
-          var(--exit-scale-z, var(--exit-scale))
-        )
-        rotate(var(--exit-rotate));
     }
   }
 

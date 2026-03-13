@@ -65,7 +65,9 @@ export const SelectContent = (inProps: SelectContentProps) => {
           onKeyDown={composeHandlers(onKeyDown, (event) => {
             if (event.key === 'Tab') {
               event.preventDefault();
-            } else if (event.key === 'Escape') {
+            }
+
+            if (event.key === 'Escape') {
               onOpenChange(false);
             }
 

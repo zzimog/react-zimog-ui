@@ -1,4 +1,5 @@
 import {
+  useEffect,
   useRef,
   useState,
   type PropsWithChildren,
@@ -79,17 +80,27 @@ export const Select = (inProps: SelectProps) => {
   });
 
   const [currentNode, setCurrentNode] = useState<HTMLElement | null>(null);
+
   const triggerRef = useRef<HTMLElement>(null);
+  const prevOpenRef = useRef(open);
 
   function handleValueChange(value: string) {
     setValue(value);
     setOpen(false);
-
-    setTimeout(() => {
-      const trigger = triggerRef.current;
-      trigger?.focus({ preventScroll: true });
-    });
   }
+
+  useEffect(() => {
+    const wasOpen = prevOpenRef.current;
+    const hasOpenChanged = open !== wasOpen;
+    if (hasOpenChanged && !open) {
+      requestAnimationFrame(() => {
+        const trigger = triggerRef.current;
+        trigger?.focus();
+      });
+    }
+
+    prevOpenRef.current = open;
+  }, [open]);
 
   return (
     <SelectContext

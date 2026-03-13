@@ -82,8 +82,17 @@ export const FocusTrap = (inProps: FocusTrapProps) => {
   );
 
   useEffect(() => {
+    let raf: number | undefined;
+    if (raf) {
+      cancelAnimationFrame(raf);
+    }
+
     onMount?.();
-    return () => onUnmount?.();
+    return () => {
+      raf = requestAnimationFrame(() => {
+        onUnmount?.();
+      });
+    };
   }, [onMount, onUnmount]);
 
   useFocusGuards();

@@ -52,6 +52,12 @@ export const SelectOption = (inProps: SelectOptionProps) => {
     return () => collection.onItemRemove(node);
   });
 
+  function handleHighlight(focus: boolean) {
+    if (context.open) {
+      setHighlighted(focus);
+    }
+  }
+
   function handleSelect() {
     if (!disabled) {
       context.onValueChange(value);
@@ -69,10 +75,10 @@ export const SelectOption = (inProps: SelectOptionProps) => {
       tabIndex={0}
       {...props}
       className={cn('flex items-center', classes.option, className)}
-      onFocus={composeHandlers(onFocus, () => setHighlighted(true))}
-      onBlur={composeHandlers(onBlur, () => setHighlighted(false))}
+      onFocus={composeHandlers(onFocus, () => handleHighlight(true))}
+      onBlur={composeHandlers(onBlur, () => handleHighlight(false))}
       onPointerMove={composeHandlers(onPointerMove, (event) => {
-        if (!disabled) {
+        if (context.open && !disabled) {
           event.currentTarget.focus({ preventScroll: true });
         }
       })}

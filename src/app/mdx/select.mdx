@@ -71,32 +71,32 @@ This component extends the [`<Button/>`](/styled/button) props.
   data={[
     {
       name: 'placeholder',
-      type: 'text',
+      type: 'string',
       default: 'Select an option',
     },
     {
       name: 'defaultValue',
-      type: 'text',
+      type: 'string',
     },
     {
       name: 'value',
-      type: 'text',
+      type: 'string',
     },
     {
       name: 'onValueChange',
-      type: 'function',
+      type: '(value: string) => void',
     },
     {
-      name: 'defaultValue',
-      type: 'text',
+      name: 'defaultOpen',
+      type: 'boolean',
     },
     {
-      name: 'value',
-      type: 'text',
+      name: 'open',
+      type: 'boolean',
     },
     {
-      name: 'onValueChange',
-      type: 'function',
+      name: 'onOpenChange',
+      type: '(open: boolean) => void',
     },
   ]}
 />

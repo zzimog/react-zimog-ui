@@ -24,6 +24,7 @@ export const SelectOption = (inProps: SelectOptionProps) => {
     children,
     onFocus,
     onBlur,
+    onPointerDown,
     onPointerMove,
     onPointerUp,
     onKeyDown,
@@ -78,7 +79,8 @@ export const SelectOption = (inProps: SelectOptionProps) => {
       onFocus={composeHandlers(onFocus, () => handleHighlight(true))}
       onBlur={composeHandlers(onBlur, () => handleHighlight(false))}
       onPointerMove={composeHandlers(onPointerMove, (event) => {
-        if (context.open && !disabled) {
+        const isMouse = event.pointerType === 'mouse';
+        if (isMouse && context.open && !disabled) {
           event.currentTarget.focus({ preventScroll: true });
         }
       })}

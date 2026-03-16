@@ -14,6 +14,7 @@ const classes = {
     'transition-colors',
     '[&_svg]:size-4',
     '[&_svg]:transition-transform',
+    '[&_svg]:shrink-0',
     // hover
     'not-disabled:hover:border-primary',
     // focus
@@ -29,6 +30,13 @@ const classes = {
     // invalid
     'aria-invalid:border-danger',
     'aria-invalid:focus:outline-danger/25',
+  ],
+  value: [
+    'whitespace-nowrap',
+    'text-ellipsis',
+    'overflow-hidden',
+    'shrink',
+    'data-placeholder:text-muted',
   ],
   dialog: [
     'flex',

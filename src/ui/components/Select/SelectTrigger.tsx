@@ -15,7 +15,7 @@ type SelectTriggerProps = NativeProps<'button'> & {
 export const SelectTrigger = (inProps: SelectTriggerProps) => {
   const {
     ref: refProp,
-    placeholder,
+    placeholder: placeholderProp,
     className,
     onPointerDown,
     ...props
@@ -25,6 +25,9 @@ export const SelectTrigger = (inProps: SelectTriggerProps) => {
 
   const ref = useRef<HTMLElement>(null);
   const mergedRef = useMergedRefs(refProp, ref);
+
+  const hasPlaceholder = !!currentNode?.textContent;
+  const placeholder = placeholderProp || 'Select an option';
 
   const previousOpenRef = useRef(open);
   useEffect(() => {
@@ -62,11 +65,12 @@ export const SelectTrigger = (inProps: SelectTriggerProps) => {
           if (!open) event.preventDefault();
         })}
       >
-        {currentNode?.textContent || (
-          <span className="text-muted">
-            {placeholder || 'Select an option'}
-          </span>
-        )}
+        <span
+          data-placeholder={hasPlaceholder ? '' : undefined}
+          className={cn(classes.value)}
+        >
+          {currentNode?.textContent || placeholder}
+        </span>
         <ChevronDown />
       </Native.button>
     </Popover.Trigger>

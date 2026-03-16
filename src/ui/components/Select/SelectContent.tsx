@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { FocusTrap, Popover, type NativeProps } from '@ui/headless';
 import { cn, composeHandlers, createScopedContext } from '@ui/utils';
 import { Select } from './Select';
@@ -22,6 +23,18 @@ export const SelectContent = (inProps: SelectContentProps) => {
   const { open, onOpenChange } = Select.useContext(DISPLAY_NAME);
   const { getItems } = Select.useCollection();
 
+  useEffect(() => {
+    if (open) {
+      const items = getItems().filter((item) => !item.disabled);
+      const currentNode = items.reduce((first, item) => {
+        const { node, selected } = item;
+        return selected ? node : first;
+      }, items[0]?.node);
+
+      currentNode?.focus();
+    }
+  }, [open]);
+
   return (
     <SelectContentContext>
       <Popover.Content
@@ -35,13 +48,10 @@ export const SelectContent = (inProps: SelectContentProps) => {
           {...props}
           className={cn(classes.content, className)}
           onMount={(event) => {
-            const items = getItems().filter((item) => !item.disabled);
-            const current = items.reduce((first, item) => {
-              const { node, selected } = item;
-              return selected ? node : first;
-            }, items[0]?.node);
-
-            current?.focus();
+            /**
+             * Prevent focus on first element to manually handle
+             * focus on the first option or selected one
+             */
             event.preventDefault();
           }}
           onUnmount={(event) => {

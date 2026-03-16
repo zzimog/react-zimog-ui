@@ -17,7 +17,7 @@ Table.displayName = 'Table';
 const TableHeader = ({ className, ...props }: NativeProps<'thead'>) => (
   <Native.thead
     {...props}
-    className={cn('border-b [&_tr]:hover:bg-transparent', className)}
+    className={cn('border-b transition [&_tr]:hover:bg-transparent', className)}
   />
 );
 
@@ -44,7 +44,7 @@ const TableFooter = ({ className, ...props }: NativeProps<'tfoot'>) => (
     {...props}
     className={cn(
       'border-t',
-      'bg-muted-contrast/25',
+      'bg-muted-contrast/50',
       'transition',
       '[&_tr]:hover:bg-transparent',
       className

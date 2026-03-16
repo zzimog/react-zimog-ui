@@ -50,8 +50,8 @@ export const MDXLoader = ({ mdx: Mdx, components }: MDXLoaderProps) => {
           code: (props: any) =>
             !props.className ? <Code {...props} /> : <code {...props} />,
           pre: (props: PropsWithChildren) => (
-            <Card data-mdx="pre" className="">
-              <CodeBlock {...props} className="-my-6" />
+            <Card className="p-0" asChild>
+              <CodeBlock {...props} />
             </Card>
           ),
           blockquote: ({ className, ...props }) => (
@@ -68,12 +68,15 @@ export const MDXLoader = ({ mdx: Mdx, components }: MDXLoaderProps) => {
               )}
             />
           ),
-          Demo: ({ children }: PropsWithChildren) => (
+          Demo: (props: PropsWithChildren) => (
             <Card
-              data-mdx="Demo"
-              className="rounded-b-none [&+[data-mdx=pre]]:rounded-t-none [&+[data-mdx=pre]]:border-t-0"
+              className={cn(
+                '[&+.border]:border-t-0',
+                '[&+.rounded-shape]:rounded-t-none',
+                'has-[+.rounded-shape]:rounded-b-none'
+              )}
             >
-              <Card.Content>{children}</Card.Content>
+              <Card.Content {...props} />
             </Card>
           ),
           PropsTable: (props: { data: Record<string, string>[] }) => (

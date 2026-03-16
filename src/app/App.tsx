@@ -72,9 +72,9 @@ export default () => (
               key={path}
               path={path}
               element={
-                <>
+                <main>
                   <MDXLoader mdx={page} />
-                </>
+                </main>
               }
             />
           ))}

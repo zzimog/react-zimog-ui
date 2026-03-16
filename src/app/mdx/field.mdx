@@ -20,11 +20,13 @@ Use `<Field />` component to compose form fields or grouped inputs, with labels,
       <div className="grid grid-cols-3 gap-4">
         <Field>
           <Field.Label children="Day" />
-          <Select>
-            <Select.Option value="1" children="One" />
-            <Select.Option value="2" children="Two" />
-            <Select.Option value="3" children="Three" />
-          </Select>
+          <Field.Control>
+            <Select>
+              <Select.Option value="1" children="One" />
+              <Select.Option value="2" children="Two" />
+              <Select.Option value="3" children="Three" />
+            </Select>
+          </Field.Control>
         </Field>
 
         <Field>

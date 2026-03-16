@@ -14,18 +14,19 @@ export const PopoverTrigger = (inProps: PopoverTriggerProps) => {
 
   const ref = useMergedRefs(refProp, context.onTriggerChange);
 
+  function handleOpen() {
+    context.onOpenChange(!context.open);
+  }
+
   return (
     <Native.button
       ref={ref}
       type="button"
-      data-open={context.open}
       aria-haspopup="dialog"
       aria-expanded={context.open}
       aria-controls={context.contentId}
-      onClick={composeHandlers(onClick, () => {
-        context.onOpenChange(!context.open);
-      })}
       {...props}
+      onClick={composeHandlers(onClick, handleOpen, true)}
     />
   );
 };

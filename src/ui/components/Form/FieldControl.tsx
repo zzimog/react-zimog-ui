@@ -1,4 +1,8 @@
-import { type ComponentPropsWithRef } from 'react';
+import {
+  cloneElement,
+  isValidElement,
+  type ComponentPropsWithRef,
+} from 'react';
 import { Field, Input } from '@ui/components';
 
 const DISPLAY_NAME = 'FieldControl';
@@ -8,13 +12,21 @@ type BaseProps = Omit<InputProps, 'name'>;
 interface FieldControlProps extends BaseProps {}
 
 export const FieldControl = (inProps: FieldControlProps) => {
-  const { ...props } = inProps;
+  const { children, ...props } = inProps;
 
   const { id, name, descriptionId } = Field.useContext(DISPLAY_NAME);
 
-  return (
-    <Input id={id} name={name} aria-describedby={descriptionId} {...props} />
-  );
+  const inputProps = {
+    id,
+    name,
+    'aria-describedby': descriptionId,
+  };
+
+  if (isValidElement(children)) {
+    return cloneElement(children, { ...inputProps, ...props });
+  }
+
+  return <Input {...inputProps} {...props} />;
 };
 
 FieldControl.displayName = DISPLAY_NAME;

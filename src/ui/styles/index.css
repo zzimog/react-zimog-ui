@@ -11,7 +11,7 @@
   --foreground: var(--black);
   --background: var(--white);
   --muted: var(--color-zinc-400);
-  --muted-contrast: var(--color-zinc-100);
+  --muted-contrast: var(--color-zinc-200);
   --primary: var(--color-violet-500);
   --primary-contrast: var(--color-zinc-50);
   --danger: var(--color-rose-500);

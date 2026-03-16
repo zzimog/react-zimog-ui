@@ -11,14 +11,12 @@ export const Code = ({ className, ...props }: NativeProps<'span'>) => (
     {...props}
     className={cn(
       'p-[0.1rem_0.3rem]',
+      'rounded-sm',
       'font-mono',
-      'text-[0.8em]/none',
+      'text-[0.9em]/none',
       'text-foreground',
-      'border',
-      'rounded-shape',
-      'bg-muted/25',
-      'border-foreground/10',
-      'transition-colors',
+      'bg-muted-contrast',
+      'transition',
       className
     )}
   />

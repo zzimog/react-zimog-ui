@@ -17,10 +17,10 @@ function formatLines(code: string) {
     return [];
   }
 
-  while (lines[0].trim() === '') lines.shift();
-  while (lines[lines.length - 1].trim() === '') lines.pop();
+  while (lines[0]?.trim() === '') lines.shift();
+  while (lines[lines.length - 1]?.trim() === '') lines.pop();
 
-  const indentMatch = lines[0].match(/^\s*/);
+  const indentMatch = lines[0]?.match(/^\s*/);
   const indent = indentMatch ? indentMatch[0].length : 0;
 
   return lines.map((line) => line.slice(indent));

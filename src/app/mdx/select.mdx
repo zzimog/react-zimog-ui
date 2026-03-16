@@ -1,0 +1,102 @@
+# Select
+
+The `<Select />` component provides a list of options to choose from. It's triggered by a button which shows the current selected option.
+
+<Demo>
+  <Select className="mx-auto max-w-md">
+    <Select.Option value="apple">Apple</Select.Option>
+    <Select.Option value="banana">Banana</Select.Option>
+    <Select.Option value="blueberry">Blueberry</Select.Option>
+    <Select.Option value="grapes">Grapes</Select.Option>
+    <Select.Option value="pineapple">Pineapple</Select.Option>
+    <Select.Group disabled>
+      <Select.Legend>Vegetables</Select.Legend>
+      <Select.Option value="aubergine">Aubergine</Select.Option>
+      <Select.Option value="broccoli">Broccoli</Select.Option>
+      <Select.Option value="carrot">Carrot</Select.Option>
+      <Select.Option value="courgette">Courgette</Select.Option>
+      <Select.Option value="leek">Leek</Select.Option>
+    </Select.Group>
+    <Select.Group>
+      <Select.Legend>Meat</Select.Legend>
+      <Select.Option value="beef">Beef</Select.Option>
+      <Select.Option value="chicken">Chicken</Select.Option>
+      <Select.Option value="lamb" disabled>
+        Lamb
+      </Select.Option>
+      <Select.Option value="pork">Pork</Select.Option>
+    </Select.Group>
+  </Select>
+</Demo>
+
+```tsx
+<Select>
+  <Select.Option />
+  <Select.Group>
+    <Select.Legend />
+    <Select.Option />
+  </Select.Group>
+</Select>
+```
+
+## Disabled
+
+Use the `disabled` prop to disable the select.
+
+<Demo>
+  <Select className="mx-auto max-w-md" disabled />
+</Demo>
+
+```tsx
+<Select disabled />
+```
+
+## Invalid
+
+Use `aria-invalid="true"` to set the select as invalid.
+
+<Demo>
+  <Select aria-invalid="true" className="mx-auto max-w-md" />
+</Demo>
+
+```tsx
+<Select aria-invalid="true" />
+```
+
+## Props
+
+This component extends the [`<Button/>`](/styled/button) props.
+
+<PropsTable
+  data={[
+    {
+      name: 'placeholder',
+      type: 'text',
+      default: 'Select an option',
+    },
+    {
+      name: 'defaultValue',
+      type: 'text',
+    },
+    {
+      name: 'value',
+      type: 'text',
+    },
+    {
+      name: 'onValueChange',
+      type: 'function',
+    },
+    {
+      name: 'defaultValue',
+      type: 'text',
+    },
+    {
+      name: 'value',
+      type: 'text',
+    },
+    {
+      name: 'onValueChange',
+      type: 'function',
+    },
+  ]}
+/>

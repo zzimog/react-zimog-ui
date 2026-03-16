@@ -87,7 +87,10 @@ export const SelectOption = (inProps: SelectOptionProps) => {
       })}
       onKeyDown={composeHandlers(onKeyDown, (event) => {
         if (event.key === ' ') event.preventDefault();
-        if (event.key === 'Enter') handleSelect();
+        if (event.key === 'Enter') {
+          handleSelect();
+          event.preventDefault();
+        }
       })}
     >
       {selected && <Check className={cn(classes.check)} />}

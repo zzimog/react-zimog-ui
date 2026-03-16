@@ -16,9 +16,10 @@ const [SelectGroupContext, useSelectGroupContext] =
 
 /*---------------------------------------------------------------------------*/
 
-type SelectGroupProps = NativeProps<'div'> & {
+type BaseProps = NativeProps<'div'>;
+interface SelectGroupProps extends BaseProps {
   disabled?: boolean;
-};
+}
 
 export const SelectGroup = (inProps: SelectGroupProps) => {
   const { disabled = false, className, children, ...props } = inProps;

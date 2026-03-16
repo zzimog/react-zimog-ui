@@ -43,8 +43,8 @@ export const Collapsible = (inProps: CollapsibleProps) => {
 
       if (!preventAnimationRef.current) {
         const { transitionDuration, animationName } = prevStylesRef.current;
-        node.style.transitionDuration = transitionDuration;
-        node.style.animationName = animationName;
+        node.style.transitionDuration = transitionDuration as any;
+        node.style.animationName = animationName as any;
       }
     }
   }, [open]);

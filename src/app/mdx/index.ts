@@ -1,3 +1,5 @@
 export { default as PageField } from './field.mdx';
 export { default as PageHome } from './home.mdx';
 export { default as PageInput } from './input.mdx';
+export { default as PageSelect } from './select.mdx';
+export { default as PageTable } from './table.mdx';

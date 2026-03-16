@@ -1,10 +1,4 @@
-import {
-  useEffect,
-  useRef,
-  useState,
-  type PropsWithChildren,
-  type RefObject,
-} from 'react';
+import { useState, type ComponentPropsWithRef } from 'react';
 import { Popover } from '@ui/headless';
 import { useControllableState } from '@ui/hooks';
 import { createCollection, createScopedContext } from '@ui/utils';
@@ -17,12 +11,11 @@ import { SelectTrigger } from './SelectTrigger';
 const DISPLAY_NAME = 'Select';
 
 type SelectContextValue = {
-  triggerRef: RefObject<HTMLElement | null>;
-  open: boolean;
   value: string;
+  open: boolean;
   currentNode: HTMLElement | null;
-  onOpenChange(open: boolean): void;
   onValueChange(value: string): void;
+  onOpenChange(open: boolean): void;
   onCurrentNodeChange(node: HTMLElement): void;
 };
 
@@ -46,32 +39,28 @@ const [SelectCollection, useSelectCollection] = createCollection<
 
 /*---------------------------------------------------------------------------*/
 
-type SelectProps = PropsWithChildren<{
+type BaseProps = ComponentPropsWithRef<typeof SelectTrigger>;
+interface SelectProps extends BaseProps {
   id?: string;
-  open?: boolean;
-  defaultOpen?: boolean;
-  onOpenChange?(open: boolean): void;
-  value?: string;
   defaultValue?: string;
+  defaultOpen?: boolean;
+  value?: string;
+  open?: boolean;
   onValueChange?(value: string): void;
-}>;
+  onOpenChange?(open: boolean): void;
+}
 
 export const Select = (inProps: SelectProps) => {
   const {
-    defaultOpen = false,
     open: openProp,
-    onOpenChange,
-    defaultValue = '',
     value: valueProp,
-    onValueChange,
+    defaultOpen = false,
+    defaultValue = '',
     children,
+    onOpenChange,
+    onValueChange,
+    ...props
   } = inProps;
-
-  const [open, setOpen] = useControllableState({
-    defaultProp: defaultOpen,
-    prop: openProp,
-    onChange: onOpenChange,
-  });
 
   const [value, setValue] = useControllableState({
     defaultProp: defaultValue,
@@ -79,42 +68,31 @@ export const Select = (inProps: SelectProps) => {
     onChange: onValueChange,
   });
 
-  const [currentNode, setCurrentNode] = useState<HTMLElement | null>(null);
+  const [open, setOpen] = useControllableState({
+    defaultProp: defaultOpen,
+    prop: openProp,
+    onChange: onOpenChange,
+  });
 
-  const triggerRef = useRef<HTMLElement>(null);
-  const prevOpenRef = useRef(open);
+  const [currentNode, setCurrentNode] = useState<HTMLElement | null>(null);
 
   function handleValueChange(value: string) {
     setValue(value);
     setOpen(false);
   }
 
-  useEffect(() => {
-    const wasOpen = prevOpenRef.current;
-    const hasOpenChanged = open !== wasOpen;
-    if (hasOpenChanged && !open) {
-      requestAnimationFrame(() => {
-        const trigger = triggerRef.current;
-        trigger?.focus();
-      });
-    }
-
-    prevOpenRef.current = open;
-  }, [open]);
-
   return (
     <SelectContext
-      triggerRef={triggerRef}
-      open={open}
       value={value}
+      open={open}
       currentNode={currentNode}
-      onOpenChange={setOpen}
       onValueChange={handleValueChange}
+      onOpenChange={setOpen}
       onCurrentNodeChange={setCurrentNode}
     >
       <SelectCollection>
         <Popover open={open} onOpenChange={setOpen}>
-          <SelectTrigger />
+          <SelectTrigger {...props} />
           <SelectContent>{children}</SelectContent>
         </Popover>
       </SelectCollection>

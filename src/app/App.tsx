@@ -7,28 +7,25 @@ import {
   PageAccordion,
   PageCheckbox,
   PageCollapsible,
-  PagePresence,
-  PageSelect,
   PopoverDemo,
   ScrollAreaDemo,
   TabsDemo,
 } from '@app/pages';
 import { AppMenu, type MenuEntry } from './AppMenu';
-import { PageField, PageHome, PageInput } from './mdx';
+import { PageField, PageHome, PageInput, PageSelect, PageTable } from './mdx';
 import { TestPage as Test } from './Test';
 import './App.css';
 
+const _noop = () => {};
 const pages: MenuEntry = {
-  headless: {
-    presence: PagePresence,
-  },
   styled: {
     accordion: PageAccordion,
     checkbox: PageCheckbox,
     collapsible: PageCollapsible,
-    input: () => {},
-    field: () => {},
-    select: PageSelect,
+    input: _noop,
+    field: _noop,
+    select: _noop,
+    table: _noop,
   },
   old: {
     card: CardDemo,
@@ -42,6 +39,8 @@ const pages: MenuEntry = {
 const routes: Record<string, any> = {
   'styled/input': PageInput,
   'styled/field': PageField,
+  'styled/select': PageSelect,
+  'styled/table': PageTable,
 };
 
 export default () => (
@@ -81,7 +80,7 @@ export default () => (
           ))}
 
           {Object.keys(pages).map((category) =>
-            Object.entries(pages[category]).map(([name, Comp]) => (
+            Object.entries(pages[category] as any).map(([name, Comp]: any) => (
               <Route
                 key={`${category}-${name}`}
                 path={`${category}/${name}`}

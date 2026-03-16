@@ -8,6 +8,4 @@ export * from './tabs';
 export * from './PageAccordion';
 export * from './PageCheckbox';
 export * from './PageCollapsible';
-export * from './PageInput';
 export * from './PagePresence';
-export * from './PageSelect';

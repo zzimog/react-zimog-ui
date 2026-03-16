@@ -1,5 +1,5 @@
 function getFocusables(container: HTMLElement) {
-  const nodes: HTMLElement[] = [];
+  const element: HTMLElement[] = [];
   const walker = document.createTreeWalker(container, NodeFilter.SHOW_ELEMENT, {
     acceptNode: (node: any) => {
       const isHiddenInput = node.tagName === 'INPUT' && node.type === 'hidden';
@@ -14,35 +14,36 @@ function getFocusables(container: HTMLElement) {
   });
 
   while (walker.nextNode()) {
-    nodes.push(walker.currentNode as HTMLElement);
+    element.push(walker.currentNode as HTMLElement);
   }
 
-  return nodes;
-}
-
-function isHidden(node: HTMLElement, container: HTMLElement) {
-  while (node) {
-    if (node === container) {
-      return false;
-    }
-
-    const styles = getComputedStyle(node);
-    if (styles.display === 'none' || styles.visibility === 'hidden') {
-      return true;
-    }
-
-    node = node.parentElement as HTMLElement;
-  }
+  return element;
 }
 
 function findFirstVisible(elements: HTMLElement[], container: HTMLElement) {
-  for (const element of elements) {
-    if (!isHidden(element, container)) {
-      return element;
-    }
-  }
+  return elements.find((element) => {
+    let current: HTMLElement | null = element;
+    while (current) {
+      const styles = getComputedStyle(current);
 
-  return null;
+      if (
+        styles.display === 'none' ||
+        styles.display === 'contents' ||
+        styles.visibility === 'hidden' ||
+        styles.opacity === '0'
+      ) {
+        return false;
+      }
+
+      if (current === container) {
+        break;
+      }
+
+      current = current.parentElement;
+    }
+
+    return true;
+  });
 }
 
 export function getFocusableEdges(container: HTMLElement) {

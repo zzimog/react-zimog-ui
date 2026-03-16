@@ -1,4 +1,4 @@
-import { useMemo, type ComponentPropsWithRef } from 'react';
+import { type ComponentPropsWithRef } from 'react';
 import { Field, Input } from '@ui/components';
 
 const DISPLAY_NAME = 'FieldControl';
@@ -12,16 +12,9 @@ export const FieldControl = (inProps: FieldControlProps) => {
 
   const { id, name, descriptionId } = Field.useContext(DISPLAY_NAME);
 
-  const inputProps = useMemo(
-    () => ({
-      id,
-      name,
-      'aria-describedby': descriptionId,
-    }),
-    [id, name, descriptionId]
+  return (
+    <Input id={id} name={name} aria-describedby={descriptionId} {...props} />
   );
-
-  return <Input {...inputProps} {...props} />;
 };
 
 FieldControl.displayName = DISPLAY_NAME;

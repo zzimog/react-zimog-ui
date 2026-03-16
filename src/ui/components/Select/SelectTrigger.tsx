@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { Native, Popover, type NativeProps } from '@ui/headless';
 import { useMergedRefs } from '@ui/hooks';
@@ -20,8 +21,29 @@ export const SelectTrigger = (inProps: SelectTriggerProps) => {
     ...props
   } = inProps;
 
-  const { triggerRef, open, currentNode } = Select.useContext(DISPLAY_NAME);
-  const mergedRef = useMergedRefs(refProp, triggerRef);
+  const { open, currentNode } = Select.useContext(DISPLAY_NAME);
+
+  const ref = useRef<HTMLElement>(null);
+  const mergedRef = useMergedRefs(refProp, ref);
+
+  const previousOpenRef = useRef(open);
+  useEffect(() => {
+    const wasOpen = previousOpenRef.current;
+    if (open !== wasOpen) {
+      if (!open) {
+        ref.current?.focus();
+
+        requestAnimationFrame(() => {
+          const currentActive = document.activeElement;
+          if (currentActive === document.body) {
+            ref.current?.focus();
+          }
+        });
+      }
+
+      previousOpenRef.current = open;
+    }
+  }, [open]);
 
   return (
     <Popover.Trigger asChild>
@@ -40,7 +62,11 @@ export const SelectTrigger = (inProps: SelectTriggerProps) => {
           if (!open) event.preventDefault();
         })}
       >
-        {currentNode?.textContent || placeholder || '-'}
+        {currentNode?.textContent || (
+          <span className="text-muted">
+            {placeholder || 'Select an option'}
+          </span>
+        )}
         <ChevronDown />
       </Native.button>
     </Popover.Trigger>

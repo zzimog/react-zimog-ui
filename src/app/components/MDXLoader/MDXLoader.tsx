@@ -1,6 +1,7 @@
 import { useState, type PropsWithChildren } from 'react';
 import type { MDXComponents, MDXContent } from 'mdx/types';
-import { Card, cn, Code, CodeBlock, createScopedContext } from '@ui';
+import { NavLink } from 'react-router';
+import { Card, cn, Code, CodeBlock, createScopedContext, Table } from '@ui';
 import * as UIComponents from '@ui';
 import { createMDXElement } from './create-mdx-element';
 
@@ -30,24 +31,79 @@ export const MDXLoader = ({ mdx: Mdx, components }: MDXLoaderProps) => {
       <Mdx
         components={{
           h1: createMDXElement('h1', 'mb-8 text-4xl/none font-bold'),
-          h2: createMDXElement('h2', 'mt-16 mb-4 text-xl/none font-semibold'),
-          h3: createMDXElement('h3', 'mt-4 mb-2 text-lg/none font-semibold'),
+          h2: createMDXElement('h2', 'mt-16 mb-6 text-xl/none font-semibold'),
+          h3: createMDXElement('h3', 'mt-8 mb-6 text-lg/none font-semibold'),
+          a: ({ className, ...props }) => (
+            <NavLink {...props} className={cn('underline', className)} />
+          ),
           p: ({ className, ...props }) => (
             <p
               {...props}
-              className={cn('text-muted mb-6 leading-relaxed', className)}
+              className={cn(
+                'text-muted',
+                'leading-relaxed',
+                'not-last:mb-4',
+                className
+              )}
             />
           ),
           code: (props: any) =>
             !props.className ? <Code {...props} /> : <code {...props} />,
           pre: (props: PropsWithChildren) => (
-            <Card data-mdx="pre" className="rounded-t-none border-t-0">
+            <Card data-mdx="pre" className="">
               <CodeBlock {...props} className="-my-6" />
             </Card>
           ),
+          blockquote: ({ className, ...props }) => (
+            <blockquote
+              {...props}
+              className={cn(
+                'p-4',
+                'border-l-4',
+                'border-muted',
+                'text-muted',
+                'bg-muted-contrast',
+                'transition',
+                className
+              )}
+            />
+          ),
           Demo: ({ children }: PropsWithChildren) => (
-            <Card data-mdx="Demo" className="rounded-b-none">
+            <Card
+              data-mdx="Demo"
+              className="rounded-b-none [&+[data-mdx=pre]]:rounded-t-none [&+[data-mdx=pre]]:border-t-0"
+            >
               <Card.Content>{children}</Card.Content>
+            </Card>
+          ),
+          PropsTable: (props: { data: Record<string, string>[] }) => (
+            <Card className="p-0">
+              <Table>
+                <Table.Header>
+                  <Table.Row>
+                    <Table.Head>Prop</Table.Head>
+                    <Table.Head>Type</Table.Head>
+                    <Table.Head>Default</Table.Head>
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body className="font-mono">
+                  {props.data.map((row, i) => (
+                    <Table.Row key={i} className="hover:bg-transparent">
+                      <Table.Cell>
+                        <Code className="text-primary-contrast bg-primary/75">
+                          {row.name}
+                        </Code>
+                      </Table.Cell>
+                      <Table.Cell>
+                        <Code>{row.type}</Code>
+                      </Table.Cell>
+                      <Table.Cell>
+                        {row.default ?? <i className="text-muted">-</i>}
+                      </Table.Cell>
+                    </Table.Row>
+                  ))}
+                </Table.Body>
+              </Table>
             </Card>
           ),
           ...(UIComponents as any),

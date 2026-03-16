@@ -31,6 +31,8 @@ const classes = {
     'aria-invalid:focus:outline-danger/25',
   ],
   dialog: [
+    'flex',
+    'flex-col',
     'w-(--anchor-width)',
     'max-h-50',
     'data-[open=true]:animate-in',

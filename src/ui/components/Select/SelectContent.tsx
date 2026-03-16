@@ -1,6 +1,4 @@
-import { useLayoutEffect, useRef } from 'react';
 import { FocusTrap, Popover, type NativeProps } from '@ui/headless';
-import { useMergedRefs } from '@ui/hooks';
 import { cn, composeHandlers, createScopedContext } from '@ui/utils';
 import { Select } from './Select';
 import classes from './classes';
@@ -15,28 +13,14 @@ const [SelectContentContext, useSelectContentContext] = createScopedContext<
 
 /*---------------------------------------------------------------------------*/
 
-type SelectContentProps = NativeProps<'div'>;
+type BaseProps = NativeProps<'div'>;
+interface SelectContentProps extends BaseProps {}
 
 export const SelectContent = (inProps: SelectContentProps) => {
-  const { ref: refProp, className, onFocus, onKeyDown, ...props } = inProps;
-
-  const ref = useRef<HTMLElement>(null);
-  const mergedRef = useMergedRefs(refProp, ref);
+  const { className, onFocus, onKeyDown, ...props } = inProps;
 
   const { open, onOpenChange } = Select.useContext(DISPLAY_NAME);
   const { getItems } = Select.useCollection();
-
-  useLayoutEffect(() => {
-    if (open) {
-      const items = getItems().filter((item) => !item.disabled);
-      const current = items.reduce((first, item) => {
-        const { node, selected } = item;
-        return selected ? node : first;
-      }, items[0].node);
-
-      current?.focus();
-    }
-  }, [open]);
 
   return (
     <SelectContentContext>
@@ -46,19 +30,35 @@ export const SelectContent = (inProps: SelectContentProps) => {
         className={cn(classes.dialog)}
       >
         <FocusTrap
-          ref={mergedRef}
           trapped={open}
           role="listbox"
           {...props}
           className={cn(classes.content, className)}
+          onMount={(event) => {
+            const items = getItems().filter((item) => !item.disabled);
+            const current = items.reduce((first, item) => {
+              const { node, selected } = item;
+              return selected ? node : first;
+            }, items[0]?.node);
+
+            current?.focus();
+            event.preventDefault();
+          }}
+          onUnmount={(event) => {
+            /**
+             * Prevent focus on previously focused element to manually
+             * handle focus on trigger when closing the options layer
+             */
+            event.preventDefault();
+          }}
           onFocus={composeHandlers(onFocus, (event) => {
             const node = event.currentTarget;
             const [first, ...nodes] = getItems();
             const [last] = nodes.reverse();
 
-            if (event.target === first.node) {
+            if (event.target === first?.node) {
               node.scrollTop = 0;
-            } else if (event.target === last.node) {
+            } else if (event.target === last?.node) {
               node.scrollTop = node.scrollHeight;
             }
           })}
@@ -72,10 +72,8 @@ export const SelectContent = (inProps: SelectContentProps) => {
             }
 
             if (['Home', 'End', 'ArrowUp', 'ArrowDown'].includes(event.key)) {
-              const nodes = getItems()
-                .filter((item) => !item.disabled)
-                .map((item) => item.node);
-
+              const items = getItems().filter((item) => !item.disabled);
+              const nodes = items.map((item) => item.node);
               let [nextNode] = nodes;
 
               if (['ArrowUp', 'End'].includes(event.key)) {
@@ -85,7 +83,7 @@ export const SelectContent = (inProps: SelectContentProps) => {
               if (['ArrowUp', 'ArrowDown'].includes(event.key)) {
                 const currentActive = event.target as HTMLElement;
                 const currentIndex = nodes.indexOf(currentActive);
-                [nextNode] = nodes.slice(currentIndex + 1);
+                nextNode = nodes[currentIndex + 1];
               }
 
               nextNode?.focus();

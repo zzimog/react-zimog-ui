@@ -1,4 +1,3 @@
-import { copyFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import mdx from '@mdx-js/rollup';
 import tailwindcss from '@tailwindcss/vite';
@@ -26,15 +25,6 @@ export default defineConfig({
       },
     }),
     tailwindcss(),
-    {
-      name: 'copy-404',
-      closeBundle() {
-        copyFileSync(
-          resolve(__dirname, `dist/index.html`),
-          resolve(__dirname, `dist/404.html`)
-        );
-      },
-    },
   ],
   server: {
     host: true,

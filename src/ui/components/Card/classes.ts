@@ -1,5 +1,6 @@
 const classes = {
   root: [
+    'group/card',
     'flex',
     'flex-col',
     'gap-6',
@@ -12,6 +13,7 @@ const classes = {
     'transition',
   ],
   header: [
+    'group/header',
     'flex',
     'flex-col',
     'gap-3',
@@ -21,14 +23,16 @@ const classes = {
   ],
   title: 'font-semibold text-lg/none',
   description: 'text-muted',
-  content: 'px-6 transition [.border-b]:pb-6',
+  content: 'group/content px-6 transition [.border-b]:pb-6',
   footer: [
-    'px-6',
+    'p-6',
     'border-t',
     'text-sm',
     'text-muted',
+    'bg-muted-contrast/50',
     'transition',
     '[.border-t]:pt-6',
+    'last:-mb-6',
   ],
 };
 

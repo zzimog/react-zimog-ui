@@ -3,7 +3,7 @@
 The `<Select />` component provides a list of options to choose from. It's triggered by a button which shows the current selected option.
 
 <Demo>
-  <Select className="mx-auto max-w-md">
+  <Select className="mx-auto max-w-xs">
     <Select.Option value="apple">Apple</Select.Option>
     <Select.Option value="banana">Banana</Select.Option>
     <Select.Option value="blueberry">Blueberry</Select.Option>
@@ -44,7 +44,7 @@ The `<Select />` component provides a list of options to choose from. It's trigg
 Use the `disabled` prop to disable the select.
 
 <Demo>
-  <Select className="mx-auto max-w-md" disabled />
+  <Select className="mx-auto max-w-xs" disabled />
 </Demo>
 
 ```tsx
@@ -56,7 +56,7 @@ Use the `disabled` prop to disable the select.
 Use `aria-invalid="true"` to set the select as invalid.
 
 <Demo>
-  <Select aria-invalid="true" className="mx-auto max-w-md" />
+  <Select aria-invalid="true" className="mx-auto max-w-xs" />
 </Demo>
 
 ```tsx
@@ -65,7 +65,7 @@ Use `aria-invalid="true"` to set the select as invalid.
 
 ## Props
 
-This component extends the [`<Button/>`](/styled/button) props.
+This component extends the [`<Button />`](/styled/button) props.
 
 <PropsTable
   data={[

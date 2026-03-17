@@ -2,7 +2,6 @@ import { BrowserRouter, Route, Routes } from 'react-router';
 import { cn, ThemeSwitcher } from '@ui';
 import { Logo, MDXLoader } from '@app/components';
 import {
-  CardDemo,
   HighlightDemo,
   PageAccordion,
   PageCheckbox,
@@ -12,23 +11,30 @@ import {
   TabsDemo,
 } from '@app/pages';
 import { AppMenu, type MenuEntry } from './AppMenu';
-import { PageField, PageHome, PageInput, PageSelect, PageTable } from './mdx';
+import {
+  PageCard,
+  PageField,
+  PageHome,
+  PageInput,
+  PageSelect,
+  PageTable,
+} from './mdx';
 import { TestPage as Test } from './Test';
 import './App.css';
 
 const _noop = () => {};
 const pages: MenuEntry = {
   styled: {
-    accordion: PageAccordion,
-    checkbox: PageCheckbox,
-    collapsible: PageCollapsible,
+    card: _noop,
     input: _noop,
     field: _noop,
     select: _noop,
     table: _noop,
   },
   old: {
-    card: CardDemo,
+    accordion: PageAccordion,
+    checkbox: PageCheckbox,
+    collapsible: PageCollapsible,
     highlight: HighlightDemo,
     popover: PopoverDemo,
     scrollarea: ScrollAreaDemo,
@@ -37,6 +43,7 @@ const pages: MenuEntry = {
 };
 
 const routes: Record<string, any> = {
+  'styled/card': PageCard,
   'styled/input': PageInput,
   'styled/field': PageField,
   'styled/select': PageSelect,

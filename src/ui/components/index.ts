@@ -4,7 +4,7 @@ export * from './Card';
 export * from './Checkbox';
 export * from './CodeBlock';
 export * from './Collapsible';
-export * from './Form';
+export * from './Field';
 export * from './Input';
 export * from './Password';
 export * from './ScrollArea';

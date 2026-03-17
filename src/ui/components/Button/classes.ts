@@ -3,20 +3,26 @@ import { cva } from 'class-variance-authority';
 const buttonClasses = cva(
   [
     'inline-flex',
-    'place-content-center',
+    'justify-center',
+    'items-center',
     'gap-2',
+    'min-w-8',
+    'h-8',
     'rounded-shape',
     'whitespace-nowrap',
-    'transition-colors',
+    'text-ellipsis',
+    'overflow-hidden',
+    'transition-all',
+    // active
+    'active:translate-y-px',
+    // disabled
     'disabled:opacity-50',
     'disabled:cursor-not-allowed',
-    //'not-disabled:active:scale-95',
-    'not-disabled:active:animate-btn-active',
-    'not-disabled:active:[--scale:0.95]',
+    'disabled:pointer-events-none',
     // focus
     'focusable',
-    'focus-visible:outline-(--base)/25',
-    'focus-visible:z-10',
+    'focus:outline-outline',
+    'focus:z-10',
     // icon
     '[&_svg]:-mx-1',
     '[&_svg]:shrink-0',
@@ -25,9 +31,9 @@ const buttonClasses = cva(
   {
     variants: {
       size: {
-        sm: 'px-2 py-1 text-xs/4 [&_svg]:size-4',
-        md: 'px-3 py-2 text-sm/5 [&_svg]:size-5',
-        lg: 'px-4 py-3 text-base/6 [&_svg]:size-6',
+        sm: 'px-1 text-xs [&_svg]:size-4',
+        md: 'px-2 text-sm [&_svg]:size-4',
+        lg: 'px-4 text-base [&_svg]:size-6',
       },
       variant: {
         solid: 'border',

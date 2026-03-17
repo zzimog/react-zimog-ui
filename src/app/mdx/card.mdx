@@ -1,0 +1,90 @@
+# Card
+
+A simple and styled `<Card />` component.
+
+<Demo>
+  <Card as="article" className="mx-auto max-w-sm">
+    <Card.Header as="header">
+      <Card.Title>Login</Card.Title>
+      <Card.Description>Login to your account</Card.Description>
+    </Card.Header>
+    <Card.Content as="main" className="flex flex-col gap-6">
+      <Field>
+        <Field.Label>Username</Field.Label>
+        <Field.Control placeholder="Username" />
+      </Field>
+
+      <Field>
+        <div className="flex items-center">
+          <Field.Label>Password</Field.Label>
+          <a
+            href="#!"
+            className="ml-auto hover:underline text-xs"
+            children="Forgot password?"
+          />
+        </div>
+        <Password>
+          <Input.Group>
+              <Field.Control>
+                <Password.Input placeholder="Password" />
+              </Field.Control>
+              <Password.Toggle as={Input.Addon} />
+          </Input.Group>
+        </Password>
+      </Field>
+    </Card.Content>
+    <Card.Footer as="footer">
+      <Button color="primary">Login</Button>
+      <Button className="ml-2">Register</Button>
+    </Card.Footer>
+
+  </Card>
+</Demo>
+
+```tsx
+<Card className="mx-auto max-w-sm">
+  <Card.Header>
+    <Card.Title>Login</Card.Title>
+    <Card.Description>Login to your account</Card.Description>
+  </Card.Header>
+  <Card.Content className="flex flex-col gap-6">
+    <Field>
+      <Field.Label>Username</Field.Label>
+      <Field.Control placeholder="Username" />
+    </Field>
+
+    <Field>
+      <div className="flex items-center">
+        <Field.Label>Password</Field.Label>
+        <a
+          href="#!"
+          className="ml-auto underline"
+          children="Forgot password?"
+        />
+      </div>
+      <Field.Control type="password" placeholder="Password" />
+    </Field>
+  </Card.Content>
+  <Card.Footer>
+    <Button color="primary">Login</Button>
+    <Button className="ml-2">Register</Button>
+  </Card.Footer>
+</Card>
+```
+
+## Props
+
+This component and all its parts extend the base `<div />` element props.
+
+<PropsTable
+  data={[
+    {
+      name: 'as',
+      type: 'ElementType',
+    },
+    {
+      name: 'asChild',
+      type: 'boolean',
+    },
+  ]}
+/>

@@ -13,7 +13,7 @@ export const Code = ({ className, ...props }: NativeProps<'span'>) => (
       'p-[0.1rem_0.3rem]',
       'rounded-sm',
       'font-mono',
-      'text-[0.9em]/none',
+      'text-[0.8em]/none',
       'text-foreground',
       'bg-muted-contrast',
       'transition',

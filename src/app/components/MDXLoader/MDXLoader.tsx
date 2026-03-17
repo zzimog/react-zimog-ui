@@ -32,19 +32,14 @@ export const MDXLoader = ({ mdx: Mdx, components }: MDXLoaderProps) => {
         components={{
           h1: createMDXElement('h1', 'mb-8 text-4xl/none font-bold'),
           h2: createMDXElement('h2', 'mt-16 mb-6 text-xl/none font-semibold'),
-          h3: createMDXElement('h3', 'mt-8 mb-6 text-lg/none font-semibold'),
+          h3: createMDXElement('h3', 'mt-12 mb-6 text-lg/none font-semibold'),
           a: ({ className, ...props }) => (
             <NavLink {...props} className={cn('underline', className)} />
           ),
           p: ({ className, ...props }) => (
             <p
               {...props}
-              className={cn(
-                'text-muted',
-                'leading-relaxed',
-                'not-last:mb-4',
-                className
-              )}
+              className={cn('text-muted', 'leading-relaxed', 'my-6', className)}
             />
           ),
           code: (props: any) =>
@@ -58,15 +53,20 @@ export const MDXLoader = ({ mdx: Mdx, components }: MDXLoaderProps) => {
             <blockquote
               {...props}
               className={cn(
-                'p-4',
+                'my-4',
+                'px-4',
                 'border-l-4',
                 'border-muted',
+                'italic',
                 'text-muted',
                 'bg-muted-contrast',
                 'transition',
                 className
               )}
             />
+          ),
+          hr: ({ className, ...props }) => (
+            <hr {...props} className={cn('my-16', className)} />
           ),
           Demo: (props: PropsWithChildren) => (
             <Card

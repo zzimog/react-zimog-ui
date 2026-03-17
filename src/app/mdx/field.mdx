@@ -1,113 +1,224 @@
 # Field
 
-Use `<Field />` component to compose form fields or grouped inputs, with labels, descriptions, and help texts.
+Use `<Field />` component to compose accesible form fields or grouped inputs, with labels, descriptions, and help texts.
 
 <Demo>
-  <div className="mx-auto flex max-w-lg flex-col gap-4">
-    <Field>
-      <Field.Label children="Name" />
-      <Field.Control placeholder="Your name" />
-      <Field.Description>Enter your name here.</Field.Description>
-    </Field>
-
-    <Field>
-      <Field.Label children="Surname" />
-      <Field.Control placeholder="Your surname" />
-    </Field>
-
-    <fieldset className="border p-4 -mx-4 rounded-shape transition">
-      <Field.Label as="legend" children="Birthday" />
-      <div className="grid grid-cols-3 gap-4">
-        <Field>
-          <Field.Label children="Day" />
-          <Field.Control>
-            <Select>
-              <Select.Option value="1" children="One" />
-              <Select.Option value="2" children="Two" />
-              <Select.Option value="3" children="Three" />
-            </Select>
-          </Field.Control>
-        </Field>
-
-        <Field>
-          <Field.Label children="Month" />
-          <Select>
-            <Select.Option value="1" children="One" />
-            <Select.Option value="2" children="Two" />
-            <Select.Option value="3" children="Three" />
-          </Select>
-        </Field>
-
-        <Field>
-          <Field.Label children="Year" />
-          <Select>
-            <Select.Option value="1" children="One" />
-            <Select.Option value="2" children="Two" />
-            <Select.Option value="3" children="Three" />
-          </Select>
-        </Field>
-      </div>
-    </fieldset>
-
-    <Field>
-      <Field.Label children="Password" />
-      <Password>
-        <Input.Group>
-          <Password.Input />
-          <Password.Toggle as={Input.Addon} />
-        </Input.Group>
-        <Password.Requirement
-          pattern={/[a-z]/}
-          children="One lowercase character"
-        />
-        <Password.Requirement
-          pattern={/[A-Z]/}
-          children="One uppercase character"
-        />
-        <Password.Requirement pattern={/[0-9]/} children="One number" />
-        <Password.Requirement
-          pattern={/[!?@#]/}
-          children="One special character (!?@#)"
-        />
-      </Password>
-    </Field>
-
-    <Field>
-      <Field.Label children="Repeat Password" />
-      <Password>
-        <Input.Group>
-          <Password.Input />
-          <Password.Toggle as={Input.Addon} />
-        </Input.Group>
-      </Password>
-    </Field>
-
-    <Field direction="horizontal" className="pt-4">
-      <Input type="checkbox" id="privacy" />
-      <Field.Content>
-        <Field.Label htmlFor="privacy" children="Accept our Privacy Policy" />
-        <Field.Description
-          children={
-            <>
-              I have read and acccept the <a href="#!">Privacy Policy</a>.
-            </>
-          }
-        />
-      </Field.Content>
-    </Field>
-
-    <div className="mt-4 flex gap-2">
-      <Button color="primary">Submit</Button>
-      <Button>Cancel</Button>
-    </div>
-
-  </div>
+  <Field className="mx-auto max-w-xs">
+    <Field.Label>Name</Field.Label>
+    <Field.Control />
+    <Field.Description>Enter your name here.</Field.Description>
+  </Field>
 </Demo>
 
 ```tsx
 <Field>
-  <Field.Label />
-  <Input />
-  <Field.Description />
+  <Field.Label>Name</Field.Label>
+  <Field.Control />
+  <Field.Description>Enter your name here.</Field.Description>
+</Field>
+```
+
+## Usage
+
+### Label
+
+The `<Field />` component, when used with a `<Field.Label />` component inside, will automatically propagate the label `id` to the `<Field.Control />` component.
+
+A fixed value can be set with the `id` prop on the `<Field />` component.
+
+<Demo>
+  <Field id="field-demo-id" className="mx-auto max-w-xs">
+    <Field.Label>Name</Field.Label>
+    <Field.Control placeholder="Enter your name here" />
+  </Field>
+</Demo>
+
+```tsx
+<Field id="field-demo-id">
+  <Field.Label>Name</Field.Label>
+  <Field.Control placeholder="Enter your name here" />
+</Field>
+```
+
+### Description
+
+It is possible to add a description to the field, using the `<Field.Description />` component. The `id` will automatically be set on the `<Field.Control />` component using `aria-describedby` prop.
+
+A fixed value can be set with the `id` prop on the `<Field.Description />` component.
+
+<Demo>
+  <Field className="mx-auto max-w-xs">
+    <Field.Label>Name</Field.Label>
+    <Field.Control />
+    <Field.Description
+      id="field-demo-description"
+      children="Enter your name here."
+    />
+  </Field>
+</Demo>
+
+```tsx
+<Field>
+  <Field.Label>Name</Field.Label>
+  <Field.Control />
+  <Field.Description id="field-demo-description">
+    Enter your name here.
+  </Field.Description>
+</Field>
+```
+
+### Content
+
+The `<Field.Content />` component is a stack which can be used to visually group items, in both direction using the `direction` prop.
+
+<Demo>
+  <Field className="mx-auto max-w-xs">
+    <Field.Label>Search</Field.Label>
+    <Field.Content direction="horizontal">
+      <Field.Control type="search" placeholder="Search" />
+      <Button>Search</Button>
+    </Field.Content>
+  </Field>
+</Demo>
+
+```tsx
+<Field>
+  <Field.Label>Search</Field.Label>
+  <Field.Content direction="horizontal">
+    <Field.Control type="search" placeholder="Search" />
+    <Button>Search</Button>
+  </Field.Content>
+</Field>
+```
+
+### Control
+
+> This component is a work in progress
+
+The `<Field.Control />` component can be used to render the input field.
+
+Without children, it will render a standard `<input />` element.
+
+<Demo>
+  <Field className="mx-auto max-w-xs">
+    <Field.Label>Name</Field.Label>
+    <Field.Control placeholder="Enter your name" />
+  </Field>
+</Demo>
+
+```tsx
+<Field>
+  <Field.Label>Name</Field.Label>
+  <Field.Control placeholder="Enter your name" />
+</Field>
+```
+
+If a `ReactElement` is passed as children, it will be used for rendering with props such as `id`, `name` and `aria-describedby`, inherited from the `<Field />` component.
+
+<Demo>
+  <Field className="mx-auto max-w-xs">
+    <Field.Label>Select an animal</Field.Label>
+    <Field.Control placeholder="Choose one">
+      <Select>
+        <Select.Option value="1">Cat</Select.Option>
+        <Select.Option value="2">Dog</Select.Option>
+      </Select>
+    </Field.Control>
+  </Field>
+</Demo>
+
+```tsx
+<Field>
+  <Field.Label>Select an animal</Field.Label>
+  <Field.Control placeholder="Choose one">
+    <Select>
+      <Select.Option value="1">Cat</Select.Option>
+      <Select.Option value="2">Dog</Select.Option>
+    </Select>
+  </Field.Control>
+</Field>
+```
+
+## Fieldset
+
+Use `<Field.Set />` component to group related form fields together, and the `<Field.Legend />` to set a title for the group.
+
+<Demo>
+  <Field.Set className="@container mx-auto max-w-lg">
+    <Field.Legend>Address</Field.Legend>
+    <Field>
+      <Field.Label>Street address</Field.Label>
+      <Field.Control />
+    </Field>
+    <Field>
+      <Field.Label>Apt, suite, etc...</Field.Label>
+      <Field.Control />
+    </Field>
+    <div className="flex flex-col gap-3 @sm:flex-row">
+      <Field className="basis-2/3">
+        <Field.Label>City</Field.Label>
+        <Field.Control />
+      </Field>
+      <Field className="basis-1/3">
+        <Field.Label>ZIP code</Field.Label>
+        <Field.Control />
+      </Field>
+    </div>
+  </Field.Set>
+</Demo>
+
+```tsx
+<Field.Set className="@container">
+  <Field.Legend>Address</Field.Legend>
+  <Field>
+    <Field.Label>Street address</Field.Label>
+    <Field.Control />
+  </Field>
+  <Field>
+    <Field.Label>Apt, suite, etc...</Field.Label>
+    <Field.Control />
+  </Field>
+  <div className="flex flex-col gap-3 @sm:flex-row">
+    <Field className="basis-2/3">
+      <Field.Label>City</Field.Label>
+      <Field.Control />
+    </Field>
+    <Field className="basis-1/3">
+      <Field.Label>ZIP code</Field.Label>
+      <Field.Control />
+    </Field>
+  </div>
+</Field.Set>
+```
+
+---
+
+## Checkbox
+
+<Demo>
+  <Field direction="horizontal" className="mx-auto max-w-xs">
+    <Field.Control>
+      <Checkbox />
+    </Field.Control>
+    <Field.Content>
+      <Field.Label>Accept our Privacy Policy</Field.Label>
+      <Field.Description className="m-0" asChild>
+        I have read and acccept the <a href="#!">Privacy Policy</a>.
+      </Field.Description>
+    </Field.Content>
+  </Field>
+</Demo>
+
+```tsx
+<Field direction="horizontal">
+  <Field.Control>
+    <Checkbox />
+  </Field.Control>
+  <Field.Content>
+    <Field.Label>Accept our Privacy Policy</Field.Label>
+    <Field.Description>
+      I have read and acccept the <a href="#!">Privacy Policy</a>.
+    </Field.Description>
+  </Field.Content>
 </Field>
 ```

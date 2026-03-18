@@ -1,4 +1,4 @@
-import { useState, type ComponentPropsWithRef } from 'react';
+import { useState, type ComponentProps, type ReactElement } from 'react';
 import { Popover } from '@ui/headless';
 import { useControllableState } from '@ui/hooks';
 import { createCollection, createScopedContext } from '@ui/utils';
@@ -10,14 +10,14 @@ import { SelectTrigger } from './SelectTrigger';
 
 const DISPLAY_NAME = 'Select';
 
-type SelectContextValue = {
+interface SelectContextValue {
   value: string;
   open: boolean;
   currentNode: HTMLElement | null;
   onValueChange(value: string): void;
   onOpenChange(open: boolean): void;
   onCurrentNodeChange(node: HTMLElement): void;
-};
+}
 
 const [SelectContext, useSelectContext] = createScopedContext<
   SelectContextValue | undefined
@@ -25,12 +25,26 @@ const [SelectContext, useSelectContext] = createScopedContext<
 
 /*---------------------------------------------------------------------------*/
 
-type SelectOptionData = {
+type OptionProps = ComponentProps<'option'>;
+type OptionElement = ReactElement<OptionProps>;
+interface SelectOptionsContextValue {
+  options: Set<OptionElement>;
+  onOptionAdd(option: OptionElement): void;
+  onOptionRemove(option: OptionElement): void;
+}
+
+const [SelectOptionsContext, useSelectOptionsContext] = createScopedContext<
+  SelectOptionsContextValue | undefined
+>(DISPLAY_NAME, undefined);
+
+/*---------------------------------------------------------------------------*/
+
+interface SelectOptionData {
   node: HTMLElement;
   value: string;
-  selected: boolean;
-  disabled: boolean;
-};
+  selected?: boolean;
+  disabled?: boolean;
+}
 
 const [SelectCollection, useSelectCollection] = createCollection<
   HTMLElement,
@@ -39,7 +53,7 @@ const [SelectCollection, useSelectCollection] = createCollection<
 
 /*---------------------------------------------------------------------------*/
 
-type BaseProps = ComponentPropsWithRef<typeof SelectTrigger>;
+type BaseProps = ComponentProps<typeof SelectTrigger>;
 interface SelectProps extends BaseProps {
   id?: string;
   defaultValue?: string;
@@ -74,6 +88,7 @@ export const Select = (inProps: SelectProps) => {
     onChange: onOpenChange,
   });
 
+  const [options, setOptions] = useState<Set<OptionElement>>(new Set());
   const [currentNode, setCurrentNode] = useState<HTMLElement | null>(null);
 
   function handleValueChange(value: string) {
@@ -90,18 +105,33 @@ export const Select = (inProps: SelectProps) => {
       onOpenChange={setOpen}
       onCurrentNodeChange={setCurrentNode}
     >
-      <SelectCollection>
-        <Popover open={open} onOpenChange={setOpen}>
-          <SelectTrigger {...props} />
-          <SelectContent>{children}</SelectContent>
-        </Popover>
-      </SelectCollection>
+      <SelectOptionsContext
+        options={options}
+        onOptionAdd={(option) => {
+          setOptions((prev) => new Set(prev).add(option));
+        }}
+        onOptionRemove={(option) => {
+          setOptions((prev) => {
+            const newSet = new Set(prev);
+            newSet.delete(option);
+            return newSet;
+          });
+        }}
+      >
+        <SelectCollection>
+          <Popover open={open} onOpenChange={setOpen}>
+            <SelectTrigger {...props} />
+            <SelectContent>{children}</SelectContent>
+          </Popover>
+        </SelectCollection>
+      </SelectOptionsContext>
     </SelectContext>
   );
 };
 
 Select.displayName = DISPLAY_NAME;
 Select.useContext = useSelectContext;
+Select.useOptionsContext = useSelectOptionsContext;
 Select.useCollection = useSelectCollection;
 Select.Trigger = SelectTrigger;
 Select.Content = SelectContent;

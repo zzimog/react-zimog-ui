@@ -32,20 +32,27 @@ export function createCollection<
   const Collection = (inProps: PropsWithChildren) => {
     const { children } = inProps;
 
-    const items = useRef(new Map());
+    const itemsRef = useRef<Map<E, T>>(new Map());
+    const orderedRef = useRef<T[]>(null);
 
     const props = useRef({
-      getItems() {
-        const keys = Array.from(items.current.keys());
-        const ordered = keys.sort(sortByDocumentPosition);
+      getItems(): T[] {
+        if (!orderedRef.current) {
+          const entries = itemsRef.current.entries();
+          orderedRef.current = Array.from(entries)
+            .sort((a, b) => sortByDocumentPosition(a[0], b[0]))
+            .map(([_, data]) => data);
+        }
 
-        return ordered.map((key) => items.current.get(key));
+        return orderedRef.current;
       },
-      onItemAdd(item: E, data?: T) {
-        items.current.set(item, data || {});
+      onItemAdd(item: E, data: T) {
+        itemsRef.current.set(item, data);
+        orderedRef.current = null;
       },
       onItemRemove(item: E) {
-        items.current.delete(item);
+        itemsRef.current.delete(item);
+        orderedRef.current = null;
       },
     }).current;
 

@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Check } from 'lucide-react';
 import { useMergedRefs } from '@ui';
 import { Native, type NativeProps } from '@ui/headless';
@@ -10,16 +10,17 @@ import classes from './classes';
 
 const DISPLAY_NAME = 'SelectOption';
 
-type SelectOptionProps = NativeProps<'div'> & {
-  disabled?: boolean;
+type BaseProps = NativeProps<'div'>;
+interface SelectOptionProps extends BaseProps {
   value: string;
-};
+  disabled?: boolean;
+}
 
 export const SelectOption = (inProps: SelectOptionProps) => {
   const {
     ref: refProp,
-    disabled: disabledProp,
     value,
+    disabled: disabledProp,
     className,
     children,
     onFocus,
@@ -33,13 +34,14 @@ export const SelectOption = (inProps: SelectOptionProps) => {
 
   const [highlighted, setHighlighted] = useState(false);
 
-  const context = Select.useContext(DISPLAY_NAME);
   const collection = Select.useCollection();
+  const context = Select.useContext(DISPLAY_NAME);
+  const optionsContext = Select.useOptionsContext(DISPLAY_NAME);
   const groupContext = SelectGroup.useContext(DISPLAY_NAME);
   SelectContent.useContext(DISPLAY_NAME);
 
   const selected = value === context.value;
-  const disabled = groupContext.disabled || disabledProp || false;
+  const disabled = groupContext.disabled || disabledProp;
 
   const ref = useRef<HTMLElement>(null);
   const mergedRef = useMergedRefs(refProp, ref, (node: HTMLElement) => {
@@ -53,6 +55,16 @@ export const SelectOption = (inProps: SelectOptionProps) => {
     return () => collection.onItemRemove(node);
   });
 
+  const { onOptionAdd, onOptionRemove } = optionsContext;
+  const option = useMemo(
+    () => (
+      <option key={value} value={value} disabled={disabled}>
+        {children}
+      </option>
+    ),
+    [value, disabled]
+  );
+
   function handleHighlight(focus: boolean) {
     if (context.open) {
       setHighlighted(focus);
@@ -65,6 +77,11 @@ export const SelectOption = (inProps: SelectOptionProps) => {
       context.onCurrentNodeChange(ref.current!);
     }
   }
+
+  useLayoutEffect(() => {
+    onOptionAdd(option);
+    return () => onOptionRemove(option);
+  }, [option, onOptionAdd, onOptionRemove]);
 
   return (
     <Native.div

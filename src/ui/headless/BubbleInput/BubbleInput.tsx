@@ -1,12 +1,12 @@
 import { useEffect, useRef, type ComponentPropsWithRef } from 'react';
-import { useMergedRefs } from '@ui/hooks';
-import { usePrevious } from '../../hooks/use-previous';
+import { useMergedRefs, usePrevious } from '@ui/hooks';
 
 const DISPLAY_NAME = 'BubbleInput';
 
-type BubbleInputProps = ComponentPropsWithRef<'input'> & {
+type BaseProps = ComponentPropsWithRef<'input'>;
+interface BubbleInputProps extends BaseProps {
   bubbles?: boolean;
-};
+}
 
 export const BubbleInput = (inProps: BubbleInputProps) => {
   const {
@@ -49,8 +49,8 @@ export const BubbleInput = (inProps: BubbleInputProps) => {
     <input
       ref={mergedRef}
       type={type}
-      defaultValue={propValue as string}
-      defaultChecked={propValue as boolean}
+      defaultValue={value}
+      defaultChecked={checked}
       {...props}
       style={{
         display: 'none',

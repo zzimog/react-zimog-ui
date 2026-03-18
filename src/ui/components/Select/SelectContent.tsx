@@ -1,4 +1,5 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { FocusTrap, Popover, type NativeProps } from '@ui/headless';
 import { cn, composeHandlers, createScopedContext } from '@ui/utils';
 import { Select } from './Select';
@@ -6,7 +7,7 @@ import classes from './classes';
 
 const DISPLAY_NAME = 'SelectContent';
 
-type SelectContentContextValue = {};
+interface SelectContentContextValue {}
 
 const [SelectContentContext, useSelectContentContext] = createScopedContext<
   SelectContentContextValue | undefined
@@ -19,6 +20,12 @@ interface SelectContentProps extends BaseProps {}
 
 export const SelectContent = (inProps: SelectContentProps) => {
   const { className, onFocus, onKeyDown, ...props } = inProps;
+
+  const [fragment] = useState<DocumentFragment | undefined>(() => {
+    if (typeof DocumentFragment === 'function') {
+      return new DocumentFragment();
+    }
+  });
 
   const { open, onOpenChange } = Select.useContext(DISPLAY_NAME);
   const { getItems } = Select.useCollection();
@@ -34,6 +41,13 @@ export const SelectContent = (inProps: SelectContentProps) => {
       currentNode?.focus();
     }
   }, [open]);
+
+  if (!open && fragment) {
+    return createPortal(
+      <SelectContentContext>{props.children}</SelectContentContext>,
+      fragment
+    );
+  }
 
   return (
     <SelectContentContext>

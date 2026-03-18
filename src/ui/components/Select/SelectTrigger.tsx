@@ -24,7 +24,15 @@ export const SelectTrigger = (inProps: SelectTriggerProps) => {
     ...props
   } = inProps;
 
-  const { open, currentNode, onOpenChange } = Select.useContext(DISPLAY_NAME);
+  const {
+    open,
+    currentNode,
+    onOpenChange,
+    onValueChange,
+    onCurrentNodeChange,
+  } = Select.useContext(DISPLAY_NAME);
+
+  const { getItems } = Select.useCollection();
 
   const ref = useRef<HTMLElement>(null);
   const mergedRef = useMergedRefs(refProp, ref);
@@ -83,6 +91,26 @@ export const SelectTrigger = (inProps: SelectTriggerProps) => {
         if ([' ', 'Enter', 'ArrowUp', 'ArrowDown'].includes(event.key)) {
           onOpenChange(true);
           event.preventDefault();
+        }
+
+        if (['Home', 'End', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
+          const items = getItems().filter((item) => !item.disabled);
+          let [nextItem] = items;
+
+          if (['ArrowLeft', 'End'].includes(event.key)) {
+            [nextItem] = items.reverse();
+          }
+
+          if (['ArrowLeft', 'ArrowRight'].includes(event.key)) {
+            const currentIndex = items.findIndex((item) => item.selected);
+            nextItem = items[currentIndex + 1];
+          }
+
+          if (nextItem) {
+            onValueChange(nextItem.value);
+            onCurrentNodeChange(nextItem.node);
+            event.preventDefault();
+          }
         }
       })}
     >

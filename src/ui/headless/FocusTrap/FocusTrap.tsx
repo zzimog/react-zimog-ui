@@ -48,41 +48,6 @@ export const FocusTrap = (inProps: FocusTrapProps) => {
 
   useEffect(() => {
     const node = ref.current;
-    if (node) {
-      const currentActive = document.activeElement as HTMLElement | null;
-      if (!node.contains(currentActive)) {
-        const eventMount = new CustomEvent(EVENT_MOUNT, EVENT_OPTIONS);
-        node.addEventListener(EVENT_MOUNT, onMount);
-        node.dispatchEvent(eventMount);
-
-        if (!eventMount.defaultPrevented) {
-          const [first] = getFocusableEdges(node);
-          first?.focus();
-        }
-
-        previousFocusedRef.current = currentActive;
-      }
-
-      FocusStack.add(enabledRef);
-      return () => {
-        const eventUnmount = new CustomEvent(EVENT_UNMOUNT, EVENT_OPTIONS);
-        node.addEventListener(EVENT_UNMOUNT, onUnmount);
-        node.dispatchEvent(eventUnmount);
-
-        if (!eventUnmount.defaultPrevented) {
-          const focusTarget = previousFocusedRef.current ?? document.body;
-          focusTarget?.focus();
-        }
-
-        node.removeEventListener(EVENT_MOUNT, onMount);
-        node.removeEventListener(EVENT_UNMOUNT, onUnmount);
-        FocusStack.remove(enabledRef);
-      };
-    }
-  }, [onMount, onUnmount]);
-
-  useEffect(() => {
-    const node = ref.current;
     const isEnabled = enabledRef.current;
     if (node && trapped) {
       /**
@@ -130,6 +95,44 @@ export const FocusTrap = (inProps: FocusTrapProps) => {
       };
     }
   }, [trapped]);
+
+  useEffect(() => {
+    const node = ref.current;
+    if (node) {
+      const currentActive = document.activeElement as HTMLElement | null;
+      if (!node.contains(currentActive)) {
+        const eventMount = new CustomEvent(EVENT_MOUNT, EVENT_OPTIONS);
+        node.addEventListener(EVENT_MOUNT, onMount);
+        node.dispatchEvent(eventMount);
+
+        if (!eventMount.defaultPrevented) {
+          const [first] = getFocusableEdges(node);
+          first?.focus();
+        }
+
+        previousFocusedRef.current = currentActive;
+      }
+
+      FocusStack.add(enabledRef);
+      return () => {
+        node.removeEventListener(EVENT_MOUNT, onMount);
+
+        setTimeout(() => {
+          const eventUnmount = new CustomEvent(EVENT_UNMOUNT, EVENT_OPTIONS);
+          node.addEventListener(EVENT_UNMOUNT, onUnmount);
+          node.dispatchEvent(eventUnmount);
+
+          if (!eventUnmount.defaultPrevented) {
+            const focusTarget = previousFocusedRef.current ?? document.body;
+            focusTarget?.focus();
+          }
+
+          FocusStack.remove(enabledRef);
+          node.removeEventListener(EVENT_UNMOUNT, onUnmount);
+        });
+      };
+    }
+  }, [onMount, onUnmount]);
 
   useFocusGuards();
 

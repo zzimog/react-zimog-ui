@@ -27,7 +27,7 @@ export const SelectContent = (inProps: SelectContentProps) => {
     }
   });
 
-  const { open, onOpenChange } = Select.useContext(DISPLAY_NAME);
+  const { trigger, open, onOpenChange } = Select.useContext(DISPLAY_NAME);
   const { getItems } = Select.useCollection();
 
   useEffect(() => {
@@ -73,6 +73,7 @@ export const SelectContent = (inProps: SelectContentProps) => {
              * Prevent focus on previously focused element to manually
              * handle focus on trigger when closing the options layer
              */
+            trigger?.focus({ preventScroll: true });
             event.preventDefault();
           }}
           onFocus={composeHandlers(onFocus, (event) => {
@@ -93,6 +94,7 @@ export const SelectContent = (inProps: SelectContentProps) => {
 
             if (event.key === 'Escape') {
               onOpenChange(false);
+              event.preventDefault();
             }
 
             if (['Home', 'End', 'ArrowUp', 'ArrowDown'].includes(event.key)) {

@@ -11,9 +11,11 @@ import { SelectTrigger } from './SelectTrigger';
 const DISPLAY_NAME = 'Select';
 
 interface SelectContextValue {
+  trigger: HTMLElement | null;
   value: string;
   open: boolean;
   currentNode: HTMLElement | null;
+  onTriggerChange(element: HTMLElement | null): void;
   onValueChange(value: string): void;
   onOpenChange(open: boolean): void;
   onCurrentNodeChange(node: HTMLElement): void;
@@ -88,6 +90,7 @@ export const Select = (inProps: SelectProps) => {
     onChange: onOpenChange,
   });
 
+  const [trigger, setTrigger] = useState<HTMLElement | null>(null);
   const [options, setOptions] = useState<Set<OptionElement>>(new Set());
   const [currentNode, setCurrentNode] = useState<HTMLElement | null>(null);
 
@@ -98,9 +101,11 @@ export const Select = (inProps: SelectProps) => {
 
   return (
     <SelectContext
+      trigger={trigger}
       value={value}
       open={open}
       currentNode={currentNode}
+      onTriggerChange={setTrigger}
       onValueChange={handleValueChange}
       onOpenChange={setOpen}
       onCurrentNodeChange={setCurrentNode}

@@ -1,8 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { type NativeProps } from '@ui/headless';
+import { Presence, type NativeProps } from '@ui/headless';
 import { useMergedRefs } from '@ui/hooks';
-import { Presence } from '../Presence';
 import { placeContent } from './place-content';
 import { Popover } from './Popover';
 
@@ -36,6 +35,23 @@ export const PopoverContent = (inProps: PopoverContentProps) => {
   const mergedRefs = useMergedRefs(refProp, ref);
 
   useEffect(() => {
+    function handleOutside(event: Event) {
+      const content = ref.current;
+      for (const element of [trigger, content]) {
+        const target = event.target as HTMLElement;
+        if (element && element.contains(target)) {
+          return;
+        }
+      }
+
+      onOpenChange(false);
+    }
+
+    window.addEventListener('pointerdown', handleOutside);
+    return () => window.removeEventListener('pointerdown', handleOutside);
+  }, []);
+
+  useEffect(() => {
     if (open) {
       function handleResize() {
         const content = ref.current;
@@ -52,26 +68,12 @@ export const PopoverContent = (inProps: PopoverContentProps) => {
         }
       }
 
-      function handleOutside(event: Event) {
-        const content = ref.current;
-        for (const element of [trigger, content]) {
-          const target = event.target as HTMLElement;
-          if (element && element.contains(target)) {
-            return;
-          }
-        }
-
-        onOpenChange(false);
-      }
-
       handleResize();
       window.addEventListener('resize', handleResize);
       window.addEventListener('scroll', handleResize, true);
-      window.addEventListener('pointerdown', handleOutside);
       return () => {
         window.removeEventListener('resize', handleResize);
         window.removeEventListener('scroll', handleResize);
-        window.removeEventListener('pointerdown', handleOutside);
       };
     }
   }, [open, trigger, distance, padding, side, align, avoidCollisions]);

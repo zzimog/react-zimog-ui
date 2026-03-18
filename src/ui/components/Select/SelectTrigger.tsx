@@ -27,6 +27,7 @@ export const SelectTrigger = (inProps: SelectTriggerProps) => {
   const {
     open,
     currentNode,
+    onTriggerChange,
     onOpenChange,
     onValueChange,
     onCurrentNodeChange,
@@ -34,12 +35,15 @@ export const SelectTrigger = (inProps: SelectTriggerProps) => {
 
   const { getItems } = Select.useCollection();
 
+  const pointerTypeRef = useRef<string>(null);
+
   const ref = useRef<HTMLElement>(null);
-  const mergedRef = useMergedRefs(refProp, ref);
+  const mergedRef = useMergedRefs(refProp, ref, onTriggerChange);
 
   const hasPlaceholder = !currentNode?.textContent;
   const placeholder = placeholderProp || 'Select an option';
 
+  /*
   const previousOpenRef = useRef(open);
   useEffect(() => {
     const wasOpen = previousOpenRef.current;
@@ -58,6 +62,7 @@ export const SelectTrigger = (inProps: SelectTriggerProps) => {
       previousOpenRef.current = open;
     }
   }, [open]);
+  */
 
   return (
     <Popover.Trigger
@@ -69,6 +74,11 @@ export const SelectTrigger = (inProps: SelectTriggerProps) => {
       {...props}
       className={cn(classes.trigger, className)}
       onClick={composeHandlers(onClick, (event) => {
+        const pointerType = pointerTypeRef.current;
+        if (pointerType !== 'mouse') {
+          onOpenChange(!open);
+        }
+
         event.currentTarget.focus();
         event.preventDefault();
       })}
@@ -86,6 +96,8 @@ export const SelectTrigger = (inProps: SelectTriggerProps) => {
           onOpenChange(!open);
           event.preventDefault();
         }
+
+        pointerTypeRef.current = event.pointerType;
       })}
       onKeyDown={composeHandlers(onKeyDown, (event) => {
         if ([' ', 'Enter', 'ArrowUp', 'ArrowDown'].includes(event.key)) {

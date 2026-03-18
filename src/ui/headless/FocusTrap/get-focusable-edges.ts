@@ -1,10 +1,15 @@
+function isInput(element: HTMLElement): element is HTMLInputElement {
+  return element.tagName === 'INPUT';
+}
+
 function getFocusables(container: HTMLElement) {
   const element: HTMLElement[] = [];
   const walker = document.createTreeWalker(container, NodeFilter.SHOW_ELEMENT, {
-    acceptNode: (node: any) => {
-      const isHiddenInput = node.tagName === 'INPUT' && node.type === 'hidden';
-      if (node.disabled || node.hidden || isHiddenInput) {
-        return NodeFilter.FILTER_SKIP;
+    acceptNode: (node: HTMLElement) => {
+      if (isInput(node) && node.type === 'hidden') {
+        if (node.disabled || node.hidden) {
+          return NodeFilter.FILTER_SKIP;
+        }
       }
 
       return node.tabIndex >= 0

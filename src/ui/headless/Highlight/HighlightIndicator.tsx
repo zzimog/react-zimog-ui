@@ -8,7 +8,7 @@ const DISPLAY_NAME = 'HighlightIndicator';
 type PresenceProps = Omit<NativeProps<typeof Presence>, 'present'>;
 type HighlightIndicatorProps = PresenceProps;
 
-export function rectEquals(rect1: DOMRect, rect2: DOMRect): boolean {
+function rectEquals(rect1: DOMRect, rect2: DOMRect): boolean {
   return (
     rect1.x === rect2.x &&
     rect1.y === rect2.y &&

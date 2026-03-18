@@ -48,10 +48,8 @@ interface SelectOptionData {
   disabled?: boolean;
 }
 
-const [SelectCollection, useSelectCollection] = createCollection<
-  HTMLElement,
-  SelectOptionData
->(DISPLAY_NAME);
+const [SelectCollection, useSelectCollection] =
+  createCollection<SelectOptionData>(DISPLAY_NAME);
 
 /*---------------------------------------------------------------------------*/
 

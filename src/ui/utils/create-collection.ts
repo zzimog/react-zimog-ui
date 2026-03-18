@@ -13,8 +13,8 @@ function sortByDocumentPosition(a: HTMLElement, b: HTMLElement) {
 }
 
 export function createCollection<
+  T extends object,
   E extends HTMLElement = HTMLElement,
-  T extends {} = {},
 >(name: string) {
   const COLLECTION_NAME = name + 'Collection';
   const ITEM_NAME = COLLECTION_NAME + 'Item';
@@ -36,12 +36,12 @@ export function createCollection<
     const orderedRef = useRef<T[]>(null);
 
     const props = useRef({
-      getItems(): T[] {
+      getItems() {
         if (!orderedRef.current) {
           const entries = itemsRef.current.entries();
           orderedRef.current = Array.from(entries)
             .sort((a, b) => sortByDocumentPosition(a[0], b[0]))
-            .map(([_, data]) => data);
+            .map(([, data]) => data);
         }
 
         return orderedRef.current;
@@ -54,9 +54,10 @@ export function createCollection<
         itemsRef.current.delete(item);
         orderedRef.current = null;
       },
-    }).current;
+    });
 
-    return createElement(CollectionContext, props, children);
+    // eslint-disable-next-line react-hooks/refs
+    return createElement(CollectionContext, props.current, children);
   };
 
   Collection.displayName = COLLECTION_NAME;

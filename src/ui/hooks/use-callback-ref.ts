@@ -1,6 +1,6 @@
-import { useLayoutEffect, useRef } from 'react';
+import { useLayoutEffect, useMemo, useRef } from 'react';
 
-type Callback = (...args: any[]) => any;
+type Callback = (...args: never[]) => unknown;
 
 export function useCallbackRef<T extends Callback>(callback?: T): T {
   const callbackRef = useRef(callback);
@@ -9,5 +9,5 @@ export function useCallbackRef<T extends Callback>(callback?: T): T {
     callbackRef.current = callback;
   });
 
-  return useRef(((...args) => callbackRef.current?.(...args)) as T).current;
+  return useMemo(() => ((...args) => callbackRef.current?.(...args)) as T, []);
 }

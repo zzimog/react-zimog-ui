@@ -7,7 +7,7 @@ import { cn } from '@ui';
 /*---------------------------------------------------------------------------*/
 
 type NavBaseProps = ComponentProps<'nav'>;
-interface NavProps extends NavBaseProps {}
+type NavProps = NavBaseProps;
 
 export const Nav = (props: NavProps) => <nav {...props} />;
 
@@ -18,7 +18,7 @@ Nav.displayName = 'Nav';
 /*---------------------------------------------------------------------------*/
 
 type ListBaseProps = ComponentProps<'ul'>;
-interface NavListProps extends ListBaseProps {}
+type NavListProps = ListBaseProps;
 
 export const NavList = ({ className, ...props }: NavListProps) => (
   <ul
@@ -35,7 +35,7 @@ Nav.List = NavList;
 /*---------------------------------------------------------------------------*/
 
 type ItemBaseProps = ComponentProps<'li'>;
-interface NavItemProps extends ItemBaseProps {}
+type NavItemProps = ItemBaseProps;
 
 const NavItem = (props: NavItemProps) => <li {...props} />;
 
@@ -52,7 +52,7 @@ type RouterLinkProps = Omit<
   'to' | keyof AnchorProps
 >;
 
-interface NavLinkProps extends RouterLinkProps, AnchorProps {}
+type NavLinkProps = RouterLinkProps & AnchorProps;
 
 export const NavLink = (inProps: NavLinkProps) => {
   const { href, className, ...props } = inProps;
@@ -77,7 +77,7 @@ export const NavLink = (inProps: NavLinkProps) => {
         return () => observer.disconnect();
       }
     }
-  }, [href]);
+  }, [href, isAnchor]);
 
   const classes = cn(
     'inline-block',

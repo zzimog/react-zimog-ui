@@ -47,7 +47,6 @@ export const Slider = (inProps: SliderProps) => {
     step = 1,
     direction = 'horizontal',
     className,
-    style,
     onValueChange,
     onContextMenu,
     ...props
@@ -72,7 +71,7 @@ export const Slider = (inProps: SliderProps) => {
       const newValue = clamp(value, min, max);
       setValue(newValue);
     },
-    [min, max]
+    [min, max, setValue]
   );
 
   const getValueFromRatio = useCallback(
@@ -116,7 +115,7 @@ export const Slider = (inProps: SliderProps) => {
 
       event.preventDefault();
     },
-    [direction, thumb]
+    [direction, thumb, getValueFromRatio, updateValue]
   );
 
   return (

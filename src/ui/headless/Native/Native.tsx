@@ -6,10 +6,13 @@ import {
   type ComponentPropsWithRef,
   type ElementType,
   type JSX,
+  type Ref,
 } from 'react';
 import { useMergedRefs } from '@ui/hooks';
 import { mergeProps } from './merge-props';
 import { tags } from './tags';
+
+type PropsWithRef = { ref: Ref<HTMLElement> };
 
 type BaseProps<T extends ElementType> = Omit<ComponentPropsWithRef<T>, 'as'>;
 export type NativeProps<T extends ElementType> = BaseProps<T> & {
@@ -20,19 +23,20 @@ export type NativeProps<T extends ElementType> = BaseProps<T> & {
 function createNativeElement<T extends ElementType>(tag: T) {
   const Native = <E extends ElementType = T>(inProps: NativeProps<E>) => {
     const { as, asChild, ...props } = inProps;
-    const Comp: any = as || tag;
+    const Comp: ElementType = as || tag;
 
     if (asChild) {
       const { ref, children, ...parentProps } = props;
 
       if (isValidElement(children)) {
         const child = Children.only(children);
-        const childProps = child.props as Record<string, any>;
+        const childProps = child.props as PropsWithRef;
         const mergedProps = mergeProps(parentProps, childProps);
 
         if (children.type !== Fragment) {
           mergedProps.ref = ref
-            ? useMergedRefs(ref, childProps.ref)
+            ? // eslint-disable-next-line react-hooks/rules-of-hooks
+              useMergedRefs(ref, childProps.ref)
             : childProps.ref;
         }
 

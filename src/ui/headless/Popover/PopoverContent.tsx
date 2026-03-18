@@ -49,7 +49,7 @@ export const PopoverContent = (inProps: PopoverContentProps) => {
 
     window.addEventListener('pointerdown', handleOutside);
     return () => window.removeEventListener('pointerdown', handleOutside);
-  }, []);
+  }, [trigger, onOpenChange]);
 
   useEffect(() => {
     if (open) {

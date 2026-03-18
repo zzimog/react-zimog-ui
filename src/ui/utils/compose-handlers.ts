@@ -4,7 +4,7 @@ export function composeHandlers<E extends { defaultPrevented: boolean }>(
   propHandler: EventHandler<E> | undefined,
   customHandler: EventHandler<E>,
   checkPrevented: boolean = true
-) {
+): EventHandler<E> {
   return (event: E) => {
     propHandler?.(event);
 

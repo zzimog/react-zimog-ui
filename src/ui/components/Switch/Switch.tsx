@@ -4,7 +4,7 @@ import { Checkable } from '@ui/headless';
 import { cn } from '@ui/utils';
 
 type CheckableProps = ComponentPropsWithRef<typeof Checkable>;
-interface SwitchProps extends CheckableProps {}
+type SwitchProps = CheckableProps
 
 export const Switch = (inProps: SwitchProps) => {
   const { className, ...props } = inProps;

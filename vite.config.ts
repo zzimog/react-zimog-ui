@@ -1,8 +1,9 @@
 import { copyFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import mdx from '@mdx-js/rollup';
+import babel from '@rolldown/plugin-babel';
 import tailwindcss from '@tailwindcss/vite';
-import react from '@vitejs/plugin-react';
+import react, { reactCompilerPreset } from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 
 //import pkg from './package.json';
@@ -20,11 +21,8 @@ export default defineConfig({
       enforce: 'pre',
       ...mdx(),
     },
-    react({
-      babel: {
-        plugins: [['babel-plugin-react-compiler']],
-      },
-    }),
+    react(),
+    babel({ presets: [reactCompilerPreset()] }),
     tailwindcss(),
     {
       name: 'copy-404',

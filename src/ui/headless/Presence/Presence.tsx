@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import { Native, type NativeProps } from '@ui/headless';
 import { useMergedRefs } from '@ui/hooks';
 
@@ -58,10 +58,11 @@ export const Presence = (inProps: PresenceProps) => {
     }, [])
   );
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const prevPresent = prevPresentRef.current;
     if (present !== prevPresent) {
       if (present) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setMounted(true);
       } else {
         const currentAnimationName = getAnimationName(stylesRef.current);

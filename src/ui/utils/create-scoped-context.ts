@@ -13,7 +13,10 @@ export function createScopedContext<T extends object | undefined>(
   const Context = createContext<T>(defaultContext);
   const Provider = (inProps: PropsWithChildren<T>) => {
     const { children, ...props } = inProps;
-    const value = useMemo(() => props, Object.values(props)) as T;
+    const deps = Object.values(props);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const value = useMemo(() => props, deps) as T;
 
     return createElement(Context.Provider, { value, children });
   };

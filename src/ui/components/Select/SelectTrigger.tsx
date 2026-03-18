@@ -73,6 +73,7 @@ export const SelectTrigger = (inProps: SelectTriggerProps) => {
       aria-activedescendant={currentNode?.id || undefined}
       {...props}
       className={cn(classes.trigger, className)}
+      // eslint-disable-next-line react-hooks/refs
       onClick={composeHandlers(onClick, (event) => {
         const pointerType = pointerTypeRef.current;
         if (pointerType !== 'mouse') {
@@ -82,6 +83,7 @@ export const SelectTrigger = (inProps: SelectTriggerProps) => {
         event.currentTarget.focus();
         event.preventDefault();
       })}
+      // eslint-disable-next-line react-hooks/refs
       onPointerDown={composeHandlers(onPointerDown, (event) => {
         const target = event.target as HTMLElement;
         if (target.hasPointerCapture(event.pointerId)) {

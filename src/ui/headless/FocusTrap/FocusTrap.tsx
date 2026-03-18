@@ -142,8 +142,8 @@ export const FocusTrap = (inProps: FocusTrapProps) => {
       tabIndex={-1}
       {...props}
       onKeyDown={composeHandlers(onKeyDown, (event) => {
-        const node = ref.current;
-        if (node && loop) {
+        if (loop) {
+          const node = event.currentTarget;
           const isTab =
             event.key === 'Tab' &&
             !event.altKey &&

@@ -32,6 +32,7 @@ export const SliderRange = (inProps: SliderRangeProps) => {
       style={{
         ['--start' as string]: '0%',
         ['--end' as string]: `${(1 - ratio) * 100}%`,
+        ...style,
       }}
     />
   );

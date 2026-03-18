@@ -1,16 +1,8 @@
-import { BrowserRouter, Route, Routes } from 'react-router';
-import { cn, ThemeSwitcher } from '@ui';
+import type { MDXContent } from 'mdx/types';
+import { BrowserRouter, Link, Route, Routes } from 'react-router';
+import { ThemeSwitcher } from '@ui';
 import { Logo, MDXLoader } from '@app/components';
-import {
-  HighlightDemo,
-  PageAccordion,
-  PageCheckbox,
-  PageCollapsible,
-  PopoverDemo,
-  ScrollAreaDemo,
-  TabsDemo,
-} from '@app/pages';
-import { AppMenu, type MenuEntry } from './AppMenu';
+import { AppMenu } from './AppMenu';
 import {
   PageCard,
   PageField,
@@ -22,84 +14,47 @@ import {
 import { TestPage as Test } from './Test';
 import './App.css';
 
-const _noop = () => {};
-const pages: MenuEntry = {
-  styled: {
-    card: _noop,
-    input: _noop,
-    field: _noop,
-    select: _noop,
-    table: _noop,
-  },
-  old: {
-    accordion: PageAccordion,
-    checkbox: PageCheckbox,
-    collapsible: PageCollapsible,
-    highlight: HighlightDemo,
-    popover: PopoverDemo,
-    scrollarea: ScrollAreaDemo,
-    tabs: TabsDemo,
-  },
+const components: Record<string, MDXContent> = {
+  card: PageCard,
+  input: PageInput,
+  field: PageField,
+  select: PageSelect,
+  table: PageTable,
 };
 
-const routes: Record<string, any> = {
-  'styled/card': PageCard,
-  'styled/input': PageInput,
-  'styled/field': PageField,
-  'styled/select': PageSelect,
-  'styled/table': PageTable,
-};
-
-export default () => (
-  <div
-    className={cn(
-      'min-h-screen',
-      'text-foreground',
-      'bg-background',
-      'transition-colors'
-    )}
-  >
+const App = () => (
+  <div className="text-foreground bg-background min-h-screen transition-colors">
     <div className="mx-auto w-full max-w-3xl p-4">
       <BrowserRouter basename="react-zimog-ui">
         <header className="mb-16 flex h-16 items-center justify-between gap-2">
-          <AppMenu data={pages} />
+          <AppMenu data={components} />
 
-          <a aria-label="UI" title="UI Homepage" href="/">
+          <Link to="/" aria-label="Homepage" title="Homepage">
             <Logo className="size-16" />
-          </a>
+          </Link>
 
           <ThemeSwitcher size="sm" />
         </header>
 
-        <Routes>
-          <Route index element={<MDXLoader mdx={PageHome} />} />
+        <main>
+          <Routes>
+            <Route index element={<MDXLoader mdx={PageHome} />} />
 
-          {Object.entries(routes).map(([path, page]) => (
-            <Route
-              key={path}
-              path={path}
-              element={
-                <main>
-                  <MDXLoader mdx={page} />
-                </main>
-              }
-            />
-          ))}
-
-          {Object.keys(pages).map((category) =>
-            Object.entries(pages[category] as any).map(([name, Comp]: any) => (
+            {Object.entries(components).map(([name, page]) => (
               <Route
-                key={`${category}-${name}`}
-                path={`${category}/${name}`}
-                element={<Comp />}
+                key={name}
+                path={name}
+                element={<MDXLoader mdx={page} />}
               />
-            ))
-          )}
+            ))}
 
-          <Route path="test" element={<Test />} />
-          <Route path="*" element={<h2>404</h2>} />
-        </Routes>
+            <Route path="test" element={<Test />} />
+            <Route path="*" element={<h1>404</h1>} />
+          </Routes>
+        </main>
       </BrowserRouter>
     </div>
   </div>
 );
+
+export default App;

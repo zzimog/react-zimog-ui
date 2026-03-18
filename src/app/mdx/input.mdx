@@ -4,17 +4,19 @@ Basic `<Input />` component to input data.
 
 <Demo>
   <Field className="mx-auto max-w-md">
-    <Field.Label htmlFor="demo-input" children="Lorem ipsum dolor sit" />
-    <Input id="demo-input" />
+    <Field.Label>Lorem ipsum</Field.Label>
+    <Input placeholder="Lorem ipsum" />
     <Field.Description children="Lorem ipsum dolor sit amet consectetur adipisicing elit." />
   </Field>
 </Demo>
 
 ```tsx
 <Field>
-  <Field.Label />
-  <Input />
-  <Field.Description />
+  <Field.Label>Lorem ipsum</Field.Label>
+  <Input placeholder="Lorem ipsum" />
+  <Field.Description>
+    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+  </Field.Description>
 </Field>
 ```
 
@@ -24,18 +26,15 @@ Use the `disabled` prop to disable the input.
 
 <Demo>
   <Field className="mx-auto max-w-md">
-    <Field.Label
-      htmlFor="demo-input-disabled"
-      children="Lorem ipsum dolor sit"
-    />
-    <Input id="demo-input-disabled" placeholder="Disabled input" disabled />
+    <Field.Label>Lorem ipsum</Field.Label>
+    <Input placeholder="Disabled input" disabled />
   </Field>
 </Demo>
 
 ```tsx
 <Field>
-  <Field.Label />
-  <Input disabled />
+  <Field.Label>Lorem ipsum</Field.Label>
+  <Input placeholder="Disabled input" disabled />
 </Field>
 ```
 
@@ -45,17 +44,14 @@ Use `aria-invalid="true"` to set the input as invalid.
 
 <Demo>
   <Field className="mx-auto max-w-md">
-    <Field.Label
-      htmlFor="demo-input-invalid"
-      children="Lorem ipsum dolor sit"
-    />
-    <Input id="demo-input-invalid" aria-invalid="true" />
+    <Field.Label>Lorem ipsum</Field.Label>
+    <Input aria-invalid="true" />
   </Field>
 </Demo>
 
 ```tsx
 <Field>
-  <Field.Label />
+  <Field.Label>Lorem ipsum</Field.Label>
   <Input aria-invalid="true" />
 </Field>
 ```
@@ -106,4 +102,23 @@ Wrap your `<Input />` in a `<Input.Group />` component and add `<Input.Addon />`
 
 ## Props
 
-_coming soon_
+### Input
+
+This component extends the base `<input />` element props.
+
+### Group & Addons
+
+These components extend the base `<div />` element props.
+
+<PropsTable
+  data={[
+    {
+      name: 'as',
+      type: 'ElementType',
+    },
+    {
+      name: 'asChild',
+      type: 'boolean',
+    },
+  ]}
+/>

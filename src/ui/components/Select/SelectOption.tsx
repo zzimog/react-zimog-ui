@@ -11,10 +11,10 @@ import classes from './classes';
 const DISPLAY_NAME = 'SelectOption';
 
 type BaseProps = NativeProps<'div'>;
-interface SelectOptionProps extends BaseProps {
+type SelectOptionProps = BaseProps & {
   value: string;
   disabled?: boolean;
-}
+};
 
 export const SelectOption = (inProps: SelectOptionProps) => {
   const {
@@ -25,7 +25,6 @@ export const SelectOption = (inProps: SelectOptionProps) => {
     children,
     onFocus,
     onBlur,
-    onPointerDown,
     onPointerMove,
     onPointerUp,
     onKeyDown,
@@ -62,7 +61,7 @@ export const SelectOption = (inProps: SelectOptionProps) => {
         {children}
       </option>
     ),
-    [value, disabled]
+    [value, disabled, children]
   );
 
   function handleHighlight(focus: boolean) {
@@ -74,7 +73,7 @@ export const SelectOption = (inProps: SelectOptionProps) => {
   function handleSelect() {
     if (!disabled) {
       context.onValueChange(value);
-      context.onCurrentNodeChange(ref.current!);
+      context.onOpenChange(false);
     }
   }
 
@@ -92,7 +91,7 @@ export const SelectOption = (inProps: SelectOptionProps) => {
       data-highlighted={highlighted ? '' : undefined}
       tabIndex={0}
       {...props}
-      className={cn('flex items-center', classes.option, className)}
+      className={cn(classes.option, className)}
       onFocus={composeHandlers(onFocus, () => handleHighlight(true))}
       onBlur={composeHandlers(onBlur, () => handleHighlight(false))}
       onPointerMove={composeHandlers(onPointerMove, (event) => {

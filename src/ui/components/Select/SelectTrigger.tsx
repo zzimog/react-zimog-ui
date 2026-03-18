@@ -1,4 +1,4 @@
-import { useEffect, useRef, type ComponentPropsWithRef } from 'react';
+import { useRef, type ComponentPropsWithRef } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { Popover } from '@ui/headless';
 import { useMergedRefs } from '@ui/hooks';

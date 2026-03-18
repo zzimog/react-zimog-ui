@@ -4,8 +4,10 @@ import classes from './classes';
 
 const DISPLAY_NAME = 'TabsList';
 
+type TabsListContextValue = object;
+
 const [TabsListContext, useTabsListContext] = createScopedContext<
-  {} | undefined
+  TabsListContextValue | undefined
 >(DISPLAY_NAME, undefined);
 
 /*---------------------------------------------------------------------------*/

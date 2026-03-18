@@ -4,7 +4,7 @@ import { createOnigurumaEngine } from 'shiki/engine/oniguruma';
 
 const Shiki = await createHighlighterCore({
   engine: createOnigurumaEngine(import('shiki/wasm')),
-  langs: [import('@shikijs/langs/tsx')],
+  langs: [import('@shikijs/langs/tsx'), import('@shikijs/langs/bash')],
   themes: [
     import('@shikijs/themes/github-dark'),
     import('@shikijs/themes/github-light'),

@@ -1,55 +1,31 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Hamburger, Home, X } from 'lucide-react';
+import type { MDXContent } from 'mdx/types';
 import { Button, cn, Presence } from '@ui';
 import { Nav } from './components';
 
-export type MenuEntry = {
-  [key: string]: MenuEntry | Function;
+type AppMenuProps = {
+  data: Record<string, MDXContent>;
 };
 
-export const AppMenu = (props: { data?: MenuEntry }) => {
-  const { data = {} } = props;
+export const AppMenu = (props: AppMenuProps) => {
+  const { data } = props;
+
   const [open, setOpen] = useState(false);
+  const entries = Object.keys(data).sort();
 
-  const handleClose = useCallback(() => {
-    /**
-     * @todo Temp fix, wait "page load"
-     */
+  function close() {
     setTimeout(() => {
-      setOpen(false);
+      setOpen?.(false);
     }, 100);
-  }, []);
-
-  const getItems = useCallback(
-    (data: MenuEntry = {}, context = '') =>
-      Object.entries(data).map(([label, data]) => {
-        const href = `${context}/${label}`.toLowerCase();
-        const isFunc = typeof data === 'function';
-
-        return (
-          <Nav.Item key={href}>
-            {isFunc ? (
-              <Nav.Link title={label} href={href} onClick={handleClose}>
-                {label}
-              </Nav.Link>
-            ) : (
-              <>
-                <span className="text-foreground block py-1 font-mono text-xl uppercase transition">
-                  {label}
-                </span>
-
-                <Nav.List>{getItems(data, href)}</Nav.List>
-              </>
-            )}
-          </Nav.Item>
-        );
-      }),
-    [data]
-  );
+  }
 
   useEffect(() => {
-    const overflow: any = open ? 'hidden' : null;
-    document.body.style.overflow = overflow;
+    if (open) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.removeProperty('overflow');
+    }
   }, [open]);
 
   return (
@@ -77,27 +53,27 @@ export const AppMenu = (props: { data?: MenuEntry }) => {
           'not-md:**:text-2xl/11'
         )}
       >
-        <Button onClick={handleClose}>
+        <Button className="shrink-0" onClick={close}>
           <X />
         </Button>
 
         <Nav className="mx-auto text-center">
           <Nav.List className="capitalize">
-            <Nav.Item className="mb-4">
+            <Nav.Item className="mb-4" onClick={close}>
               <Nav.Link title="Home" href="/">
                 <span className="sr-only">Home</span>
                 <Home className="inline not-md:size-11" />
               </Nav.Link>
             </Nav.Item>
 
-            {getItems(data)}
+            {entries.map((entry) => (
+              <Nav.Item key={entry} onClick={close}>
+                <Nav.Link href={entry}>{entry}</Nav.Link>
+              </Nav.Item>
+            ))}
 
-            <Nav.Item>
-              <Nav.Link
-                href="/test"
-                className="mt-4 font-mono lowercase"
-                onClick={handleClose}
-              >
+            <Nav.Item onClick={close}>
+              <Nav.Link href="/test" className="mt-4 font-mono lowercase">
                 [test]
               </Nav.Link>
             </Nav.Item>

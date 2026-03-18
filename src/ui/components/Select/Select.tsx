@@ -92,11 +92,6 @@ export const Select = (inProps: SelectProps) => {
   const [options, setOptions] = useState<Set<OptionElement>>(new Set());
   const [currentNode, setCurrentNode] = useState<HTMLElement | null>(null);
 
-  function handleValueChange(value: string) {
-    setValue(value);
-    setOpen(false);
-  }
-
   return (
     <SelectContext
       trigger={trigger}
@@ -104,7 +99,7 @@ export const Select = (inProps: SelectProps) => {
       open={open}
       currentNode={currentNode}
       onTriggerChange={setTrigger}
-      onValueChange={handleValueChange}
+      onValueChange={setValue}
       onOpenChange={setOpen}
       onCurrentNodeChange={setCurrentNode}
     >

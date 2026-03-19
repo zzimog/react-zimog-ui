@@ -8,21 +8,21 @@ A simple and styled `<Card />` component.
       <Card.Title>Login</Card.Title>
       <Card.Description>Login to your account</Card.Description>
     </Card.Header>
-    <Card.Content as="main" className="flex flex-col gap-6">
+    <Card.Content as="main">
       <Field>
         <Field.Label>Username</Field.Label>
         <Field.Control placeholder="Username" />
       </Field>
 
-      <Field>
-        <div className="flex items-center">
+      <Field className="mt-6">
+        <Field.Content direction="horizontal">
           <Field.Label>Password</Field.Label>
           <a
             href="#!"
             className="ml-auto hover:underline text-xs"
             children="Forgot password?"
           />
-        </div>
+        </Field.Content>
         <Password>
           <Input.Group>
               <Field.Control>
@@ -42,26 +42,23 @@ A simple and styled `<Card />` component.
 </Demo>
 
 ```tsx
-<Card className="mx-auto max-w-sm">
+<Card>
   <Card.Header>
     <Card.Title>Login</Card.Title>
     <Card.Description>Login to your account</Card.Description>
   </Card.Header>
-  <Card.Content className="flex flex-col gap-6">
+  <Card.Content>
     <Field>
       <Field.Label>Username</Field.Label>
       <Field.Control placeholder="Username" />
     </Field>
-
-    <Field>
-      <div className="flex items-center">
+    <Field className="mt-6">
+      <Field.Content direction="horizontal">
         <Field.Label>Password</Field.Label>
-        <a
-          href="#!"
-          className="ml-auto underline"
-          children="Forgot password?"
-        />
-      </div>
+        <a href="#!" className="ml-auto hover:underline text-xs">
+          Forgot password?
+        </a>
+      </Field.Content>
       <Field.Control type="password" placeholder="Password" />
     </Field>
   </Card.Content>

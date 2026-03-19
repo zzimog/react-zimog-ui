@@ -33,7 +33,7 @@ const buttonClasses = cva(
       size: {
         sm: 'px-1 text-xs [&_svg]:size-4',
         md: 'px-2 text-sm [&_svg]:size-4',
-        lg: 'px-4 text-base [&_svg]:size-6',
+        lg: 'h-10 px-3 text-base [&_svg]:size-6',
       },
       variant: {
         solid: 'border',

@@ -19,6 +19,7 @@ function createId(children: ReactNode) {
   if (Array.isArray(children)) {
     str = children.map(createId).flat().filter(Boolean).join('');
   }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   if (isValidElement(children) && !!(children.props as any).children) {
     str = createId(children);
   }
@@ -58,7 +59,7 @@ export function createMDXElement<T extends ElementType>(
       if (isTitle && !baseId) {
         onBaseIdChange(id);
       }
-    }, [isTitle, baseId, id]);
+    }, [isTitle, baseId, id, onBaseIdChange]);
 
     return createElement(tag, {
       id,

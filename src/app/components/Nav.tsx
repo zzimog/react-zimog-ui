@@ -59,6 +59,7 @@ export const NavLink = (inProps: NavLinkProps) => {
 
   const [isVisible, setIsVisible] = useState(false);
   const isAnchor = href?.startsWith('#');
+  const isExternal = href?.startsWith('http');
 
   useLayoutEffect(() => {
     if (href && isAnchor) {
@@ -92,7 +93,7 @@ export const NavLink = (inProps: NavLinkProps) => {
     return <span {...props} />;
   }
 
-  if (isAnchor) {
+  if (isAnchor || isExternal) {
     return (
       <a
         data-highlight={isAnchor && isVisible ? '' : undefined}

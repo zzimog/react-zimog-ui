@@ -30,7 +30,7 @@ export const AppMenu = (props: AppMenuProps) => {
 
   return (
     <>
-      <Button onClick={() => setOpen(!open)}>
+      <Button size="lg" onClick={() => setOpen(!open)}>
         <Hamburger className="size-4" />
       </Button>
 
@@ -53,7 +53,7 @@ export const AppMenu = (props: AppMenuProps) => {
           'not-md:**:text-2xl/11'
         )}
       >
-        <Button className="shrink-0" onClick={close}>
+        <Button size="lg" className="shrink-0" onClick={close}>
           <X />
         </Button>
 

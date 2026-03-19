@@ -7,10 +7,10 @@ import { createMDXElement } from './create-mdx-element';
 
 const DISPLAY_NAME = 'MDXLoader';
 
-interface MDXContextValue {
+type MDXContextValue = {
   baseId?: string;
   onBaseIdChange(baseId: string): void;
-}
+};
 
 const [MDXContext, useMDXContext] = createScopedContext<
   MDXContextValue | undefined
@@ -18,10 +18,10 @@ const [MDXContext, useMDXContext] = createScopedContext<
 
 /*---------------------------------------------------------------------------*/
 
-interface MDXLoaderProps {
+type MDXLoaderProps = {
   mdx: MDXContent;
   components?: MDXComponents;
-}
+};
 
 export const MDXLoader = ({ mdx: Mdx, components }: MDXLoaderProps) => {
   const [baseId, setBaseId] = useState<string | undefined>();
@@ -39,12 +39,12 @@ export const MDXLoader = ({ mdx: Mdx, components }: MDXLoaderProps) => {
           p: ({ className, ...props }) => (
             <p
               {...props}
-              className={cn('text-muted', 'leading-relaxed', 'my-6', className)}
+              className={cn('text-muted my-6 leading-relaxed', className)}
             />
           ),
-          code: (props: any) =>
+          code: (props) =>
             !props.className ? <Code {...props} /> : <code {...props} />,
-          pre: (props: PropsWithChildren) => (
+          pre: (props) => (
             <Card className="p-0" asChild>
               <CodeBlock {...props} />
             </Card>
@@ -68,7 +68,7 @@ export const MDXLoader = ({ mdx: Mdx, components }: MDXLoaderProps) => {
           hr: ({ className, ...props }) => (
             <hr {...props} className={cn('my-16', className)} />
           ),
-          Demo: (props: PropsWithChildren) => (
+          Demo: (props) => (
             <Card
               className={cn(
                 '[&+.border]:border-t-0',
@@ -109,7 +109,22 @@ export const MDXLoader = ({ mdx: Mdx, components }: MDXLoaderProps) => {
               </Table>
             </Card>
           ),
-          ...(UIComponents as any),
+          Detail: (props: PropsWithChildren<{ present?: boolean }>) => {
+            const [present, setPresent] = useState(props.present ?? true);
+
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const children = (props.children as any)?.(present);
+
+            return (
+              <div>
+                <UIComponents.Button onClick={() => setPresent(!present)}>
+                  Toggle children
+                </UIComponents.Button>
+                {children}
+              </div>
+            );
+          },
+          ...(UIComponents as object),
           ...components,
         }}
       />

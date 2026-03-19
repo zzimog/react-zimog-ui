@@ -1,0 +1,73 @@
+# Presence
+
+Utility component which awaits possible CSS animation before unmounting.
+
+<Demo>
+  <Detail>
+    {(present) => (
+      <Presence data-present={present} present={present} asChild>
+        <Card className="data-[present=true]:animate-in data-[present=false]:animate-out mt-2">
+          <Card.Content>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam
+            perspiciatis aspernatur fugiat autem magni quidem similique, odio
+            officiis maiores quod. Atque tempore, minus harum ea consectetur
+            amet provident eius alias!
+          </Card.Content>
+        </Card>
+      </Presence>
+    )}
+  </Detail>
+</Demo>
+
+```tsx
+<Presence data-present={present} present={present} asChild>
+  <Card className="mt-2 data-[present=true]:animate-in data-[present=false]:animate-out">
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam
+    perspiciatis aspernatur fugiat autem magni quidem similique, odio officiis
+    maiores quod. Atque tempore, minus harum ea consectetur amet provident eius
+    alias!
+  </Card>
+</Presence>
+```
+
+## Usage
+
+```tsx
+import { Button, Presence } from '@ui';
+
+export default () => {
+  const [present, setPresent] = useState(false);
+
+  return (
+    <>
+      <Button onClick={() => setPresent(!present)} />
+      <Presence
+        data-present={present}
+        present={present}
+        className="data-[present=true]:animate-in data-[present=false]:animate-out"
+      />
+    </>
+  );
+};
+```
+
+## Props
+
+This component extends the `<div />` props.
+
+<PropsTable
+  data={[
+    {
+      name: 'as',
+      type: 'ElementType',
+    },
+    {
+      name: 'asChild',
+      type: 'boolean',
+    },
+    {
+      name: 'present',
+      type: 'boolean',
+    },
+  ]}
+/>

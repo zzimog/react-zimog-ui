@@ -2,5 +2,6 @@ export { default as PageCard } from './card.mdx';
 export { default as PageField } from './field.mdx';
 export { default as PageHome } from './home.mdx';
 export { default as PageInput } from './input.mdx';
+export { default as PagePresence } from './presence.mdx';
 export { default as PageSelect } from './select.mdx';
 export { default as PageTable } from './table.mdx';

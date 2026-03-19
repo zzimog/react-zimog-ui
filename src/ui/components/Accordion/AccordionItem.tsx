@@ -1,4 +1,3 @@
-import { useCallback } from 'react';
 import { Native, type NativeProps } from '@ui/headless';
 import { cn, createScopedContext } from '@ui/utils';
 import { Accordion } from './Accordion';
@@ -17,7 +16,8 @@ const [AccordionItemContext, useAccordionItemContext] = createScopedContext<
 
 /*---------------------------------------------------------------------------*/
 
-type AccordionItemProps = NativeProps<'div'> & {
+type BaseProps = NativeProps<'div'>;
+type AccordionItemProps = BaseProps & {
   value: string;
 };
 
@@ -27,13 +27,13 @@ export const AccordionItem = (inProps: AccordionItemProps) => {
   const context = Accordion.useContext(DISPLAY_NAME);
   const isOpen = context.value.includes(value);
 
-  const handleOpenChange = useCallback((open: boolean) => {
+  const handleOpenChange = (open: boolean) => {
     if (open) {
       context.onItemOpen(value);
     } else {
       context.onItemClose(value);
     }
-  }, []);
+  };
 
   return (
     <AccordionItemContext open={isOpen} onOpenChange={handleOpenChange}>

@@ -28,8 +28,8 @@ const classes = [
   'dark:aria-invalid:outline-danger/50',
 ];
 
-type CheckableProps = ComponentPropsWithRef<typeof Checkable>;
-interface CheckboxProps extends CheckableProps {}
+type BaseProps = ComponentPropsWithRef<typeof Checkable>;
+type CheckboxProps = BaseProps;
 
 export const Checkbox = (inProps: CheckboxProps) => {
   const { className, ...props } = inProps;

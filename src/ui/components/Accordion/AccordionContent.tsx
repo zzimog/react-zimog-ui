@@ -5,7 +5,8 @@ import classes from './classes';
 
 const DISPLAY_NAME = 'AccordionContent';
 
-type AccordionContentProps = NativeProps<'div'>;
+type BaseProps = NativeProps<'div'>;
+type AccordionContentProps = BaseProps;
 
 export const AccordionContent = (inProps: AccordionContentProps) => {
   const { children, ...props } = inProps;

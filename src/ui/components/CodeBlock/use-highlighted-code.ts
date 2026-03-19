@@ -79,10 +79,7 @@ async function getHighlightedCode(code: string, lang: string) {
 
 interface UseHighlightedCodeOptions {
   code?: string;
-  /**
-   * Support only tsx at the moment
-   */
-  lang?: 'tsx';
+  lang?: string;
 }
 
 export function useHighlightedCode(options: UseHighlightedCodeOptions = {}) {

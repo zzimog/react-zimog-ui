@@ -1,17 +1,19 @@
 import {
   isValidElement,
   type ComponentPropsWithRef,
+  type PropsWithChildren,
   type ReactNode,
 } from 'react';
 import { ScrollArea } from '@ui/components';
 import { useHighlightedCode } from './use-highlighted-code';
 
-type CodeBlockProps = ComponentPropsWithRef<'figure'> & {
+type BaseProps = ComponentPropsWithRef<'figure'>;
+type CodeBlockProps = BaseProps & {
   title?: string;
   language?: string;
 };
 
-function getNodeText(node: ReactNode) {
+function getNodeText(node?: ReactNode) {
   let string = '';
 
   if (typeof node === 'string') {
@@ -23,7 +25,7 @@ function getNodeText(node: ReactNode) {
       string += getNodeText(child);
     });
   } else if (isValidElement(node)) {
-    const props = node.props as Record<string, any>;
+    const props = node.props as PropsWithChildren;
     string += getNodeText(props.children);
   }
 
@@ -36,7 +38,7 @@ export const CodeBlock = (inProps: CodeBlockProps) => {
   const textCode = getNodeText(children);
   const html = useHighlightedCode({
     code: textCode,
-    lang: language as any,
+    lang: language,
   });
 
   return (

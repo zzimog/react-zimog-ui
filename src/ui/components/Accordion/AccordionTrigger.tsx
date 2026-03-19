@@ -6,12 +6,11 @@ import classes from './classes';
 
 const DISPLAY_NAME = 'AccordionTrigger';
 
-type AccordionTriggerProps = NativeProps<'button'> & {
-  value?: string;
-};
+type BaseProps = NativeProps<'button'>;
+type AccordionTriggerProps = BaseProps;
 
 export const AccordionTrigger = (inProps: AccordionTriggerProps) => {
-  const { value: valueProp, className, children, onClick, ...props } = inProps;
+  const { className, children, onClick, ...props } = inProps;
 
   const { open, onOpenChange } = AccordionItem.useContext(DISPLAY_NAME);
 

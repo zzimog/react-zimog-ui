@@ -1,13 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { FocusTrap, Popover, type NativeProps } from '@ui/headless';
-import { cn, composeHandlers, createScopedContext } from '@ui/utils';
+import { Native, Popper, type NativeProps } from '@ui/headless';
+import { useMergedRefs } from '@ui/hooks';
+import { cn, createScopedContext } from '@ui/utils';
 import { Select } from './Select';
 import classes from './classes';
 
 const DISPLAY_NAME = 'SelectContent';
 
-interface SelectContentContextValue {}
+type SelectContentContextValue = object;
 
 const [SelectContentContext, useSelectContentContext] = createScopedContext<
   SelectContentContextValue | undefined
@@ -16,108 +17,57 @@ const [SelectContentContext, useSelectContentContext] = createScopedContext<
 /*---------------------------------------------------------------------------*/
 
 type BaseProps = NativeProps<'div'>;
-interface SelectContentProps extends BaseProps {}
+type SelectContentProps = BaseProps;
 
 export const SelectContent = (inProps: SelectContentProps) => {
-  const { className, onFocus, onKeyDown, ...props } = inProps;
+  const { ref: refProp, className, ...props } = inProps;
 
+  const context = Select.useContext(DISPLAY_NAME);
+  const { open, onContentChange } = context;
+
+  const [isPlaced, setIsPlaced] = useState(open);
   const [fragment] = useState<DocumentFragment | undefined>(() => {
     if (typeof DocumentFragment === 'function') {
       return new DocumentFragment();
     }
   });
 
-  const { trigger, open, onOpenChange } = Select.useContext(DISPLAY_NAME);
-  const { getItems } = Select.useCollection();
+  const ref = useRef<HTMLElement>(null);
+  const mergedRef = useMergedRefs(refProp, ref, onContentChange);
 
-  useEffect(() => {
-    if (open) {
-      const items = getItems().filter((item) => !item.disabled);
-      const currentNode = items.reduce((first, item) => {
-        const { node, selected } = item;
-        return selected ? node : first;
-      }, items[0]?.node);
-
-      currentNode?.focus();
-    }
+  useLayoutEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (open) setIsPlaced(true);
   }, [open]);
 
-  if (!open && fragment) {
-    return createPortal(
-      <SelectContentContext>{props.children}</SelectContentContext>,
-      fragment
-    );
+  if (!open && !isPlaced) {
+    return fragment
+      ? createPortal(
+          <SelectContentContext>{props.children}</SelectContentContext>,
+          fragment
+        )
+      : null;
   }
 
   return (
     <SelectContentContext>
-      <Popover.Content
+      <Popper.Content
+        present={open}
         align="start"
         avoidCollisions
+        data-open={open}
         className={cn(classes.dialog)}
+        onAnimationEnd={() => {
+          if (!open) setIsPlaced(false);
+        }}
       >
-        <FocusTrap
-          trapped={open}
+        <Native.div
+          ref={mergedRef}
           role="listbox"
           {...props}
           className={cn(classes.content, className)}
-          onMount={(event) => {
-            /**
-             * Prevent focus on first element to manually handle
-             * focus on the first option or selected one
-             */
-            event.preventDefault();
-          }}
-          onUnmount={(event) => {
-            /**
-             * Prevent focus on previously focused element to manually
-             * handle focus on trigger when closing the options layer
-             */
-            trigger?.focus({ preventScroll: true });
-            event.preventDefault();
-          }}
-          onFocus={composeHandlers(onFocus, (event) => {
-            const node = event.currentTarget;
-            const [first, ...nodes] = getItems();
-            const [last] = nodes.reverse();
-
-            if (event.target === first?.node) {
-              node.scrollTop = 0;
-            } else if (event.target === last?.node) {
-              node.scrollTop = node.scrollHeight;
-            }
-          })}
-          onKeyDown={composeHandlers(onKeyDown, (event) => {
-            if (event.key === 'Tab') {
-              event.preventDefault();
-            }
-
-            if (event.key === 'Escape') {
-              onOpenChange(false);
-              event.preventDefault();
-            }
-
-            if (['Home', 'End', 'ArrowUp', 'ArrowDown'].includes(event.key)) {
-              const items = getItems().filter((item) => !item.disabled);
-              const nodes = items.map((item) => item.node);
-              let [nextNode] = nodes;
-
-              if (['ArrowUp', 'End'].includes(event.key)) {
-                [nextNode] = nodes.reverse();
-              }
-
-              if (['ArrowUp', 'ArrowDown'].includes(event.key)) {
-                const currentActive = event.target as HTMLElement;
-                const currentIndex = nodes.indexOf(currentActive);
-                nextNode = nodes[currentIndex + 1];
-              }
-
-              nextNode?.focus();
-              event.preventDefault();
-            }
-          })}
         />
-      </Popover.Content>
+      </Popper.Content>
     </SelectContentContext>
   );
 };

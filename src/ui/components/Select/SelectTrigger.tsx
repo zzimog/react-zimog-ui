@@ -1,141 +1,128 @@
-import { useRef, type ComponentPropsWithRef } from 'react';
-import { ChevronDown } from 'lucide-react';
-import { Popover } from '@ui/headless';
-import { useMergedRefs } from '@ui/hooks';
+import { Native, Popper, type NativeProps } from '@ui/headless';
 import { cn, composeHandlers } from '@ui/utils';
 import { Select } from './Select';
 import classes from './classes';
 
 const DISPLAY_NAME = 'SelectTrigger';
 
-type BaseProps = ComponentPropsWithRef<typeof Popover.Trigger>;
-interface SelectTriggerProps extends BaseProps {
-  placeholder?: string;
-}
+type BaseProps = NativeProps<'button'>;
+type SelectTriggerProps = BaseProps;
 
 export const SelectTrigger = (inProps: SelectTriggerProps) => {
-  const {
-    ref: refProp,
-    placeholder: placeholderProp,
-    className,
-    onClick,
-    onPointerDown,
-    onKeyDown,
-    ...props
-  } = inProps;
+  const { disabled, className, onBlur, onClick, onKeyDown, ...props } = inProps;
 
   const {
+    value,
     open,
-    currentNode,
-    onTriggerChange,
-    onOpenChange,
+    activeId,
+    content,
     onValueChange,
-    onCurrentNodeChange,
+    onActiveIdChange,
+    onOpenChange,
+    ...context
   } = Select.useContext(DISPLAY_NAME);
 
   const { getItems } = Select.useCollection();
 
-  const pointerTypeRef = useRef<string>(null);
-
-  const ref = useRef<HTMLElement>(null);
-  const mergedRef = useMergedRefs(refProp, ref, onTriggerChange);
-
-  const hasPlaceholder = !currentNode?.textContent;
-  const placeholder = placeholderProp || 'Select an option';
-
-  /*
-  const previousOpenRef = useRef(open);
-  useEffect(() => {
-    const wasOpen = previousOpenRef.current;
-    if (open !== wasOpen) {
-      if (!open) {
-        ref.current?.focus();
-
-        requestAnimationFrame(() => {
-          const currentActive = document.activeElement;
-          if (currentActive === document.body) {
-            ref.current?.focus();
-          }
-        });
-      }
-
-      previousOpenRef.current = open;
-    }
-  }, [open]);
-  */
+  const isDisabled = context.disabled || disabled;
 
   return (
-    <Popover.Trigger
-      ref={mergedRef}
-      type="button"
-      role="combobox"
-      aria-haspopup="listbox"
-      aria-activedescendant={currentNode?.id || undefined}
-      {...props}
-      className={cn(classes.trigger, className)}
-      // eslint-disable-next-line react-hooks/refs
-      onClick={composeHandlers(onClick, (event) => {
-        const pointerType = pointerTypeRef.current;
-        if (pointerType !== 'mouse') {
+    <Popper.Anchor asChild>
+      <Native.button
+        type="button"
+        role="combobox"
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        aria-activedescendant={open ? activeId : undefined}
+        disabled={isDisabled}
+        {...props}
+        className={cn(classes.trigger, className)}
+        onBlur={composeHandlers(onBlur, () => {
+          onOpenChange(false);
+        })}
+        onClick={composeHandlers(onClick, () => {
           onOpenChange(!open);
-        }
+        })}
+        onKeyDown={composeHandlers(onKeyDown, (event) => {
+          const SELECT_KEYS = [' ', 'Enter'];
+          const OPEN_KEYS = [...SELECT_KEYS, 'ArrowUp', 'ArrowDown'];
 
-        event.currentTarget.focus();
-        event.preventDefault();
-      })}
-      // eslint-disable-next-line react-hooks/refs
-      onPointerDown={composeHandlers(onPointerDown, (event) => {
-        const target = event.target as HTMLElement;
-        if (target.hasPointerCapture(event.pointerId)) {
-          target.releasePointerCapture(event.pointerId);
-        }
-
-        if (
-          event.pointerType === 'mouse' &&
-          event.button === 0 &&
-          event.ctrlKey === false
-        ) {
-          onOpenChange(!open);
-          event.preventDefault();
-        }
-
-        pointerTypeRef.current = event.pointerType;
-      })}
-      onKeyDown={composeHandlers(onKeyDown, (event) => {
-        if ([' ', 'Enter', 'ArrowUp', 'ArrowDown'].includes(event.key)) {
-          onOpenChange(true);
-          event.preventDefault();
-        }
-
-        if (['Home', 'End', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
           const items = getItems().filter((item) => !item.disabled);
-          let [nextItem] = items;
+          if (items.length <= 0) return;
 
-          if (['ArrowLeft', 'End'].includes(event.key)) {
-            [nextItem] = items.reverse();
+          if (open) {
+            const selectCurrent = () => {
+              const item = items.find((i) => i.node.id === activeId);
+              if (item) onValueChange(item.value);
+              onOpenChange(false);
+            };
+
+            if (
+              SELECT_KEYS.includes(event.key) ||
+              (event.altKey && event.key === 'ArrowUp')
+            ) {
+              selectCurrent();
+              event.preventDefault();
+              return;
+            }
+
+            if (event.key === 'Tab') {
+              selectCurrent();
+              return;
+            }
+
+            if (event.key === 'Escape') {
+              onOpenChange(false);
+              event.preventDefault();
+              return;
+            }
+          } else if (OPEN_KEYS.includes(event.key)) {
+            onOpenChange(true);
+            event.preventDefault();
+            return;
           }
 
-          if (['ArrowLeft', 'ArrowRight'].includes(event.key)) {
-            const currentIndex = items.findIndex((item) => item.selected);
-            nextItem = items[currentIndex + 1];
-          }
+          const PREV_KEY = open ? 'ArrowUp' : 'ArrowLeft';
+          const NEXT_KEY = open ? 'ArrowDown' : 'ArrowRight';
+          const NAV_KEYS = ['Home', 'End', PREV_KEY, NEXT_KEY];
 
-          if (nextItem) {
-            onValueChange(nextItem.value);
-            onCurrentNodeChange(nextItem.node);
+          if (NAV_KEYS.includes(event.key)) {
+            const currentIndex = items.findIndex((item) =>
+              open ? item.node.id === activeId : item.value === value
+            );
+
+            const indexMap = {
+              Home: 0,
+              End: items.length - 1,
+              [PREV_KEY]: Math.max(0, currentIndex - 1),
+              [NEXT_KEY]: Math.min(items.length - 1, currentIndex + 1),
+            };
+
+            const nextIndex = indexMap[event.key]!;
+            const nextItem = items[nextIndex]!;
+            if (open) {
+              onActiveIdChange(nextItem.node.id);
+              nextItem.node.scrollIntoView({ block: 'nearest' });
+
+              if (content) {
+                const isFirst = nextIndex === 0;
+                const isLast = nextIndex === items.length - 1;
+
+                if (isFirst) {
+                  content.scrollTo({ top: 0 });
+                } else if (isLast) {
+                  content.scrollTo({ top: content.scrollHeight });
+                }
+              }
+            } else {
+              onValueChange(nextItem.value);
+            }
+
             event.preventDefault();
           }
-        }
-      })}
-    >
-      <span
-        data-placeholder={hasPlaceholder ? '' : undefined}
-        className={cn(classes.value)}
-      >
-        {currentNode?.textContent || placeholder}
-      </span>
-      <ChevronDown />
-    </Popover.Trigger>
+        })}
+      />
+    </Popper.Anchor>
   );
 };
 

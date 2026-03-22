@@ -35,6 +35,7 @@ export function createCollection<
     const itemsRef = useRef<Map<E, T>>(new Map());
     const orderedRef = useRef<T[]>(null);
 
+    // eslint-disable-next-line react-hooks/refs
     const props = useRef({
       getItems() {
         if (!orderedRef.current) {
@@ -54,10 +55,19 @@ export function createCollection<
         itemsRef.current.delete(item);
         orderedRef.current = null;
       },
-    });
+      onItemUpdate(item: E, data: Partial<T>) {
+        const items = itemsRef.current;
+        const oldData = items.get(item);
+        if (oldData) {
+          items.set(item, {
+            ...oldData,
+            ...data,
+          });
+        }
+      },
+    }).current;
 
-    // eslint-disable-next-line react-hooks/refs
-    return createElement(CollectionContext, props.current, children);
+    return createElement(CollectionContext, props, children);
   };
 
   Collection.displayName = COLLECTION_NAME;

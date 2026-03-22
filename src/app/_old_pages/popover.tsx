@@ -1,23 +1,23 @@
-import { Button, Card, Popover } from '@ui';
+import { Button, Card, Popper } from '@ui';
 import { DemoContainer } from '../components/demo-container';
 
 const code = `
-import { Popover } from '@ui';
+import { Popper } from '@ui';
 
 export default () => (
-  <Popover>
-    <Popover.Trigger />
-    <Popover.Content />
-  </Popover>
+  <Popper>
+    <Popper.Trigger />
+    <Popper.Content />
+  </Popper>
 );`;
 
-export const PopoverDemo = () => (
-  <DemoContainer title="Popover" code={code} headless>
-    <Popover>
-      <Popover.Trigger asChild>
+export const PopperDemo = () => (
+  <DemoContainer title="Popper" code={code} headless>
+    <Popper>
+      <Popper.Trigger asChild>
         <Button>Toggle</Button>
-      </Popover.Trigger>
-      <Popover.Content avoidCollisions>
+      </Popper.Trigger>
+      <Popper.Content avoidCollisions>
         <Card className="w-80">
           <Card.Content className="-my-1.5">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla
@@ -26,7 +26,7 @@ export const PopoverDemo = () => (
             deleniti quo? Eum, inventore architecto?
           </Card.Content>
         </Card>
-      </Popover.Content>
-    </Popover>
+      </Popper.Content>
+    </Popper>
   </DemoContainer>
 );

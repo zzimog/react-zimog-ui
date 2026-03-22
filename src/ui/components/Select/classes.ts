@@ -16,7 +16,7 @@ const classes = {
     '[&_svg]:transition-transform',
     '[&_svg]:shrink-0',
     // hover
-    'not-disabled:hover:border-primary',
+    'hover:border-primary',
     // focus
     'focusable',
     'focus:border-primary',
@@ -28,8 +28,8 @@ const classes = {
     'aria-expanded:border-primary',
     'aria-expanded:[&_svg]:rotate-180',
     // invalid
-    'aria-invalid:border-danger',
-    'aria-invalid:focus:outline-danger/25',
+    'aria-invalid:border-danger!',
+    'aria-invalid:focus:outline-danger/50',
   ],
   value: [
     'whitespace-nowrap',
@@ -55,6 +55,7 @@ const classes = {
     'text-foreground',
     'transition',
     'overflow-auto',
+    'overscroll-contain',
   ],
   group: 'group',
   legend: [
@@ -75,8 +76,8 @@ const classes = {
     'select-none',
     'aria-disabled:text-muted',
     'group-aria-disabled:text-muted',
-    'data-[highlighted]:bg-highlight',
-    'data-[highlighted]:text-highlight-contrast',
+    'data-[active=true]:bg-highlight',
+    'data-[active=true]:text-highlight-contrast',
   ],
   check: 'absolute left-2 ml-0.5 top-1/2 -translate-y-1/2 size-3',
 };

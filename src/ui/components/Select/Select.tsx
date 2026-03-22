@@ -1,5 +1,11 @@
-import { useState, type ComponentProps, type ReactElement } from 'react';
-import { Popover } from '@ui/headless';
+import {
+  useState,
+  type ChangeEvent,
+  type ComponentPropsWithoutRef,
+  type ReactElement,
+} from 'react';
+import { ChevronDown } from 'lucide-react';
+import { BubbleInput, Popper } from '@ui/headless';
 import { useControllableState } from '@ui/hooks';
 import { createCollection, createScopedContext } from '@ui/utils';
 import { SelectContent } from './SelectContent';
@@ -7,19 +13,28 @@ import { SelectGroup } from './SelectGroup';
 import { SelectLegend } from './SelectLegend';
 import { SelectOption } from './SelectOption';
 import { SelectTrigger } from './SelectTrigger';
+import { SelectValue } from './SelectValue';
 
 const DISPLAY_NAME = 'Select';
 
-interface SelectContextValue {
-  trigger: HTMLElement | null;
+type OptionElement = ReactElement<'option'>;
+
+type SelectContextValue = {
+  required: boolean;
+  disabled: boolean;
   value: string;
   open: boolean;
-  currentNode: HTMLElement | null;
-  onTriggerChange(element: HTMLElement | null): void;
+  activeId: string;
+  valueNode: HTMLElement | null;
+  content: HTMLElement | null;
   onValueChange(value: string): void;
   onOpenChange(open: boolean): void;
-  onCurrentNodeChange(node: HTMLElement): void;
-}
+  onValueNodeChange(element: HTMLElement | null): void;
+  onContentChange(element: HTMLElement | null): void;
+  onActiveIdChange(value: string): void;
+  onOptionAdd(option: OptionElement): void;
+  onOptionRemove(option: OptionElement): void;
+};
 
 const [SelectContext, useSelectContext] = createScopedContext<
   SelectContextValue | undefined
@@ -27,52 +42,46 @@ const [SelectContext, useSelectContext] = createScopedContext<
 
 /*---------------------------------------------------------------------------*/
 
-type OptionProps = ComponentProps<'option'>;
-type OptionElement = ReactElement<OptionProps>;
-interface SelectOptionsContextValue {
-  options: Set<OptionElement>;
-  onOptionAdd(option: OptionElement): void;
-  onOptionRemove(option: OptionElement): void;
-}
-
-const [SelectOptionsContext, useSelectOptionsContext] = createScopedContext<
-  SelectOptionsContextValue | undefined
->(DISPLAY_NAME, undefined);
-
-/*---------------------------------------------------------------------------*/
-
-interface SelectOptionData {
+type SelectOptionData = {
   node: HTMLElement;
   value: string;
   selected?: boolean;
   disabled?: boolean;
-}
+};
 
 const [SelectCollection, useSelectCollection] =
   createCollection<SelectOptionData>(DISPLAY_NAME);
 
 /*---------------------------------------------------------------------------*/
 
-type BaseProps = ComponentProps<typeof SelectTrigger>;
-interface SelectProps extends BaseProps {
-  id?: string;
+type BaseTriggerProps = ComponentPropsWithoutRef<typeof SelectTrigger>;
+type BaseValueProps = ComponentPropsWithoutRef<typeof SelectValue>;
+type BaseProps = BaseTriggerProps & BaseValueProps;
+type SelectProps = BaseProps & {
+  required?: boolean;
   defaultValue?: string;
   defaultOpen?: boolean;
   value?: string;
   open?: boolean;
   onValueChange?(value: string): void;
   onOpenChange?(open: boolean): void;
-}
+  onChange?(event: ChangeEvent<HTMLSelectElement>): void;
+};
 
 export const Select = (inProps: SelectProps) => {
   const {
-    open: openProp,
     value: valueProp,
-    defaultOpen = false,
+    open: openProp,
     defaultValue = '',
+    defaultOpen = false,
+    name,
+    required = false,
+    disabled = false,
+    placeholder,
     children,
-    onOpenChange,
     onValueChange,
+    onOpenChange,
+    onChange,
     ...props
   } = inProps;
 
@@ -88,51 +97,67 @@ export const Select = (inProps: SelectProps) => {
     onChange: onOpenChange,
   });
 
-  const [trigger, setTrigger] = useState<HTMLElement | null>(null);
+  const [valueNode, setValueNode] = useState<HTMLElement | null>(null);
+  const [content, setContent] = useState<HTMLElement | null>(null);
+  const [activeId, setActiveId] = useState('');
   const [options, setOptions] = useState<Set<OptionElement>>(new Set());
-  const [currentNode, setCurrentNode] = useState<HTMLElement | null>(null);
 
   return (
     <SelectContext
-      trigger={trigger}
+      required={required}
+      disabled={disabled}
       value={value}
       open={open}
-      currentNode={currentNode}
-      onTriggerChange={setTrigger}
+      valueNode={valueNode}
+      content={content}
+      activeId={activeId}
       onValueChange={setValue}
       onOpenChange={setOpen}
-      onCurrentNodeChange={setCurrentNode}
+      onValueNodeChange={setValueNode}
+      onContentChange={setContent}
+      onActiveIdChange={setActiveId}
+      onOptionAdd={(option) => {
+        setOptions((prev) => {
+          const newSet = new Set(prev);
+          return newSet.add(option);
+        });
+      }}
+      onOptionRemove={(option) => {
+        setOptions((prev) => {
+          const newSet = new Set(prev);
+          newSet.delete(option);
+          return newSet;
+        });
+      }}
     >
-      <SelectOptionsContext
-        options={options}
-        onOptionAdd={(option) => {
-          setOptions((prev) => new Set(prev).add(option));
-        }}
-        onOptionRemove={(option) => {
-          setOptions((prev) => {
-            const newSet = new Set(prev);
-            newSet.delete(option);
-            return newSet;
-          });
-        }}
+      <SelectCollection>
+        <Popper>
+          <SelectTrigger {...props}>
+            <SelectValue placeholder={placeholder} />
+            <ChevronDown />
+          </SelectTrigger>
+          <SelectContent>{children}</SelectContent>
+        </Popper>
+      </SelectCollection>
+      <BubbleInput.Select
+        value={value}
+        name={name}
+        required={required}
+        disabled={disabled}
+        onChange={onChange}
       >
-        <SelectCollection>
-          <Popover open={open} onOpenChange={setOpen}>
-            <SelectTrigger {...props} />
-            <SelectContent>{children}</SelectContent>
-          </Popover>
-        </SelectCollection>
-      </SelectOptionsContext>
+        {Array.from(options)}
+      </BubbleInput.Select>
     </SelectContext>
   );
 };
 
 Select.displayName = DISPLAY_NAME;
 Select.useContext = useSelectContext;
-Select.useOptionsContext = useSelectOptionsContext;
 Select.useCollection = useSelectCollection;
-Select.Trigger = SelectTrigger;
 Select.Content = SelectContent;
 Select.Group = SelectGroup;
 Select.Legend = SelectLegend;
 Select.Option = SelectOption;
+Select.Trigger = SelectTrigger;
+Select.Value = SelectValue;

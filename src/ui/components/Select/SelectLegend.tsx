@@ -2,8 +2,8 @@ import { useId } from 'react';
 import { Native, type NativeProps } from '@ui/headless';
 import { useMergedRefs } from '@ui/hooks';
 import { cn } from '@ui/utils';
-import { Select } from './Select';
 import { SelectGroup } from './SelectGroup';
+import { Select } from './Select';
 import classes from './classes';
 
 const DISPLAY_NAME = 'SelectLegend';
@@ -11,17 +11,18 @@ const DISPLAY_NAME = 'SelectLegend';
 type SelectLegendProps = NativeProps<'div'>;
 
 export const SelectLegend = (inProps: SelectLegendProps) => {
-  const { ref: refProp, className, ...props } = inProps;
+  const { ref: refProp, id: idProp, className, ...props } = inProps;
 
-  const id = useId();
+  const genId = useId();
+  const id = idProp || genId;
 
   const { onLegendIdChange } = SelectGroup.useContext(DISPLAY_NAME);
+  Select.useContext(DISPLAY_NAME);
 
   const ref = useMergedRefs(refProp, (node: Element) => {
     onLegendIdChange?.(node?.id);
+    return () => onLegendIdChange?.(undefined);
   });
-
-  Select.useContext(DISPLAY_NAME);
 
   return (
     <Native.div

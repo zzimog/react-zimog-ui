@@ -1,5 +1,6 @@
-import { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useId, useLayoutEffect, useMemo, useRef } from 'react';
 import { Check } from 'lucide-react';
+import { createPortal } from 'react-dom';
 import { useMergedRefs } from '@ui';
 import { Native, type NativeProps } from '@ui/headless';
 import { cn, composeHandlers } from '@ui/utils';
@@ -19,26 +20,26 @@ type SelectOptionProps = BaseProps & {
 export const SelectOption = (inProps: SelectOptionProps) => {
   const {
     ref: refProp,
+    id: idProp,
     value,
     disabled: disabledProp,
     className,
     children,
-    onFocus,
-    onBlur,
+    onPointerDown,
     onPointerMove,
     onPointerUp,
-    onKeyDown,
     ...props
   } = inProps;
 
-  const [highlighted, setHighlighted] = useState(false);
+  const genId = useId();
+  const id = idProp ?? genId;
 
-  const collection = Select.useCollection();
   const context = Select.useContext(DISPLAY_NAME);
-  const optionsContext = Select.useOptionsContext(DISPLAY_NAME);
+  const collection = Select.useCollection();
   const groupContext = SelectGroup.useContext(DISPLAY_NAME);
   SelectContent.useContext(DISPLAY_NAME);
 
+  const active = id === context.activeId;
   const selected = value === context.value;
   const disabled = groupContext.disabled || disabledProp;
 
@@ -47,14 +48,12 @@ export const SelectOption = (inProps: SelectOptionProps) => {
     collection.onItemAdd(node, {
       node,
       value,
-      selected,
       disabled,
     });
-
     return () => collection.onItemRemove(node);
   });
 
-  const { onOptionAdd, onOptionRemove } = optionsContext;
+  const { onOptionAdd, onOptionRemove } = context;
   const option = useMemo(
     () => (
       <option key={value} value={value} disabled={disabled}>
@@ -64,55 +63,53 @@ export const SelectOption = (inProps: SelectOptionProps) => {
     [value, disabled, children]
   );
 
-  function handleHighlight(focus: boolean) {
-    if (context.open) {
-      setHighlighted(focus);
-    }
-  }
-
-  function handleSelect() {
-    if (!disabled) {
-      context.onValueChange(value);
-      context.onOpenChange(false);
-    }
-  }
-
   useLayoutEffect(() => {
     onOptionAdd(option);
     return () => onOptionRemove(option);
   }, [option, onOptionAdd, onOptionRemove]);
 
+  useLayoutEffect(() => {
+    const node = ref.current;
+    if (node && context.open && selected) {
+      context.onActiveIdChange(id);
+      node.scrollIntoView({ block: 'center' });
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [context.open]);
+
   return (
     <Native.div
       ref={mergedRef}
+      id={id}
       role="option"
-      aria-selected={selected || highlighted}
+      aria-selected={selected}
       aria-disabled={disabled}
-      data-highlighted={highlighted ? '' : undefined}
-      tabIndex={0}
+      data-active={active}
       {...props}
       className={cn(classes.option, className)}
-      onFocus={composeHandlers(onFocus, () => handleHighlight(true))}
-      onBlur={composeHandlers(onBlur, () => handleHighlight(false))}
+      onPointerDown={composeHandlers(onPointerDown, (event) => {
+        event.preventDefault();
+      })}
       onPointerMove={composeHandlers(onPointerMove, (event) => {
-        const isMouse = event.pointerType === 'mouse';
-        if (isMouse && context.open && !disabled) {
-          event.currentTarget.focus({ preventScroll: true });
+        if (!disabled && event.pointerType === 'mouse') {
+          context.onActiveIdChange(id);
         }
       })}
       onPointerUp={composeHandlers(onPointerUp, () => {
-        handleSelect();
-      })}
-      onKeyDown={composeHandlers(onKeyDown, (event) => {
-        if (event.key === ' ') event.preventDefault();
-        if (event.key === 'Enter') {
-          handleSelect();
-          event.preventDefault();
+        if (!disabled) {
+          context.onValueChange(value);
+          context.onActiveIdChange(id);
+          context.onOpenChange(false);
         }
       })}
     >
       {selected && <Check className={cn(classes.check)} />}
       {children}
+
+      {selected && context.valueNode
+        ? createPortal(children, context.valueNode)
+        : null}
     </Native.div>
   );
 };

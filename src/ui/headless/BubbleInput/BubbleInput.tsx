@@ -1,17 +1,14 @@
-import { useEffect, useRef, type ComponentPropsWithRef } from 'react';
-import { useMergedRefs } from '@ui/hooks';
+import { useEffect, useRef, type ComponentPropsWithoutRef } from 'react';
+import { BubbleInputSelect } from './BubbleInputSelect';
 
 const DISPLAY_NAME = 'BubbleInput';
 
-type BaseProps = ComponentPropsWithRef<'input'>;
-interface BubbleInputProps extends BaseProps {
-  bubbles?: boolean;
-}
+type BaseInputProps = ComponentPropsWithoutRef<'input'>;
+type BaseProps = Omit<BaseInputProps, 'defaultValue' | 'defaultChecked'>;
+type BubbleInputProps = BaseProps;
 
 export const BubbleInput = (inProps: BubbleInputProps) => {
   const {
-    ref: refProp,
-    bubbles = true,
     type,
     value: valueProp,
     checked: checkedProp,
@@ -24,32 +21,34 @@ export const BubbleInput = (inProps: BubbleInputProps) => {
   const prop = isCheckable ? 'checked' : 'value';
   const value = isCheckable ? checkedProp : valueProp;
 
+  const ref = useRef<HTMLInputElement>(null);
   const previousValueRef = useRef(value);
-
-  const ref = useRef<HTMLElement>(null);
-  const mergedRef = useMergedRefs(refProp, ref);
 
   useEffect(() => {
     const node = ref.current;
     const previousValue = previousValueRef.current;
     if (node && value !== previousValue) {
-      const Property = Object.getOwnPropertyDescriptor(
-        HTMLInputElement.prototype,
-        prop
-      ) as PropertyDescriptor;
+      const { prototype } = HTMLInputElement;
+      const descriptor = Object.getOwnPropertyDescriptor(prototype, prop);
+      const setProp = descriptor?.set;
 
-      if (Property.set) {
-        Property.set.call(node, value);
-        node.dispatchEvent(new Event(event, { bubbles }));
+      if (setProp) {
+        setProp.call(node, value);
+        node.dispatchEvent(
+          new Event(event, {
+            bubbles: true,
+            cancelable: true,
+          })
+        );
       }
 
       previousValueRef.current = value;
     }
-  }, [prop, value, event, bubbles]);
+  }, [prop, value, event]);
 
   return (
     <input
-      ref={mergedRef}
+      ref={ref}
       type={type}
       defaultValue={valueProp}
       defaultChecked={checkedProp}
@@ -63,3 +62,4 @@ export const BubbleInput = (inProps: BubbleInputProps) => {
 };
 
 BubbleInput.displayName = DISPLAY_NAME;
+BubbleInput.Select = BubbleInputSelect;

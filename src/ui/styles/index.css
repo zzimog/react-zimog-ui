@@ -4,7 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --white: #fffeff;
+  --white: #fefffc;
   --black: var(--color-zinc-950);
   --shape: var(--radius-md);
 

@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Native, Popper, type NativeProps } from '@ui/headless';
 import { useMergedRefs } from '@ui/hooks';
@@ -22,25 +22,23 @@ type SelectContentProps = BaseProps;
 export const SelectContent = (inProps: SelectContentProps) => {
   const { ref: refProp, className, ...props } = inProps;
 
-  const context = Select.useContext(DISPLAY_NAME);
-  const { open, onContentChange } = context;
+  const { open, onContentChange } = Select.useContext(DISPLAY_NAME);
 
-  const [isPlaced, setIsPlaced] = useState(open);
+  const [mounted, setMounted] = useState(open);
   const [fragment] = useState<DocumentFragment | undefined>(() => {
     if (typeof DocumentFragment === 'function') {
       return new DocumentFragment();
     }
   });
 
-  const ref = useRef<HTMLElement>(null);
-  const mergedRef = useMergedRefs(refProp, ref, onContentChange);
+  const mergedRef = useMergedRefs(refProp, onContentChange);
 
   useLayoutEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (open) setIsPlaced(true);
+    if (open) setMounted(true);
   }, [open]);
 
-  if (!open && !isPlaced) {
+  if (!open && !mounted) {
     return fragment
       ? createPortal(
           <SelectContentContext>{props.children}</SelectContentContext>,
@@ -53,12 +51,11 @@ export const SelectContent = (inProps: SelectContentProps) => {
     <SelectContentContext>
       <Popper.Content
         present={open}
-        align="start"
-        avoidCollisions
         data-open={open}
+        avoidCollisions
         className={cn(classes.dialog)}
         onAnimationEnd={() => {
-          if (!open) setIsPlaced(false);
+          if (!open) setMounted(false);
         }}
       >
         <Native.div

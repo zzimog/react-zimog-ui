@@ -39,9 +39,10 @@ export const SelectOption = (inProps: SelectOptionProps) => {
   const groupContext = SelectGroup.useContext(DISPLAY_NAME);
   SelectContent.useContext(DISPLAY_NAME);
 
-  const active = id === context.activeId;
   const selected = value === context.value;
   const disabled = groupContext.disabled || disabledProp;
+  const isEmpty = value === '';
+  const isActive = id === context.activeId;
 
   const ref = useRef<HTMLElement>(null);
   const mergedRef = useMergedRefs(refProp, ref, (node: HTMLElement) => {
@@ -85,7 +86,8 @@ export const SelectOption = (inProps: SelectOptionProps) => {
       role="option"
       aria-selected={selected}
       aria-disabled={disabled}
-      data-active={active}
+      data-active={isActive ? '' : undefined}
+      data-empty={isEmpty ? '' : undefined}
       {...props}
       className={cn(classes.option, className)}
       onPointerDown={composeHandlers(onPointerDown, (event) => {
@@ -104,7 +106,7 @@ export const SelectOption = (inProps: SelectOptionProps) => {
         }
       })}
     >
-      {selected && <Check className={cn(classes.check)} />}
+      {!isEmpty && selected && <Check className={cn(classes.check)} />}
       {children}
 
       {selected && context.valueNode

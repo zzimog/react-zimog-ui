@@ -44,7 +44,7 @@ const TableFooter = ({ className, ...props }: NativeProps<'tfoot'>) => (
     {...props}
     className={cn(
       'border-t',
-      'bg-muted-contrast/50',
+      'bg-muted-background/50',
       'transition',
       '[&_tr]:hover:bg-transparent',
       className

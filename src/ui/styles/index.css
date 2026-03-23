@@ -11,7 +11,7 @@
   --foreground: var(--black);
   --background: var(--white);
   --muted: var(--color-zinc-400);
-  --muted-contrast: var(--color-zinc-200);
+  --muted-background: var(--color-zinc-200);
   --primary: var(--color-violet-500);
   --primary-contrast: var(--color-zinc-50);
   --danger: var(--color-rose-500);
@@ -28,7 +28,8 @@
 .dark:root {
   --foreground: var(--color-zinc-50);
   --background: var(--black);
-  --muted-contrast: var(--color-zinc-800);
+  --muted: var(--color-zinc-500);
+  --muted-background: var(--color-zinc-700);
   --highlight: var(--color-violet-900);
   --highlight-contrast: var(--foreground);
   --card: var(--color-zinc-900);
@@ -44,7 +45,7 @@
   --color-foreground: var(--foreground);
   --color-background: var(--background);
   --color-muted: var(--muted);
-  --color-muted-contrast: var(--muted-contrast);
+  --color-muted-background: var(--muted-background);
   --color-primary: var(--primary);
   --color-primary-contrast: var(--primary-contrast);
   --color-danger: var(--danger);
@@ -105,13 +106,12 @@
     [data-line] {
       @apply pr-8 text-sm/6;
       @apply before:bg-white dark:before:bg-black;
-      @apply before:content-[attr(data-line)];
       display: inline-flex;
       width: 100%;
 
       &::before {
-        @apply mr-4 w-16 pr-2;
-        @apply transition-colors;
+        @apply content-[attr(data-line)];
+        @apply mr-4 w-16 pr-2 transition-colors;
         position: sticky;
         left: 0;
         display: inline-block;

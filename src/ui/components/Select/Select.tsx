@@ -1,4 +1,5 @@
 import {
+  useEffect,
   useState,
   type ChangeEvent,
   type ComponentPropsWithoutRef,
@@ -24,14 +25,14 @@ type SelectContextValue = {
   disabled: boolean;
   value: string;
   open: boolean;
-  activeId: string;
+  activeId?: string;
   valueNode: HTMLElement | null;
   content: HTMLElement | null;
   onValueChange(value: string): void;
   onOpenChange(open: boolean): void;
   onValueNodeChange(element: HTMLElement | null): void;
   onContentChange(element: HTMLElement | null): void;
-  onActiveIdChange(value: string): void;
+  onActiveIdChange(value?: string): void;
   onOptionAdd(option: OptionElement): void;
   onOptionRemove(option: OptionElement): void;
 };
@@ -70,10 +71,10 @@ type SelectProps = BaseProps & {
 
 export const Select = (inProps: SelectProps) => {
   const {
-    value: valueProp,
-    open: openProp,
     defaultValue = '',
     defaultOpen = false,
+    value: valueProp,
+    open: openProp,
     name,
     required = false,
     disabled = false,
@@ -99,8 +100,19 @@ export const Select = (inProps: SelectProps) => {
 
   const [valueNode, setValueNode] = useState<HTMLElement | null>(null);
   const [content, setContent] = useState<HTMLElement | null>(null);
-  const [activeId, setActiveId] = useState('');
+  const [activeId, setActiveId] = useState<string | undefined>();
   const [options, setOptions] = useState<Set<OptionElement>>(new Set());
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (!open) setActiveId(undefined);
+  }, [open]);
+
+  useEffect(() => {
+    const close = () => setOpen(false);
+    window.addEventListener('scroll', close);
+    return () => window.removeEventListener('scroll', close);
+  }, [setOpen]);
 
   return (
     <SelectContext
@@ -140,6 +152,7 @@ export const Select = (inProps: SelectProps) => {
         </Popper>
       </SelectCollection>
       <BubbleInput.Select
+        aria-label={name}
         value={value}
         name={name}
         required={required}

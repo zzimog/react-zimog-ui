@@ -31,12 +31,13 @@ export const AppMenu = (props: AppMenuProps) => {
   return (
     <>
       <Button size="lg" onClick={() => setOpen(!open)}>
+        <span className="sr-only">Main menu</span>
         <Hamburger className="size-4" />
       </Button>
 
       <Presence
-        data-open={open}
         present={open}
+        data-open={open}
         className={cn(
           'fixed',
           'inset-0',
@@ -54,6 +55,7 @@ export const AppMenu = (props: AppMenuProps) => {
         )}
       >
         <Button size="lg" className="shrink-0" onClick={close}>
+          <span className="sr-only">Close main menu</span>
           <X />
         </Button>
 

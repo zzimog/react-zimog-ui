@@ -1,0 +1,112 @@
+# Popper
+
+<Badge color="primary" asChild>
+  Utility
+</Badge>
+
+<Demo>
+  <Popper>
+    <Popper.Anchor className="ml-auto w-fit">Anchor</Popper.Anchor>
+    <Popper.Content align="end">
+      <Card className="w-64">
+        <Card.Content className="text-balance *:-my-2">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit.
+        </Card.Content>
+      </Card>
+    </Popper.Content>
+  </Popper>
+</Demo>
+
+```tsx
+<Popper>
+  <Popper.Anchor>Anchor</Popper.Anchor>
+  <Popper.Content align="end">
+    <Card className="w-64">
+      <Card.Content className="text-balance">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+      </Card.Content>
+    </Card>
+  </Popper.Content>
+</Popper>
+```
+
+## Usage
+
+```tsx
+import { Popper } from '@ui';
+
+export default () => (
+  <Popper>
+    <Popper.Anchor />
+    <Popper.Content />
+  </Popper>
+);
+```
+
+## Props
+
+### Root
+
+This component does not accept any props, besides `children`.
+
+### Anchor
+
+This component extends the `<div />` props.
+
+<PropsTable
+  data={[
+    {
+      name: 'as',
+      type: 'ElementType',
+    },
+    {
+      name: 'asChild',
+      type: 'boolean',
+    },
+  ]}
+/>
+
+### Content
+
+This component extends the `<div />` props.
+
+<PropsTable
+  data={[
+    {
+      name: 'as',
+      type: 'ElementType',
+    },
+    {
+      name: 'asChild',
+      type: 'boolean',
+    },
+    {
+      name: 'present',
+      type: 'boolean',
+    },
+    {
+      name: 'avoidCollisions',
+      type: 'boolean',
+    },
+    {
+      name: 'distance',
+      type: 'number',
+      default: 8,
+    },
+    {
+      name: 'padding',
+      type: 'number',
+      default: 16,
+    },
+    {
+      name: 'side',
+      type: '"top" | "bottom" | "left" | "right"',
+      default: '"bottom"',
+    },
+    {
+      name: 'align',
+      type: '"start" | "center" | "end"',
+      default: '"center"',
+    },
+  ]}
+/>

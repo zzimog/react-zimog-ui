@@ -29,7 +29,7 @@ const classes = {
     'border-t',
     'text-sm',
     'text-muted',
-    'bg-muted-contrast/50',
+    'bg-muted-background/50',
     'transition',
     '[.border-t]:pt-6',
     'last:-mb-6',

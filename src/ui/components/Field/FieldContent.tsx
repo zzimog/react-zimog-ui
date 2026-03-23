@@ -2,9 +2,9 @@ import { Native, type NativeProps } from '@ui/headless';
 import { cn } from '@ui/utils';
 
 type BaseProps = NativeProps<'div'>;
-interface FieldContentProps extends BaseProps {
+type FieldContentProps = BaseProps & {
   direction?: 'horizontal' | 'vertical';
-}
+};
 
 export const FieldContent = ({
   direction,

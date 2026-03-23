@@ -1,4 +1,5 @@
-export * from './Text';
+export * from './Code';
+export * from './Badge';
 
 /**
  * @deprecated

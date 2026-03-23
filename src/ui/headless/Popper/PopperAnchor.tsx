@@ -4,15 +4,16 @@ import { Popper } from './Popper';
 
 const DISPLAY_NAME = 'PopperAnchor';
 
-type PopperAnchorProps = NativeProps<'div'>;
+type BaseProps = NativeProps<'div'>;
+type PopperAnchorProps = BaseProps;
 
 export const PopperAnchor = (inProps: PopperAnchorProps) => {
   const { ref: refProp, ...props } = inProps;
 
   const { onAnchorChange } = Popper.useContext(DISPLAY_NAME);
-  const ref = useMergedRefs(refProp, onAnchorChange);
+  const mergedRef = useMergedRefs(refProp, onAnchorChange);
 
-  return <Native.div ref={ref} {...props} />;
+  return <Native.div ref={mergedRef} {...props} />;
 };
 
 PopperAnchor.displayName = DISPLAY_NAME;

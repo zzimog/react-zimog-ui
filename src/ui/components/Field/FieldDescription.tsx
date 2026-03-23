@@ -6,7 +6,7 @@ import { Field } from './Field';
 const DISPLAY_NAME = 'FieldDescription';
 
 type BaseProps = NativeProps<'p'>;
-interface FieldDescriptionProps extends BaseProps {}
+type FieldDescriptionProps = BaseProps
 
 export const FieldDescription = (inProps: FieldDescriptionProps) => {
   const { id: idProps, className, ...props } = inProps;

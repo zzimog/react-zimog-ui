@@ -50,6 +50,7 @@ export const BubbleInput = (inProps: BubbleInputProps) => {
     <input
       ref={ref}
       type={type}
+      aria-hidden
       defaultValue={valueProp}
       defaultChecked={checkedProp}
       {...props}

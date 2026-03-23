@@ -25,7 +25,7 @@ export function placeContent({
   anchor,
   content,
   distance = 8,
-  padding = 8,
+  padding = 16,
   side = 'bottom',
   align = 'center',
   //minSize = 0,

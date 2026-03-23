@@ -7,8 +7,8 @@ import { Popper } from './Popper';
 
 const DISPLAY_NAME = 'PopperContent';
 
-type PresenceProps = ComponentPropsWithRef<typeof Presence>;
-type PopperContentProps = PresenceProps & {
+type BaseProps = ComponentPropsWithRef<typeof Presence>;
+type PopperContentProps = BaseProps & {
   avoidCollisions?: boolean;
   distance?: number;
   padding?: number;
@@ -20,8 +20,8 @@ export const PopperContent = (inProps: PopperContentProps) => {
   const {
     ref: refProp,
     avoidCollisions = false,
-    distance = 8,
-    padding = 16,
+    distance,
+    padding,
     side,
     align,
     style,

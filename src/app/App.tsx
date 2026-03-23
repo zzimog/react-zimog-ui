@@ -8,6 +8,7 @@ import {
   PageField,
   PageHome,
   PageInput,
+  PagePopper,
   PagePresence,
   PageSelect,
   PageTable,
@@ -22,6 +23,7 @@ const components: Record<string, MDXContent> = {
   select: PageSelect,
   table: PageTable,
   presence: PagePresence,
+  popper: PagePopper,
 };
 
 const App = () => (
@@ -39,7 +41,7 @@ const App = () => (
         </div>
       </header>
 
-      <main className="mx-auto max-w-3xl p-4 mb-32">
+      <main className="mx-auto mb-32 max-w-3xl p-4">
         <Routes>
           <Route index element={<MDXLoader mdx={PageHome} />} />
 
@@ -52,7 +54,7 @@ const App = () => (
         </Routes>
       </main>
 
-      <footer className="text-muted border-t py-8 mt-8">
+      <footer className="text-muted mt-8 border-t py-8">
         <div className="flex justify-center gap-6 px-4">
           <Nav.Link href="https://github.com/zzimog" target="_blank">
             github/zzimog

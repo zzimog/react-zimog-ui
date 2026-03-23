@@ -8,12 +8,12 @@ import { FieldLabel } from './FieldLabel';
 
 const DISPLAY_NAME = 'Field';
 
-interface FieldContextType {
+type FieldContextType = {
   id: string;
   name?: string;
   descriptionId?: string;
   onDescriptionIdChange(id?: string): void;
-}
+};
 
 const [FieldContext, useFieldContext] = createScopedContext<
   FieldContextType | undefined
@@ -22,10 +22,10 @@ const [FieldContext, useFieldContext] = createScopedContext<
 /*---------------------------------------------------------------------------*/
 
 type BaseProps = NativeProps<'div'>;
-interface FieldProps extends BaseProps {
+type FieldProps = BaseProps & {
   name?: string;
   direction?: 'horizontal' | 'vertical';
-}
+};
 
 export const Field = (inProps: FieldProps) => {
   const { direction = 'vertical', id, name, className, ...props } = inProps;

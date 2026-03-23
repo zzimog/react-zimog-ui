@@ -4,8 +4,8 @@ import { Field } from './Field';
 
 const DISPLAY_NAME = 'FieldLabel';
 
-type FieldBaseProps = Omit<NativeProps<'label'>, 'id'>;
-interface FieldLabelProps extends FieldBaseProps {}
+type BaseProps = Omit<NativeProps<'label'>, 'id'>;
+type FieldLabelProps = BaseProps;
 
 export const FieldLabel = (inProps: FieldLabelProps) => {
   const { className, ...props } = inProps;
@@ -20,8 +20,8 @@ export const FieldLabel = (inProps: FieldLabelProps) => {
         'w-fit',
         'text-sm/none',
         'font-semibold',
-        'group-has-disabled/field:opacity-50',
-        'group-has-disabled/field:cursor-not-allowed',
+        'group-has-[>[disabled]]/field:text-muted',
+        'group-has-[>[disabled]]/field:cursor-not-allowed',
         'group-has-aria-invalid/field:text-danger',
         'group-has-[[type=checkbox]]/field:leading-6',
         'group-has-[[role=checkbox]]/field:leading-6',

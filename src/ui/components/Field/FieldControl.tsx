@@ -19,17 +19,18 @@ export const FieldControl = (inProps: FieldControlProps) => {
   const { children, ...props } = inProps;
 
   const context = Field.useContext(DISPLAY_NAME);
-  const { descriptionId, onDescriptionIdChange, ...contextProps } = context;
+  const { id, name, descriptionId } = context;
 
   const inputProps = {
-    ...contextProps,
+    id,
+    name,
     'aria-describedby': descriptionId,
   };
 
   if (children) {
     if (isValidElement(children)) {
       const child = Children.only(children);
-      const childProps = child.props as Record<string, any>;
+      const childProps = child.props as Record<string, unknown>;
       return cloneElement(child, { ...childProps, ...inputProps, ...props });
     }
 

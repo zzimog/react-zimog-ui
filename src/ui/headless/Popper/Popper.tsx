@@ -7,7 +7,7 @@ const DISPLAY_NAME = 'Popper';
 
 type PopperContextType = {
   anchor: HTMLElement | null;
-  onAnchorChange(node: HTMLElement): void;
+  onAnchorChange(node: HTMLElement | null): void;
 };
 
 const [PopperContext, usePopperContext] = createScopedContext<

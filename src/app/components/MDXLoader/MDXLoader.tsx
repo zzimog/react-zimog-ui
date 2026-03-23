@@ -59,7 +59,7 @@ export const MDXLoader = ({ mdx: Mdx, components }: MDXLoaderProps) => {
                 'border-muted',
                 'italic',
                 'text-muted',
-                'bg-muted-contrast',
+                'bg-muted-background',
                 'transition',
                 className
               )}
@@ -101,7 +101,7 @@ export const MDXLoader = ({ mdx: Mdx, components }: MDXLoaderProps) => {
                         <Code>{row.type}</Code>
                       </Table.Cell>
                       <Table.Cell>
-                        {row.default ?? <i className="text-muted">undefined</i>}
+                        {row.default ?? <i className="text-muted">—</i>}
                       </Table.Cell>
                     </Table.Row>
                   ))}

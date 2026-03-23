@@ -3,38 +3,56 @@
 The `<Select />` component provides a list of options to choose from. It's triggered by a button which shows the current selected option.
 
 <Demo>
-  <form onChange={(e) => console.log('Change event:', e.target.value)}>
-    <Select className="mx-auto max-w-xs">
-      <Select.Option value="apple">Apple</Select.Option>
-      <Select.Option value="banana">Banana</Select.Option>
-      <Select.Option value="blueberry">Blueberry</Select.Option>
-      <Select.Option value="grapes">Grapes</Select.Option>
-      <Select.Option value="pineapple">Pineapple</Select.Option>
-      <Select.Group disabled>
-        <Select.Legend>Vegetables</Select.Legend>
-        <Select.Option value="aubergine">Aubergine</Select.Option>
-        <Select.Option value="broccoli">Broccoli</Select.Option>
-        <Select.Option value="carrot">Carrot</Select.Option>
-        <Select.Option value="courgette">Courgette</Select.Option>
-        <Select.Option value="leek">Leek</Select.Option>
-      </Select.Group>
-      <Select.Group>
-        <Select.Legend>Meat</Select.Legend>
-        <Select.Option value="beef">Beef</Select.Option>
-        <Select.Option value="chicken">Chicken</Select.Option>
-        <Select.Option value="lamb" disabled>Lamb</Select.Option>
-        <Select.Option value="pork">Pork</Select.Option>
-      </Select.Group>
-    </Select>
-  </form>
+  <Field as="form" name="fruit" className="mx-auto max-w-xs">
+    <Field.Label>Select a fruit</Field.Label>
+    <Field.Control>
+      <Select defaultValue="blueberry">
+        <Select.Option value="apple">Apple</Select.Option>
+        <Select.Option value="banana">Banana</Select.Option>
+        <Select.Option value="blueberry">Blueberry</Select.Option>
+        <Select.Option value="grapes">Grapes</Select.Option>
+        <Select.Option value="pineapple">Pineapple</Select.Option>
+        <Select.Group disabled>
+          <Select.Legend>Vegetables</Select.Legend>
+          <Select.Option value="aubergine">Aubergine</Select.Option>
+          <Select.Option value="broccoli">Broccoli</Select.Option>
+          <Select.Option value="carrot">Carrot</Select.Option>
+          <Select.Option value="courgette">Courgette</Select.Option>
+          <Select.Option value="leek">Leek</Select.Option>
+        </Select.Group>
+        <Select.Group>
+          <Select.Legend>Meat</Select.Legend>
+          <Select.Option value="beef">Beef</Select.Option>
+          <Select.Option value="chicken">Chicken</Select.Option>
+          <Select.Option value="lamb" disabled>Lamb</Select.Option>
+          <Select.Option value="pork">Pork</Select.Option>
+        </Select.Group>
+      </Select>
+    </Field.Control>
+  </Field>
 </Demo>
 
 ```tsx
-<Select>
-  <Select.Option />
+<Select value="blueberry">
+  <Select.Option value="apple">Apple</Select.Option>
+  <Select.Option value="banana">Banana</Select.Option>
+  <Select.Option value="blueberry">Blueberry</Select.Option>
+  <Select.Option value="grapes">Grapes</Select.Option>
+  <Select.Option value="pineapple">Pineapple</Select.Option>
+  <Select.Group disabled>
+    <Select.Legend>Vegetables</Select.Legend>
+    <Select.Option value="aubergine">Aubergine</Select.Option>
+    <Select.Option value="broccoli">Broccoli</Select.Option>
+    <Select.Option value="carrot">Carrot</Select.Option>
+    <Select.Option value="courgette">Courgette</Select.Option>
+    <Select.Option value="leek">Leek</Select.Option>
+  </Select.Group>
   <Select.Group>
-    <Select.Legend />
-    <Select.Option />
+    <Select.Legend>Meat</Select.Legend>
+    <Select.Option value="beef">Beef</Select.Option>
+    <Select.Option value="chicken">Chicken</Select.Option>
+    <Select.Option value="lamb" disabled>Lamb</Select.Option>
+    <Select.Option value="pork">Pork</Select.Option>
   </Select.Group>
 </Select>
 ```

@@ -24,6 +24,7 @@ export const SelectTrigger = (inProps: SelectTriggerProps) => {
 
   const { getItems } = Select.useCollection();
 
+  const isRequired = context.required;
   const isDisabled = context.disabled || disabled;
 
   return (
@@ -34,6 +35,7 @@ export const SelectTrigger = (inProps: SelectTriggerProps) => {
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-activedescendant={open ? activeId : undefined}
+        aria-required={isRequired ? true : undefined}
         disabled={isDisabled}
         {...props}
         className={cn(classes.trigger, className)}

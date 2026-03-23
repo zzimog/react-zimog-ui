@@ -17,6 +17,7 @@ export const ThemeSwitcher = (inProps: ThemeSwitcherProps) => {
   return (
     <Button
       {...inProps}
+      aria-hidden={true}
       title={`Set ${other} mode`}
       onClick={() => setScheme(other)}
     >

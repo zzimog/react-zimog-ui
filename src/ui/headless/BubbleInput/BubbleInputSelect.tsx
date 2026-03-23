@@ -37,6 +37,7 @@ export const BubbleInputSelect = (inProps: BubbleInputSelectProps) => {
   return (
     <select
       ref={ref}
+      aria-hidden
       defaultValue={value}
       {...props}
       style={{

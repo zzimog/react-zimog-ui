@@ -1,5 +1,6 @@
 import {
-  useLayoutEffect,
+  useCallback,
+  useEffect,
   useRef,
   useState,
   type ComponentPropsWithRef,
@@ -41,22 +42,25 @@ export const PopperContent = (inProps: PopperContentProps) => {
   const ref = useRef<HTMLElement>(null);
   const mergedRefs = useMergedRefs(refProp, ref);
 
-  useLayoutEffect(() => {
+  const handlePlacement = useCallback(() => {
+    const content = ref.current;
+    if (anchor && content) {
+      placeContent({
+        anchor,
+        content,
+        distance,
+        padding,
+        side,
+        align,
+        avoidCollisions,
+      });
+    }
+  }, [anchor, distance, padding, side, align, avoidCollisions]);
+
+  useEffect(() => {
     if (present) {
       function handleResize() {
-        const content = ref.current;
-        if (anchor && content) {
-          placeContent({
-            anchor,
-            content,
-            distance,
-            padding,
-            side,
-            align,
-            avoidCollisions,
-          });
-        }
-
+        handlePlacement();
         setIsPlaced(true);
       }
 
@@ -68,7 +72,7 @@ export const PopperContent = (inProps: PopperContentProps) => {
         window.removeEventListener('scroll', handleResize);
       };
     }
-  }, [present, anchor, distance, padding, side, align, avoidCollisions]);
+  }, [present, handlePlacement]);
 
   return createPortal(
     <Presence

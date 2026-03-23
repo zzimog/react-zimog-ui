@@ -33,6 +33,8 @@ export function placeContent({
   avoidCollisions,
 }: PlaceContentOptions) {
   const anchorRect = anchor.getBoundingClientRect();
+  content.style.setProperty('--anchor-width', `${anchorRect.width}px`);
+  content.style.setProperty('--anchor-height', `${anchorRect.height}px`);
 
   function getRect(side: ContentSide): DOMRect {
     const contentRect = content.getBoundingClientRect();
@@ -80,9 +82,6 @@ export function placeContent({
     }
   }
 
-  //content.style.transformOrigin = `${origin.x}px ${origin.y}px`;
-  content.style.transform = `translate3d(${rect.left}px, ${rect.top}px, 0)`;
-
   const availableHeight = {
     top: anchorRect.top - distance - padding,
     bottom: window.innerHeight - padding - anchorRect.bottom - distance,
@@ -99,6 +98,6 @@ export function placeContent({
 
   content.style.setProperty('--available-width', `${availableWidth}px`);
   content.style.setProperty('--available-height', `${availableHeight}px`);
-  content.style.setProperty('--anchor-width', `${anchorRect.width}px`);
-  content.style.setProperty('--anchor-height', `${anchorRect.height}px`);
+  //content.style.transformOrigin = `${origin.x}px ${origin.y}px`;
+  content.style.transform = `translate3d(${rect.left}px, ${rect.top}px, 0)`;
 }

@@ -1,7 +1,9 @@
-import type { PropsWithChildren } from 'react';
+import type { ComponentPropsWithRef } from 'react';
 import { createCollection, createScopedContext } from '@ui/utils';
 import { MenuContent } from './MenuContent';
 import { MenuItem } from './MenuItem';
+import { MenuItemCheckbox } from './MenuItemCheckbox';
+import { MenuLabel } from './MenuLabel';
 
 const DISPLAY_NAME = 'Menu';
 
@@ -25,18 +27,19 @@ const [MenuCollection, useMenuCollection] =
 
 /*---------------------------------------------------------------------------*/
 
-type MenuProps = PropsWithChildren<{
+type BaseProps = ComponentPropsWithRef<typeof MenuContent>;
+type MenuProps = BaseProps & {
   open?: boolean;
-}>;
+};
 
 export const Menu = (inProps: MenuProps) => {
-  const { open, children } = inProps;
+  const { open, ...props } = inProps;
   const isOpen = !!open;
 
   return (
     <MenuContext open={isOpen}>
       <MenuCollection>
-        <MenuContent>{children}</MenuContent>
+        <MenuContent {...props} />
       </MenuCollection>
     </MenuContext>
   );
@@ -46,3 +49,5 @@ Menu.displayName = DISPLAY_NAME;
 Menu.useContext = useMenuContext;
 Menu.useCollection = useMenuCollection;
 Menu.Item = MenuItem;
+Menu.Label = MenuLabel;
+Menu.ItemCheckbox = MenuItemCheckbox;

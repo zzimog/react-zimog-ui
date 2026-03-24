@@ -1,26 +1,27 @@
 import { FocusTrap, Native, type NativeProps } from '@ui/headless';
 import { cn } from '@ui/utils';
 import { Menu } from './Menu';
+import classes from './classes';
+
+const NAV_KEYS = ['Home', 'End', 'ArrowUp', 'ArrowDown'];
 
 const DISPLAY_NAME = 'MenuContent';
 
 type MenuContentProps = NativeProps<'div'>;
 
-const NAV_KEYS = ['Home', 'End', 'ArrowUp', 'ArrowDown'];
-
 export const MenuContent = (inProps: MenuContentProps) => {
   const { className, ...props } = inProps;
 
-  const context = Menu.useContext(DISPLAY_NAME);
+  Menu.useContext(DISPLAY_NAME);
   const { getItems } = Menu.useCollection();
 
   return (
-    <FocusTrap trapped={context.open} asChild>
+    <FocusTrap trapped={false} asChild>
       <Native.div
         role="menu"
         tabIndex={-1}
         {...props}
-        className={cn('flex flex-col gap-2', className)}
+        className={cn(classes.content, className)}
         onKeyDown={(event) => {
           if (event.key === 'Tab') {
             event.preventDefault();

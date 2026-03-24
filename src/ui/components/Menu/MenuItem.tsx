@@ -2,6 +2,7 @@ import { Native, type NativeProps } from '@ui/headless';
 import { useMergedRefs } from '@ui/hooks';
 import { cn } from '@ui/utils';
 import { Menu } from './Menu';
+import classes from './classes';
 
 const DISPLAY_NAME = 'MenuItem';
 
@@ -11,6 +12,7 @@ type MenuItemProps = BaseProps;
 export const MenuItem = (inProps: MenuItemProps) => {
   const { ref: refProp, disabled, className, ...props } = inProps;
 
+  Menu.useContext(DISPLAY_NAME);
   const { onItemAdd, onItemRemove } = Menu.useCollection();
 
   const mergedRef = useMergedRefs(refProp, (node: HTMLElement) => {
@@ -22,15 +24,8 @@ export const MenuItem = (inProps: MenuItemProps) => {
     <Native.button
       ref={mergedRef}
       role="menuitem"
-      tabIndex={0}
       {...props}
-      className={cn(
-        'p-2',
-        'rounded-shape',
-        'outline-0',
-        'focus:bg-highlight',
-        className
-      )}
+      className={cn(classes.item, className)}
       onPointerMove={(event) => {
         const target = event.target as HTMLElement;
         target.focus({ preventScroll: true });

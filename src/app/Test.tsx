@@ -8,11 +8,19 @@ export const TestPage = () => {
     <div className="flex flex-col gap-8">
       <Title>Test page</Title>
 
-      <Menu open>
+      <Menu className="mx-auto w-xs" open>
         <Menu.Item>Lorem</Menu.Item>
         <Menu.Item>Ipsum</Menu.Item>
-        <Menu.Item>Dolor</Menu.Item>
-        <Menu.Item>Sit</Menu.Item>
+        <div role="separator" className="bg-border my-1 h-px w-full"></div>
+        <div role="group">
+          <Menu.Label>Group Label</Menu.Label>
+          <Menu.Item>Lorem</Menu.Item>
+          <Menu.Item>Ipsum</Menu.Item>
+          <Menu.Item>Dolor</Menu.Item>
+          <Menu.Item>Sit</Menu.Item>
+        </div>
+        <div role="separator" className="bg-border my-1 h-px w-full"></div>
+        <Menu.ItemCheckbox>Checkbox</Menu.ItemCheckbox>
       </Menu>
 
       <Card>

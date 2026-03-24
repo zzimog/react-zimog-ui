@@ -8,6 +8,7 @@ export * from './Field';
 export * from './Input';
 export * from './Menu';
 export * from './Password';
+export * from './RadioGroup';
 export * from './ScrollArea';
 export * from './Select';
 export * from './Slider';

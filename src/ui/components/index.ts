@@ -6,6 +6,7 @@ export * from './CodeBlock';
 export * from './Collapsible';
 export * from './Field';
 export * from './Input';
+export * from './Menu';
 export * from './Password';
 export * from './ScrollArea';
 export * from './Select';

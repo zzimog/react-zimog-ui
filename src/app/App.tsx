@@ -29,7 +29,7 @@ const components: Record<string, MDXContent> = {
 const App = () => (
   <BrowserRouter basename="react-zimog-ui">
     <div className="text-foreground bg-background min-h-screen transition-colors">
-      <header className="mb-8 border-b py-8">
+      <header className="mb-8 border-b py-8 transition">
         <div className="mx-auto flex max-w-3xl items-center justify-between gap-2 px-4">
           <AppMenu data={components} />
 
@@ -54,7 +54,7 @@ const App = () => (
         </Routes>
       </main>
 
-      <footer className="text-muted mt-8 border-t py-8">
+      <footer className="text-muted mt-8 border-t py-8 transition">
         <div className="flex justify-center gap-6 px-4">
           <Nav.Link href="https://github.com/zzimog" target="_blank">
             github/zzimog

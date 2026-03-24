@@ -12,6 +12,7 @@ export const SelectTrigger = (inProps: SelectTriggerProps) => {
   const { disabled, className, onBlur, onClick, onKeyDown, ...props } = inProps;
 
   const {
+    contentId,
     value,
     open,
     activeId,
@@ -33,6 +34,7 @@ export const SelectTrigger = (inProps: SelectTriggerProps) => {
         type="button"
         role="combobox"
         aria-haspopup="listbox"
+        aria-controls={contentId}
         aria-expanded={open}
         aria-activedescendant={open ? activeId : undefined}
         aria-required={isRequired ? true : undefined}

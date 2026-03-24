@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Card, Field, Input, Password, Slider, Switch, Title } from '@ui';
+import { Card, Field, Input, Menu, Password, Slider, Switch, Title } from '@ui';
 
 export const TestPage = () => {
   const [sliderValue, setSliderValue] = useState(12);
@@ -7,6 +7,13 @@ export const TestPage = () => {
   return (
     <div className="flex flex-col gap-8">
       <Title>Test page</Title>
+
+      <Menu open>
+        <Menu.Item>Lorem</Menu.Item>
+        <Menu.Item>Ipsum</Menu.Item>
+        <Menu.Item>Dolor</Menu.Item>
+        <Menu.Item>Sit</Menu.Item>
+      </Menu>
 
       <Card>
         <Card.Content>

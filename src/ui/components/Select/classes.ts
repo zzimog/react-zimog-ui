@@ -33,15 +33,12 @@ const classes = {
   ],
   value: 'truncate shrink data-placeholder:text-muted',
   dialog: [
-    'flex',
-    'flex-col',
     'w-(--anchor-width)',
-    'max-h-50',
     'data-[open=true]:animate-in',
     'data-[open=false]:animate-out',
   ],
   content: [
-    'h-full',
+    'max-h-50',
     'p-1',
     'border',
     'rounded-shape',

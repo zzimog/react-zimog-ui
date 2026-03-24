@@ -16,13 +16,13 @@ const [SelectContentContext, useSelectContentContext] = createScopedContext<
 
 /*---------------------------------------------------------------------------*/
 
-type BaseProps = NativeProps<'div'>;
+type BaseProps = Omit<NativeProps<'div'>, 'id'>;
 type SelectContentProps = BaseProps;
 
 export const SelectContent = (inProps: SelectContentProps) => {
   const { ref: refProp, className, ...props } = inProps;
 
-  const { open, onContentChange } = Select.useContext(DISPLAY_NAME);
+  const { contentId, open, onContentChange } = Select.useContext(DISPLAY_NAME);
 
   const [mounted, setMounted] = useState(open);
   const [fragment] = useState<DocumentFragment | undefined>(() => {
@@ -51,15 +51,14 @@ export const SelectContent = (inProps: SelectContentProps) => {
     <SelectContentContext>
       <Popper.Content
         present={open}
-        data-open={open}
         avoidCollisions
+        data-open={open}
         className={cn(classes.dialog)}
-        onAnimationEnd={() => {
-          if (!open) setMounted(false);
-        }}
+        onPresenceChange={setMounted}
       >
         <Native.div
           ref={mergedRef}
+          id={contentId}
           role="listbox"
           {...props}
           className={cn(classes.content, className)}

@@ -1,4 +1,4 @@
-import { useId, useLayoutEffect, useMemo, useRef } from 'react';
+import { useLayoutEffect, useMemo, useRef } from 'react';
 import { Check } from 'lucide-react';
 import { createPortal } from 'react-dom';
 import { useMergedRefs } from '@ui';
@@ -11,7 +11,7 @@ import classes from './classes';
 
 const DISPLAY_NAME = 'SelectOption';
 
-type BaseProps = NativeProps<'div'>;
+type BaseProps = Omit<NativeProps<'div'>, 'id'>;
 type SelectOptionProps = BaseProps & {
   value: string;
   disabled?: boolean;
@@ -20,7 +20,6 @@ type SelectOptionProps = BaseProps & {
 export const SelectOption = (inProps: SelectOptionProps) => {
   const {
     ref: refProp,
-    id: idProp,
     value,
     disabled: disabledProp,
     className,
@@ -31,14 +30,12 @@ export const SelectOption = (inProps: SelectOptionProps) => {
     ...props
   } = inProps;
 
-  const genId = useId();
-  const id = idProp ?? genId;
-
   const context = Select.useContext(DISPLAY_NAME);
   const collection = Select.useCollection();
   const groupContext = SelectGroup.useContext(DISPLAY_NAME);
   SelectContent.useContext(DISPLAY_NAME);
 
+  const id = `${context.baseId}-${value}`;
   const selected = value === context.value;
   const disabled = groupContext.disabled || disabledProp;
   const isEmpty = value === '';

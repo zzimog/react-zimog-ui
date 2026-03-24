@@ -1,4 +1,10 @@
-import { useCallback, useLayoutEffect, useRef, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import { Native, type NativeProps } from '@ui/headless';
 import { useMergedRefs } from '@ui/hooks';
 
@@ -6,6 +12,7 @@ type BaseProps = NativeProps<'div'>;
 interface PresenceProps extends BaseProps {
   present?: boolean;
   forceMount?: boolean;
+  onPresenceChange?(presence: boolean): void;
 }
 
 function getAnimationName(styles: CSSStyleDeclaration | null) {
@@ -13,10 +20,16 @@ function getAnimationName(styles: CSSStyleDeclaration | null) {
 }
 
 export const Presence = (inProps: PresenceProps) => {
-  const { ref: refProp, present = true, forceMount, ...props } = inProps;
+  const {
+    ref: refProp,
+    present = true,
+    forceMount,
+    onPresenceChange,
+    ...props
+  } = inProps;
 
   const [mounted, setMounted] = useState(present);
-  const shouldRender = present || mounted;
+  const isPresent = present || mounted;
 
   const prevPresentRef = useRef(present);
   const stylesRef = useRef<CSSStyleDeclaration>(null);
@@ -58,6 +71,10 @@ export const Presence = (inProps: PresenceProps) => {
     }, [])
   );
 
+  useEffect(() => {
+    onPresenceChange?.(isPresent);
+  }, [isPresent, onPresenceChange]);
+
   useLayoutEffect(() => {
     const prevPresent = prevPresentRef.current;
     if (present !== prevPresent) {
@@ -78,9 +95,9 @@ export const Presence = (inProps: PresenceProps) => {
     }
   }, [present]);
 
-  if (!forceMount && !shouldRender) {
+  if (!forceMount && !isPresent) {
     return null;
   }
 
-  return <Native.div ref={mergedRef} hidden={!shouldRender} {...props} />;
+  return <Native.div ref={mergedRef} hidden={!isPresent} {...props} />;
 };

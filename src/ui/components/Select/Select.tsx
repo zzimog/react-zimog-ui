@@ -1,5 +1,6 @@
 import {
   useEffect,
+  useId,
   useState,
   type ChangeEvent,
   type ComponentPropsWithoutRef,
@@ -21,6 +22,8 @@ const DISPLAY_NAME = 'Select';
 type OptionElement = ReactElement<'option'>;
 
 type SelectContextValue = {
+  baseId: string;
+  contentId: string;
   required: boolean;
   disabled: boolean;
   value: string;
@@ -103,6 +106,9 @@ export const Select = (inProps: SelectProps) => {
   const [activeId, setActiveId] = useState<string | undefined>();
   const [options, setOptions] = useState<Set<OptionElement>>(new Set());
 
+  const baseId = useId();
+  const contentId = `${baseId}-content`;
+
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     if (!open) setActiveId(undefined);
@@ -116,6 +122,8 @@ export const Select = (inProps: SelectProps) => {
 
   return (
     <SelectContext
+      baseId={baseId}
+      contentId={contentId}
       required={required}
       disabled={disabled}
       value={value}

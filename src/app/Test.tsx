@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { CircleArrowLeft, CircleArrowRight } from 'lucide-react';
 import {
   Card,
   Field,
@@ -12,45 +13,66 @@ import {
 } from '@ui';
 
 export const TestPage = () => {
+  const [iconSize, setIconSize] = useState('md');
   const [sliderValue, setSliderValue] = useState(12);
 
   return (
     <div className="flex flex-col gap-8">
       <Title>Test page</Title>
 
-      <Field className="mx-auto w-xs">
-        <Field.Label>Theme</Field.Label>
-        <Field.Control>
-          <RadioGroup defaultValue="2" onValueChange={console.log}>
-            <label className="flex items-center gap-2 text-sm font-semibold">
-              <RadioGroup.Item id="r1" value="light" />
-              Light
-            </label>
-            <label className="flex items-center gap-2 text-sm font-semibold">
-              <RadioGroup.Item id="r2" value="dark" />
-              Dark
-            </label>
-            <label className="flex items-center gap-2 text-sm font-semibold">
-              <RadioGroup.Item id="r3" value="system" />
-              System
-            </label>
-          </RadioGroup>
-        </Field.Control>
-      </Field>
+      <Field.Set className="mx-auto w-xs">
+        <Field.Legend>Theme</Field.Legend>
+        <RadioGroup defaultValue="2" onValueChange={console.log}>
+          <label className="flex items-center gap-2 text-sm font-semibold">
+            <RadioGroup.Item id="r1" value="light" />
+            Light
+          </label>
+          <label className="flex items-center gap-2 text-sm font-semibold">
+            <RadioGroup.Item id="r2" value="dark" />
+            Dark
+          </label>
+          <label className="flex items-center gap-2 text-sm font-semibold">
+            <RadioGroup.Item id="r3" value="system" />
+            System
+          </label>
+        </RadioGroup>
+      </Field.Set>
 
-      <Menu className="mx-auto w-xs" open>
-        <Menu.Item>Lorem</Menu.Item>
-        <Menu.Item>Ipsum</Menu.Item>
-        <div role="separator" className="bg-border my-1 h-px w-full"></div>
-        <div role="group">
-          <Menu.Label>Group Label</Menu.Label>
-          <Menu.Item>Lorem</Menu.Item>
-          <Menu.Item>Ipsum</Menu.Item>
-          <Menu.Item>Dolor</Menu.Item>
-          <Menu.Item>Sit</Menu.Item>
-        </div>
-        <div role="separator" className="bg-border my-1 h-px w-full"></div>
-        <Menu.ItemCheckbox>Checkbox</Menu.ItemCheckbox>
+      <Menu className="mx-auto w-fit" open>
+        <Menu.Item>
+          <CircleArrowLeft />
+          Previous
+        </Menu.Item>
+        <Menu.Item>
+          <CircleArrowRight />
+          Next
+        </Menu.Item>
+        <div
+          role="separator"
+          aria-orientation="horizontal"
+          className="bg-border my-1 h-px w-full"
+        />
+        <Menu.RadioGroup value={iconSize} onValueChange={setIconSize}>
+          <Menu.Label>Icon size</Menu.Label>
+          <Menu.RadioItem value="sm">Small</Menu.RadioItem>
+          <Menu.RadioItem value="md">Medium</Menu.RadioItem>
+          <Menu.RadioItem value="lg">Large</Menu.RadioItem>
+        </Menu.RadioGroup>
+        <div
+          role="separator"
+          aria-orientation="horizontal"
+          className="bg-border my-1 h-px w-full"
+        />
+        <Menu.CheckboxItem>Auto arrange icons</Menu.CheckboxItem>
+        <Menu.CheckboxItem defaultChecked>
+          Align icons to grid
+        </Menu.CheckboxItem>
+        <div
+          role="separator"
+          aria-orientation="horizontal"
+          className="bg-border my-1 h-px w-full"
+        />
+        <Menu.CheckboxItem defaultChecked>Show icons</Menu.CheckboxItem>
       </Menu>
 
       <Card>
@@ -89,19 +111,8 @@ export const TestPage = () => {
 
       <Card>
         <Card.Content className="flex justify-center gap-2">
-          <Switch
-            onChange={(event) => {
-              const target = event.target as HTMLInputElement;
-              console.log('[Change] Checked:', target.checked);
-            }}
-          />
-          <Switch
-            defaultChecked
-            onChange={(event) => {
-              const target = event.target as HTMLInputElement;
-              console.log('[Change] Checked:', target.checked);
-            }}
-          />
+          <Switch />
+          <Switch defaultChecked />
           <Switch disabled />
           <Switch disabled defaultChecked />
         </Card.Content>

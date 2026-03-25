@@ -1,4 +1,3 @@
-import type { ChangeEvent } from 'react';
 import { useControllableState } from '@ui/hooks';
 import { composeHandlers, createScopedContext } from '@ui/utils';
 import { BubbleInput } from '../BubbleInput';
@@ -24,7 +23,6 @@ interface CheckableProps extends BaseProps {
   defaultChecked?: boolean;
   type?: 'checkbox' | 'radio';
   required?: boolean;
-  onChange?(event: ChangeEvent<HTMLInputElement>): void;
   onCheckedChange?(checked: boolean): void;
 }
 
@@ -39,7 +37,6 @@ export const Checkable = (inProps: CheckableProps) => {
     form,
     children,
     onClick,
-    onChange,
     onCheckedChange,
     ...props
   } = inProps;
@@ -73,7 +70,6 @@ export const Checkable = (inProps: CheckableProps) => {
         disabled={disabled}
         required={required}
         form={form}
-        onChange={onChange}
       />
     </CheckableContext>
   );

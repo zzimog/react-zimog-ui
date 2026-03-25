@@ -7,9 +7,11 @@ import checkboxClasses from '../Checkbox/classes';
 import { RadioGroup } from './RadioGroup';
 import classes from './classes';
 
+const FIRST_KEYS = ['Home', 'PageUp'];
+const LAST_KEYS = ['End', 'PageDown'];
 const PREV_KEYS = ['ArrowLeft', 'ArrowUp'];
 const NEXT_KEYS = ['ArrowRight', 'ArrowDown'];
-const NAV_KEYS = ['Home', 'End', ...PREV_KEYS, ...NEXT_KEYS];
+const NAV_KEYS = [...FIRST_KEYS, ...LAST_KEYS, ...PREV_KEYS, ...NEXT_KEYS];
 
 const DISPLAY_NAME = 'RadioGroupItem';
 
@@ -26,7 +28,6 @@ export const RadioGroupItem = (inProps: RadioGroupItemProps) => {
     value,
     disabled = false,
     className,
-    onFocus,
     onKeyDown,
     ...props
   } = inProps;
@@ -35,8 +36,10 @@ export const RadioGroupItem = (inProps: RadioGroupItemProps) => {
   const { getItems, onItemAdd, onItemRemove } = RadioGroup.useCollection();
 
   const mergedRef = useMergedRefs(ref, (node: HTMLElement) => {
-    onItemAdd(node, { node, value, disabled });
-    return () => onItemRemove(node);
+    if (!disabled) {
+      onItemAdd(node, { node });
+      return () => onItemRemove(node);
+    }
   });
 
   const composedId = `${context.baseId}-${value}`;
@@ -59,24 +62,26 @@ export const RadioGroupItem = (inProps: RadioGroupItemProps) => {
       onCheckedChange={() => {
         context.onValueChange(value);
       }}
-      onFocus={composeHandlers(onFocus, () => {
-        context.onActiveIdChange(id);
-      })}
       onKeyDown={composeHandlers(onKeyDown, (event) => {
         if (event.key === 'Enter') {
           event.preventDefault();
         }
 
+        if (event.target !== event.currentTarget) {
+          return;
+        }
+
         if (NAV_KEYS.includes(event.key)) {
-          const items = getItems().filter((i) => !i.disabled);
+          const items = getItems();
           let [nextItem] = items;
 
-          if (['End', ...PREV_KEYS].includes(event.key)) {
+          if ([...LAST_KEYS, ...PREV_KEYS].includes(event.key)) {
             [nextItem] = items.reverse();
           }
 
           if ([...PREV_KEYS, ...NEXT_KEYS].includes(event.key)) {
-            const index = items.findIndex((i) => i.value === context.value);
+            const target = event.target;
+            const index = items.findIndex((i) => i.node === target);
             [nextItem] = items.slice(index + 1);
           }
 

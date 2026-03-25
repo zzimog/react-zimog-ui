@@ -4,12 +4,12 @@ import { Checkable } from '@ui/headless';
 import { Menu } from './Menu';
 import { MenuItem } from './MenuItem';
 
-const DISPLAY_NAME = 'MenuItemCheckbox';
+const DISPLAY_NAME = 'MenuCheckboxItem';
 
 type BaseProps = ComponentPropsWithRef<typeof Checkable>;
-type MenuItemCheckboxProps = BaseProps;
+type MenuCheckboxItemProps = Omit<BaseProps, 'type'>;
 
-export const MenuItemCheckbox = (inProps: MenuItemCheckboxProps) => {
+export const MenuCheckboxItem = (inProps: MenuCheckboxItemProps) => {
   const { children, ...props } = inProps;
 
   Menu.useContext(DISPLAY_NAME);
@@ -17,13 +17,13 @@ export const MenuItemCheckbox = (inProps: MenuItemCheckboxProps) => {
   return (
     <MenuItem role="menuitemcheckbox" asChild>
       <Checkable {...props}>
-        {children}
         <Checkable.Indicator asChild>
           <Check />
         </Checkable.Indicator>
+        {children}
       </Checkable>
     </MenuItem>
   );
 };
 
-MenuItemCheckbox.displayName = DISPLAY_NAME;
+MenuCheckboxItem.displayName = DISPLAY_NAME;

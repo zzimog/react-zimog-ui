@@ -45,7 +45,7 @@ export function createCollection<
             .map(([, data]) => data);
         }
 
-        return orderedRef.current;
+        return [...orderedRef.current];
       },
       onItemAdd(item: E, data: T) {
         itemsRef.current.set(item, data);

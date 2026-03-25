@@ -7,7 +7,7 @@ import classes from './classes';
 const DISPLAY_NAME = 'MenuItem';
 
 type BaseProps = NativeProps<'button'>;
-type MenuItemProps = BaseProps;
+type MenuItemProps = Omit<BaseProps, 'type'>;
 
 export const MenuItem = (inProps: MenuItemProps) => {
   const { ref: refProp, disabled, className, ...props } = inProps;
@@ -24,6 +24,7 @@ export const MenuItem = (inProps: MenuItemProps) => {
     <Native.button
       ref={mergedRef}
       role="menuitem"
+      type="button"
       {...props}
       className={cn(classes.item, className)}
       onPointerMove={(event) => {

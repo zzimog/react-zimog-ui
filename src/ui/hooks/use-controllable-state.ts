@@ -10,7 +10,7 @@ type SetState<T> = Dispatch<SetStateAction<T>>;
 type ControllableStateParams<T> = {
   defaultProp: T;
   prop?: T;
-  onChange?: (state: T) => void;
+  onChange?(state: T): void;
 };
 
 function isFunction(value: unknown) {

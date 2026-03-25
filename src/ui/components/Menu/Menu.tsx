@@ -1,9 +1,11 @@
 import type { ComponentPropsWithRef } from 'react';
 import { createCollection, createScopedContext } from '@ui/utils';
+import { MenuCheckboxItem } from './MenuCheckboxItem';
 import { MenuContent } from './MenuContent';
 import { MenuItem } from './MenuItem';
-import { MenuItemCheckbox } from './MenuItemCheckbox';
 import { MenuLabel } from './MenuLabel';
+import { MenuRadioGroup } from './MenuRadioGroup';
+import { MenuRadioItem } from './MenuRadioItem';
 
 const DISPLAY_NAME = 'Menu';
 
@@ -50,4 +52,6 @@ Menu.useContext = useMenuContext;
 Menu.useCollection = useMenuCollection;
 Menu.Item = MenuItem;
 Menu.Label = MenuLabel;
-Menu.ItemCheckbox = MenuItemCheckbox;
+Menu.CheckboxItem = MenuCheckboxItem;
+Menu.RadioGroup = MenuRadioGroup;
+Menu.RadioItem = MenuRadioItem;

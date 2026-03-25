@@ -1,4 +1,4 @@
-import { useId, useState } from 'react';
+import { useId } from 'react';
 import { Native, type NativeProps } from '@ui/headless';
 import { useControllableState } from '@ui/hooks';
 import { cn, createCollection, createScopedContext } from '@ui/utils';
@@ -9,11 +9,10 @@ const DISPLAY_NAME = 'RadioGroup';
 
 type RadioGroupContextValue = {
   baseId: string;
-  name: string;
   value: string;
-  disabled: boolean;
+  name?: string;
+  disabled?: boolean;
   onValueChange(value: string): void;
-  onActiveIdChange(id: string): void;
 };
 
 const [RadioGroupContext, useRadioGroupContext] = createScopedContext<
@@ -22,11 +21,7 @@ const [RadioGroupContext, useRadioGroupContext] = createScopedContext<
 
 /*---------------------------------------------------------------------------*/
 
-type RadioGroupCollectionData = {
-  node: HTMLElement;
-  value: string;
-  disabled: boolean;
-};
+type RadioGroupCollectionData = { node: HTMLElement };
 
 const [RadioGroupCollection, useRadioGroupCollection] =
   createCollection<RadioGroupCollectionData>(DISPLAY_NAME);
@@ -44,11 +39,11 @@ type RadioGroupProps = NativeProps<'div'> & {
 
 export const RadioGroup = (inProps: RadioGroupProps) => {
   const {
-    name: nameProp,
+    name,
     defaultValue,
     value: valueProp,
-    required = false,
-    disabled = false,
+    required,
+    disabled,
     className,
     onValueChange,
     ...props
@@ -60,10 +55,7 @@ export const RadioGroup = (inProps: RadioGroupProps) => {
     onChange: onValueChange,
   });
 
-  const [activeId, setActiveId] = useState<string | undefined>();
-
   const baseId = useId();
-  const name = nameProp ?? baseId;
 
   return (
     <RadioGroupContext
@@ -72,14 +64,12 @@ export const RadioGroup = (inProps: RadioGroupProps) => {
       value={value}
       disabled={disabled}
       onValueChange={setValue}
-      onActiveIdChange={setActiveId}
     >
       <RadioGroupCollection>
         <Native.div
           role="radiogroup"
           aria-required={required ? true : undefined}
           aria-disabled={disabled ? true : undefined}
-          aria-activedescendant={activeId}
           tabIndex={-1}
           {...props}
           className={cn(classes.root, className)}

@@ -60,6 +60,7 @@ export const Checkable = (inProps: CheckableProps) => {
         disabled={disabled}
         {...props}
         onClick={composeHandlers(onClick, () => {
+          if (type === 'radio' && checked) return;
           setChecked((prev) => !prev);
         })}
       >

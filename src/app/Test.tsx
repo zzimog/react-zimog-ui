@@ -1,5 +1,15 @@
 import { useState } from 'react';
-import { Card, Field, Input, Menu, Password, Slider, Switch, Title } from '@ui';
+import {
+  Card,
+  Field,
+  Input,
+  Menu,
+  Password,
+  RadioGroup,
+  Slider,
+  Switch,
+  Title,
+} from '@ui';
 
 export const TestPage = () => {
   const [sliderValue, setSliderValue] = useState(12);
@@ -7,6 +17,26 @@ export const TestPage = () => {
   return (
     <div className="flex flex-col gap-8">
       <Title>Test page</Title>
+
+      <Field className="mx-auto w-xs">
+        <Field.Label>Theme</Field.Label>
+        <Field.Control>
+          <RadioGroup defaultValue="2" onValueChange={console.log}>
+            <label className="flex items-center gap-2 text-sm font-semibold">
+              <RadioGroup.Item id="r1" value="light" />
+              Light
+            </label>
+            <label className="flex items-center gap-2 text-sm font-semibold">
+              <RadioGroup.Item id="r2" value="dark" />
+              Dark
+            </label>
+            <label className="flex items-center gap-2 text-sm font-semibold">
+              <RadioGroup.Item id="r3" value="system" />
+              System
+            </label>
+          </RadioGroup>
+        </Field.Control>
+      </Field>
 
       <Menu className="mx-auto w-xs" open>
         <Menu.Item>Lorem</Menu.Item>

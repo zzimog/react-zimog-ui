@@ -17,8 +17,8 @@ const classes = {
     'rounded-shape',
     'outline-0',
     'focus:bg-highlight',
-    '[&>svg]:ml-auto',
     '[&>svg]:size-4',
+    '[&>svg]:ml-auto',
   ],
 };
 

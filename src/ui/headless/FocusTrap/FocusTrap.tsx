@@ -50,11 +50,6 @@ export const FocusTrap = (inProps: FocusTrapProps) => {
     const node = ref.current;
     const isEnabled = enabledRef.current;
     if (node && trapped) {
-      /**
-       * @todo
-       * Parametrize the ability to focus container
-       * by removing `node !== target`
-       */
       function handleFocusIn(event: FocusEvent) {
         if (node && isEnabled) {
           const target = event.target as HTMLElement;
@@ -108,6 +103,7 @@ export const FocusTrap = (inProps: FocusTrapProps) => {
         if (!eventMount.defaultPrevented) {
           const [first] = getFocusableEdges(node);
           first?.focus();
+          console.log(first);
         }
 
         previousFocusedRef.current = currentActive;

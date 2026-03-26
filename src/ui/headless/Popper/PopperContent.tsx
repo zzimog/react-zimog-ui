@@ -1,6 +1,6 @@
 import {
   useCallback,
-  useEffect,
+  useLayoutEffect,
   useRef,
   useState,
   type ComponentPropsWithRef,
@@ -25,7 +25,7 @@ type PopperContentProps = BaseProps & {
 export const PopperContent = (inProps: PopperContentProps) => {
   const {
     ref: refProp,
-    present,
+    present = true,
     distance,
     padding,
     side,
@@ -57,7 +57,7 @@ export const PopperContent = (inProps: PopperContentProps) => {
     }
   }, [anchor, distance, padding, side, align, avoidCollisions]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (present) {
       function handleResize() {
         handlePlacement();
@@ -66,7 +66,7 @@ export const PopperContent = (inProps: PopperContentProps) => {
 
       handleResize();
       window.addEventListener('resize', handleResize);
-      window.addEventListener('scroll', handleResize, true);
+      window.addEventListener('scroll', handleResize);
       return () => {
         window.removeEventListener('resize', handleResize);
         window.removeEventListener('scroll', handleResize);

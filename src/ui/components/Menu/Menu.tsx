@@ -1,21 +1,25 @@
-import { useCallback, useRef } from 'react';
-import { FocusTrap, Native, type NativeProps } from '@ui/headless';
-import { useMergedRefs } from '@ui/hooks';
-import { cn, createCollection, createScopedContext } from '@ui/utils';
+import { type PropsWithChildren } from 'react';
+import { Popper } from '@ui/headless';
+import { useControllableState } from '@ui/hooks';
+import { createCollection, createScopedContext } from '@ui/utils';
 import { MenuCheckboxItem } from './MenuCheckboxItem';
+import { MenuContent } from './MenuContent';
 import { MenuIcon } from './MenuIcon';
 import { MenuItem } from './MenuItem';
 import { MenuLabel } from './MenuLabel';
 import { MenuRadioGroup } from './MenuRadioGroup';
 import { MenuRadioItem } from './MenuRadioItem';
 import { MenuSeparator } from './MenuSeparator';
-import classes from './classes';
+import { MenuSub } from './MenuSub';
+import { MenuSubContent } from './MenuSubContent';
+import { MenuSubTrigger } from './MenuSubTrigger';
+import { MenuTrigger } from './MenuTrigger';
 
 const DISPLAY_NAME = 'Menu';
 
 type MenuContextValue = {
-  onKeyFocusFirst(): void;
-  onKeyFocusLast(): void;
+  open: boolean;
+  onOpenChange(open: boolean): void;
 };
 
 const [MenuContext, useMenuContext] = createScopedContext<
@@ -34,36 +38,25 @@ const [MenuCollection, useMenuCollection] =
 
 /*---------------------------------------------------------------------------*/
 
-type BaseProps = NativeProps<'div'>;
-type MenuProps = BaseProps;
+type MenuProps = PropsWithChildren<{
+  defaultOpen?: boolean;
+  open?: boolean;
+  onOpenChange?(open: boolean): void;
+}>;
 
 export const Menu = (inProps: MenuProps) => {
-  const { ref: refProp, className, ...props } = inProps;
+  const { defaultOpen, open: openProp, onOpenChange, children } = inProps;
 
-  const ref = useRef<HTMLElement>(null);
-  const mergedRef = useMergedRefs(refProp, ref);
-
-  const handleFocusEdge = useCallback((edge: 'first' | 'last') => {
-    const node = ref.current;
-    const top = edge === 'first' ? 0 : node?.scrollHeight;
-
-    node?.scrollTo({ top });
-  }, []);
+  const [open, setOpen] = useControllableState({
+    defaultProp: defaultOpen ?? false,
+    prop: openProp,
+    onChange: onOpenChange,
+  });
 
   return (
-    <MenuContext
-      onKeyFocusFirst={() => handleFocusEdge('first')}
-      onKeyFocusLast={() => handleFocusEdge('last')}
-    >
+    <MenuContext open={open} onOpenChange={setOpen}>
       <MenuCollection>
-        <FocusTrap trapped={false} asChild>
-          <Native.div
-            ref={mergedRef}
-            role="menu"
-            {...props}
-            className={cn(classes.root, className)}
-          />
-        </FocusTrap>
+        <Popper>{children}</Popper>
       </MenuCollection>
     </MenuContext>
   );
@@ -72,6 +65,8 @@ export const Menu = (inProps: MenuProps) => {
 Menu.displayName = DISPLAY_NAME;
 Menu.useContext = useMenuContext;
 Menu.useCollection = useMenuCollection;
+Menu.Trigger = MenuTrigger;
+Menu.Content = MenuContent;
 Menu.Item = MenuItem;
 Menu.Label = MenuLabel;
 Menu.Separator = MenuSeparator;
@@ -79,3 +74,6 @@ Menu.Icon = MenuIcon;
 Menu.RadioGroup = MenuRadioGroup;
 Menu.RadioItem = MenuRadioItem;
 Menu.CheckboxItem = MenuCheckboxItem;
+Menu.Sub = MenuSub;
+Menu.SubTrigger = MenuSubTrigger;
+Menu.SubContent = MenuSubContent;

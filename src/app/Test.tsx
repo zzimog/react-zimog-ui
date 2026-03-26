@@ -1,5 +1,13 @@
 import { useState } from 'react';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import {
+  ArrowLeft,
+  ArrowRight,
+  Copy,
+  PencilLine,
+  Plus,
+  Scissors,
+  Trash,
+} from 'lucide-react';
 import {
   Card,
   Field,
@@ -38,34 +46,62 @@ export const TestPage = () => {
         </RadioGroup>
       </Field.Set>
 
-      <Menu className="mx-auto w-64">
-        <Menu.Item>
-          <Menu.Icon as={ArrowLeft} />
-          Previous
-        </Menu.Item>
-        <Menu.Item>
-          <Menu.Icon as={ArrowRight} />
-          Next
-        </Menu.Item>
-        <Menu.Separator />
-        <Menu.RadioGroup defaultValue="md">
-          <Menu.Label>Icon size</Menu.Label>
-          <Menu.RadioItem value="sm">Small</Menu.RadioItem>
-          <Menu.RadioItem value="md">Medium</Menu.RadioItem>
-          <Menu.RadioItem value="lg">Large</Menu.RadioItem>
-        </Menu.RadioGroup>
-        <Menu.Separator />
-        <Menu.CheckboxItem>Auto arrange icons</Menu.CheckboxItem>
-        <Menu.CheckboxItem defaultChecked>
-          Align icons to grid
-        </Menu.CheckboxItem>
-        <Menu.Separator />
-        <Menu.CheckboxItem defaultChecked>Show icons</Menu.CheckboxItem>
-        <Menu.Separator />
-        <Menu.Item>
-          More options
-          <ArrowRight />
-        </Menu.Item>
+      <Menu>
+        <Menu.Trigger className="mx-auto w-fit border p-2">
+          <span>Menu</span>
+        </Menu.Trigger>
+        <Menu.Content className="w-64">
+          <Menu.Item>
+            <Menu.Icon as={ArrowLeft} />
+            Previous
+          </Menu.Item>
+          <Menu.Item>
+            <Menu.Icon as={ArrowRight} />
+            Next
+          </Menu.Item>
+          <Menu.Separator />
+          <Menu.RadioGroup defaultValue="md">
+            <Menu.Label>Icon size</Menu.Label>
+            <Menu.RadioItem value="sm">Small</Menu.RadioItem>
+            <Menu.RadioItem value="md">Medium</Menu.RadioItem>
+            <Menu.RadioItem value="lg">Large</Menu.RadioItem>
+          </Menu.RadioGroup>
+          <Menu.Separator />
+          <Menu.CheckboxItem>Auto arrange icons</Menu.CheckboxItem>
+          <Menu.CheckboxItem defaultChecked>
+            Align icons to grid
+          </Menu.CheckboxItem>
+          <Menu.Separator />
+          <Menu.CheckboxItem defaultChecked>Show icons</Menu.CheckboxItem>
+          <Menu.Separator />
+          <Menu.Sub>
+            <Menu.SubTrigger>More options</Menu.SubTrigger>
+            <Menu.SubContent>
+              <Menu.Item disabled>
+                <Menu.Icon as={Plus} />
+                New
+              </Menu.Item>
+              <Menu.Separator />
+              <Menu.Item>
+                <Menu.Icon as={Scissors} />
+                Cut
+              </Menu.Item>
+              <Menu.Item>
+                <Menu.Icon as={Copy} />
+                Copy
+              </Menu.Item>
+              <Menu.Separator />
+              <Menu.Item disabled>
+                <Menu.Icon as={Trash} />
+                Delete
+              </Menu.Item>
+              <Menu.Item>
+                <Menu.Icon as={PencilLine} />
+                Rename
+              </Menu.Item>
+            </Menu.SubContent>
+          </Menu.Sub>
+        </Menu.Content>
       </Menu>
 
       <Card>

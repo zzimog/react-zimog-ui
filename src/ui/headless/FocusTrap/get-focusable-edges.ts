@@ -5,11 +5,11 @@ function isInput(element: HTMLElement): element is HTMLInputElement {
 function getFocusables(container: HTMLElement) {
   const element: HTMLElement[] = [];
   const walker = document.createTreeWalker(container, NodeFilter.SHOW_ELEMENT, {
-    acceptNode: (node: HTMLElement) => {
-      if (isInput(node) && node.type === 'hidden') {
-        if (node.disabled || node.hidden) {
-          return NodeFilter.FILTER_SKIP;
-        }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    acceptNode: (node: any) => {
+      const isHidden = isInput(node) && node.type === 'hidden';
+      if (node.disabled || node.hidden || isHidden) {
+        return NodeFilter.FILTER_SKIP;
       }
 
       return node.tabIndex >= 0

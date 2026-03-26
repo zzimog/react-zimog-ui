@@ -1,5 +1,5 @@
 const classes = {
-  content: [
+  root: [
     'flex',
     'flex-col',
     'p-1',
@@ -9,20 +9,24 @@ const classes = {
     'transition',
   ],
   label: 'text-muted px-2 py-1 text-xs font-extrabold',
+  separator: 'w-full h-px my-1 bg-border',
   item: [
     'relative',
+    'flex',
+    'gap-2',
+    'justify-between',
+    'items-center',
     'w-full',
-    'px-8',
-    'py-2',
+    'p-2',
+    'pl-8',
     'text-left',
-    'text-sm/4',
+    'text-xs/4',
     'rounded-shape',
     'outline-0',
     'focus:bg-highlight',
-    '[&>svg]:absolute',
-    '[&>svg]:left-2',
-    '[&>svg]:size-4',
+    '[&_svg]:size-4',
   ],
+  icon: 'absolute left-2',
 };
 
 export default classes;

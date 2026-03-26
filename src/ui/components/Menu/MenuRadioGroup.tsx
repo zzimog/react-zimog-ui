@@ -18,16 +18,23 @@ const [MenuRadioGroupContext, useMenuRadioGroupContext] = createScopedContext<
 /*---------------------------------------------------------------------------*/
 
 type MenuRadioGroupProps = NativeProps<'div'> & {
+  defaultValue?: string;
   value?: string;
   disabled?: boolean;
   onValueChange?(value: string): void;
 };
 
 export const MenuRadioGroup = (inProps: MenuRadioGroupProps) => {
-  const { value: valueProp, disabled, onValueChange, ...props } = inProps;
+  const {
+    defaultValue = '',
+    value: valueProp,
+    disabled,
+    onValueChange,
+    ...props
+  } = inProps;
 
   const [value, setValue] = useControllableState({
-    defaultProp: '',
+    defaultProp: defaultValue,
     prop: valueProp,
     onChange: onValueChange,
   });

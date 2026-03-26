@@ -1,6 +1,7 @@
 import type { ComponentPropsWithRef } from 'react';
 import { CircleDot } from 'lucide-react';
 import { Checkable } from '@ui/headless';
+import { Menu } from './Menu';
 import { MenuItem } from './MenuItem';
 import { MenuRadioGroup } from './MenuRadioGroup';
 
@@ -15,6 +16,7 @@ type MenuRadioItemProps = BaseProps & {
 export const MenuRadioItem = (inProps: MenuRadioItemProps) => {
   const { value, disabled, children, ...props } = inProps;
 
+  Menu.useContext(DISPLAY_NAME);
   const groupContext = MenuRadioGroup.useContext(DISPLAY_NAME);
 
   const isChecked = groupContext.value === value;
@@ -33,7 +35,9 @@ export const MenuRadioItem = (inProps: MenuRadioItemProps) => {
         {...props}
       >
         <Checkable.Indicator asChild>
-          <CircleDot />
+          <Menu.Icon asChild>
+            <CircleDot />
+          </Menu.Icon>
         </Checkable.Indicator>
         {children}
       </Checkable>

@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { CircleArrowLeft, CircleArrowRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 import {
   Card,
   Field,
   Input,
+  Label,
   Menu,
   Password,
   RadioGroup,
@@ -13,7 +14,6 @@ import {
 } from '@ui';
 
 export const TestPage = () => {
-  const [iconSize, setIconSize] = useState('md');
   const [sliderValue, setSliderValue] = useState(12);
 
   return (
@@ -22,57 +22,50 @@ export const TestPage = () => {
 
       <Field.Set className="mx-auto w-xs">
         <Field.Legend>Theme</Field.Legend>
-        <RadioGroup defaultValue="2" onValueChange={console.log}>
-          <label className="flex items-center gap-2 text-sm font-semibold">
+        <RadioGroup defaultValue="2">
+          <Label>
             <RadioGroup.Item id="r1" value="light" />
             Light
-          </label>
-          <label className="flex items-center gap-2 text-sm font-semibold">
+          </Label>
+          <Label>
             <RadioGroup.Item id="r2" value="dark" />
             Dark
-          </label>
-          <label className="flex items-center gap-2 text-sm font-semibold">
+          </Label>
+          <Label>
             <RadioGroup.Item id="r3" value="system" />
             System
-          </label>
+          </Label>
         </RadioGroup>
       </Field.Set>
 
-      <Menu className="mx-auto w-fit" open>
+      <Menu className="mx-auto w-64">
         <Menu.Item>
-          <CircleArrowLeft />
+          <Menu.Icon as={ArrowLeft} />
           Previous
         </Menu.Item>
         <Menu.Item>
-          <CircleArrowRight />
+          <Menu.Icon as={ArrowRight} />
           Next
         </Menu.Item>
-        <div
-          role="separator"
-          aria-orientation="horizontal"
-          className="bg-border my-1 h-px w-full"
-        />
-        <Menu.RadioGroup value={iconSize} onValueChange={setIconSize}>
+        <Menu.Separator />
+        <Menu.RadioGroup defaultValue="md">
           <Menu.Label>Icon size</Menu.Label>
           <Menu.RadioItem value="sm">Small</Menu.RadioItem>
           <Menu.RadioItem value="md">Medium</Menu.RadioItem>
           <Menu.RadioItem value="lg">Large</Menu.RadioItem>
         </Menu.RadioGroup>
-        <div
-          role="separator"
-          aria-orientation="horizontal"
-          className="bg-border my-1 h-px w-full"
-        />
+        <Menu.Separator />
         <Menu.CheckboxItem>Auto arrange icons</Menu.CheckboxItem>
         <Menu.CheckboxItem defaultChecked>
           Align icons to grid
         </Menu.CheckboxItem>
-        <div
-          role="separator"
-          aria-orientation="horizontal"
-          className="bg-border my-1 h-px w-full"
-        />
+        <Menu.Separator />
         <Menu.CheckboxItem defaultChecked>Show icons</Menu.CheckboxItem>
+        <Menu.Separator />
+        <Menu.Item>
+          More options
+          <ArrowRight />
+        </Menu.Item>
       </Menu>
 
       <Card>
@@ -125,10 +118,6 @@ export const TestPage = () => {
             value={sliderValue}
             className="w-full max-w-60"
             onValueChange={setSliderValue}
-            onChange={(event) => {
-              const target = event.target as HTMLInputElement;
-              console.log('[Change] Value:', target.value);
-            }}
           >
             <Slider.Track>
               <Slider.Steps />
@@ -145,10 +134,6 @@ export const TestPage = () => {
             value={sliderValue}
             className="min-h-40"
             onValueChange={setSliderValue}
-            onChange={(event) => {
-              const target = event.target as HTMLInputElement;
-              console.log('[Change] Value:', target.value);
-            }}
           >
             <Slider.Track>
               <Slider.Steps />

@@ -18,7 +18,9 @@ export const MenuCheckboxItem = (inProps: MenuCheckboxItemProps) => {
     <MenuItem role="menuitemcheckbox" asChild>
       <Checkable {...props}>
         <Checkable.Indicator asChild>
-          <Check />
+          <Menu.Icon asChild>
+            <Check />
+          </Menu.Icon>
         </Checkable.Indicator>
         {children}
       </Checkable>

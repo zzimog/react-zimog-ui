@@ -1,16 +1,21 @@
-import type { ComponentPropsWithRef } from 'react';
-import { createCollection, createScopedContext } from '@ui/utils';
+import { useCallback, useRef } from 'react';
+import { FocusTrap, Native, type NativeProps } from '@ui/headless';
+import { useMergedRefs } from '@ui/hooks';
+import { cn, createCollection, createScopedContext } from '@ui/utils';
 import { MenuCheckboxItem } from './MenuCheckboxItem';
-import { MenuContent } from './MenuContent';
+import { MenuIcon } from './MenuIcon';
 import { MenuItem } from './MenuItem';
 import { MenuLabel } from './MenuLabel';
 import { MenuRadioGroup } from './MenuRadioGroup';
 import { MenuRadioItem } from './MenuRadioItem';
+import { MenuSeparator } from './MenuSeparator';
+import classes from './classes';
 
 const DISPLAY_NAME = 'Menu';
 
 type MenuContextValue = {
-  open: boolean;
+  onKeyFocusFirst(): void;
+  onKeyFocusLast(): void;
 };
 
 const [MenuContext, useMenuContext] = createScopedContext<
@@ -29,19 +34,36 @@ const [MenuCollection, useMenuCollection] =
 
 /*---------------------------------------------------------------------------*/
 
-type BaseProps = ComponentPropsWithRef<typeof MenuContent>;
-type MenuProps = BaseProps & {
-  open?: boolean;
-};
+type BaseProps = NativeProps<'div'>;
+type MenuProps = BaseProps;
 
 export const Menu = (inProps: MenuProps) => {
-  const { open, ...props } = inProps;
-  const isOpen = !!open;
+  const { ref: refProp, className, ...props } = inProps;
+
+  const ref = useRef<HTMLElement>(null);
+  const mergedRef = useMergedRefs(refProp, ref);
+
+  const handleFocusEdge = useCallback((edge: 'first' | 'last') => {
+    const node = ref.current;
+    const top = edge === 'first' ? 0 : node?.scrollHeight;
+
+    node?.scrollTo({ top });
+  }, []);
 
   return (
-    <MenuContext open={isOpen}>
+    <MenuContext
+      onKeyFocusFirst={() => handleFocusEdge('first')}
+      onKeyFocusLast={() => handleFocusEdge('last')}
+    >
       <MenuCollection>
-        <MenuContent {...props} />
+        <FocusTrap trapped={false} asChild>
+          <Native.div
+            ref={mergedRef}
+            role="menu"
+            {...props}
+            className={cn(classes.root, className)}
+          />
+        </FocusTrap>
       </MenuCollection>
     </MenuContext>
   );
@@ -52,6 +74,8 @@ Menu.useContext = useMenuContext;
 Menu.useCollection = useMenuCollection;
 Menu.Item = MenuItem;
 Menu.Label = MenuLabel;
-Menu.CheckboxItem = MenuCheckboxItem;
+Menu.Separator = MenuSeparator;
+Menu.Icon = MenuIcon;
 Menu.RadioGroup = MenuRadioGroup;
 Menu.RadioItem = MenuRadioItem;
+Menu.CheckboxItem = MenuCheckboxItem;

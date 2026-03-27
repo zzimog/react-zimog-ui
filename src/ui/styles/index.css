@@ -57,6 +57,7 @@
   --color-card: var(--card);
   --color-card-contrast: var(--card-contrast);
   --color-border: var(--border);
+  --color-shadow: var(--shadow);
   --color-input: var(--input);
   --color-outline: var(--outline);
 }

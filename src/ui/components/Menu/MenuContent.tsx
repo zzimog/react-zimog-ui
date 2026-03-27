@@ -15,7 +15,6 @@ type MenuProps = BaseProps & {
   distance?: number;
   side?: PopperContentProps['side'];
   align?: PopperContentProps['align'];
-  forceOpen?: boolean;
 };
 
 export const MenuContent = (inProps: MenuProps) => {
@@ -25,8 +24,8 @@ export const MenuContent = (inProps: MenuProps) => {
     distance,
     side,
     align,
-    forceOpen,
     onContextMenu,
+    onPointerLeave,
     onKeyDown,
     ...props
   } = inProps;
@@ -48,7 +47,7 @@ export const MenuContent = (inProps: MenuProps) => {
       distance={distance}
       side={side}
       align={align}
-      present={forceOpen || context.open}
+      present={context.open}
     >
       <Native.div
         ref={mergedRef}
@@ -58,6 +57,9 @@ export const MenuContent = (inProps: MenuProps) => {
         className={cn(classes.root, className)}
         onContextMenu={composeHandlers(onContextMenu, (event) => {
           event.preventDefault();
+        })}
+        onPointerLeave={composeHandlers(onPointerLeave, (event) => {
+          event.currentTarget.focus();
         })}
         onKeyDown={composeHandlers(onKeyDown, (event) => {
           if (event.key === 'Tab') {

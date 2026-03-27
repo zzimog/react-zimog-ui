@@ -1,4 +1,4 @@
-import type { ComponentPropsWithRef } from 'react';
+import { type ComponentPropsWithRef } from 'react';
 import { ChevronRight } from 'lucide-react';
 import { Popper } from '@ui/headless';
 import { composeHandlers } from '../../utils/compose-handlers';
@@ -13,15 +13,20 @@ type MenuSubTriggerProps = BaseProps;
 export const MenuSubTrigger = (inProps: MenuSubTriggerProps) => {
   const { children, onClick, onKeyDown, ...props } = inProps;
 
-  const context = MenuSub.useContext(DISPLAY_NAME);
+  const context = Menu.useContext(DISPLAY_NAME);
+  const subContext = MenuSub.useContext(DISPLAY_NAME);
 
   return (
     <Popper.Anchor asChild>
       <Menu.Item
+        id={subContext.triggerId}
+        aria-haspopup="menu"
+        aria-expanded={context.open}
+        aria-controls={subContext.contentId}
         {...props}
         onClick={composeHandlers(onClick, () => {
           if (!props.disabled) {
-            context.onOpenToggle();
+            subContext.onOpenToggle();
           }
         })}
         onKeyDown={composeHandlers(onKeyDown, (event) => {

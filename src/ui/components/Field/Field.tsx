@@ -83,7 +83,6 @@ const FieldSet = ({ className, ...props }: NativeProps<'fieldset'>) => (
       'p-4',
       'border',
       'rounded-shape',
-      'bg-background/50',
       'transition',
       className
     )}

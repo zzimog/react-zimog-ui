@@ -1,4 +1,4 @@
-import { useState, type PropsWithChildren } from 'react';
+import { useCallback, useId, useState, type PropsWithChildren } from 'react';
 import { Popper } from '@ui/headless';
 import { createScopedContext } from '@ui/utils';
 import { Menu } from './Menu';
@@ -6,8 +6,8 @@ import { Menu } from './Menu';
 const DISPLAY_NAME = 'MenuSub';
 
 type MenuSubContextValue = {
-  open: boolean;
-  onOpenChange(open: boolean): void;
+  triggerId: string;
+  contentId: string;
   onOpenToggle(): void;
 };
 
@@ -17,25 +17,25 @@ const [MenuSubContext, useMenuSubContext] = createScopedContext<
 
 /*---------------------------------------------------------------------------*/
 
-type MenuSubProps = PropsWithChildren<{
-  defaultOpen?: boolean;
-}>;
+type MenuSubProps = PropsWithChildren;
 
 export const MenuSub = (inProps: MenuSubProps) => {
-  const { defaultOpen, children } = inProps;
+  const [open, setOpen] = useState(false);
 
-  const [open, setOpen] = useState(defaultOpen ?? false);
-
-  Menu.useContext(DISPLAY_NAME);
+  const handleToggle = useCallback(() => {
+    setOpen((open) => !open);
+  }, [setOpen]);
 
   return (
-    <MenuSubContext
-      open={open}
-      onOpenChange={setOpen}
-      onOpenToggle={() => setOpen(!open)}
-    >
-      <Popper>{children}</Popper>
-    </MenuSubContext>
+    <Menu.Provider open={open} onOpenChange={setOpen}>
+      <MenuSubContext
+        triggerId={useId()}
+        contentId={useId()}
+        onOpenToggle={handleToggle}
+      >
+        <Popper>{inProps.children}</Popper>
+      </MenuSubContext>
+    </Menu.Provider>
   );
 };
 

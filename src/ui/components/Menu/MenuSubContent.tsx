@@ -1,5 +1,6 @@
 import type { ComponentPropsWithRef } from 'react';
 import { composeHandlers } from '@ui/utils';
+import { Menu } from './Menu';
 import { MenuContent } from './MenuContent';
 import { MenuSub } from './MenuSub';
 
@@ -9,27 +10,28 @@ type BaseProps = ComponentPropsWithRef<typeof MenuContent>;
 type MenuSubContentProps = BaseProps;
 
 export const MenuSubContent = (inProps: MenuSubContentProps) => {
-  const { onBlur, onKeyDown, ...props } = inProps;
+  const { onKeyDown, ...props } = inProps;
 
-  const context = MenuSub.useContext(DISPLAY_NAME);
+  const context = Menu.useContext(DISPLAY_NAME);
+  const subContext = MenuSub.useContext(DISPLAY_NAME);
 
   return (
-    <MenuContent
-      side="right"
-      align="start"
-      distance={0}
-      forceOpen={context.open}
-      {...props}
-      onBlur={composeHandlers(onBlur, () => {
-        //context.onOpenChange(false);
-      })}
-      onKeyDown={composeHandlers(onKeyDown, (event) => {
-        if (event.key === 'ArrowLeft') {
-          context.onOpenChange(false);
-          event.preventDefault();
-        }
-      })}
-    />
+    <Menu.Collection>
+      <MenuContent
+        side="right"
+        align="start"
+        distance={0}
+        id={subContext.contentId}
+        aria-labelledby={subContext.triggerId}
+        {...props}
+        onKeyDown={composeHandlers(onKeyDown, (event) => {
+          if (event.key === 'ArrowLeft') {
+            context.onOpenChange(false);
+            event.preventDefault();
+          }
+        })}
+      />
+    </Menu.Collection>
   );
 };
 

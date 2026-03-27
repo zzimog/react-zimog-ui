@@ -21,6 +21,7 @@
   --card: var(--color-zinc-50);
   --card-contrast: var(--color-zinc-900);
   --border: var(--color-zinc-300);
+  --shadow: var(--color-zinc-200);
   --input: var(--color-white);
   --outline: --alpha(var(--color-primary) / 50%);
 }
@@ -35,6 +36,7 @@
   --card: var(--color-zinc-900);
   --card-contrast: var(--color-zinc-50);
   --border: var(--color-zinc-700);
+  --shadow: var(--color-black);
   --input: var(--color-zinc-800);
 }
 
@@ -57,12 +59,6 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-outline: var(--outline);
-}
-
-@utility focusable {
-  @apply outline-3;
-  @apply outline-offset-1;
-  @apply outline-transparent;
 }
 
 @utility rounded-shape-* {
@@ -95,6 +91,16 @@
     background-repeat: no-repeat;
     background-position: 50%;
     background-size: calc(var(--spacing) * 3);
+  }
+
+  .shadow {
+    @apply shadow-shadow;
+  }
+
+  .focusable {
+    @apply outline-3;
+    @apply outline-offset-1;
+    @apply outline-transparent;
   }
 }
 

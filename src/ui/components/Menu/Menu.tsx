@@ -65,6 +65,8 @@ export const Menu = (inProps: MenuProps) => {
 Menu.displayName = DISPLAY_NAME;
 Menu.useContext = useMenuContext;
 Menu.useCollection = useMenuCollection;
+Menu.Provider = MenuContext;
+Menu.Collection = MenuCollection;
 Menu.Trigger = MenuTrigger;
 Menu.Content = MenuContent;
 Menu.Item = MenuItem;
